@@ -225,14 +225,16 @@ end)
 -- draw 3D text --
 Citizen.CreateThread(function()
 	while true do
-		for name, data in pairs(locations) do
-			if onDuty == "no" then
-				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign in (~g~Mechanic~s~)')
-			else
-				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign out (~g~Mechanic~s~) | [Hold V] - Retrieve Truck')
-			end
-			if data.impound then
-				DrawText3D(data.impound.x, data.impound.y, (data.impound.z + 1.5), 15, '[E] - Impound Vehicle')
+		if not isMechanicPartMenuOpen then
+			for name, data in pairs(locations) do
+				if onDuty == "no" then
+					DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign in (~g~Mechanic~s~)')
+				else
+					DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign out (~g~Mechanic~s~) | [Hold E] - Order Parts | [Hold V] - Retrieve Truck')
+				end
+				if data.impound then
+					DrawText3D(data.impound.x, data.impound.y, (data.impound.z + 1.5), 15, '[E] - Impound Vehicle')
+				end
 			end
 		end
 		Wait(1)
@@ -244,30 +246,38 @@ Citizen.CreateThread(function()
 	local timeout = 0
 	while true do
 		Wait(0)
+		
 		if IsControlJustPressed(0, KEYS.E) then
-			local playerPed = PlayerPedId()
-			local playerCoords = GetEntityCoords(playerPed)
-			for name, data in pairs(locations) do
+			Wait(500)
+			if IsControlPressed(0, KEYS.E) then
+				if isNearSignOnSpot(5) then
+					TriggerServerEvent("mechanic:openPartsMenu")
+				end
+			else
 				local playerPed = PlayerPedId()
-				if Vdist(playerCoords, data.duty.x, data.duty.y, data.duty.z) < 3 then
-					if timeout > 3 then
-						TriggerEvent('usa:notify', "You have clocked in and out too much recently, ~y~please wait~s~.")
-					else
-						timeout = timeout + 1
+				local playerCoords = GetEntityCoords(playerPed)
+				for name, data in pairs(locations) do
+					local playerPed = PlayerPedId()
+					if Vdist(playerCoords, data.duty.x, data.duty.y, data.duty.z) < 3 then
 						if timeout > 3 then
-							Citizen.CreateThread(function()
-								local beginTime = GetGameTimer()
-								while GetGameTimer() - beginTime < 10000 do
-									Citizen.Wait(100)
-								end
-								timeout = 0
-							end)
+							TriggerEvent('usa:notify', "You have clocked in and out too much recently, ~y~please wait~s~.")
+						else
+							timeout = timeout + 1
+							if timeout > 3 then
+								Citizen.CreateThread(function()
+									local beginTime = GetGameTimer()
+									while GetGameTimer() - beginTime < 10000 do
+										Citizen.Wait(100)
+									end
+									timeout = 0
+								end)
+							end
+							TriggerServerEvent("towJob:setJob")
 						end
-						TriggerServerEvent("towJob:setJob")
-					end
-				elseif data.impound and Vdist(playerCoords, data.impound.x, data.impound.y, data.impound.z) < 15.0 then
-					if onDuty == "yes" then
-						ImpoundVehicle()
+					elseif data.impound and Vdist(playerCoords, data.impound.x, data.impound.y, data.impound.z) < 15.0 then
+						if onDuty == "yes" then
+							ImpoundVehicle()
+						end
 					end
 				end
 			end
@@ -525,6 +535,13 @@ AddEventHandler("mechanic:spawnTruck", function(repairCount)
 	end
 end)
 
+RegisterNetEvent("mechanic:usedPart")
+AddEventHandler("mechanic:usedPart", function(part)
+	local nearbyVeh = MechanicHelper.getClosestVehicle(5)
+	local vehPlate = exports.globals:trim(GetVehicleNumberPlateText(nearbyVeh))
+	TriggerServerEvent("mechanic:usedPart", part, vehPlate)
+end)
+
 function isNearAnyRepairShop()
 	local me = PlayerPedId()
 	local mycoords = GetEntityCoords(me)
@@ -765,7 +782,9 @@ function ApplyUpgrades(veh, upgrades)
 	for i = 1, #upgrades do
 		print("applying upgrade: " .. upgrades[i].id)
 		local upgrade = upgrades[i]
-		MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount)
+		if MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id] then
+			MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount)
+		end
 	end
 end
 

@@ -10,6 +10,14 @@ local TRUCKS_FOR_RANK = {
 	[3] = {"flatbed", "isgtow"}
 }
 
+local PARTS_FOR_RANK = {
+	[1] = {},
+	[2] = {"NOS Install Kit", "NOS Bottle (Stage 1)", "NOS Bottle (Stage 2)", "Top Speed Tune", "NOS Gauge"},
+	[3] = {"NOS Install Kit", "NOS Bottle (Stage 1)", "NOS Bottle (Stage 2)", "NOS Bottle (Stage 3)", "Top Speed Tune", "NOS Gauge"}
+}
+
+local PARTS_DELIVERY_TIME_DAYS = 1
+
 local installQueue = {}
 
 RegisterServerEvent("towJob:giveReward")
@@ -33,40 +41,15 @@ end, {
 })
 
 TriggerEvent('es:addJobCommand', 'install', { "mechanic" }, function(source, args, char)
-	local upgrade = UPGRADES[args[2]]
-	if upgrade then
-		local char = exports["usa-characters"]:GetCharacter(source)
-		if char.get("money") >= upgrade.cost then
-			MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
-				if rank >= 2 then
-					TriggerClientEvent('mechanic:tryInstall', source, upgrade, rank)
-					installQueue[source] = args[2]
-				else 
-					TriggerClientEvent("usa:notify", source, "Must be lvl 2 or higher to install upgrades!", "^3INFO: ^0Must be a level 2 mechanic to install upgrades! Respond to more player calls and repair vehicles to rank up!")
-				end
-			end)
-		else 
-			TriggerClientEvent("usa:notify", source, "Not enough money! Need $" .. exports.globals:comma_value(upgrade.cost))
-		end
-	else 
-		local optionsStr = ""
-		local count = 0
-		for name, info in pairs(UPGRADES) do 
-			if count == 0 then
-				optionsStr = "($" .. exports.globals:comma_value(info.cost) .. ") " .. name
-			else
-				optionsStr = "($" .. exports.globals:comma_value(info.cost) .. ") " .. name .. ", " .. optionsStr
-			end
-			count = count + 1
-		end
-		TriggerClientEvent("usa:notify", source, "Invalid upgrade name!", "^3INFO: ^0Invalid upgrade name! Options: " .. optionsStr)
-	end
+	TriggerClientEvent("usa:notify", source, "Command no longer used", "^0The /install Command no longer used, press 'use' on a car part instead in your inventory")
 end, {
-	help = "Install custom vehicle upgrades",
-	params = {
-		{ name = "upgradeName", help = "Options: topspeed1, topspeed2, topspeed3, topspeed4" }
-	}
+	help = "Command no longer used, press 'use' on a car part instead in your inventory"
 })
+
+RegisterServerEvent("mechanic:usedPart")
+AddEventHandler("mechanic:usedPart", function(part, nearbyVehPlate)
+	tryInstallPart(source, part, nearbyVehPlate)
+end)
 
 RegisterServerEvent("towJob:setJob")
 AddEventHandler("towJob:setJob", function()
@@ -143,25 +126,21 @@ end)
 
 RegisterServerEvent("mechanic:installedUpgrade")
 AddEventHandler("mechanic:installedUpgrade", function(plate, vehNetId, rank)
-	print("installing upgrade! veh net id: " .. vehNetId)
+	print("installed upgrade! veh net id: " .. vehNetId)
 	local usource = source
 	local upgrade = UPGRADES[installQueue[usource]]
 	local char = exports["usa-characters"]:GetCharacter(usource)
-	local cost = upgrade.cost
 	plate = exports.globals:trim(plate)
 	if upgrade then
-		if rank >= 3 then
-			cost = upgrade.cost - 3000
-		end
-		if char.get("money") >= cost then
-			char.removeMoney(cost)
-			MechanicHelper.upgradeInstalled(plate, upgrade, function()
-				installQueue[usource] = nil
+		MechanicHelper.upgradeInstalled(plate, upgrade, function()
+			installQueue[usource] = nil
+			if upgrade.doSync then
 				TriggerClientEvent("mechanic:syncUpgrade", -1, vehNetId, upgrade)
-			end)
-		else
-			TriggerClientEvent("usa:notify", usource, "Not enough money! Need $" .. exports.globals:comma_value(cost))
-		end
+			end
+			if upgrade.requiresItem then
+				char.removeItem(upgrade.requiresItem, 1)
+			end
+		end)
 	end
 end)
 
@@ -193,6 +172,126 @@ AddEventHandler("mechanic:openTruckSpawnMenu", function()
 	end)
 end)
 
+RegisterServerEvent("mechanic:openPartsMenu")
+AddEventHandler("mechanic:openPartsMenu", function()
+	local src = source
+	local char = exports["usa-characters"]:GetCharacter(src)
+	if char.get("job") == "mechanic" then
+		MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
+			if rank == 0 then rank = 1 end
+			local availableParts = PARTS_FOR_RANK[rank]
+			MechanicHelper.getMechanicInfo(char.get("_id"), function(info)
+				if not info then
+					info = {}
+				end
+				if not info.orderedParts then
+					info.orderedParts = {}
+				end
+				if not info.deliveredParts then
+					info.deliveredParts = {}
+				end
+				info.orderedParts = updateDeliveryProgress(char, info.orderedParts)
+				TriggerClientEvent("mechanic:openMechanicShopMenuCL", src, rank, availableParts, info.orderedParts, info.deliveredParts, os.time())
+			end)
+		end)
+	else
+		TriggerClientEvent("usa:notify", src, "Not signed in!")
+	end
+end)
+
+RegisterServerEvent("mechanic:orderPart")
+AddEventHandler("mechanic:orderPart", function(partName)
+	local src = source
+	local char = exports["usa-characters"]:GetCharacter(src)
+	MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
+		if doesRankHaveAccessToPart(rank, partName) then
+			if char.get("bank") >= PARTS[partName].price then
+				local orderedPart = exports.globals:deepCopy(PARTS[partName])
+				orderedPart.uuid = exports.globals:generateID()
+				orderedPart.orderedTime = os.time()
+				orderedPart.expectedDeliveryTimeDays = PARTS_DELIVERY_TIME_DAYS
+				local query = {
+					["owner_identifier"] = char.get("_id")
+				}
+				local fields = {
+					"_id",
+					"orderedParts",
+				}
+				MechanicHelper.db.getSpecificFieldFromDocumentByRows("mechanicjob", query, fields, function(doc)
+					if doc then
+						if not doc.orderedParts then
+							doc.orderedParts = {}
+						end
+						table.insert(doc.orderedParts, orderedPart)
+						MechanicHelper.db.updateDocument("mechanicjob", doc._id, {orderedParts = doc.orderedParts}, function(ok)
+							if ok then
+								char.removeBank(orderedPart.price)
+								TriggerClientEvent("usa:notify", src, "Ordered for $" .. exports.globals:comma_value(orderedPart.price))
+								doc.orderedParts = updateDeliveryProgress(char, doc.orderedParts)
+								TriggerClientEvent("mechanic:setOrderedParts", src, doc.orderedParts)
+							else
+								print("mechanic doc update failed")
+							end
+						end)
+					else
+						print("no doc found")
+					end
+				end)
+			else
+				TriggerClientEvent("usa:notify", src, "Not enough money! Need: $" .. exports.globals:comma_value(PARTS[partName].price))
+			end
+		end
+	end)
+end)
+
+RegisterServerEvent("mechanic:claimDeliveries")
+AddEventHandler("mechanic:claimDeliveries", function()
+	local src = source
+	local char = exports["usa-characters"]:GetCharacter(src)
+	local charCoords = GetEntityCoords(GetPlayerPed(src))
+	MechanicHelper.getMechanicInfo(char.get("_id"), function(info)
+		-- drop parts on ground
+		for i = 1, #info.deliveredParts do
+			local newCoords = {}
+			newCoords.x = charCoords.x + (math.random() * 2)
+			newCoords.y = charCoords.y + (math.random() * 2)
+			newCoords.z = charCoords.z - 0.8
+			local part = info.deliveredParts[i]
+			part.coords = newCoords
+			TriggerEvent("interaction:addDroppedItem", part)
+		end
+		if #info.deliveredParts > 0 then
+			TriggerClientEvent("usa:notify", src, "All deliveries claimed!")
+		else
+			TriggerClientEvent("usa:notify", src, "No deliveries!")
+			return
+		end
+		-- save
+		MechanicHelper.db.updateDocument("mechanicjob", info._id, {deliveredParts = {}}, function(ok) end)
+		-- update menu
+		TriggerClientEvent("mechanic:setDeliveredParts", src, {})
+	end)
+end)
+
+RegisterServerEvent("mechanic:fetchDeliveryProgress")
+AddEventHandler("mechanic:fetchDeliveryProgress", function()
+	local src = source
+	local char = exports["usa-characters"]:GetCharacter(src)
+	local query = {
+		["owner_identifier"] = char.get("_id")
+	}
+	local fields = {
+		"_id",
+		"orderedParts",
+	}
+	MechanicHelper.db.getSpecificFieldFromDocumentByRows("mechanicjob", query, fields, function(doc)
+		if doc then
+			if not doc.orderedParts then doc.orderedParts = {} end
+			updateDeliveryProgress(char, doc.orderedParts)
+		end
+	end)
+end)
+
 AddEventHandler("playerDropped", function(reason)
 	if installQueue[source] then 
 		installQueue[source] = nil
@@ -208,6 +307,96 @@ function GetUpgradeObjectsFromIds(upgradeIds)
 		end
 	end
 	return ret
+end
+
+function doesRankHaveAccessToPart(rank, partName)
+	local availableParts = PARTS_FOR_RANK[rank]
+	for i = 1, #availableParts do
+		if partName == availableParts[i] then
+			return true
+		end
+	end
+	return false 
+end
+
+function updateDeliveryProgress(char, orders)
+	if not orders then
+		orders = {}
+	end
+	local newDeliveries = {}
+	for i = #orders, 1, -1 do
+		--orders[i].deliveryProgress = math.min((os.difftime(os.time(), orders[i].orderedTime) / (60 * 60)) / 24, 1.0)
+		orders[i].deliveryProgress = 1.0
+		if orders[i].deliveryProgress == 1.0 then -- is delivered
+			table.insert(newDeliveries, orders[i])
+			table.remove(orders, i)
+		end
+	end
+	local query = {
+		["owner_identifier"] = char.get("_id")
+	}
+	local fields = {
+		"_id",
+		"deliveredParts",
+	}
+	MechanicHelper.db.getSpecificFieldFromDocumentByRows("mechanicjob", query, fields, function(doc)
+		if doc then
+			if not doc.deliveredParts then
+				doc.deliveredParts = {}
+			end
+			for i = 1, #newDeliveries do
+				table.insert(doc.deliveredParts, newDeliveries[i])
+			end
+			MechanicHelper.db.updateDocument("mechanicjob", doc._id, {deliveredParts = doc.deliveredParts, orderedParts = orders}, function(ok)
+				if ok then
+					TriggerClientEvent("mechanic:setOrderedParts", char.get("source"), orders)
+					TriggerClientEvent("mechanic:setDeliveredParts", char.get("source"), doc.deliveredParts)
+				end
+			end)
+		else
+			print("no doc found when updating delivery progress")
+		end
+	end)
+	return orders
+end
+
+function tryInstallPart(src, part, plate)
+	print("trying to install " .. part.name .. " on veh with plate: " .. plate)
+	local upgrade = getUpgradeFromPartName(part.name)
+	if upgrade then
+		local char = exports["usa-characters"]:GetCharacter(src)
+		if upgrade.requiresItem then
+			if not char.hasItem(upgrade.requiresItem) then
+				TriggerClientEvent("usa:notify", src, "Need: " .. upgrade.requiresItem)
+				return
+			end
+		end
+		if upgrade.requiresUpgrades then
+			if not MechanicHelper.doesVehicleHaveUpgrades(plate, upgrade.requiresUpgrades) then
+				TriggerClientEvent("usa:notify", src, "Vehicle is missing required upgrades!")
+				for i = 1, #upgrade.requiresUpgrades do
+					TriggerClientEvent("usa:notify", src, "Need: " .. upgrade.requiresUpgrades[i])
+				end
+				return
+			end
+		end
+		MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
+			if rank >= 2 then
+				TriggerClientEvent('mechanic:tryInstall', src, upgrade, rank)
+				installQueue[src] = upgrade.id
+			else 
+				TriggerClientEvent("usa:notify", src, "Must be lvl 2 or higher to install upgrades!", "^3INFO: ^0Must be a level 2 mechanic to install upgrades! Respond to more player calls and repair vehicles to rank up!")
+			end
+		end)
+	end
+end
+
+function getUpgradeFromPartName(name)
+	for k, v in pairs(UPGRADES) do
+		if v.displayName == name then
+			return v
+		end
+	end
 end
 
 --[[

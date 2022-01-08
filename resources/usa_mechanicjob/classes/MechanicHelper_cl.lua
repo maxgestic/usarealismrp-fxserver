@@ -6,7 +6,7 @@ MechanicHelper.animations.repair.dict = "mini@repair"
 MechanicHelper.animations.repair.name = "fixing_a_player"
 
 MechanicHelper.REPAIR_TIME = 60000
-MechanicHelper.UPGRADE_INSTALL_TIME = 300000
+MechanicHelper.UPGRADE_INSTALL_TIME = 30000
 
 MechanicHelper.LEVEL_2_RANK_THRESH = 70
 MechanicHelper.LEVEL_3_RANK_THRESH = 500
@@ -92,7 +92,9 @@ MechanicHelper.installUpgrade = function(veh, upgrade, cb)
         end
         Wait(1)
     end
-    MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount) -- call appropriate native
+    if MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id] then
+        MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount) -- call appropriate native
+    end
     ClearPedTasks(me)
     cb()
     Wait(500)

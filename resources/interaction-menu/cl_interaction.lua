@@ -1166,6 +1166,12 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerServerEvent("rp-radio:checkForRadioItem")
 	elseif itemName == "Scuba Gear" then
 		TriggerEvent("scuba:useGear")
+	elseif wholeItem.type and wholeItem.type == "mechanicPart" then
+		if IsPedInAnyVehicle(PlayerPedId()) then
+			exports.globals:notify("Must not be inside vehicle")
+			return
+		end
+		TriggerEvent("mechanic:usedPart", wholeItem)
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end

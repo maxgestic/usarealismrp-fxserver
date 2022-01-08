@@ -250,6 +250,11 @@ var itemImages = {
   "Rag": "https://i.imgur.com/JzXq87s.png",
   "Paint Remover": "https://i.imgur.com/yTNxLFJ.png",
   "Spray Paint": "https://i.imgur.com/Yk7gCff.png",
+  "Top Speed Tune": "https://i.imgur.com/sMQyj75.png",
+  "NOS Install Kit": "https://i.imgur.com/mltB4gl.png",
+  "NOS Bottle (Stage 1)": "https://i.imgur.com/VhLtSzT.png",
+  "NOS Bottle (Stage 2)": "https://i.imgur.com/6o12VYH.png",
+  "NOS Bottle (Stage 3)": "https://i.imgur.com/alUom3h.png",
   // begin ammo
   "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
   "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",
