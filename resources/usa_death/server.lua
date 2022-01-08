@@ -16,18 +16,6 @@ AddEventHandler("death:respawn", function()
 		end
 	end
 
-	-- find non cell phone items to delete --
-	local user_inventory = char.get("inventory")
-	for i = 0, (user_inventory.MAX_CAPACITY - 1) do
-		local item = user_inventory.items[tostring(i)]
-		if item then
-			if not string.find(item.name, "Cell Phone") and item.type ~= "license" then
-				user_inventory.items[tostring(i)] = nil
-			end
-		end
-	end
-	char.set("inventory", user_inventory)
-
 	-- other stuff --
 	TriggerClientEvent("crim:untieHands", source, source)
 	TriggerClientEvent("crim:blindfold", source, false, true)
