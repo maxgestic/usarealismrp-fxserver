@@ -16,7 +16,7 @@ AddEventHandler("nitro-gauge:fetchGuageData", function(vehPlate)
 end)
 
 function doesHaveGuageInstalled(vehPlate)
-    local hasGuage = doesVehicleHaveUpgrades(vehPlate, {"nitroguage"})
+    local hasGuage = doesVehicleHaveUpgrades(vehPlate, {"nitrogauge"})
     return hasGuage
 end
 
