@@ -103,8 +103,8 @@ UPGRADES = {
             end
         end
     },
-    ["nitroguage"] = {
-        id = "nitroguage",
+    ["nitrogauge"] = {
+        id = "nitrogauge",
         displayName = "NOS Gauge",
         requiresItem = "NOS Gauge",
         requiresUpgrades = {
