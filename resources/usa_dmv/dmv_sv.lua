@@ -115,6 +115,8 @@ AddEventHandler("dmv:orderCustomPlate", function(oldPlate, newPlate)
 						db.createDocumentWithId("vehicles", oldVehDoc, newPlate, function(ok) end)
 						-- delete old vehicle doc
 						db.deleteDocument("vehicles", oldPlate, function() end)
+						-- update nitro doc if any
+						updateNitroDocIdentifier(oldPlate, newPlate)
 						-- save in character owned vehicle plate list
 						local vehs = c.get("vehicles")
 						for i = 1, #vehs do
@@ -198,4 +200,16 @@ function getVehicleDBDoc(plate)
 		ret = nil
 	end
 	return ret
+end
+
+function updateNitroDocIdentifier(old, new)
+	TriggerEvent("es:exposeDBFunctions", function(db)
+		db.getDocumentById("vehicle-nitro-fuel", old, function(doc)
+			if doc then
+				doc._id = nil
+				doc._rev = nil
+				db.deleteDocument("vehicle-nitro-fuel", old, function(ok) end)
+			end
+		end)
+	end)
 end
