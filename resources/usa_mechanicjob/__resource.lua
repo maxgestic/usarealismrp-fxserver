@@ -10,7 +10,7 @@ client_scripts {
     'classes/MechanicHelper_cl.lua',
     'mechanic_cl.lua',
     'menus/cl_truckSpawnMenu.lua',
-    'menus/cl_mechanicShopMenu.lua'
+    'menus/parts/*.lua'
 }
 
 shared_scripts {
