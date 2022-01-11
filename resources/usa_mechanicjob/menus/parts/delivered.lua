@@ -14,9 +14,17 @@ function drawDeliveriesMenu(deliveredParts)
     vein:endRow()
 
     vein:beginRow()
-        for i = 1, #deliveredParts do
+        local itemsPerRow = 3
+        local numRows = math.ceil(#deliveredParts / itemsPerRow)
+
+        for i = 1, numRows do
             vein:beginRow()
-                drawLabel(deliveredParts[i].name)
+                for j = 1, itemsPerRow do
+                    local curPartIndex = ((i-1) * itemsPerRow) + j
+                    if deliveredParts[curPartIndex] then
+                        drawLabel(deliveredParts[curPartIndex].name)
+                    end
+                end
             vein:endRow()
         end
         if #deliveredParts == 0 then

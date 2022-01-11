@@ -4,6 +4,10 @@ local windowX, windowY
 
 local DATA_FETCH_INTERVAL_SECONDS = 5
 
+local PAGE_ITEM_MAX = 15
+
+local currentPageNum = 1
+
 function drawOrdersMenu(orderedParts)
     vein:beginWindow(windowX, windowY) -- Mandatory
 
@@ -12,11 +16,14 @@ function drawOrdersMenu(orderedParts)
     vein:endRow()
 
     vein:beginRow()
-        for i = 1, #orderedParts do
+        for j = 1, PAGE_ITEM_MAX do
             vein:beginRow()
-                drawLabel(orderedParts[i].name)
-                local currentProgress = orderedParts[i].deliveryProgress
-                vein:progressBar(0.0, currentProgress, 1.0, 0.2)
+                local index = ((currentPageNum - 1) * PAGE_ITEM_MAX) + j
+                if orderedParts[index] then
+                    drawLabel(orderedParts[index].name)
+                    local currentProgress = orderedParts[index].deliveryProgress
+                    vein:progressBar(0.0, currentProgress, 1.0, 0.2)
+                end
             vein:endRow()
         end
         if #orderedParts == 0 then
@@ -37,6 +44,18 @@ function drawOrdersMenu(orderedParts)
         end
         if vein:button('Close') then -- Draw button and check if it were pressed
             isMechanicPartMenuOpen = false
+        end
+
+        local numPages = math.ceil(#orderedParts / PAGE_ITEM_MAX)
+        if numPages > 1 and currentPageNum ~= 1 then
+            if vein:button('Prev') then
+                currentPageNum = currentPageNum - 1
+            end
+        end
+        if numPages > 1 and currentPageNum ~= numPages then
+            if vein:button('Next') then
+                currentPageNum = currentPageNum + 1
+            end
         end
     vein:endRow()
 
