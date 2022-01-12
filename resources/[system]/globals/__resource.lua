@@ -51,5 +51,6 @@ server_exports {
   "generateID",
   "deepCopy",
   "trim",
-  "isOnlyAlphaNumeric"
+  "isOnlyAlphaNumeric",
+  "split"
 }

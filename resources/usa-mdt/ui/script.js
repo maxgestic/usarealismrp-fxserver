@@ -40,8 +40,7 @@ const mdtApp = new Vue({
         warrants: [],
         bolos: [],
         police_reports: [],
-        fname_search: "",
-        lname_search: "",
+        name_search: "",
         warrant_search: "",
         bolo_search: "",
         report_search: "",
@@ -79,7 +78,9 @@ const mdtApp = new Vue({
         error: null,
         personCheckNotification: null,
         notification: null,
-        current_tab: "Person(s) Check" // default tab
+        current_tab: "Person(s) Check", // default tab
+        searchedPersonResults: [],
+        isLoadingAsyncData: false
     },
     methods: {
         UpdatePhoto() {
@@ -298,6 +299,20 @@ const mdtApp = new Vue({
                 }
             }
             this.error = "Error: did not find a matching police report with that uuid!";
+        },
+        getNameSearchResults(name) {
+            $.post('http://usa-mdt/getNameSearchDropdownResults', JSON.stringify({
+                name: name
+            }));
+            this.searchedPersonResults = [];
+            this.isLoadingAsyncData = true;
+        },
+        selectSearchedNameResult(personDetails) {
+            $.post('http://usa-mdt/performPersonCheckByCharID', JSON.stringify({
+                id: personDetails._id
+            }));
+            this.searchedPersonResults = [];
+            this.name_search = "";
         }
     },
     computed: {
@@ -337,6 +352,16 @@ const mdtApp = new Vue({
                 }
             }
         }
+    },
+    watch: {
+        name_search: function(newVal, oldVal) {
+            if (newVal.length > 1) {
+                this.debouncedGetNameSearchResults(newVal)
+            }
+        }
+    },
+    created() {
+        this.debouncedGetNameSearchResults = _.debounce(this.getNameSearchResults, 500);
     }
 });
 
@@ -474,6 +499,9 @@ document.onreadystatechange = () => {
                     }
                 }
                 mdtApp.person_check.address = s;
+            } else if (event.data.type == "personSearchResultsLoaded") {
+                mdtApp.searchedPersonResults = event.data.results
+                mdtApp.isLoadingAsyncData = false;
             }
         });
     };

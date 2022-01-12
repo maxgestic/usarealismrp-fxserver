@@ -908,6 +908,156 @@ AddEventHandler("mdt:getAddressInfo", function(data)
 	end
 end)
 
+RegisterServerEvent("mdt:getNameSearchDropdownResults")
+AddEventHandler("mdt:getNameSearchDropdownResults", function(name)
+	local src = source
+	local results = {}
+	if not name:find(" ") then -- one word input, search for anyone with first, middle, or last of that word
+		local query = { 
+			first = {
+				["$regex"] = "(?i)" .. name
+			}
+		}
+		local r1 = getNameSearchResults(query)
+		addTableEntries(results, r1)
+		local query = { 
+			middle = {
+				["$regex"] = "(?i)" .. name
+			}
+		}
+		local r2 = getNameSearchResults(query)
+		addTableEntries(results, r2)
+		local query = { 
+			last = {
+				["$regex"] = "(?i)" .. name
+			}
+		}
+		local r3 = getNameSearchResults(query)
+		addTableEntries(results, r3)
+	else
+		-- > 1 word input ? do either [first middle last] or [first last])
+		name = exports.globals:split(name, " ")
+		local query = { 
+			first = {
+				["$regex"] = "(?i)" .. name[1],
+			}
+		}
+		if #name > 2 then
+			query.middle = {
+				["$regex"] = "(?i)" .. name[2]
+			}
+			query.last = {
+				["$regex"] = "(?i)" .. name[3]
+			}
+		else
+			query.last = {
+				["$regex"] = "(?i)" .. name[2]
+			}
+		end
+		results = getNameSearchResults(query)
+	end
+	local msg = {
+		type = "personSearchResultsLoaded",
+		results = results
+	}
+	TriggerClientEvent("mdt:sendNUIMessage", src, msg)
+end)
+
+RegisterServerEvent("mdt:performPersonCheckByCharID")
+AddEventHandler("mdt:performPersonCheckByCharID", function(id)
+	local usource = source
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.getDocumentById("characters", id, function(doc)
+			if doc then
+				print("doc found")
+				local person = doc
+				-- values have to be false by default to work with UI --
+				local person_info  = {
+					ssn = ssn,
+					fname = firstToUpper(person.name.first),
+					lname = firstToUpper(person.name.last),
+					dob = person.dateOfBirth,
+					drivers_license = false,
+					firearm_permit = false,
+					insurance = false,
+					criminal_history = {
+						crimes = {},
+						tickets = {}
+					},
+					mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg", -- generic placeholder img
+					returnedDNA = person.dna
+				}
+				-- get mug shot --
+				if person.mugshot then
+					person_info.mugshot = person.mugshot
+				end
+
+				TriggerEvent('properties:getAddressByName', person.name.first .. ' ' .. person.name.last, function(address)
+					if address then
+						person_info.address = address
+					else
+						if person.property['house'] and person.property['houseStreet'] then
+							person_info.address = 'House '..person.property['house']..', '..person.property['houseStreet']
+						else
+							person_info.address = person.property['location']
+						end
+					end
+					-- get criminal history --
+					local criminal_history = person.criminalHistory
+					if #criminal_history > 0 then
+						for i = 1, #criminal_history do
+							local crime = criminal_history[i]
+							if (not crime.type or crime.type == "arrest") then
+								table.insert(person_info.criminal_history.crimes, crime)
+							else
+								table.insert(person_info.criminal_history.tickets, crime)
+							end
+						end
+						if #person_info.criminal_history.crimes <= 0 then
+							person_info.criminal_history.crimes = false
+						end
+						if #person_info.criminal_history.tickets <= 0 then
+							person_info.criminal_history.tickets = false
+						end
+					end
+					-- get licenses --
+					person_info.licenses = GetLicensesFromInventory(person.inventory)
+					-- get insurance --
+					local insurance = person.insurance
+					if insurance.planName then
+						person_info.insurance = insurance
+					end
+					------------------------
+					-- auto warrant check --
+					------------------------
+					exports["usa-warrants"]:GetWarrantsForPerson(person.name, person.dateOfBirth, function(warrants)
+						if type(warrants) ~= "boolean" then
+							if #warrants > 0 then
+								print("person has active warrants!")
+								local msg = {
+									type = "personCheckNotification",
+									message  = "Person has " .. #warrants .. " active warrant(s)!"
+								}
+								TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+								TriggerClientEvent('InteractSound_CL:PlayOnOne', usource, "warrantfound", 0.4)
+							end
+						end
+					end)
+					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
+				end)
+			end
+		end)
+	end)
+end)
+
+function addTableEntries(target, src)
+	if src then
+		for i = 1, #src do
+			table.insert(target, src[i])
+		end
+	end
+end
+
 function GetDisplayNameFromJob(job)
 	if job == "sheriff" then 
 		return "San Andreas State Police"
@@ -1062,6 +1212,37 @@ function removeOldBOLOs()
 			end
 		end
 	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+end
+
+function getNameSearchResults(query)
+	local results = nil
+	local q = {
+		name = query
+	}
+	local fields = {
+		"_id",
+		"name",
+		"mugshot"
+	}
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.getSpecificFieldFromAllDocumentsByRows("characters", q, fields, function(doc)
+			if doc then
+				results = {}
+				for i = 1, #doc do
+					if not doc[i].mugshot then
+						doc[i].mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg"
+					end
+					table.insert(results, doc[i])
+				end
+			else
+				results = false
+			end
+		end)
+	end)
+	while results == nil do
+		Wait(1)
+	end
+	return results
 end
 
 -- PERFORM FIRST TIME DB CHECKS --

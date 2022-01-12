@@ -3,6 +3,7 @@
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
         <style>
         body {
             display: none;
@@ -57,7 +58,8 @@
             overflow-y: scroll;
         }
         #tabTitle {
-            padding: 1em 0;
+            padding: 0.8em 0 1em 0;
+            display: inline;
         }
         .theme-color {
             /* color: #FFC41B; */
@@ -96,6 +98,48 @@
             background-color: rgba(0, 0, 0, 0.4);
             display: none;
         }
+        #name-check-input {
+            position: relative;
+        }
+        #name-search-dropdown {
+            background: gray;
+            position: absolute;
+            font-size: 1em;
+            height: 300px;
+            overflow: scroll;
+        }
+        #name-search-dropdown > div:hover {
+            background: darkgray;
+        }
+        #search-result-dropdown-mugshot {
+            width: 110px;
+            height: 130px;
+        }
+        #name-search-dropdown-name {
+            padding: 0.5em;
+        }
+        #loading-spinner {
+            display: inline;
+            margin-top: 2.2em;
+            margin-right: 1em;
+            border: 6px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 6px solid darkgray;
+            width: 25px;
+            height: 25px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            bottom: 5%;
+            left: -15%;
+        }
+        #tab-title-container {
+            display: flex;
+            justify-content: center;
+            padding: 2em;
+        }
+        #spinner-and-title-sub-container {
+            position: relative;
+        }
         /* Adjust for Laptops / Small displays*/
         @media screen and (max-width: 1500px) {
             #content_container {
@@ -122,6 +166,10 @@
             #icon_navbar i {
             font-size: 20px !important;
             }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         </style>
     </head>
@@ -178,8 +226,15 @@
 
                         <main style="overflow-y: scroll; padding-left: 2em; padding-right: 2em;">
 
-                            <!-- Title -->
-                            <h3 id="tabTitle" class="w3-center">{{ current_tab }}</h3>
+                            <div id="tab-title-container">
+                                <div id="spinner-and-title-sub-container">
+                                    <!-- loading spinner -->
+                                    <span id="loading-spinner" v-if="isLoadingAsyncData"></span>
+
+                                    <!-- Title -->
+                                    <h3 id="tabTitle" class="w3-center">{{ current_tab }}</h3>
+                                </div>
+                            </div>
 
                             <!-- Error box -->
                             <div class="w3-text-red">{{ error }}</div>
@@ -194,9 +249,16 @@
                                 <form class="w3-container" style="padding-left: 0 !important;">
                                     <br>
                                     <p>
-                                        <p>BY NAME:</p>
-                                        <input v-model="fname_search" class="w3-input w3-border" type="text"  placeholder="Enter a first  name to search..." required>
-                                        <input v-model="lname_search" class="w3-input w3-border" type="text"  placeholder="Enter a last name to search..." required>
+                                        <div id="name-check-input">
+                                            <p>BY NAME:</p>
+                                            <input v-model="name_search" class="w3-input w3-border" type="text"  placeholder="Enter a name to search..." required>
+                                            <div id="name-search-dropdown" v-if="searchedPersonResults.length > 0 && name_search.length > 1">
+                                                <div v-for="person in searchedPersonResults" v-on:click="selectSearchedNameResult(person)">
+                                                    <img id ="search-result-dropdown-mugshot" v-bind:src="person.mugshot" alt="">
+                                                    <span id="name-search-dropdown-name">{{ person.name.first }} {{ (person.name.middle || "") }} {{ person.name.last }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <p>BY SSN:</p>
                                         <input v-model="person_check.ssn" class="w3-input w3-border" type="text"  placeholder="Enter an SSN to search..." required>
                                         <p>BY DNA:</p>

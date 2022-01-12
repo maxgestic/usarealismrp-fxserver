@@ -329,6 +329,22 @@ function exposedDB.getSpecificFieldFromDocumentByRows(db, rowsAndValues, fields,
 	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
+function exposedDB.getSpecificFieldFromAllDocumentsByRows(db, rowsAndValues, fields, callback)
+	local qu = {selector = rowsAndValues, fields = fields}
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
+		local t = json.decode(rText)
+		if(t)then
+			if t.docs then
+				callback(t.docs)
+			else
+				callback(false)
+			end
+		else
+			callback(false, rText)
+		end
+	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+end
+
 function exposedDB.getDocumentsByRows(db, rowsAndValues, callback)
 	--local qu = {selector = {[row] = value}}
 	local qu = {selector = rowsAndValues}
