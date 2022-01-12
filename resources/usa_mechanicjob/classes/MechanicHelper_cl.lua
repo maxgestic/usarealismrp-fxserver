@@ -81,6 +81,7 @@ MechanicHelper.repairVehicle = function(veh, repairCount, cb)
 end
 
 MechanicHelper.installUpgrade = function(veh, upgrade, cb)
+    TriggerEvent("interaction:setBusy", true)
     SetVehicleDoorOpen(veh, 4, false, false)
     local me = PlayerPedId()
     local beginTime = GetGameTimer()
@@ -99,6 +100,7 @@ MechanicHelper.installUpgrade = function(veh, upgrade, cb)
     cb()
     Wait(500)
     SetVehicleDoorShut(veh, 4, false)
+    TriggerEvent("interaction:setBusy", false)
 end
 
 MechanicHelper.installUpgradeNoAnim = function(veh, upgrade)
