@@ -139,6 +139,16 @@ RegisterNUICallback("getAddressInfo", function(data, cb)
     TriggerServerEvent("mdt:getAddressInfo", data)
 end)
 
+RegisterNUICallback("getNameSearchDropdownResults", function(data, cb)
+    TriggerServerEvent("mdt:getNameSearchDropdownResults", data.name)
+    cb('ok')
+end)
+
+RegisterNUICallback("performPersonCheckByCharID", function(data, cb)
+    TriggerServerEvent("mdt:performPersonCheckByCharID", data.id)
+    cb('ok')
+end)
+
 function ToggleGUI(explicit_status)
   if explicit_status ~= nil then
     isVisible = explicit_status
