@@ -599,15 +599,16 @@ function ImpoundVehicle()
 			local targetPlate = GetVehicleNumberPlateText(targetVehicle, false)
 			targetPlate = exports.globals:trim(targetPlate)
 			TriggerServerEvent("impound:impoundVehicle", targetVehicle, targetPlate)
+			NetworkRequestControlOfEntity(targetVehice)
 			SetEntityAsMissionEntity(targetVehicle, true, true)
 			DelVehicle(targetVehicle)
-			vehicleToImpound = nil
 			exports.globals:notify("Impounding...")
 			Citizen.CreateThread(function()
 				Wait(3000)
 				if not DoesEntityExist(targetVehicle) then
 					TriggerServerEvent("towJob:giveReward")
 					exports.globals:notify("Impounded!")
+					vehicleToImpound = nil
 				end
 			end)
 		end
