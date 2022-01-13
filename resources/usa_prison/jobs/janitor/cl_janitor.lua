@@ -12,16 +12,14 @@ local START_JOB_KEY = 38
 
 local CLEAN_TIME_SECONDS = 45 -- also tightly coupled with a server sided duplicate variable rn unfortunately so don't forget to update that too if u change it
 
-local CLEANING_ANIM_DICT = "timetable@floyd@clean_kitchen@base"
-local CLEANING_ANIM_NAME = "base"
-
 local JOB_START_DELAY_SECONDS = 15 * 60
 
 local lastJobFinishedAt = 0
 
 RegisterNetEvent("prison-janitor:startJobClient")
-AddEventHandler("prison-janitor:startJobClient", function(cleaningLocations)
+AddEventHandler("prison-janitor:startJobClient", function(cleaningLocations, taskName)
     currentJobLocations = cleaningLocations
+    currentTask = taskName
 end)
 
 RegisterNetEvent("prison-janitor:removeCurrentJobLocations")
@@ -95,6 +93,20 @@ local function AddPropToPlayer(prop1, bone, off1, off2, off3, rot1, rot2, rot3)
     return propHandle
 end
 
+local function getAnimationInfoForTask(taskName)
+    if taskName == "tables" then
+        return {
+            dict = "timetable@floyd@clean_kitchen@base",
+            name = "base"
+        }
+    elseif taskName == "shower" then
+        return {
+            dict = "amb@world_human_maid_clean@",
+            name = "base"
+        }
+    end
+end
+
 -- thread to keep track of current ped coords:
 Citizen.CreateThread(function()
     while true do
@@ -165,9 +177,10 @@ Citizen.CreateThread(function()
                             local me = PlayerPedId()
                             while GetGameTimer() - beginTime < CLEAN_TIME_SECONDS * 1000 do
                                 DrawTimerBar(beginTime, CLEAN_TIME_SECONDS * 1000, 1.42, 1.475, 'CLEANING')
-                                if not IsEntityPlayingAnim(me, CLEANING_ANIM_DICT, CLEANING_ANIM_NAME, 3) then
-                                    exports.globals:loadAnimDict(CLEANING_ANIM_DICT)
-                                    TaskPlayAnim(me, CLEANING_ANIM_DICT, CLEANING_ANIM_NAME, 8.0, 1.0, -1, 11, 1.0, false, false, false)
+                                local animInfo = getAnimationInfoForTask(currentTask)
+                                if not IsEntityPlayingAnim(me, animInfo.dict, animInfo.name, 3) then
+                                    exports.globals:loadAnimDict(animInfo.dict)
+                                    TaskPlayAnim(me, animInfo.dict, animInfo.name, 8.0, 1.0, -1, 11, 1.0, false, false, false)
                                 end
                                 Wait(1)
                             end

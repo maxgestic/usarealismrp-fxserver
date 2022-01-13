@@ -9,10 +9,19 @@ local cleaningLocations = {
         {x = 1783.3665771484, y = 2578.2507324219, z = 46.590110778809},
         {x = 1775.7790527344, y = 2578.224609375, z = 46.590118408203}
     },
-    --[[
     ["shower"] = {
-
+        {x = 1762.5603027344, y = 2584.1528320313, z = 45.79780960083},
+        {x = 1762.4711914063, y = 2583.0393066406, z = 45.79780960083},
+        {x = 1762.5052490234, y = 2581.9421386719, z = 45.79780960083},
+        {x = 1762.5593261719, y = 2580.9379882813, z = 45.79780960083},
+        {x = 1762.6495361328, y = 2579.7543945313, z = 45.79780960083},
+        {x = 1764.2890625, y = 2579.771484375, z = 45.79780960083},
+        {x = 1764.2041015625, y = 2580.8955078125, z = 45.79780960083},
+        {x = 1764.2381591797, y = 2581.9560546875, z = 45.79780960083},
+        {x = 1764.1721191406, y = 2583.0883789063, z = 45.79780960083},
+        {x = 1764.2390136719, y = 2584.1032714844, z = 45.79780960083}
     },
+    --[[
     ["kitchen"] = {
 
     },
@@ -23,7 +32,8 @@ local cleaningLocations = {
 }
 
 local PAY_RATES = {
-    tables = 50
+    tables = 75,
+    shower = 75
 }
 
 local CLEANING_TIME_SECONDS = 45
@@ -37,11 +47,10 @@ AddEventHandler("prison-janitor:toggleJob", function(targetSrc)
     if targetSrc then src = targetSrc end
     if not currentlyCleaning[src] then
         print("starting prison job")
-        --local options = {"tables", "shower", "kitchen", "cells"}
-        local options = {"tables"}
+        local options = getAvailableTaskOptions()
         local chosenTask = options[math.random(#options)]
         local locations = cleaningLocations[chosenTask]
-        TriggerClientEvent("prison-janitor:startJobClient", src, locations)
+        TriggerClientEvent("prison-janitor:startJobClient", src, locations, chosenTask)
         TriggerClientEvent("usa:notify", src, "You've started cleaning job: " .. chosenTask)
         currentlyCleaning[src] = deepcopy(locations)
         currentlyCleaningTaskName[src] = chosenTask
@@ -112,6 +121,14 @@ function getNumCleaned(locations)
         end
     end
     return count
+end
+
+function getAvailableTaskOptions()
+    local ret = {}
+    for taskName, taskInfo in pairs(cleaningLocations) do
+        table.insert(ret, taskName)
+    end
+    return ret
 end
 
 -- thread to remove people from job if they escape or are released:
