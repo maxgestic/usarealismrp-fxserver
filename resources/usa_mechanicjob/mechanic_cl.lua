@@ -800,7 +800,7 @@ function ShowHelp(isRank3)
 		TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/tow^0 when near a vehicle to load/unload it from the flatbed.")
 		Wait(3000)
 	end
-	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/install [upgrade]^0 to install custom vehicle upgrades (must be lvl 2 mechanic).")
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can order parts from the parts store and install them by 'using' them in your inventory near a vehicle (must be lvl 2 mechanic).")
 	Wait(3000)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can get a repair kit from the hardware store and use that to repair vehicles.")
 end
