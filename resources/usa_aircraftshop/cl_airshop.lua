@@ -180,7 +180,7 @@ AddEventHandler('aircraft:openPrivateMenu', function(aircraft)
 end)
 
 RegisterNetEvent('aircraft:spawn')
-AddEventHandler('aircraft:spawn', function(hash, id)
+AddEventHandler('aircraft:spawn', function(hash, plate)
     if type(hash) ~= "number" then
         hash = GetHashKey(hash)
     end
@@ -193,12 +193,10 @@ AddEventHandler('aircraft:spawn', function(hash, id)
     end
     local location = GetClosestLocation()
 	local aircraft = CreateVehicle(hash, location.spawn.x, location.spawn.y, location.spawn.z, (location.spawn.heading or 0.0), true, false)
-	TriggerEvent('persistent-vehicles/register-vehicle', aircraft)
 	SetEntityAsMissionEntity(aircraft, 1, 1)
-    if id then
-        SetVehicleNumberPlateText(aircraft, tostring(id):sub(1, 8))
+    if plate then
+        SetVehicleNumberPlateText(aircraft, plate)
     end
-    local plate = GetVehicleNumberPlateText(aircraft)
     local vehicle_key = {
         name = "Key -- " .. plate,
         quantity = 1,
@@ -206,7 +204,7 @@ AddEventHandler('aircraft:spawn', function(hash, id)
         owner = "GOVT",
         make = "GOVT",
         model = "GOVT",
-        plate = plate
+        plate = GetVehicleNumberPlateText(aircraft)
     }
     TriggerServerEvent("garage:giveKey", vehicle_key)
 end)

@@ -116,7 +116,8 @@ AddEventHandler('aircraft:requestPurchase', function(category, name, business)
             exports["usa-businesses"]:GiveBusinessCashPercent(business, aircraft.price)
         end
         local charAircraft = char.get("aircraft")
-        aircraft.id = math.random(99999999)
+        aircraft.id = exports.globals:generateID(8)
+        aircraft.plate = aircraft.id
         aircraft.stored = false
         table.insert(charAircraft, aircraft)
         char.set("aircraft", charAircraft)
@@ -148,10 +149,13 @@ AddEventHandler('aircraft:requestRetrieval', function(id)
     local aircraft = char.get("aircraft")
     for i = 1, #aircraft do
         if aircraft[i].id == id then
+            if not aircraft[i].plate then
+                aircraft[i].plate = id
+            end
             if aircraft[i].stored then
                 aircraft[i].stored = false
                 char.set("aircraft", aircraft)
-                TriggerClientEvent("aircraft:spawn", source, aircraft[i].hash, aircraft[i].id)
+                TriggerClientEvent("aircraft:spawn", source, aircraft[i].hash, aircraft[i].plate)
             else 
                 TriggerClientEvent("usa:notify", source, "Not stored!")
             end
