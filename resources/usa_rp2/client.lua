@@ -228,31 +228,6 @@ Citizen.CreateThread(function()
     end
 end)
 
--- NO DRIVE BY'S
-Citizen.CreateThread(function()
-  local driveBysEnabled = true
-    while true do
-        Wait(1)
-        local me = PlayerPedId()
-        local veh = GetVehiclePedIsIn(me)
-        local mph = GetEntitySpeed(veh) * 2.236936
-        if veh and (IsControlPressed(0, 76) or IsControlPressed(0, 79) or IsControlPressed(0, 71) or IsControlPressed(0, 72) or IsControlPressed(0, 63) or IsControlPressed(0, 64)) or (mph > 30 and GetPedInVehicleSeat(veh, -1) == me) then
-            DisableControlAction(0, 68, true)
-            DisableControlAction(0, 69, true)
-            DisableControlAction(0, 70, true)
-            if driveBysEnabled then
-              driveBysEnabled = false
-              SetPlayerCanDoDriveBy(me, false)
-            end
-        else
-          if not driveBysEnabled then
-            driveBysEnabled = true
-            SetPlayerCanDoDriveBy(me, true)
-          end
-        end
-    end
-end)
-
 -- spawn peds
 local locations = {
       stripclub = {
