@@ -119,7 +119,7 @@ AddEventHandler("mechanic:vehicleRepaired", function()
 	MechanicHelper.incrementStat(ident, "repairCount", function(updatedVal)
 		TriggerClientEvent("usa:notify", usource, "You have repaired " .. updatedVal .. " vehicle(s)!", "^3INFO: ^0You have repaired " .. updatedVal .. " vehicle(s)!")
 		if updatedVal == MechanicHelper.LEVEL_2_RANK_THRESH then -- notify of rank up
-			TriggerClientEvent("usa:notify", usource, "You have reached mechanic level 2!", "^3INFO: ^0You have reached mechanic level 2! You can now use ^3/install <upgradeName>^0 to install custom vehicle upgrades!")
+			TriggerClientEvent("usa:notify", usource, "You have reached mechanic level 2!", "^3INFO: ^0You have reached mechanic level 2!")
 		end
 	end)
 end)
