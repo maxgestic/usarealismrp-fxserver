@@ -126,14 +126,6 @@ const mdtApp = new Vue({
                     return;
                 }
 
-                if (this.fname_search != "" && this.lname_search != "") {
-                    $.post('http://usa-mdt/PerformPersonCheckByName', JSON.stringify({
-                        fname: this.fname_search,
-                        lname: this.lname_search
-                    }));
-                    return;
-                }
-
                 if (this.person_check.dna && this.person_check.dna != "") {
                     $.post('http://usa-mdt/PerformPersonCheckByDNA', JSON.stringify({
                         dna: this.person_check.dna
@@ -141,7 +133,7 @@ const mdtApp = new Vue({
                     return;
                 }
 
-                if (!this.person_check.ssn && this.fname_search == "" && this.lname_search == "" && !this.person_check.dna )
+                if (!this.person_check.ssn && this.name_search == "" && !this.person_check.dna )
                     this.error = "Please enter an SSN, first and last name, or DNA sample to perform a person check!";
 
             }
