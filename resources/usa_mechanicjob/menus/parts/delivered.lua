@@ -6,6 +6,10 @@ local CLAIM_BUTTON_TIMEOUT_SECONDS = 3
 
 local claimButtonLastLick = 0
 
+local PAGE_ITEM_MAX = 15
+
+local currentPageNum = 1
+
 function drawDeliveriesMenu(deliveredParts)
     vein:beginWindow(windowX, windowY) -- Mandatory
 
@@ -14,16 +18,11 @@ function drawDeliveriesMenu(deliveredParts)
     vein:endRow()
 
     vein:beginRow()
-        local itemsPerRow = 3
-        local numRows = math.ceil(#deliveredParts / itemsPerRow)
-
-        for i = 1, numRows do
+        for j = 1, PAGE_ITEM_MAX do
             vein:beginRow()
-                for j = 1, itemsPerRow do
-                    local curPartIndex = ((i-1) * itemsPerRow) + j
-                    if deliveredParts[curPartIndex] then
-                        drawLabel(deliveredParts[curPartIndex].name)
-                    end
+                local index = ((currentPageNum - 1) * PAGE_ITEM_MAX) + j
+                if deliveredParts[index] then
+                    drawLabel(deliveredParts[index].name)
                 end
             vein:endRow()
         end
@@ -49,6 +48,17 @@ function drawDeliveriesMenu(deliveredParts)
         end
         if vein:button('Close') then -- Draw button and check if it were pressed
             isMechanicPartMenuOpen = false
+        end
+        local numPages = math.ceil(#deliveredParts / PAGE_ITEM_MAX)
+        if numPages > 1 and currentPageNum ~= 1 then
+            if vein:button('Prev') then
+                currentPageNum = currentPageNum - 1
+            end
+        end
+        if numPages > 1 and currentPageNum ~= numPages then
+            if vein:button('Next') then
+                currentPageNum = currentPageNum + 1
+            end
         end
     vein:endRow()
 
