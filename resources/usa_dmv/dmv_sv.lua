@@ -208,7 +208,9 @@ function updateNitroDocIdentifier(old, new)
 			if doc then
 				doc._id = nil
 				doc._rev = nil
-				db.deleteDocument("vehicle-nitro-fuel", old, function(ok) end)
+				db.deleteDocument("vehicle-nitro-fuel", old, function(ok)
+					db.createDocumentWithId("vehicle-nitro-fuel", doc, new, function(ok) end)
+				end)
 			end
 		end)
 	end)
