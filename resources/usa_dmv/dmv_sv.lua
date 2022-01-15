@@ -133,6 +133,28 @@ AddEventHandler("dmv:orderCustomPlate", function(oldPlate, newPlate)
 						TriggerClientEvent("usa:notify", src, "~y~Fee:~w~ " .. exports.globals:comma_value(CUSTOM_PLATE_PRICE))
 						-- notify garages to bypass vehicle plate ownership check for a vehicle that was used to drive to the DMV
 						TriggerEvent("garage:notifyOfPlateChange", src, oldPlate, newPlate)
+
+						-- send to discord #dmv-log --
+						local url = 'https://discord.com/api/webhooks/618096418388705291/32_PzUcyLTAxDunODw8nf3E57nhjVAoaVZt1LrSOiwLC5EdXkQnyvtLBj_0bdLLSyd04'
+						local owner_name = c.getFullName()
+						local car_make = oldVehDoc.make
+						local car_model = oldVehDoc.model
+						local makemodel = car_make .. " " .. car_model
+						PerformHttpRequest(url, function(err, text, headers)
+							if text then
+								print(text)
+							end
+						end, "POST", json.encode({
+							embeds = {
+								{
+									description = "**RO:** " .. owner_name .. " \n**MAKE/MODEL:** " .. makemodel .." \n**OLD PLATE:** " .. oldPlate .." \n**NEW PLATE:** " .. newPlate .."\n**TIMESTAMP:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+									color = 263172,
+									author = {
+										name = "Department of Motor Vehicles - Plate Change"
+									}
+								}
+							}
+						}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 					end)
 				else
 					TriggerClientEvent("usa:notify", src, "Blacklisted phrase found")
