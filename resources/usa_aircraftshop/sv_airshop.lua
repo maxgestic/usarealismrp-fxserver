@@ -42,17 +42,6 @@ AddEventHandler('aircraft:requestOpenMenu', function()
     end
 end)
 
-RegisterServerEvent('aircraft:requestOpenPrivateMenu')
-AddEventHandler('aircraft:requestOpenPrivateMenu', function()
-    local char = exports["usa-characters"]:GetCharacter(source)
-    local license = char.getItem("Aircraft License")
-    if license and license.status == "valid" then
-        TriggerClientEvent('aircraft:openPrivateMenu', source, (char.get("aircraft") or {}))
-    else
-        TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. exports["globals"]:comma_value(LICENSE_PURCHASE_PRICE))
-    end
-end)
-
 RegisterServerEvent('aircraft:loadItems')
 AddEventHandler('aircraft:loadItems', function()
     TriggerClientEvent("aircraft:loadItems", source, ITEMS, RENTAL_PERCENTAGE, CLAIM_PERCENTAGE)
@@ -91,9 +80,9 @@ AddEventHandler('aircraft:requestReturn', function(plate)
 end)
 
 RegisterServerEvent('aircraft:requestRent')
-AddEventHandler('aircraft:requestRent', function(category, name, business)
+AddEventHandler('aircraft:requestRent', function(name, business)
     local char = exports["usa-characters"]:GetCharacter(source)
-    local aircraft = ITEMS[category][name]
+    local aircraft = getAircraftItemFromName(name)
     local rentalPrice = math.floor(RENTAL_PERCENTAGE * aircraft.price)
     if char.get("money") >= rentalPrice then
         char.removeMoney(rentalPrice)
@@ -101,15 +90,16 @@ AddEventHandler('aircraft:requestRent', function(category, name, business)
             exports["usa-businesses"]:GiveBusinessCashPercent(business, rentalPrice)
         end
         TriggerClientEvent("aircraft:spawn", source, aircraft.hash)
+        TriggerClientEvent("usa:notify", source, "Rent successful!")
     else 
         TriggerClientEvent("usa:notify", source, "Not enough money!")
     end
 end)
 
 RegisterServerEvent('aircraft:requestPurchase')
-AddEventHandler('aircraft:requestPurchase', function(category, name, business)
+AddEventHandler('aircraft:requestPurchase', function(name, business)
     local char = exports["usa-characters"]:GetCharacter(source)
-    local aircraft = ITEMS[category][name]
+    local aircraft = getAircraftItemFromName(name)
     if char.get("money") >= aircraft.price then 
         char.removeMoney(aircraft.price)
         if business then 
@@ -122,6 +112,7 @@ AddEventHandler('aircraft:requestPurchase', function(category, name, business)
         table.insert(charAircraft, aircraft)
         char.set("aircraft", charAircraft)
         TriggerClientEvent("aircraft:spawn", source, aircraft.hash, aircraft.id)
+        TriggerClientEvent("usa:notify", source, "Purchase successful!")
     else 
         TriggerClientEvent("usa:notify", source, "Not enough money!")
     end
@@ -156,6 +147,7 @@ AddEventHandler('aircraft:requestRetrieval', function(id)
                 aircraft[i].stored = false
                 char.set("aircraft", aircraft)
                 TriggerClientEvent("aircraft:spawn", source, aircraft[i].hash, aircraft[i].plate)
+                TriggerClientEvent("usa:notify", source, "Retrieved!")
             else 
                 TriggerClientEvent("usa:notify", source, "Not stored!")
             end
@@ -221,3 +213,14 @@ AddEventHandler("aircraft:purchaseLicense", function(business)
         TriggerClientEvent("usa:notify", source, "You have been issued a pilot's license!")
     end
 end)
+
+function getAircraftItemFromName(name)
+    for category, categoryItems in pairs(ITEMS) do
+        for itemName, info in pairs(categoryItems) do
+            if itemName == name then
+                return info
+            end
+        end
+    end
+    return nil
+end
