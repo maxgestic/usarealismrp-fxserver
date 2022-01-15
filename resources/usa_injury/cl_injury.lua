@@ -71,7 +71,7 @@ bone_effects = { -- ORDER MATTERS - each index is subject to each stage
 }
 
 injuries = { -- ensure this is the same as sv_injury.lua
-    --[2725352035] = {type = 'blunt', bleed = 7200, string = 'Fists', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.5}, -- WEAPON_UNARMED
+    --[GetHashKey("WEAPON_UNARMED")] = {type = 'blunt', bleed = 7200, string = 'Fists', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.5}, -- WEAPON_UNARMED
     [GetHashKey("WEAPON_ANIMAL")] = {type = 'laceration', bleed = 1500, string = 'Animal Attack', treatableWithBandage = true, treatmentPrice = 80, dropEvidence = 0.9}, -- WEAPON_ANIMAL
     [GetHashKey("WEAPON_COUGAR")] = {type = 'laceration', bleed = 900, string = 'Animal Attack', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 0.9}, -- WEAPON_COUGAR
     [GetHashKey("WEAPON_KNIFE")] = {type = 'laceration', bleed = 480, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_KNIFE
@@ -331,35 +331,37 @@ AddEventHandler('injuries:triggerGrace', function(callback)
 end)
 
 function RegisterInjuries(entity, weaponHash)
-    if entity == PlayerPedId() then
-        local playerPed = PlayerPedId()
-        local _, damagedBone = GetPedLastDamageBone(playerPed)
-        for hash, name in pairs(parts) do
-            if hash == damagedBone then
-                ApplyPedBlood(playerPed, GetPedBoneIndex(playerPed, damagedBone), 0.0, 0.0, 0.0, "wound_sheet")
-                if type(injuredParts[damagedBone]) ~= 'table' then
-                    injuredParts[damagedBone] = {}
+    if injuries[weaponHash] then
+        if entity == PlayerPedId() then
+            local playerPed = PlayerPedId()
+            local _, damagedBone = GetPedLastDamageBone(playerPed)
+            for hash, name in pairs(parts) do
+                if hash == damagedBone then
+                    ApplyPedBlood(playerPed, GetPedBoneIndex(playerPed, damagedBone), 0.0, 0.0, 0.0, "wound_sheet")
+                    if type(injuredParts[damagedBone]) ~= 'table' then
+                        injuredParts[damagedBone] = {}
+                    end
+                    if type(injuredParts[damagedBone][weaponHash]) ~= 'table' then
+                        --print(weaponHash .. ' has damaged '.. damagedBone)
+                        injuredParts[damagedBone][weaponHash] = {
+                            type = injuries[weaponHash].type,
+                            bleed = injuries[weaponHash].bleed,
+                            string = injuries[weaponHash].string,
+                            treatableWithBandage = injuries[weaponHash].treatableWithBandage,
+                            treatmentPrice = injuries[weaponHash].treatmentPrice,
+                            stage = 1, -- add the stage to the injury
+                            bandagedTime = 0 -- add when the injury was last bandaged
+                        }
+                        --print('added injuredParts['.. damagedBone..']['..weaponHash..']')
+                        TriggerServerEvent('injuries:saveData', injuredParts)
+                        Citizen.Wait(2000)
+                        NotifyPlayerOfInjuries()
+                    end
+                    return
                 end
-                if type(injuredParts[damagedBone][weaponHash]) ~= 'table' then
-                    --print(weaponHash .. ' has damaged '.. damagedBone)
-                    injuredParts[damagedBone][weaponHash] = {
-                        type = injuries[weaponHash].type,
-                        bleed = injuries[weaponHash].bleed,
-                        string = injuries[weaponHash].string,
-                        treatableWithBandage = injuries[weaponHash].treatableWithBandage,
-                        treatmentPrice = injuries[weaponHash].treatmentPrice,
-                        stage = 1, -- add the stage to the injury
-                        bandagedTime = 0 -- add when the injury was last bandaged
-                    }
-                    --print('added injuredParts['.. damagedBone..']['..weaponHash..']')
-                    TriggerServerEvent('injuries:saveData', injuredParts)
-                    Citizen.Wait(2000)
-                    NotifyPlayerOfInjuries()
-                end
-                return
             end
+            print('INJURIES: Add me to injury bone list: ' ..damagedBone)
         end
-        print('INJURIES: Add me to injury bone list: ' ..damagedBone)
     end
 end
 
