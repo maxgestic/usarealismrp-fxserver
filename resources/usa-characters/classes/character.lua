@@ -463,10 +463,30 @@ function CreateCharacter(data)
     end
   end
 
-  rTable.removeAllItems = function()
+  rTable.removeAllItems = function(excludeType)
     for i = 0, self.inventory.MAX_CAPACITY - 1 do
-      if self.inventory.items[tostring(i)] then
-        self.inventory.items[tostring(i)] = nil
+      i = tostring(i)
+      if self.inventory.items[i] then
+        if not excludeType or (excludeType and self.inventory.items[i].type and self.inventory.items[i].type ~= excludeType) then
+          self.inventory.items[i] = nil
+        end
+      end
+    end
+  end
+
+  rTable.dropAllItems = function(excludeType)
+    local mycoords = GetEntityCoords(GetPlayerPed(self.source))
+    for i = 0, self.inventory.MAX_CAPACITY - 1 do
+      i = tostring(i)
+      if self.inventory.items[i] then
+        if not excludeType or (excludeType and self.inventory.items[i].type and self.inventory.items[i].type ~= excludeType) then
+          self.inventory.items[i].coords = {x = mycoords.x, y = mycoords.y, z = mycoords.z}
+          self.inventory.items[i].coords.x = self.inventory.items[i].coords.x + (math.random() * 1)
+          self.inventory.items[i].coords.y = self.inventory.items[i].coords.y + (math.random() * 1)
+          self.inventory.items[i].coords.z = self.inventory.items[i].coords.z - 0.8
+          TriggerEvent("interaction:addDroppedItem", self.inventory.items[i])
+          self.inventory.items[i] = nil
+        end
       end
     end
   end

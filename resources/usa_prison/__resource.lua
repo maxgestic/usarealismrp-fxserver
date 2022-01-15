@@ -30,7 +30,8 @@ client_scripts {
 	"@NativeUI/NativeUI.lua",
     'menu.lua',
     'contraband/cl_contraband.lua',
-    'jobs/janitor/cl_janitor.lua'
+    'jobs/janitor/cl_janitor.lua',
+    'frontdesk/*.lua'
 }
 
 server_scripts {
