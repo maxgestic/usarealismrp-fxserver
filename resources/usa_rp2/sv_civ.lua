@@ -435,7 +435,7 @@ function SendDiscordMessage(content, url, color)
 				description = content,
 				color = color, --524288
 				author = {
-					name = "Department of Motor Vehicles"
+					name = "Department of Motor Vehicles - Vehicle Transfer"
 				}
 			}
 		}
