@@ -34,6 +34,10 @@ local CELLS = {
 
 local alarm_on = false
 
+local DB_NAME = "prisonitemstorage"
+
+exports["globals"]:PerformDBCheck("usa_jail", DB_NAME)
+
 -- V2
 TriggerEvent('es:addCommand', 'jail', function(source, args, char)
 	local job = char.get("job")
@@ -52,8 +56,8 @@ TriggerEvent('es:addCommand', 'toggle_alarm', function(source, args, char)
 	if job == "sheriff" or job == "cop" or job == "corrections" then
 		if alarm_on == false then
 			alarm_on = true
-		    TriggerClientEvent('chat:addMessage', source, { args = { '^1SYSTEM', 'Prison Alarm Activated!' } })
-		    TriggerEvent("jail:startalarmSV", -1)
+			TriggerClientEvent('chat:addMessage', source, { args = { '^1SYSTEM', 'Prison Alarm Activated!' } })
+			TriggerEvent("jail:startalarmSV", -1)
 		else
 			alarm_on = false
 			TriggerClientEvent('chat:addMessage', source, { args = { '^1SYSTEM', 'Prison Alarm Deactivated!' } })
@@ -119,6 +123,40 @@ function jailPlayer(src, data, officerName, gender)
 	TriggerClientEvent("jail:jail", targetPlayer, assigned_cell, gender)
 	inmate.removeWeapons()
 	inmate.removeIllegalItems()
+
+	if inmate.get("jailTime") == 0 then
+
+		local inv = inmate.get("inventory")
+		for i = 0, inv.MAX_CAPACITY do
+			i = tostring(i)
+			if inv.items[i] and inv.items[i].type and inv.items[i].type == "license" then
+				inv.items[i] = nil
+			end
+		end
+		local invtable = {
+			inventory = inv,
+			storedAt = os.time()
+		}
+		local charid = inmate.get("_id")
+		TriggerEvent('es:exposeDBFunctions', function(db)
+			db.createDocumentWithId(DB_NAME, invtable, charid, function(cb1)
+				if cb1 then
+					inmate.removeAllItems("license")
+					TriggerClientEvent("usa:notify", targetPlayer, "Your belongings have been stored until your release!")
+				else
+					db.updateDocument(DB_NAME, charid, invtable, function(cb2)
+						if cb2 then
+							inmate.removeAllItems("license")
+							TriggerClientEvent("usa:notify", targetPlayer, "Your belongings have been stored until your release!")
+						else 
+							TriggerClientEvent("usa:notify", targetPlayer, "There was an issue with taking your belongings automatically, please inform a CO about this.")
+						end
+					end)
+				end
+			end)
+		end)
+	end
+
 	inmate.set("jailTime", sentence)
 	inmate.set("job", "civ")
 
@@ -208,18 +246,25 @@ AddEventHandler("jail:notifyEscapee", function()
 	local WEBHOOK_URL = "https://discord.com/api/webhooks/876634488476692551/tvcqPzkDCod0gz5JmtZkbyV7ShW_W9B_SlutIFTLRBtw43soBtYowt0SFMVgn7q9J9sa"
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local inmate_name = char.getFullName()
+	local charid = char.get("_id")
 	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3INFO: ^0A person has escaped from Bolingbroke Penitentiary! ^3Inmate info: ^0" .. inmate_name)
 
 	exports.globals:SendDiscordLog(WEBHOOK_URL, "An inmate escaped! Name: `" .. inmate_name .. "`")
 
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.deleteDocument(DB_NAME, charid, function(ok)
+			-- print(ok) --debug
+		end)
+	end)
+
 	alarm_on = true
-    TriggerEvent("jail:startalarmSV", -1)
-    SetTimeout(5 * 60 * 1000, function ()
-    	if alarm_on then
-	    	alarm_on = false
-	    	TriggerClientEvent("jail:stopalarmCL", -1)
-	    end
-    end)
+	TriggerEvent("jail:startalarmSV", -1)
+	SetTimeout(5 * 60 * 1000, function ()
+		if alarm_on then
+			alarm_on = false
+			TriggerClientEvent("jail:stopalarmCL", -1)
+		end
+	end)
 end)
 
 RegisterServerEvent("jail:startalarmSV")

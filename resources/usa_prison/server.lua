@@ -287,3 +287,23 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 		TriggerClientEvent("usa:notify", usource, "You are not on-duty!")
 	end
 end)
+
+RegisterServerEvent("prison:retrieveItems")
+AddEventHandler("prison:retrieveItems", function()
+	print("retrieving items!")
+	local src = source
+	local char = exports["usa-characters"]:GetCharacter(src)
+	char.dropAllItems("license")
+	local charid = char.get("_id")
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.getDocumentById("prisonitemstorage", charid, function(inv)
+			if not inv then
+				print("error")
+			else
+				char.set("inventory", inv.inventory)
+				TriggerClientEvent("usa:notify", src, "Here are your belongings back! Stay out of trouble!")
+				db.deleteDocument("prisonitemstorage", charid, function(ok) end)
+			end
+		end)
+	end)
+end)
