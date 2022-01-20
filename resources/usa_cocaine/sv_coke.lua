@@ -15,14 +15,18 @@ local cocaineProduced = {
 }
 
 RegisterServerEvent("cocaineJob:givePackaged")
-AddEventHandler("cocaineJob:givePackaged", function()
-	local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler("cocaineJob:givePackaged", function(securityToken)
+	local src = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+	local char = exports["usa-characters"]:GetCharacter(src)
 	if char.canHoldItem(cocaineProduced) then
     char.removeItem("Uncut Cocaine")
-  	char.giveItem(cocaineProduced)
-		TriggerClientEvent("usa:notify", source, "You have successfully proccessed the uncut cocaine into packaged product!")
+	char.giveItem(cocaineProduced)
+		TriggerClientEvent("usa:notify", src, "You have successfully proccessed the uncut cocaine into packaged product!")
 	else
-		TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
+		TriggerClientEvent("usa:notify", src, "Your inventory is full. Can't carry anymore!")
 	end
 end)
 
@@ -94,8 +98,12 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function()
 end)
 
 RegisterServerEvent("cocaineJob:giveUncut")
-AddEventHandler("cocaineJob:giveUncut", function()
-	local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler("cocaineJob:giveUncut", function(securityToken)
+	local src = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+	local char = exports["usa-characters"]:GetCharacter(src)
 	char.giveItem(uncutCocaine, 1)
 end)
 
