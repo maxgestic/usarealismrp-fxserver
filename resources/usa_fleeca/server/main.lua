@@ -86,7 +86,12 @@ end
 
 RegisterServerEvent('fleeca:drilledGoods')
 AddEventHandler('fleeca:drilledGoods', function(securityToken)
-    local char = exports["usa-characters"]:GetCharacter(source)
+    local src = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+
+    local char = exports["usa-characters"]:GetCharacter(src)
     local payout = math.random()
     local cash = math.random(300, 3100)
 
@@ -95,13 +100,13 @@ AddEventHandler('fleeca:drilledGoods', function(securityToken)
         if char.canHoldItem(randomItem) then
             randomItem.uuid = exports.globals:generateID()
             char.giveItem(randomItem)
-            TriggerClientEvent("usa:notify", source, "You stole ".. randomItem.name)
+            TriggerClientEvent("usa:notify", src, "You stole ".. randomItem.name)
         else
-            TriggerClientEvent("usa:notify", source, "Inventory is full!")
+            TriggerClientEvent("usa:notify", src, "Inventory is full!")
         end
     else
         char.giveMoney(cash)
-        TriggerClientEvent("usa:notify", source, "You stole $".. cash .. ' from the deposit box!')
+        TriggerClientEvent("usa:notify", src, "You stole $".. cash .. ' from the deposit box!')
     end
 end)
 
