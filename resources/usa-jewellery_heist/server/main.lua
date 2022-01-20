@@ -54,10 +54,14 @@ AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()
 end)
 
 RegisterServerEvent('jewelleryheist:plantThermite')
-AddEventHandler('jewelleryheist:plantThermite', function()
-    local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler('jewelleryheist:plantThermite', function(securityToken)
+    local src = source
+    if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+    local char = exports["usa-characters"]:GetCharacter(src)
     char.removeItem('Thermite')
-    TriggerClientEvent('doormanager:thermiteDoor', source)
+    TriggerClientEvent('doormanager:thermiteDoor', src)
     SetTimeout(STORE_ROBBERY_TIMEOUT + math.random(0, 45 * 60 * 1000), function()
         resetHeistState()
     end)
@@ -74,19 +78,24 @@ AddEventHandler('jewelleryheist:doesUserHaveGoodsToSell', function()
 end)
 
 RegisterServerEvent('jewelleryheist:sellstolengoods')
-AddEventHandler('jewelleryheist:sellstolengoods', function()
-    local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler('jewelleryheist:sellstolengoods', function(securityToken)
+    local src = source
+    local char = exports["usa-characters"]:GetCharacter(src)
     local purchaseAmount = math.random(700, 2000)
     if char.hasItem("Stolen Goods") then
         char.removeItem("Stolen Goods", 1)
         char.giveMoney(purchaseAmount)
-        TriggerClientEvent('usa:notify', source, 'You have been paid $'.. exports.globals:comma_value(purchaseAmount) ..'~s~.')
+        TriggerClientEvent('usa:notify', src, 'You have been paid $'.. exports.globals:comma_value(purchaseAmount) ..'~s~.')
     end
 end)
 
 RegisterServerEvent('jewelleryheist:stolengoods')
-AddEventHandler('jewelleryheist:stolengoods', function()
-    local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler('jewelleryheist:stolengoods', function(securityToken)
+    local src = source
+    if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+    local char = exports["usa-characters"]:GetCharacter(src)
     local stolenGoods = {
         name = "Stolen Goods",
         legality = "illegal",
@@ -96,9 +105,9 @@ AddEventHandler('jewelleryheist:stolengoods', function()
     }
     if char.canHoldItem(stolenGoods) then
         char.giveItem(stolenGoods)
-        TriggerClientEvent("usa:notify", source, "You have taken " .. stolenGoods.quantity .. " stolen goods!")
+        TriggerClientEvent("usa:notify", src, "You have taken " .. stolenGoods.quantity .. " stolen goods!")
     else
-        TriggerClientEvent("usa:notify", source, "Inventory is full!")
+        TriggerClientEvent("usa:notify", src, "Inventory is full!")
     end
 end)
 
