@@ -160,17 +160,10 @@ function jailPlayer(src, data, officerName, gender)
 	inmate.set("jailTime", sentence)
 	inmate.set("job", "civ")
 
-	local property = inmate.get("property")
+	inmate.removeBank(fine)
 
-	if inmate.get("bank") > 0 or not property then
-		inmate.removeBank(fine)
-	else
-		if property["money"] > 0 then
-			property["money"] = property["money"] - fine
-			inmate.set("property", property)
-		else 
-			TriggerClientEvent("usa:notify", src, "Person is not able to pay their fine!", "^3INFO: ^0The person you jailed now owes $" .. fine .. " to the state. Consider seizing assets worth that amount if they cannot pay it back.")
-		end
+	if inmate.get("bank") < 0 then
+		TriggerClientEvent("usa:notify", src, "Person owes money to the state!", "^3INFO: ^0The person you jailed now owes $" .. inmate.get("bank") .. " to the state. They can now legally have their assets (vehicles, properties, etc) worth that amount seized now unless they can pay the amount they owe.")
 	end
 
 	TriggerClientEvent("usa:notify", targetPlayer, "You have been fined: $" .. fine)
