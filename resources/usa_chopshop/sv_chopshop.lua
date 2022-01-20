@@ -6,8 +6,12 @@ local items = {
 }
 
 RegisterServerEvent("chopshop:reward")
-AddEventHandler("chopshop:reward", function(veh_name, damage, property)
-  local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler("chopshop:reward", function(veh_name, damage, securityToken)
+  local src = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+  local char = exports["usa-characters"]:GetCharacter(src)
   local reward = math.random(200, 900)
   local numTroopers = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
 
@@ -18,15 +22,15 @@ AddEventHandler("chopshop:reward", function(veh_name, damage, property)
 
   local finalReward = math.max(reward - damage, 0) -- give money reward
   char.giveMoney(finalReward)
-  TriggerClientEvent("usa:notify", source, "Thanks! Here is $" .. finalReward .. "!", "^0Thanks! Here is $" .. finalReward .. "!")
+  TriggerClientEvent("usa:notify", src, "Thanks! Here is $" .. finalReward .. "!", "^0Thanks! Here is $" .. finalReward .. "!")
 
   if math.random() <= 0.30 then
     local randomItem = items[math.random(#items)]
     if char.canHoldItem(randomItem) then
       char.giveItem(randomItem)
-      TriggerClientEvent("usa:notify", source, "Here, take this " .. randomItem.name .. ". It might be useful.", "^3Pedro: ^0Here, take this " .. randomItem.name .. ". It might be useful.")
+      TriggerClientEvent("usa:notify", src, "Here, take this " .. randomItem.name .. ". It might be useful.", "^3Pedro: ^0Here, take this " .. randomItem.name .. ". It might be useful.")
     else
-      TriggerClientEvent("usa:notify", source, "Inventory full!", "^3Pedro: ^0I was going to give you something extra but your pockets are full!")
+      TriggerClientEvent("usa:notify", src, "Inventory full!", "^3Pedro: ^0I was going to give you something extra but your pockets are full!")
     end
   end
 end)

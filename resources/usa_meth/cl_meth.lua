@@ -80,7 +80,7 @@ Citizen.CreateThread(function()
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
             if meth.producingMeth then
                 for k = 1, #meth.methIngredients do
-                    TriggerServerEvent("methJob:giveChemicals", meth.methIngredients[k])
+                    TriggerServerEvent("methJob:giveChemicals", meth.methIngredients[k], securityToken)
                 end
                 meth.methIngredients = {}
             end
@@ -239,7 +239,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 meth.methIngredients = {}
-                TriggerServerEvent("methJob:methProduced", methProduced)
+                TriggerServerEvent("methJob:methProduced", methProduced, securityToken)
             end
         elseif meth.processingMeth then
             beginTime = GetGameTimer()
@@ -273,7 +273,7 @@ Citizen.CreateThread(function()
             end
             meth.processingMeth = false
             if not failed then
-                TriggerServerEvent("methJob:methProcessed", processedMeth)
+                TriggerServerEvent("methJob:methProcessed", processedMeth, securityToken)
             end
         end
     Citizen.Wait(0)

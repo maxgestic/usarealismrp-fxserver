@@ -74,7 +74,7 @@ AddEventHandler("weed:continueHarvesting", function()
     end
   end
   if harvested then
-    TriggerServerEvent("weed:rewardItem", "Harvest")
+    TriggerServerEvent("weed:rewardItem", "Harvest", securityToken)
     TriggerEvent('usa:notify', 'You have harvested a ~y~Weed Bud~s~.')
     TriggerEvent('evidence:weedScent')
     ClearPedTasks(playerPed)
@@ -102,7 +102,7 @@ AddEventHandler("weed:continueProcessing", function()
     end
   end
   if processed then
-    TriggerServerEvent("weed:rewardItem", "Process")
+    TriggerServerEvent("weed:rewardItem", "Process", securityToken)
     TriggerEvent('usa:notify', 'You have processed a ~y~Weed Bud~s~.')
     ClearPedTasks(playerPed)
     processed = false
