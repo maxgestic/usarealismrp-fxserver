@@ -4,8 +4,12 @@
 -- This same concept within the script will handle all aspects of a job from getting supplies, processing, to selling, etc.
 
 RegisterServerEvent("methJob:methProduced")
-AddEventHandler("methJob:methProduced", function(itemName)
-	local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler("methJob:methProduced", function(itemName, securityToken)
+	local src = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+	local char = exports["usa-characters"]:GetCharacter(src)
 	local methProduced = {
 		name = itemName,
 		type = "drug",
@@ -16,15 +20,19 @@ AddEventHandler("methJob:methProduced", function(itemName)
 	}
 	if char.canHoldItem(methProduced) then
 		char.giveItem(methProduced)
-		TriggerClientEvent("usa:notify", source, "You have successfully proccessed the materials into a meth rock!")
+		TriggerClientEvent("usa:notify", src, "You have successfully proccessed the materials into a meth rock!")
     else
-		TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
+		TriggerClientEvent("usa:notify", src, "Your inventory is full. Can't carry anymore!")
     end
 end)
 
 RegisterServerEvent("methJob:methProcessed")
-AddEventHandler("methJob:methProcessed", function(itemName)
-	local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler("methJob:methProcessed", function(itemName, securityToken)
+	local src = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+	local char = exports["usa-characters"]:GetCharacter(src)
 	local methProduced = {
 		name = itemName,
 		type = 'drug',
@@ -35,9 +43,9 @@ AddEventHandler("methJob:methProcessed", function(itemName)
 	}
 	if char.canHoldItem(methProduced) then
 		char.giveItem(methProduced)
-		TriggerClientEvent("usa:notify", source, "You have successfully processed meth rock into packaged product!")
+		TriggerClientEvent("usa:notify", src, "You have successfully processed meth rock into packaged product!")
 	else
-		TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
+		TriggerClientEvent("usa:notify", src, "Your inventory is full. Can't carry anymore!")
 	end
 end)
 
@@ -60,8 +68,12 @@ AddEventHandler("methJob:checkUserJobSupplies", function(supply, supply2)
 end)
 
 RegisterServerEvent("methJob:giveChemicals")
-AddEventHandler("methJob:giveChemicals", function(chemicalToGive)
-	local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler("methJob:giveChemicals", function(chemicalToGive, securityToken)
+	local src = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+	local char = exports["usa-characters"]:GetCharacter(src)
 	local chemical = {
 		name = chemicalToGive,
 		legality = "illegal",

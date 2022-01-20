@@ -1,4 +1,11 @@
 resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
-client_script 'cl_meth.lua'
-server_script 'sv_meth.lua'
+client_scripts {
+    'cl_meth.lua',
+    '@salty_tokenizer/init.lua'
+}
+
+server_scripts {
+    'sv_meth.lua',
+    '@salty_tokenizer/init.lua'
+}

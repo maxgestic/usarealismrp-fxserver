@@ -21,16 +21,20 @@ local PARTS_DELIVERY_TIME_DAYS = 1
 local installQueue = {}
 
 RegisterServerEvent("towJob:giveReward")
-AddEventHandler("towJob:giveReward", function()
-	local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler("towJob:giveReward", function(securityToken)
+	local src = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+	local char = exports["usa-characters"]:GetCharacter(src)
 	if char.get("job") == "mechanic" then
 		local amountRewarded = math.random(TOW_REWARD[1], TOW_REWARD[2])
 		char.giveMoney(amountRewarded)
-		TriggerClientEvent('usa:notify', source, 'Vehicle impounded, you have received: ~y~$'..amountRewarded..'.00')
-		print("TOW: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has received amount["..amountRewarded..'] for impounding vehicle!')
+		TriggerClientEvent('usa:notify', src, 'Vehicle impounded, you have received: ~y~$'..amountRewarded..'.00')
+		print("TOW: " .. GetPlayerName(src) .. "["..GetPlayerIdentifier(src).."] has received amount["..amountRewarded..'] for impounding vehicle!')
 	else
-		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
-    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit towJob:giveReward event, please intervene^0!')
+		DropPlayer(src, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(src)..' ['..GetPlayerIdentifier(src)..'] ^0 has been kicked for attempting to exploit towJob:giveReward event, please intervene^0!')
     end
 end)
 

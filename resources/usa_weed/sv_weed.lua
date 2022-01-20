@@ -43,13 +43,17 @@ AddEventHandler("weed:checkItem", function(stage)
 end)
 
 RegisterServerEvent("weed:rewardItem")
-AddEventHandler("weed:rewardItem", function(stage)
-  local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler("weed:rewardItem", function(stage, securityToken)
+  local src = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
+		return false
+	end
+  local char = exports["usa-characters"]:GetCharacter(src)
   if stage == "Harvest" then
     if char.canHoldItem(data.harvest_item) then
       char.giveItem(data.harvest_item)
     else
-      TriggerClientEvent('usa:notify', source, 'Your inventory is full!')
+      TriggerClientEvent('usa:notify', src, 'Your inventory is full!')
     end
   elseif stage == "Process" then
     if char.hasItem(data.harvest_item) then
@@ -57,11 +61,11 @@ AddEventHandler("weed:rewardItem", function(stage)
         char.giveItem(data.processed_item)
         char.removeItem(data.harvest_item, 1)
       else
-        TriggerClientEvent('usa:notify', source, 'Your inventory is full!')
+        TriggerClientEvent('usa:notify', src, 'Your inventory is full!')
       end
     else
-      TriggerClientEvent("usa:notify", userSource, "You don't have any " .. data.harvest_item.name .. " to process!")
+      TriggerClientEvent("usa:notify", src, "You don't have any " .. data.harvest_item.name .. " to process!")
     end
   end
-  TriggerClientEvent("evidence:weedScent", source)
+  TriggerClientEvent("evidence:weedScent", src)
 end)

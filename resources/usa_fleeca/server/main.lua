@@ -85,7 +85,7 @@ function attemptDrilling(depositBox, source)
 end
 
 RegisterServerEvent('fleeca:drilledGoods')
-AddEventHandler('fleeca:drilledGoods', function()
+AddEventHandler('fleeca:drilledGoods', function(securityToken)
     local char = exports["usa-characters"]:GetCharacter(source)
     local payout = math.random()
     local cash = math.random(300, 3100)

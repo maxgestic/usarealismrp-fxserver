@@ -29,6 +29,10 @@ client_scripts {
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
 	'cl_fishing.lua',
-    'cl_anchor.lua'
+    'cl_anchor.lua',
+    '@salty_tokenizer/init.lua'
 }
-server_script 'sv_fishing.lua'
+server_scripts {
+    'sv_fishing.lua',
+    '@salty_tokenizer/init.lua'
+}

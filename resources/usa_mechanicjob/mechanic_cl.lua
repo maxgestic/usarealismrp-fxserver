@@ -606,7 +606,7 @@ function ImpoundVehicle()
 			Citizen.CreateThread(function()
 				Wait(3000)
 				if not DoesEntityExist(targetVehicle) then
-					TriggerServerEvent("towJob:giveReward")
+					TriggerServerEvent("towJob:giveReward", securityToken)
 					exports.globals:notify("Impounded!")
 					vehicleToImpound = nil
 				end
