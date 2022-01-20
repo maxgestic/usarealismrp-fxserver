@@ -240,6 +240,7 @@ function canCharUnlockDoor(char, doorIndex, lsource)
     if door.allowedJobs[i] == char.get("job") then -- clocked in for job
       return true
     elseif door.allowedJobs[i] == 'da' and char.get("daRank") and char.get("daRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+    elseif door.allowedJobs[i] == 'judge' and char.get("judgeRank") and char.get("judgeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
       return true
     elseif door.allowedJobs[i] == 'sheriff' and char.get("policeRank") and char.get("policeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
       return true
