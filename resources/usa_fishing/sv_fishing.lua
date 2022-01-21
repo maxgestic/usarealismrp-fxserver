@@ -26,7 +26,7 @@ AddEventHandler("fish:giveFish", function(securityToken)
 end)
 
 RegisterServerEvent("fish:giveSeaFish")
-AddEventHandler("fish:giveSeaFish", function(fish, securityToken)
+AddEventHandler("fish:giveSeaFish", function(securityToken)
   local src = source
 	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), src, securityToken) then
 		return false
@@ -44,13 +44,13 @@ end)
 RegisterServerEvent("fish:sellFish")
 AddEventHandler("fish:sellFish", function(fish)
   local fish = fishItems[fish]
-  local char = exports["usa-characters"]:GetCharacter(src)
+  local char = exports["usa-characters"]:GetCharacter(source)
   if char.hasItem(fish) then
     char.removeItem(fish, 1)
     char.giveMoney(fish.worth + math.random(0, 50))
-    TriggerClientEvent("usa:notify", src, "You have sold (1x) " .. fish.name .. " for $" .. fish.worth)
+    TriggerClientEvent("usa:notify", source, "You have sold (1x) " .. fish.name .. " for $" .. fish.worth)
   else
-    TriggerClientEvent("usa:notify", src, "You have no fish to sell!")
+    TriggerClientEvent("usa:notify", source, "You have no fish to sell!")
   end
 end)
 
