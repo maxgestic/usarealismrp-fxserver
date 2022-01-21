@@ -26,6 +26,7 @@ setup.sh
 hypnonema.db
 
 node_modules
+!resources/salty_tokenizer/node_modules
 scrambled_resources
 
 server_internal.cfg
