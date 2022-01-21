@@ -61,6 +61,7 @@ TriggerEvent("es:addCommand", "claimreward", function(src, args, char, location)
                 if TEBEX_PACKAGE_FUNCTIONS[doc.type](src) then
                     TriggerClientEvent("usa:notify", src, "Success!")
                     db.deleteDocument("tebex-transaction-ids", transactionID, function(ok) end)
+                    print("Tebex package successfully claimed (" .. transactionID .. ") by " .. char.getFullName() .. "!")
                 else
                     TriggerClientEvent("usa:notify", src, "Something went wrong!")
                 end
