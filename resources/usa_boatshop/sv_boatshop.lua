@@ -25,6 +25,7 @@ local LICENSE_PURCHASE_PRICE = 1000
 
 local fishingPole = {
   name = "Fishing Pole",
+  type = "misc",
   quantity = 1,
   legality = "legal",
   weight = 15.0,
