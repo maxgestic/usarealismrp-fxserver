@@ -300,7 +300,13 @@ AddEventHandler("prison:retrieveItems", function()
 			if not inv then
 				print("error")
 			else
-				char.set("inventory", inv.inventory)
+				for i = 0, inv.inventory.MAX_CAPACITY do
+					i = tostring(i)
+					if inv.inventory.items[i] then
+						char.giveItem(inv.inventory.items[i])
+						inv.inventory.items[i] = nil
+					end
+				end
 				TriggerClientEvent("usa:notify", src, "Here are your belongings back! Stay out of trouble!")
 				db.deleteDocument("prisonitemstorage", charid, function(ok) end)
 			end
