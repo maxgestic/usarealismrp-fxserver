@@ -481,6 +481,8 @@ var interactionMenu = new Vue({
                     } else {
                         this.visible = false;
                     }
+                } else {
+                    this.visible = false;
                 }
             },
             updatePosition(event) {
