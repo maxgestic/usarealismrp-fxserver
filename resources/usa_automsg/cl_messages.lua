@@ -2,6 +2,7 @@ local m = {
     delay = 90,
     prefix = '^5^*[USARRP] ^r^0',
     messages = {
+        "Want to support the server and get rewarded for it at the same time? Visit https://store.usarrp.gg to check out our listings for exclusive rewards!",
         "Aspiring to become a police officer? The SASP is hiring! Apply today at https://www.usarrp.gg ^*>^r Applications",
         --"Check out the new market place for some cool things you can get to support the server! Type ^3/store^0 to check it out!",
         "Aspiring to become a law enforcement officer? The BCSO is hiring! Apply today at https://www.usarrp.gg ^*>^r Applications",
