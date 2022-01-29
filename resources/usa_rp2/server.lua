@@ -442,6 +442,6 @@ end
 -- end util functions / start commands
 
 TriggerEvent('es:addCommand', 'discord', function(source, args, char)
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Discord: https://discord.gg/aAPCdva")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Discord: https://discord.gg/usarrp")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^3Join the discord channel to keep up with the community! If that link doesn't work, visit the website.")
 end, {help = "View the server's discord link."})
