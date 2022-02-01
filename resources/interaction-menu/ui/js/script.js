@@ -314,7 +314,6 @@ var menuItems = [{
             { name: "Show ID" },
             { name: "Give cash" },
             { name: "Bank" },
-            { name: "Phone number" },
             { name: "Glasses" },
             { name: "Mask" },
             { name: "Hat" },
