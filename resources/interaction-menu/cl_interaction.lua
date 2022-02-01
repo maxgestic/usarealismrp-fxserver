@@ -212,12 +212,6 @@ local ACTIONS = {
 	["Bank"] = function()
 		TriggerServerEvent("bank:showBankBalance")
 	end,
-	["Phone number"] = function()
-		local ped = GetPlayerPed(-1)
-		local location = GetEntityCoords(ped)
-		local locationTemp = {location.x, location.y, location.z}
-		TriggerServerEvent("phone:showPhoneNumber", locationTemp)
-	end,
 	["Roll dice"] = function()
 		Citizen.CreateThread(function()
 			local maxRoll = tonumber(exports.globals:GetUserInput())
