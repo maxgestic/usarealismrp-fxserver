@@ -102,9 +102,10 @@ local HARDWARE_STORE_ITEMS = {
     { name = "Hatchet", type = "weapon", hash = -102973651, price = 250, legality = "legal", quantity = 1, weight = 12, objectModel = "w_me_hatchet" },
     { name = "Wrench", type = "weapon", hash = 419712736, price = 400, legality = "legal", quantity = 1, weight = 12, objectModel = "prop_tool_wrench" },
     { name = "Machete", type = "weapon", hash = -581044007, price = 250, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_ld_w_me_machette" },
+    { name = "Crowbar", type = "weapon", hash = `WEAPON_CROWBAR`, price = 500, legality = "legal", quantity = 1, weight = 20, objectModel = "w_me_crowbar" },
     { name = "Spray Paint", price = 1000, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "ng_proc_spraycan01a", remainingUses = 5, notStackable = true},
     { name = "Paint Remover", price = 1000, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "bkr_prop_meth_ammonia", remainingUses = 5, notStackable = true},
-    { name = "Rag", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_shower_towel"}
+    { name = "Rag", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_shower_towel"},
   }
 }
 
