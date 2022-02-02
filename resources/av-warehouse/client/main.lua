@@ -281,6 +281,7 @@ end)
 
 RegisterNetEvent("av_warehouse:teleport")
 AddEventHandler("av_warehouse:teleport", function()
+	exports["_anticheese"]:Disable("speedOrTPHack")
 	if hintBlipHandle then
 		RemoveBlip(hintBlipHandle)
 		hintBlipHandle = nil
@@ -309,6 +310,7 @@ AddEventHandler("av_warehouse:teleport", function()
 	TriggerEvent('av_warehouse:loadCrates')
 	Citizen.Wait(1000)
 	DoScreenFadeIn(1500)
+	exports["_anticheese"]:Enable("speedOrTPHack")
 	Cajas3D()
 end)
 
