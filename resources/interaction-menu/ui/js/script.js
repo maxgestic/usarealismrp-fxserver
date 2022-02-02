@@ -22,6 +22,9 @@ NO_TOOLTIP_WEAPONS.add("Hammer");
 NO_TOOLTIP_WEAPONS.add("Jerry Can");
 NO_TOOLTIP_WEAPONS.add("Switchblade");
 NO_TOOLTIP_WEAPONS.add("Fishing Pole");
+NO_TOOLTIP_WEAPONS.add("Crowbar");
+NO_TOOLTIP_WEAPONS.add("Calvary Dagger");
+NO_TOOLTIP_WEAPONS.add("Sticky Bomb");
 
 var itemImages = {
     "Driver's License": "https://i.imgur.com/dy0SpFh.png",
@@ -257,6 +260,12 @@ var itemImages = {
     "NOS Bottle (Stage 2)": "https://i.imgur.com/6o12VYH.png",
     "NOS Bottle (Stage 3)": "https://i.imgur.com/alUom3h.png",
     "NOS Gauge": "https://i.imgur.com/jCccTmV.png",
+    "Grappling Hook": "https://i.imgur.com/c0lJWu2.png",
+    "Sticky Bomb": "https://i.imgur.com/gp0fW3J.png",
+    "Battle Axe": "https://i.imgur.com/xHeALU3.png",
+    "Crowbar": "https://i.imgur.com/W1vYBRI.png",
+    "Calvary Dagger": "https://i.imgur.com/OL8iIUT.png",
+    "Double Barrel Shotgun": "https://i.imgur.com/RhL3DmQ.png",
     // begin ammo
     "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
     "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",

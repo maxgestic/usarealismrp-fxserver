@@ -296,7 +296,7 @@ AddEventHandler("ammo:save", function(newAmmoCount)
                 wep.magazine.currentCapacity = newAmmoCount
                 char.modifyItemByUUID(wep.uuid, { magazine = wep.magazine })
             else
-                if wep.name:find("Molotov") or wep.name:find("Flare") or wep.name:find("Tear Gas") then
+                if wep.name:find("Molotov") or wep.name:find("Flare") or wep.name:find("Tear Gas") or wep.name:find("Sticky Bomb") then
                     char.removeItemByIndex(selectedIndex, 1)
                 end
             end

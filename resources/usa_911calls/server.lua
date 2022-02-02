@@ -486,6 +486,7 @@ end)
 function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
     local prison_coords = vector3(1686.6680, 2581.7151, 45.5649)
     local alert_co = false
+    y = tonumber(y)
     local callCoords = vector3(x, y, z)
     if #(prison_coords.xy - callCoords.xy) < 200 then
         alert_co = true
@@ -543,3 +544,8 @@ TriggerEvent('es:addJobCommand', 'mute911', { "sheriff", "ems", "fire", "correct
 	TriggerClientEvent('911:mute911', source)
 end, {
 	help = "Temporarily toggle receiving 911 calls"})
+
+RegisterServerEvent('911:call')
+AddEventHandler('911:call', function(x, y, z, msg, blipText)
+    Send911Notification({"sheriff", "corrections"}, msg, x, y, z, blipText)
+end)
