@@ -475,9 +475,9 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 		SpawnResidents()
 	end
 
-	exports["_anticheese"]:Disable("speedOrTP")
+	exports["_anticheese"]:Disable("speedOrTPHack")
 	DoorTransition(x, y, z, heading)
-	exports["_anticheese"]:Enable("speedOrTP")
+	exports["_anticheese"]:Enable("speedOrTPHack")
 
 	local alertness = 0
 
