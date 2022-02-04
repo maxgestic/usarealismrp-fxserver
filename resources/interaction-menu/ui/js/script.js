@@ -266,6 +266,7 @@ var itemImages = {
     "Crowbar": "https://i.imgur.com/W1vYBRI.png",
     "Calvary Dagger": "https://i.imgur.com/OL8iIUT.png",
     "Double Barrel Shotgun": "https://i.imgur.com/RhL3DmQ.png",
+    "Sign Kit": "https://i.imgur.com/uFWkUoW.png",
     // begin ammo
     "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
     "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",

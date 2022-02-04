@@ -68,7 +68,8 @@ local GENERAL_STORE_ITEMS = {
     { name = "KY Intense Gel", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 6, objectModel = "v_res_d_lube", blockedInPrison = true},
     { name = "Viagra", price = 10, type = "misc", quantity = 10, legality = "legal", weight = 5, objectModel = "prop_cs_pills", blockedInPrison = true},
     { name = "RAW Papers", price = 10, type = "misc", quantity = 5, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true},
-    { name = "Bic Lighter", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true}
+    { name = "Bic Lighter", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true},
+    { name = "Sign Kit", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_cd_paper_pile1"},
   }
 }
 
@@ -106,6 +107,7 @@ local HARDWARE_STORE_ITEMS = {
     { name = "Spray Paint", price = 1000, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "ng_proc_spraycan01a", remainingUses = 5, notStackable = true},
     { name = "Paint Remover", price = 1000, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "bkr_prop_meth_ammonia", remainingUses = 5, notStackable = true},
     { name = "Rag", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_shower_towel"},
+    { name = "Sign Kit", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_cd_paper_pile1"},
   }
 }
 
