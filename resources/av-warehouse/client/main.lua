@@ -194,17 +194,19 @@ function hackeoEvent(success)
 		FreezeEntityPosition(p, false)
 		if Config.CallCopsOnSucess then
 			if math.random() >= 0.50 then
+				local coords = GetEntityCoords(GetPlayerPed(-1), true)
 				Citizen.Wait(Config.TimeBeforeAlert * 60 * 1000)
-				alertPolice()
+				alertPolice(coords)
 			end
 		end
 	else
 		ClearPedTasks(p)
 		FreezeEntityPosition(p, false)
 		if Config.CallCopsOnFail then
-			Citizen.Wait(Config.TimeBeforeAlert * 60 * 1000)
 			if math.random() <= 0.25 then
-				alertPolice()
+				local coords = GetEntityCoords(GetPlayerPed(-1), true)
+				Citizen.Wait(Config.TimeBeforeAlert * 60 * 1000)
+				alertPolice(coords)
 			end
 		end
 	end			
@@ -379,8 +381,8 @@ function makeNearbyGuardsAggresive()
 	end
 end
 
-function alertPolice()
-	local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+function alertPolice(coords)
+	local x, y, z = table.unpack(coords)
 	local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 	local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 	TriggerServerEvent('911:call', x, y, z, "Warehouse burglary alarm triggered (" .. lastStreetNAME .. ")", "Warehouse Burglary")
