@@ -481,8 +481,12 @@ RegisterServerCallback {
 	eventName = 'storeRobberies:getCurrentJob',
 	eventCallback = function(source)
         local char = exports["usa-characters"]:GetCharacter(source)
-        local job = char.get("job")
-		return job
+        if char then
+            local job = char.get("job")
+            return job
+        else
+            return "civ"
+        end
 	end
 }
 
