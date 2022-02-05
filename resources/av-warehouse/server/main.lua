@@ -186,6 +186,9 @@ AddEventHandler('av_warehouse:loot', function(a, crateIndex, securityToken)
 			if not item.quantity then
 				item.quantity = 1
 			end
+			if item.type and (item.type == "magazine" or item.type == "weapon") then
+				item.notStackable = true
+			end
 			TriggerEvent("interaction:addDroppedItem", item)
 			TriggerClientEvent("usa:notify", src, Config.Lang['you_stole']..''..item.quantity..'x '..item.name)
 		end		
