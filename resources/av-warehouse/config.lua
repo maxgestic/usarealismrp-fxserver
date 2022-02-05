@@ -76,19 +76,19 @@ Config.Rewards = {
 	[2] = {
 		type = 'items',		
 		reward = {
-			[1] = { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[2] = { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[3] = { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[4] = { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[5] = { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[6] = { name = "Empty 7.62mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[7] = { name = "Empty 7.62mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[8] = { name = "Empty 7.62mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[9] = { name = "Empty 7.62mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[10] = { name = "Empty 7.62mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-			[11] = { name = "Empty .45 Mag [30]", type = "magazine", price = 150, weight = 5, receives = ".45", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
-			[12] = { name = "Empty 12 Gauge Shells Mag [6]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "12 Gauge Shells", MAX_CAPACITY = 6, currentCapacity = 0 },
-			[13] = { name = "Empty 12 Gauge Shells Mag [6]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "12 Gauge Shells", MAX_CAPACITY = 6, currentCapacity = 0 },
+			[1] = { name = "Empty 5.56mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[2] = { name = "Empty 5.56mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[3] = { name = "Empty 5.56mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[4] = { name = "Empty 5.56mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[5] = { name = "Empty 5.56mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[6] = { name = "Empty 7.62mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[7] = { name = "Empty 7.62mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[8] = { name = "Empty 7.62mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[9] = { name = "Empty 7.62mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[10] = { name = "Empty 7.62mm Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+			[11] = { name = "Empty .45 Mag [30]", type = "magazine", quantity = 1, price = 150, weight = 5, receives = ".45", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
+			[12] = { name = "Empty 12 Gauge Shells Mag [6]", type = "magazine", quantity = 1, legality = "legal", price = 100, weight = 5, receives = "12 Gauge Shells", MAX_CAPACITY = 6, currentCapacity = 0 },
+			[13] = { name = "Empty 12 Gauge Shells Mag [6]", type = "magazine", quantity = 1, legality = "legal", price = 100, weight = 5, receives = "12 Gauge Shells", MAX_CAPACITY = 6, currentCapacity = 0 },
 		}
 	},
 	[3] = {
@@ -123,13 +123,13 @@ Config.Rewards = {
 	[6] = {
 		type = 'items',		
 		reward = {
-			[1] = { name = "Empty 9mm Mag [30]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, objectModel = "w_sb_gusenberg_mag1" },
-			[2] = { name = "Empty .45 Mag [16]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = ".45", MAX_CAPACITY = 16, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
-			[3] = { name = "Empty 9x18mm Mag [18]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "9x18mm", MAX_CAPACITY = 18, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
-			[4] = { name = "Empty .50 Cal Mag [9]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = ".50 Cal", MAX_CAPACITY = 9, currentCapacity = 0, legality = "legal", objectModel = "w_pi_combatpistol_mag1" },
-			[5] = { name = "Empty 9mm Mag [12]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, legality = "legal", objectModel = "w_pi_combatpistol_mag1" },
-			[6] = { name = "Empty 9mm Mag [7]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "9mm", MAX_CAPACITY = 7, currentCapacity = 0, legality = "legal", objectModel = "w_pi_combatpistol_mag1" },
-			[7] = { name = "Empty .45 Mag [18]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = ".45", MAX_CAPACITY = 18, currentCapacity = 0, legality = "legal", objectModel = "w_pi_heavypistol_mag2"},
+			[1] = { name = "Empty 9mm Mag [30]", type = "magazine", quantity = 1, legality = "legal", price = 200, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, objectModel = "w_sb_gusenberg_mag1" },
+			[2] = { name = "Empty .45 Mag [16]", type = "magazine", quantity = 1, legality = "legal", price = 200, weight = 5, receives = ".45", MAX_CAPACITY = 16, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
+			[3] = { name = "Empty 9x18mm Mag [18]", type = "magazine", quantity = 1, legality = "legal", price = 100, weight = 5, receives = "9x18mm", MAX_CAPACITY = 18, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
+			[4] = { name = "Empty .50 Cal Mag [9]", type = "magazine", quantity = 1, legality = "legal", price = 200, weight = 5, receives = ".50 Cal", MAX_CAPACITY = 9, currentCapacity = 0, legality = "legal", objectModel = "w_pi_combatpistol_mag1" },
+			[5] = { name = "Empty 9mm Mag [12]", type = "magazine", quantity = 1, legality = "legal", price = 100, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, legality = "legal", objectModel = "w_pi_combatpistol_mag1" },
+			[6] = { name = "Empty 9mm Mag [7]", type = "magazine", quantity = 1, legality = "legal", price = 100, weight = 5, receives = "9mm", MAX_CAPACITY = 7, currentCapacity = 0, legality = "legal", objectModel = "w_pi_combatpistol_mag1" },
+			[7] = { name = "Empty .45 Mag [18]", type = "magazine", quantity = 1, legality = "legal", price = 200, weight = 5, receives = ".45", MAX_CAPACITY = 18, currentCapacity = 0, legality = "legal", objectModel = "w_pi_heavypistol_mag2"},
 		}
 	},
 	[7] = {

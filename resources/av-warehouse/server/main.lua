@@ -183,6 +183,9 @@ AddEventHandler('av_warehouse:loot', function(a, crateIndex, securityToken)
 			newCoords.y = newCoords.y + (math.random() * 1)
 			newCoords.z = newCoords.z - 0.85
 			item.coords = newCoords
+			if not item.quantity then
+				item.quantity = 1
+			end
 			TriggerEvent("interaction:addDroppedItem", item)
 			TriggerClientEvent("usa:notify", src, Config.Lang['you_stole']..''..item.quantity..'x '..item.name)
 		end		
