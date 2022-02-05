@@ -1,4 +1,4 @@
-local COOLDOWN_TIME_HOURS = 8
+local COOLDOWN_TIME_HOURS = 5
 
 local webhook = nil
 local x,y,z = nil, nil, nil
