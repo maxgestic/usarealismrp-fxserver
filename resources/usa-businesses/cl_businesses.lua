@@ -45,17 +45,17 @@ Citizen.CreateThread(function()
 			Wait(500)
 			if IsControlPressed(0, KEYS.K) then
 				local closestStore = GetClosestStore(1.5)
-				if closestStore then
+				if closestStore and not BUSINESSES[closestStore].notRobbable then
 					if IsPedArmed(me, 7) then
 						if not isRobbingStore then
 							local isMale = true
-              if GetEntityModel(me) == GetHashKey("mp_f_freemode_01") then
-                isMale = false
-              elseif GetEntityModel(me) == GetHashKey("mp_m_freemode_01") then 
-                isMale = true
-              else
-                isMale = IsPedMale(me)
-              end
+							if GetEntityModel(me) == GetHashKey("mp_f_freemode_01") then
+								isMale = false
+							elseif GetEntityModel(me) == GetHashKey("mp_m_freemode_01") then 
+								isMale = true
+							else
+								isMale = IsPedMale(me)
+							end
 							TriggerServerEvent('business:beginRobbery', closestStore, isMale, GetNumberOfPlayers())
 						end
 					else
@@ -111,10 +111,10 @@ Citizen.CreateThread(function()
 		for name, isNearby in pairs(NEARBY_BUSINESSES) do
 			local data = BUSINESSES[name]
 			local pos = data.position
-			if data.price then
-				DrawText3D(pos[1], pos[2], pos[3], '[E] - Open | [HOLD K] - Rob')
+			if not data.notRobbable then
+				DrawText3D(pos[1], pos[2], pos[3], '[E] - Business Menu | [HOLD K] - Rob')
 			else
-				DrawText3D(pos[1], pos[2], pos[3], '[HOLD K] - Rob')
+				DrawText3D(pos[1], pos[2], pos[3], '[E] - Business Menu')
 			end
 		end
 		Wait(1)
