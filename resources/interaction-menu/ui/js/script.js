@@ -150,6 +150,7 @@ var itemImages = {
     "Machine Pistol": "https://i.pinimg.com/originals/19/38/54/193854f15e38f4e13174e815c92de4e4.png",
     "Tommy Gun": "https://www.gtabase.com/images/gta-5/weapons/machine-guns/gusenberg-sweeper.png",
     "AK47": "http://www.transparentpng.com/thumb/ak-47/icon-clipart-ak-47-12.png",
+    "Assault Rifle MK2": "https://i.imgur.com/MvXwwxr.png",
     "Carbine": "http://www.gaksharpshooters.com/images/ar15.gif",
     "Bullpup Rifle": "https://gaming.newbcomputerbuild.com/wp-content/uploads/2015/09/Bullpup-Rifle-GTA-V-300x111.png",
     "Curly Fries": "https://herfybd.com/assets/image/curly_fries.png",
