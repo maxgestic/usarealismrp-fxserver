@@ -100,14 +100,16 @@ BUSINESSES = {
 		cameraID = 'store1',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["LTD Gasoline (Ginger St.)"] = {
 		position = {-705.89, -911.89, 19.21},
 		cameraID = 'store2',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["Herr Kutz Barber (Bay City Ave.)"] = {
 		position = {-1283.7, -1115.3, 6.9},
@@ -135,42 +137,48 @@ BUSINESSES = {
 		cameraID = 'store4',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2500
+		price = 2500,
+		notRobbable = true
 	},
 	["Rob's Liquor - (San Andreas Ave.)"] = {
 		position = {-1224.64, -909.504, 12.32},
 		cameraID = 'store5',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["247 Supermarket (Alhambra Dr.)"] = {
 		position = {1958.38, 3743.11, 32.34},
 		cameraID = 'store6',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2500
+		price = 2500,
+		notRobbable = true
 	},
 	['247 Supermarket (Clinton Ave.)'] = {
 		position = {373.25, 329.68, 103.56},
 		cameraID = 'store7',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["LTD Gasoline (Grove St.)"] = {
 		position = {-45.50, -1756.71, 29.42},
 		cameraID = 'store8',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["Rob's Liquor (Route 68)"] = {
 		position = {1168.00, 2711.08, 38.15},
 		cameraID = 'store9',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["LTD Gasoline (Grapeseed Main St.)"] = {
 		position = {1699.34, 4921.74, 42.06},
@@ -184,7 +192,8 @@ BUSINESSES = {
 		cameraID = 'store11',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["247 Supermarket (Palomino Fwy.)"] = {
 		position = {2554.50, 380.78, 108.62},
@@ -198,34 +207,39 @@ BUSINESSES = {
 		cameraID = 'store13',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["247 Supermarket (Harmony, Route 68)"] = {
 		position = {549.51, 2668.76, 42.15},
 		cameraID = 'store14',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["LTD Gasoline (Banham Canyon Dr.)"] = {
 		position = {-1821.10, 795.60, 138.09},
 		cameraID = 'store15',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		notRobbable = true
 	},
 	["247 Supermarket (Barbareno Rd.)"] = {
 		position = {-3244.92, 1000.0, 12.83},
 		cameraID = 'store16',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["Rob's Liquor (Great Ocean Hwy.)"] = {
 		position = {-2966.24, 388.91, 15.04},
 		cameraID = 'store17',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["Clothing Store (Sinner St.)"] = {
 		position = {427.34, -807.00, 29.49},
