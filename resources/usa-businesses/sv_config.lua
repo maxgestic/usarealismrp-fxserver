@@ -130,7 +130,8 @@ BUSINESSES = {
 		cameraID = 'store3',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		notRobbable = true
 	},
 	["247 Supermarket - (Innocence Blvd.)"] = {
 		position = {24.44, -1343.922, 29.49},
