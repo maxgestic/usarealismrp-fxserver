@@ -28,7 +28,7 @@
       "https://ice4.somafm.com/dubstep-128-aac"
     ]
 
-    var MAX_VOL = 0.08
+    var MAX_VOL = 0.07
 
     var Radio = function (station) {
       var self = this;
