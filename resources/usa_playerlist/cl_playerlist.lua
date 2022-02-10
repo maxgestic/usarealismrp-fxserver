@@ -127,6 +127,9 @@ function DrawTracerText(text, spacing, talking, playerPed)
 end
 
 function HexIdToSteamId(hexId)
+	if not hexId or not tonumber(string.sub(hexId, 7), 16) then
+		return "UNDEFINED"
+	end
     local cid = math.floor(tonumber(string.sub(hexId, 7), 16))
 	local steam64 = math.floor(tonumber(string.sub( cid, 2)))
 	local a = steam64 % 2 == 0 and 0 or 1
