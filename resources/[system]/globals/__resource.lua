@@ -24,7 +24,8 @@ exports {
   'DrawText3D',
   "GetKeys",
   "getClosestVehicle",
-  "trim"
+  "trim",
+  "createCulledNonNetworkedPedAtCoords"
 }
 
 -- global server functions/tables

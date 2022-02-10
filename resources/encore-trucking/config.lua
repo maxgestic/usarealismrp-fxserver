@@ -30,7 +30,7 @@ Config.JobStart = {
 Config.Blip = {
 	SpriteID = 477,
 	ColorID  = 31,
-	Scale    = 0.9,
+	Scale    = 0.8,
 }
 
 Config.Marker = {
