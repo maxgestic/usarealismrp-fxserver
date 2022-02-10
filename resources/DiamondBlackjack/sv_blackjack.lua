@@ -9,14 +9,21 @@ end
 local blackjackGameInProgress = {}
 local blackjackGameData = {}
 
+local MAX_BET = 500000
+
 function tryTakeChips(source, amount)
     --returns true if taken 'chips' succesfully
     --returns false if doesn't have enough 'chips'
+    if amount > MAX_BET then
+        TriggerClientEvent("usa:notify", source, "Max bet of $500k exceeded")
+        return
+    end
     local char = exports["usa-characters"]:GetCharacter(source)
     if char.get("money") >= amount then
         char.removeMoney(amount)
         return true
-    else 
+    else
+        TriggerClientEvent("blackjack:notify",source,"~r~Not enough chips!")
         return false
     end
 end
@@ -100,8 +107,6 @@ AddEventHandler("Blackjack:setBlackjackBet",function(gameId,betAmount,chairId)
                         TriggerClientEvent("Blackjack:successBlackjackBet",source)
                         TriggerClientEvent("Blackjack:syncChipsPropBlackjack",-1,betAmount,chairId)
                         TriggerClientEvent("blackjack:notify",source,"~g~Bet placed: " .. tostring(betAmount) .. " chips.")
-                    else 
-                        TriggerClientEvent("blackjack:notify",source,"~r~Not enough chips!")
                     end
                 end
             end
