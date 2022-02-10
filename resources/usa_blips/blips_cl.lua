@@ -97,6 +97,7 @@ local blips = {
 	{ title = "Untamed Autos", x = 1149.8494, y =  -781.1504, id = 402, colour = 5, scale = 0.8},
 	{ title = "Fight Club", x = 1059.5687255859, y = -2409.5798339844, id = 210, colour = 0, scale = 0.4},
 	{ title = "RPG", x = -795.98742675781, y = -219.36700439453, id = 402, colour = 5, scale = 0.8},
+	{ title = "Dock Container Job", x = 1192.2296142578, y = -3254.0080566406, id = 371, colour = 62, scale = 0.7},
 }
 
 Citizen.CreateThread(function()

@@ -258,3 +258,62 @@ function trim(s)
     return (s:gsub("^%s*(.-)%s*$", "%1"))
   end
 end
+
+function createCulledNonNetworkedPedAtCoords(model, locations, maxDist, _3dText, _3dTextDrawDist, keypressFunc, key)
+  local nearbyLocation = nil
+  if type(model) == "string" then
+      model = GetHashKey(model)
+  end
+  -- spawn ped when close, delete when far
+  Citizen.CreateThread(function()
+    local shopNPCHandles = {}
+    while true do
+        local playerCoords = GetEntityCoords(PlayerPedId(), false)
+        nearbyLocation = nil
+        for i = 1, #locations do
+          local dist = Vdist(playerCoords, locations[i].x, locations[i].y, locations[i].z)
+          if dist < maxDist then
+            nearbyLocation = locations[i]
+            nearbyLocation.dist = dist
+            if not shopNPCHandles[i] then
+              RequestModel(model)
+              while not HasModelLoaded(model) do
+                  Wait(1)
+              end
+              shopNPCHandles[i] = CreatePed(0, model, locations[i].x, locations[i].y, locations[i].z - 0.5, (locations[i].heading or 0), false, false) -- need to add distance culling
+              SetEntityCanBeDamaged(shopNPCHandles[i],false)
+              SetPedCanRagdollFromPlayerImpact(shopNPCHandles[i],false)
+              SetBlockingOfNonTemporaryEvents(shopNPCHandles[i],true)
+              SetPedFleeAttributes(shopNPCHandles[i],0,0)
+              SetPedCombatAttributes(shopNPCHandles[i],17,1)
+              SetPedRandomComponentVariation(shopNPCHandles[i], true)
+              TaskStartScenarioInPlace(shopNPCHandles[i], "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+              Wait(5000)
+              FreezeEntityPosition(shopNPCHandles[i], true)
+            end
+          else 
+            if shopNPCHandles[i] then
+                DeletePed(shopNPCHandles[i])
+                shopNPCHandles[i] = nil
+            end
+          end
+        end
+        Wait(1000)
+    end
+  end)
+  -- draw 3d text when nearby
+  Citizen.CreateThread(function()
+    while true do
+      if nearbyLocation and nearbyLocation.dist <= _3dTextDrawDist then
+        DrawText3D(nearbyLocation.x, nearbyLocation.y, nearbyLocation.z, _3dText)
+        -- listen for keypress
+        if keypressFunc then
+          if IsControlJustPressed(0, key) then
+            keypressFunc()
+          end
+        end
+      end
+      Wait(1)
+    end
+  end)
+end

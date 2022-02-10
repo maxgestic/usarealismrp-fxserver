@@ -8,7 +8,7 @@ Config.Priority = {
     -- end examples, start real peeps...
 }
 
-Config.RequireSteam = true
+Config.RequireSteam = false
 Config.PriorityOnly = false -- whitelist only server
 
 Config.IsBanned = function(src, callback)
