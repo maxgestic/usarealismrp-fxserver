@@ -62,6 +62,10 @@ function spawnContainer(info)
     SetEntityAsMissionEntity(containerHandle)
     SetEntityHeading(containerHandle, info.h)
     PlaceObjectOnGroundProperly(containerHandle)
+    local netid = ObjToNet(containerHandle)
+    SetNetworkIdExistsOnAllMachines(netid, true)
+    NetworkSetNetworkIdDynamic(netid, true)
+    SetNetworkIdCanMigrate(netid, false)
     -- draw pick up and drop off markers:
     Citizen.CreateThread(function()
         while containerHandle and DoesEntityExist(containerHandle) do
