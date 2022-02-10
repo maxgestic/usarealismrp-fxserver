@@ -425,7 +425,8 @@ local vehicleShopItems = {
 			{make = "Chevrolet", model = "Silverado (Single Cab)", price = 70000, hash = "silv20", storage_capacity = 280.0},
 			{make = "GMC", model = "Sierra (2006)", price = 80000, hash = "polar06seirra", storage_capacity = 280.0},
 			{make = "Chevrolet", model = "Tahoe (2008)", price = 80000, hash = "tahoe08", storage_capacity = 250.0},
-			{make = "Nissan", model = "240SX (s14)", price = 75000, hash = "silvia3", storage_capacity = 150.0}
+			{make = "Nissan", model = "240SX (s14)", price = 75000, hash = "silvia3", storage_capacity = 150.0},
+			{make = "Volkswagon", model = "Golf (Mk6)", price = 75000, hash = "golfmk6", storage_capacity = 200.0}
 		}
 	}
 }
