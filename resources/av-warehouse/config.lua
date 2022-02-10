@@ -20,7 +20,7 @@ Config.Guards = {
 	[1] = {
 		pos = {1064.79, -3097.34, -38.99, 184.67},
 		ped = 'mp_s_m_armoured_01',
-		weapon = 'WEAPON_PISTOL',
+		weapon = 'WEAPON_HEAVYPISTOL',
 		armour = 100
 	},
 	[2] = {
@@ -32,7 +32,7 @@ Config.Guards = {
 	[3] = {
 		pos = {1056.69, -3107.81, -38.99, 355.67},
 		ped = 'mp_s_m_armoured_01',
-		weapon = 'WEAPON_PISTOL',
+		weapon = 'WEAPON_PUMPSHOTGUN',
 		armour = 100
 	},
 	[4] = {
