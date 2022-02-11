@@ -73,6 +73,7 @@ function CreateCharacter(data)
   end
 
   rTable.removeMoney = function(amount)
+    amount = math.abs(amount)
     self.money = self.money - tonumber(amount)
     TriggerClientEvent("es:setMoneyDisplay", self.source, 1, self.money)
   end
