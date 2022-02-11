@@ -48,6 +48,7 @@ AddEventHandler("motiontext:submit", function(info)
             if ok then 
                 print("* New motiontext doc created! *")
                 TriggerClientEvent("motiontext:new", -1, info)
+                table.insert(allText, info)
             else 
                 print("* Error creating new motiontext doc in DB *")
             end
