@@ -68,8 +68,7 @@ end)
 
 RegisterServerEvent("motiontext:playerSpawned")
 AddEventHandler("motiontext:playerSpawned", function()
-    local src = source
-    TriggerClientEvent("motiontext:set", src, allText)
+    TriggerClientEvent("motiontext:set", source, allText)
 end)
 
 Citizen.CreateThread(function()
@@ -87,7 +86,7 @@ Citizen.CreateThread(function()
                         if os.difftime(os.time(), (doc.created.time or 0)) > TEXT_PERSIST_DAYS * 24 * 60 * 60 then
                             print("text was old enough! deleting!")
                             TriggerEvent('es:exposeDBFunctions', function(db)
-                                db.deleteDocument("motiontext", s._id, function(ok) end)
+                                db.deleteDocument("motiontext", doc._id, function(ok) end)
                             end)
                         else
                             table.insert(allText, doc)
