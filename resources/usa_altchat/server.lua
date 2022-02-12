@@ -91,7 +91,7 @@ TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'corrections'}, function(
 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 		return
-	elseif char.get("bcsoRank") < 4 and job == 'corrections' then
+	elseif char.get("bcsoRank") < 5 and job == 'corrections' then
 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 		return
 	end
@@ -147,7 +147,7 @@ TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'corrections'}, function(
 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 		return
-	elseif char.get("bcsoRank") < 4 and job == 'corrections' then
+	elseif char.get("bcsoRank") < 5 and job == 'corrections' then
 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 		return
 	end
@@ -186,7 +186,7 @@ function showid(src, u, location)
 	local job = u.get("job")
 	local employer = nil
 	if job == 'corrections' then
-		if u.get("bcsoRank") > 2 then
+		if u.get("bcsoRank") > 3 then
             employer = jobNames[job]
         else
         	employer = 'Correctional Officer (BCSO)'
