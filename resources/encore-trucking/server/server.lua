@@ -39,8 +39,11 @@ end
 --
 
 RegisterServerEvent('encore_trucking:loadDelivered')
-AddEventHandler('encore_trucking:loadDelivered', function()
+AddEventHandler('encore_trucking:loadDelivered', function(securityToken)
 	local playerId = source
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
 	local totalRouteDistance = TRUCKERS[playerId].distanceToPickup + TRUCKERS[playerId].distanceToDelivery
 	local payout   = math.floor(totalRouteDistance * Config.PayPerMeter) + math.random(0, 200)
 
