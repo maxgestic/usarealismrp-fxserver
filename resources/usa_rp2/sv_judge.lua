@@ -50,7 +50,7 @@ TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'sheriff', 'corre
 			isAllowed = true
 	    end
     elseif char.get("job") == "corrections" then
-	    if char.get("bcsoRank") < 5 then
+	    if char.get("bcsoRank") < 7 then
 			isAllowed = false
 		else
 			isAllowed = true
@@ -243,7 +243,7 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff', 'corrections'}, f
 			isAllowed = true
 	    end
     elseif char.get("job") == "corrections" then
-	    if char.get("bcsoRank") < 5 then
+	    if char.get("bcsoRank") < 7 then
 			isAllowed = false
 		else
 			isAllowed = true
@@ -393,7 +393,7 @@ TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sheriff", "corrections"},
 			isAllowed = true
 	    end
     elseif char.get("job") == "corrections" then
-	    if char.get("bcsoRank") < 5 then
+	    if char.get("bcsoRank") < 7 then
 			isAllowed = false
 		else
 			isAllowed = true
@@ -473,7 +473,7 @@ TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff', 'corrections'}, 
 			isAllowed = true
 	    end
     elseif char.get("job") == "corrections" then
-	    if char.get("bcsoRank") < 5 then
+	    if char.get("bcsoRank") < 7 then
 			isAllowed = false
 		else
 			isAllowed = true

@@ -14,7 +14,7 @@ local WEAPONS = {
 	{ name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, rank = 2, price = 500, weight = 25},
 	{ name = "SMG MK2", type = "weapon", hash = 0x78A97CD0, price = 750, rank = 2, weight = 20 },
 	{ hash = 100416529,  type = "weapon", name = "Sniper Rifle", rank = 2, weight = 30, price = 2000},
-	{ name = "Spike Strips", type = "misc", rank = 3 },
+	{ name = "Spike Strips", type = "misc", rank = 4 },
     { name = "Police Radio", type = "misc", rank = 1, price = 300, type = "misc", weight = 5 },
 	{ name = "Stretcher", type = "misc", rank = 1, price = 400, type = "misc", weight = 35, invisibleWhenDropped = true },
 	{ name = "7.62mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },

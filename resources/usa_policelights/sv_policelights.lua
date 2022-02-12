@@ -17,10 +17,10 @@ TriggerEvent('es:addJobCommand', 'uclights', {'sheriff', 'corrections'}, functio
 			TriggerClientEvent("usa:notify", src, "Must be rank 4+")
 		end
 	elseif job == "corrections" then -- BCSO
-		if char.get("bcsoRank") >= 4 then
+		if char.get("bcsoRank") >= 5 then
 			TriggerClientEvent('policelights:enableLightsOnVehicle', src)
 		else 
-			TriggerClientEvent("usa:notify", src, "Must be rank 4+")
+			TriggerClientEvent("usa:notify", src, "Must be rank 5+")
 		end
 	end
 end, {
