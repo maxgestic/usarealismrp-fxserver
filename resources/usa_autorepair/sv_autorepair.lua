@@ -1,7 +1,10 @@
 local REPAIR_COST_BASE_FEE = 50
 
 RegisterServerEvent("autoRepair:checkMoney")
-AddEventHandler("autoRepair:checkMoney", function(business, engineHp, bodyHp)
+AddEventHandler("autoRepair:checkMoney", function(business, engineHp, bodyHp, securityToken)
+  if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
   local REPAIR_COST = REPAIR_COST_BASE_FEE + CalculateRepairCost(engineHp, bodyHp)
   local char = exports["usa-characters"]:GetCharacter(source)
   local job = char.get("job")
