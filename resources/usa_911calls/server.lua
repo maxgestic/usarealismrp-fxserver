@@ -502,7 +502,7 @@ function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
                         TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
                     else 
                         if alert_co == false then
-                            if char.get("bcsoRank") >= 3 then 
+                            if char.get("bcsoRank") >= 4 then 
                                 TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
                             end
                         else
