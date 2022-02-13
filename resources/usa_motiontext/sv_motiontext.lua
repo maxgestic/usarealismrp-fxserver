@@ -64,6 +64,7 @@ AddEventHandler("motiontext:delete", function(index)
         db.deleteDocument("motiontext", allText[index]._id, function(ok)
             TriggerClientEvent("usa:notify", src, "Sign deleted!")
         end)
+        table.remove(allText, index)
     end)
 end)
 
