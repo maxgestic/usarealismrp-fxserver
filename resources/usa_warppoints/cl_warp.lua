@@ -269,6 +269,17 @@ local warp_locations = {
     },
     job_access = 'civ'
   },
+  ['Tinsel Towers Apt A'] = {
+    entrance = {
+      coords = {-621.09588623047, 46.484092712402, 43.591468811035},
+      heading = 90.0
+    },
+    exit = {
+      coords = {-602.89074707031, 58.989883422852, 98.200210571289},
+      heading = -180.0
+    },
+    job_access = 'civ'
+  },
   ['Humane Labs Water Labs'] = {
     entrance = {
       coords = {3540.6101, 3675.9336, 28.1211},
