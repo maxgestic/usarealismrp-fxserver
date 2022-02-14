@@ -12,7 +12,7 @@ TriggerEvent('es:addJobCommand', 'govcheck', {"sheriff", "corrections", "judge",
         end
         return
     elseif job == "sheriff" then
-        if char.get("policeRank") < 4 then
+        if char.get("policeRank") < 5 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
             return
         else
@@ -56,7 +56,7 @@ TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge
         end
         return
     elseif job == "sheriff" then
-        if char.get("policeRank") < 4 then
+        if char.get("policeRank") < 5 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
         else
             TriggerEvent("govfunding:save", amount, usource, fundAccount)
@@ -94,7 +94,7 @@ TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "judg
         end
         return
     elseif job == "sheriff" then
-        if char.get("policeRank") < 4 then
+        if char.get("policeRank") < 5 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
             return
         else

@@ -28,25 +28,29 @@ function DepositPayCheck(char)
 
     if job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
         local cop_rank = char.get("policeRank")
-        paycheckAmount = 850
+        paycheckAmount = 850 -- Cadet
         if cop_rank == 2 then
-            paycheckAmount = 950
+            paycheckAmount = 950 -- Trooper
         elseif cop_rank == 3 then
-            paycheckAmount = 1050
+            paycheckAmount = 1050 -- Sr Trooper
         elseif cop_rank == 4 then
-            paycheckAmount = 1150
+            paycheckAmount = 1150 -- Lead Sr Trooper
         elseif cop_rank == 5 then
-            paycheckAmount = 1250
+            paycheckAmount = 1250 -- Corporal
         elseif cop_rank == 6 then
-            paycheckAmount = 1350
+            paycheckAmount = 1350 -- Sergeant
         elseif cop_rank == 7 then
-            paycheckAmount = 1450
+            paycheckAmount = 1450 -- Staff Sergeant
         elseif cop_rank == 8 then
-            paycheckAmount = 1550
+            paycheckAmount = 1550 -- Lieutenant
         elseif cop_rank == 9 then
-            paycheckAmount = 1650
+            paycheckAmount = 1650 -- Captain
         elseif cop_rank == 10 then
-            paycheckAmount = 1750
+            paycheckAmount = 1750 -- Deputy Commissioner
+        elseif cop_rank == 11 then
+            paycheckAmount = 1850 -- Commissioner
+        elseif cop_rank == 12 then
+            paycheckAmount = 1950 -- Minipunch
         end
     elseif job == "ems" then
         local rank = char.get("emsRank")
@@ -74,27 +78,27 @@ function DepositPayCheck(char)
         paycheckAmount = 1700
     elseif job == "corrections" then
         local bcsoRank = char.get("bcsoRank")
-        paycheckAmount = 800 --Correctional Deputy
+        paycheckAmount = 900 --Correctional Deputy
         if bcsoRank == 2 then
-            paycheckAmount = 1000 --Sr Correctional Deputy
+            paycheckAmount = 1100 --Sr Correctional Deputy
         elseif bcsoRank == 3 then
-            paycheckAmount = 1150 --Correctional Corporal
+            paycheckAmount = 1200 --Correctional Corporal
         elseif bcsoRank == 4 then
             paycheckAmount = 850 -- Sheriff's Deputy
         elseif bcsoRank == 5 then
-            paycheckAmount = 950 -- Senior Sheriff's Deputy
+            paycheckAmount = 1050 -- Senior Sheriff's Deputy
         elseif bcsoRank == 6 then
-            paycheckAmount = 1050 -- Corporal
+            paycheckAmount = 1150 -- Corporal
         elseif bcsoRank == 7 then
-            paycheckAmount = 1250 -- Sergeant
+            paycheckAmount = 1350 -- Sergeant
         elseif bcsoRank == 8 then
-            paycheckAmount = 1350 -- Captain
+            paycheckAmount = 1550 -- Captain
         elseif bcsoRank == 9 then
-            paycheckAmount = 1450 -- Commander
+            paycheckAmount = 1650 -- Commander
         elseif bcsoRank == 10 then
-            paycheckAmount = 1550 -- Undersheriff
+            paycheckAmount = 1750 -- Undersheriff
         elseif bcsoRank == 11 then
-            paycheckAmount = 1650 -- Sheriff
+            paycheckAmount = 1850 -- Sheriff
         end
     elseif job == "lawyer" then
         paycheckAmount = 1500
