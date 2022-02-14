@@ -706,7 +706,7 @@ AddEventHandler("mdt:deleteWarrant", function(id, rev)
 
 	if job == "corrections" and char.get("bcsoRank") >= 7 then
 		permitted = true
-	elseif (job == 'sheriff' and char.get("policeRank") >= 4) then
+	elseif (job == 'sheriff' and char.get("policeRank") >= 6) then
 		permitted = true
 	elseif job == 'judge' then 
 		permitted = true
@@ -820,7 +820,7 @@ AddEventHandler("mdt:deletePoliceReport", function(id, rev)
 
 	if job == "corrections" and char.get("bcsoRank") >= 7 then
 		permitted = true
-	elseif (job == 'sheriff' and char.get("policeRank") >= 4) then
+	elseif (job == 'sheriff' and char.get("policeRank") >= 6) then
 		permitted = true
 	elseif job == 'judge' then 
 		permitted = true
