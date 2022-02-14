@@ -145,7 +145,7 @@ var itemImages = {
     "Switchblade": "https://vignette.wikia.nocookie.net/gtawiki/images/f/fc/Switchblade-GTAV.png/revision/latest?cb=20161021210105",
     "AP Pistol": "https://i.pinimg.com/originals/3e/5b/09/3e5b09796cb124639c5f2232e5f32d9b.png",
     "Sawn-off": "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopbuyLgNv1fX3cDx96t2ykb-GkuP1P7fYlVRd4cJ5ntbN9J7yjRq1qkRoYmHxJICcdwVrNVyC_Va-xrq718W0uZSbm3M26Cdws3mOlkTln1gSOcynOW1P/360fx360f",
-    "Micro SMG": "https://www.gtagaming.com/images/10490/1317045779_micro_uzi_t_lad.png",
+    "Micro SMG": "https://i.imgur.com/yGbb2l5.png",
     "SMG": "https://i.imgur.com/XbTVfAB.png",
     "Machine Pistol": "https://i.pinimg.com/originals/19/38/54/193854f15e38f4e13174e815c92de4e4.png",
     "Tommy Gun": "https://www.gtabase.com/images/gta-5/weapons/machine-guns/gusenberg-sweeper.png",
