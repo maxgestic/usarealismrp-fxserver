@@ -426,7 +426,11 @@ local vehicleShopItems = {
 			{make = "GMC", model = "Sierra (2006)", price = 80000, hash = "polar06seirra", storage_capacity = 280.0},
 			{make = "Chevrolet", model = "Tahoe (2008)", price = 80000, hash = "tahoe08", storage_capacity = 250.0},
 			{make = "Nissan", model = "240SX (s14)", price = 75000, hash = "silvia3", storage_capacity = 150.0},
-			{make = "Volkswagon", model = "Golf (Mk6)", price = 75000, hash = "golfmk6", storage_capacity = 200.0}
+			{make = "Volkswagon", model = "Golf (Mk6)", price = 75000, hash = "golfmk6", storage_capacity = 200.0},
+			{make = "Ford", model = "F-150 SVT Lightning (1999)", price = 70000, hash = "flightning99", storage_capacity = 400.0},
+			{make = "Dodge", model = "Ram SRT-10", price = 140000, hash = "ramsrt10", storage_capacity = 400.0},
+			{make = "BMW", model = "M8", price = 340000, hash = "bmwm8", storage_capacity = 180.0},
+			{make = "Peugeot", model = "206 GTi", price = 30000, hash = "peugeot206", storage_capacity = 175.0},
 		}
 	}
 }
