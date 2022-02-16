@@ -144,10 +144,7 @@ local COORDS_THAT_ALLOW_INVISIBILITY = {
 
 local BlacklistedWeapons = { -- weapons that will get people banned
 	GetHashKey("WEAPON_RAILGUN"),
-	 -1813897027, -- grenade
-	 741814745, -- sticky bomb
 	 -1420407917, -- prox. mine
-	 -1169823560, -- pipe bomb
 	 -1568386805, -- grenade launcher
 	 -1312131151, -- RPG
 	 1119849093, -- minigun
