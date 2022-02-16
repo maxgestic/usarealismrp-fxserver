@@ -958,23 +958,11 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 	deferrals.update("Checking ban status...")
 	local usource = source
 	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(usource))
-	local gameLicense, steamLicense, ipAddress
-	for j = 1, #allPlayerIdentifiers do
-		if string.find(allPlayerIdentifiers[j], "license") then
-			gameLicense = allPlayerIdentifiers[j]
-		elseif string.find(allPlayerIdentifiers[j], "steam") then
-			steamLicense = allPlayerIdentifiers[j]
-		elseif string.find(allPlayerIdentifiers[j], "ip") then
-			ipAddress = allPlayerIdentifiers[j]
-		end
-	end
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
 		local query = {
 			["identifiers"] = {
 				["$elemMatch"] = {
-					["$or"] = {
-						gameLicense, steamLicense, ipAddress
-					}
+					["$or"] = allPlayerIdentifiers
 				}
 			}
 		}
@@ -1200,23 +1188,11 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 	local usource = source
 	--local identifier = GetPlayerIdentifiers(source)[1]
 	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(usource))
-	local gameLicense, steamLicense, ipAddress
-	for j = 1, #allPlayerIdentifiers do
-		if string.find(allPlayerIdentifiers[j], "license") then
-			gameLicense = allPlayerIdentifiers[j]
-		elseif string.find(allPlayerIdentifiers[j], "steam") then
-			steamLicense = allPlayerIdentifiers[j]
-		elseif string.find(allPlayerIdentifiers[j], "ip") then
-			ipAddress = allPlayerIdentifiers[j]
-		end
-	end
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
 		local query = {
 			["identifiers"] = {
 				["$elemMatch"] = {
-					["$or"] = {
-						gameLicense, steamLicense, ipAddress
-					}
+					["$or"] = allPlayerIdentifiers
 				}
 			}
 		}
