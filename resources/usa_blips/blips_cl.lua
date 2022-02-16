@@ -59,6 +59,7 @@ local blips = {
 	--{ title="The Hen House", colour = 83, id = 93, x= -304.092, y= 6264.582, z= 31.530 },
 	{ title="Tequilala", colour = 15, id = 93, scale = 0.7, x=-564.778, y=274.195, z=83.0197 },
 	{ title="Bahama Mamas", colour = 15, id = 93, scale = 0.7, x=-1388.94, y=-585.919, z=29.2195 },
+	{ title="Cockatoos", colour = 48, id = 93, scale = 0.6, x = -428.32333374023, y = -24.59232711792, z = 46.227993011475 },
 	{ title="Comedy Club", colour = 4, id = 362, scale = 0.7, x = -429.9, y = 261.6, z = 83.0 },
 	{ title="Yellow Jack", colour = 15, id = 93, scale = 0.7, x = 1986.1, y = 3050.57, z = 47.2151 },
 	{ title="Nightclub", colour = 83, id = 136, x = -337.23, y = 207.189, z = 88.57, scale = 0.95},
