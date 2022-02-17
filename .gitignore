@@ -3,7 +3,7 @@ resources/essentialmode/sv_es-DB-config.lua
 resources/scrambler-events.json
 resources/nw_bahamaMama
 resources/\[custom_clothing\]
-!resources/\[custom_clothing\]/usa_customCosmetics
+!resources/\[custom_clothing\]/usarrp-customClothing-converted
 resources/\[custom_vehicles\]
 !resources/\[custom_vehicles\]/assets/handling.meta
 resources/\[custom_maps\]
