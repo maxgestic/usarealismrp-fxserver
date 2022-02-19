@@ -27,6 +27,9 @@ AddEventHandler("playerDropped", function(reason)
     local charSelf = char.getSelf()
     local charFullName = char.getFullName()
     local charJailTime = char.get("jailTime")
+    local srcPed = GetPlayerPed(usource)
+    char.set("hp", GetEntityHealth(srcPed))
+    char.set("armor", GetPedArmour(srcPed))
     TriggerEvent('es:exposeDBFunctions', function(db)
       -- save player data --
       print("[usa-characters] player dropped, updating char with ID: " .. charId)
@@ -170,7 +173,7 @@ function InitializeCharacter(src, characterID)
                 end)
               end)
             end
-            TriggerClientEvent("character:setCharacter", src, character.get("appearance"), character.getWeapons()) -- load character
+            TriggerClientEvent("character:setCharacter", src, character.get("appearance"), character.getWeapons(), character.get("hp"), character.get("armor")) -- load character
             TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
             TriggerEvent("eblips:remove", src) -- remove any eblip
             TriggerClientEvent("banking:updateBalance", src, character.get("bank")) -- intialize bank resource
@@ -183,6 +186,8 @@ end
 
 function SaveCurrentCharacter(src, cb)
   if CHARACTERS[src] then
+    CHARACTERS[src].set("hp", GetEntityHealth(GetPlayerPed(src)))
+    CHARACTERS[src].set("armor", GetPedArmour(GetPlayerPed(src)))
     TriggerEvent('es:exposeDBFunctions', function(db)
       db.updateDocument("characters", CHARACTERS[src].get("_id"), CHARACTERS[src].getSelf(), function(err)
   			print("* Character updated in DB! *")

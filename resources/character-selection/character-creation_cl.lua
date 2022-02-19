@@ -178,7 +178,7 @@ AddEventHandler("character:open", function(menu, data)
 end)
 
 RegisterNetEvent("character:setCharacter")
-AddEventHandler("character:setCharacter", function(appearance, weapons)
+AddEventHandler("character:setCharacter", function(appearance, weapons, hp, armor)
 	Citizen.CreateThread(function()
 		RemoveAllPedWeapons(GetPlayerPed(-1), true) -- remove weapons for the case where a different character is selected after choosing one with weapons initially
 		if appearance then
@@ -259,6 +259,13 @@ AddEventHandler("character:setCharacter", function(appearance, weapons)
 		SpawnCharacter(data)
 		-- rules accepted check --
 		TriggerServerEvent("info:acceptedRulesCheck")
+		-- set HP and armor --
+		if hp then
+			SetEntityHealth(PlayerPedId(), hp)
+		end
+		if armor then
+			SetPedArmour(PlayerPedId(), armor)
+		end
 	end)
 end)
 
