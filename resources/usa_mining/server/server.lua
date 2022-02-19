@@ -22,7 +22,10 @@ AddEventHandler('mining:doesUserHaveCorrectItems', function()
 end)
 
 RegisterServerEvent('mining:giveUserMiningGoods')
-AddEventHandler('mining:giveUserMiningGoods', function()
+AddEventHandler('mining:giveUserMiningGoods', function(securityToken)
+    if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
     local char = exports["usa-characters"]:GetCharacter(source)
     local gotSomething = math.random() <= 0.60
     if gotSomething then
@@ -53,6 +56,13 @@ AddEventHandler('mining:sellMinedItems', function()
             char.removeItem(rare[j])
             TriggerClientEvent("usa:notify", source, "You Sold " .. rare[j].name .. " for $" .. rare[j].price)
         end
+    end
+    if char.hasItem("Panther") then
+        TriggerClientEvent("usa:notify", source, "Wow!! A panther jewel!!", "Buyer: Wow!! A panther jewel!!")
+        local pantherReward = math.random(50000, 100000)
+        TriggerClientEvent("usa:notify", source, "Reward: $" .. exports.globals:comma_value(pantherReward))
+        char.giveMoney(pantherReward)
+        char.removeItem("Panther", 1)
     end
 end)
 
