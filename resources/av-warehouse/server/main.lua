@@ -297,7 +297,7 @@ RegisterServerCallback {
 
 RegisterServerEvent('av_warehouse:discord')
 AddEventHandler('av_warehouse:discord', function(content)
-	if webhook then
+	if webhook and Config.sendDiscordMessageOnStart then
 		PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = name, embeds = content}), { ['Content-Type'] = 'application/json' })
 	end
 end)
@@ -314,14 +314,22 @@ end)
 
 RegisterServerEvent('av_warehouse:hint')
 AddEventHandler('av_warehouse:hint', function()
-	for _, info in pairs(locations) do
-		if x == info.x and y == info.y and z == info.z then
-			local msgAuthorColor = {84, 165, 133}
-			TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, "See that nice mansion down there? It's loaded with cash, weapons, and all sorts of goodies. It's owned by a cartel member from Mexico. I know how we can get in there, too.")
-			TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, info.hint)
-			TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, "Once inside, there might be some guards to deal with, but then we should be able to crack open the crates and get out. Just bring a crowbar. I've also marked your map temporarily with about where it is.")
-			TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, "If you're lucky you'll find a grappling hook and maybe some sticky bombs we can use to get over the mansion walls and into the safes. If not, you'll have to try again another time.")
-			TriggerClientEvent("av_warehouse:addHintBlip", source, x + randomHintBlipXOffset, y + randomHintBlipYOffset, z, Config.HintBlipRadius)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char.hasItem("Grappling Hook") and char.hasItem("Sticky Bomb") then
+		local msgAuthorColor = {84, 165, 133}
+		TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, "Oh, nice! You got some stickies and a grappling hook! Perfect! I think if you head down to that white wall of the mansion just behind me there should be a section you can try to get over with the hook.")
+		TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, "Once inside, there are 2 rooms I know of that hold valuables. One is up some stairs of the tall red building. I think it is the owner's office. You should see a safe inside it. The other is like in the basement area past some metal gates.")
+		TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, "Be careful, there are guards all over!")
+	else
+		for _, info in pairs(locations) do
+			if x == info.x and y == info.y and z == info.z then
+				local msgAuthorColor = {84, 165, 133}
+				TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, "See that nice mansion down there? It's loaded with cash, weapons, and all sorts of goodies. It's owned by a cartel member from Mexico. I know how we can get in there, too.")
+				TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, info.hint)
+				TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, "Once inside, there might be some guards to deal with, but then we should be able to crack open the crates and get out. Just bring a crowbar. I've also marked your map temporarily with about where it is.")
+				TriggerClientEvent("chatMessage", source, "INFO", msgAuthorColor, "If you're lucky you'll find a grappling hook and maybe some sticky bombs we can use to get over the mansion walls and into the safes. If not, you'll have to try again another time.")
+				TriggerClientEvent("av_warehouse:addHintBlip", source, x + randomHintBlipXOffset, y + randomHintBlipYOffset, z, Config.HintBlipRadius)
+			end
 		end
 	end
 end)

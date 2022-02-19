@@ -57,9 +57,13 @@ function revivePed(ped, anim)
 	end
 end
 
-DoScreenFadeIn(100)
+local CAYO_PERICO_MANSION_COORDS = vector3(5006.8388671875, -5755.7104492188, 21.358211517334)
 
 function respawnPed(ped,coords)
+	local currentCoords = GetEntityCoords(ped)
+	if #(currentCoords - CAYO_PERICO_MANSION_COORDS) < 500 then
+		TriggerServerEvent("av_cayoheist:removeGoods")
+	end
 	FreezeEntityPosition(ped, false)
 	DoScreenFadeOut(500)
 	Citizen.Wait(500)
