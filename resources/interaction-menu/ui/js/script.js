@@ -271,6 +271,7 @@ var itemImages = {
     "Calvary Dagger": "https://i.imgur.com/OL8iIUT.png",
     "Double Barrel Shotgun": "https://i.imgur.com/RhL3DmQ.png",
     "Sign Kit": "https://i.imgur.com/uFWkUoW.png",
+    "Panther": "https://i.imgur.com/EsXv2Yj.png",
     // begin ammo
     "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
     "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",
