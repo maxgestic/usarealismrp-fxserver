@@ -61,7 +61,8 @@ prices = {
 	['brakes'] = LSC_Config.prices.mods[12],
 	['engine tunes'] = LSC_Config.prices.mods[11],
 	['roof'] = LSC_Config.prices.mods[10],
-	['fenders'] = LSC_Config.prices.mods[8],
+	['fenders 1'] = LSC_Config.prices.mods[8],
+	['fenders 2'] = LSC_Config.prices.mods[9],
 	['hood'] = LSC_Config.prices.mods[7],
 	['grille'] = LSC_Config.prices.mods[6],
 	['roll cage'] = LSC_Config.prices.mods[5],
@@ -187,7 +188,8 @@ AddEventHandler("LSC:finished", function(veh)
 	mods[5].mod - roll cage
 	mods[6].mod - grille
 	mods[7].mod - hood
-	mods[8].mod - fenders
+	mods[8].mod - fenders 1
+	mods[9].mod - fenders 2
 	mods[10].mod - roof
 	mods[11].mod - engine
 	mods[12].mod - brakes

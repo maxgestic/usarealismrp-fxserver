@@ -61,7 +61,7 @@ end
 -- mini's added function to save customizations
 RegisterNetEvent("customs:applyCustomizations")
 AddEventHandler("customs:applyCustomizations", function(veh)
-    	local currentvehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+		local currentvehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 
 		local customizations = veh.mods
 		local extracolor = veh.extracolor
@@ -375,7 +375,8 @@ local function DriveInGarage()
 		AddMod(4,LSCMenu.categories,"EXHAUST", "Exhausts", "Customized sports exhausts.",true)
 		AddMod(6,LSCMenu.categories,"GRILLE", "Grille", "Improved engine cooling.",true)
 		AddMod(7,LSCMenu.categories,"HOOD", "Hood", "Enhance car engine cooling.",true)
-		AddMod(8,LSCMenu.categories,"FENDERS", "Fenders", "Enhance body paneling with custom fenders.",true)
+		AddMod(8,LSCMenu.categories,"FENDERS 1", "Fenders 1", "Enhance body paneling (left).",true)
+		AddMod(9,LSCMenu.categories,"FENDERS 2", "Fenders 2", "Enhance body paneling (right)",true)
 		if not (GetEntityModel(veh) == GetHashKey("revolter")) then
 			AddMod(10,LSCMenu.categories,"ROOF", "Roof", "Lower your center of gravity with lightweight roof panels.",true)
 		end
@@ -1010,13 +1011,21 @@ AddEventHandler("LSC:buttonSelected", function(name, button, canpurchase)
 			myveh.mods[button.modtype].mod = button.mod
 			SetVehicleMod(veh,button.modtype,button.mod)
 		end
-	elseif mname == "fenders" then
+	elseif mname == "fenders 1" then
 		if button.name == "Stock" or button.purchased or CanPurchase(price, canpurchase)then
 			if button.name == "Stock" then
 				myveh.mods[8].mod = button.mod
+				SetVehicleMod(veh,8,button.mod)
+			else
+				myveh.mods[button.modtype].mod = button.mod
+				SetVehicleMod(veh,button.modtype,button.mod)
+			end
+		end
+	elseif mname == "fenders 2" then
+		if button.name == "Stock" or button.purchased or CanPurchase(price, canpurchase)then
+			if button.name == "Stock" then
 				myveh.mods[9].mod = button.mod
 				SetVehicleMod(veh,9,button.mod)
-				SetVehicleMod(veh,8,button.mod)
 			else
 				myveh.mods[button.modtype].mod = button.mod
 				SetVehicleMod(veh,button.modtype,button.mod)
