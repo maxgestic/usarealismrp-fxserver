@@ -846,7 +846,10 @@ backwheel = {
 		startprice = 500,
 		increaseby = 400
 	},
-
+	[9] = {
+		startprice = 500,
+		increaseby = 400
+	},
 ------------Hood----------
 	[7] = {
 		startprice = 800,
