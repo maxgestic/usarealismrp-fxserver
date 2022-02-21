@@ -348,6 +348,7 @@ local function DriveInGarage()
 
 		-- get set mods
 		for i = 0,48 do
+			print("# mods for mod " .. i .. ": " .. json.encode(GetNumVehicleMods(veh, i)))
 			if GetNumVehicleMods(veh,i) ~= nil and GetNumVehicleMods(veh,i) ~= false and GetNumVehicleMods(veh,i) > 0 then
 				if i == 1 then
 					bumper = true
@@ -556,32 +557,109 @@ local function DriveInGarage()
 						end
 				else
 					sportw = wtype:addSubMenu("SPORT WHEELS", "Sport", nil,true)
-						for n, w in pairs(LSC_Config.prices.sportwheels) do
-							local btn = sportw:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+						for i = 0, 161 do
+							local name = "Sport Wheel #" .. (i + 1)
+							local price = LSC_Config.prices.GENERIC_WHEEL
+							for n, w in pairs(LSC_Config.prices.sportwheels) do
+								if w.mod == i then
+									name = w.name
+									price = w.price
+								end
+							end
+							local btn = sportw:addPurchase(name, price)
+							btn.wtype = 0
+							btn.modtype = 23
+							btn.mod = i
 						end
 					musclew = wtype:addSubMenu("MUSCLE WHEELS", "Muscle", nil,true)
-						for n, w in pairs(LSC_Config.prices.musclewheels) do
-							local btn = musclew:addPurchase(w.name,w.price)btn.wtype =  w.wtype btn.modtype = 23 btn.mod = w.mod
+						for i = 0, 101 do
+							local name = "Muscle Wheel #" .. (i + 1)
+							local price = LSC_Config.prices.GENERIC_WHEEL
+							for n, w in pairs(LSC_Config.prices.musclewheels) do
+								if w.mod == i then
+									name = w.name
+									price = w.price
+								end
+							end
+							local btn = musclew:addPurchase(name, price)
+							btn.wtype = 1
+							btn.modtype = 23
+							btn.mod = i
 						end
 					lowriderw = wtype:addSubMenu("LOWRIDER WHEELS", "Lowrider", nil,true)
-						for n, w in pairs(LSC_Config.prices.lowriderwheels) do
-							local btn = lowriderw:addPurchase(w.name,w.price)btn.wtype =  w.wtype btn.modtype = 23 btn.mod = w.mod
+						for i = 0, 45 do
+							local name = "Lowrider Wheel #" .. (i + 1)
+							local price = LSC_Config.prices.GENERIC_WHEEL
+							for n, w in pairs(LSC_Config.prices.lowriderwheels) do
+								if w.mod == i then
+									name = w.name
+									price = w.price
+								end
+							end
+							local btn = lowriderw:addPurchase(name, price)
+							btn.wtype = 2
+							btn.modtype = 23
+							btn.mod = i
 						end
 					suvw = wtype:addSubMenu("SUV WHEELS", "Suv", nil,true)
-						for n, w in pairs(LSC_Config.prices.suvwheels) do
-							local btn = suvw:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+						for i = 0, 41 do
+							local name = "SUV Wheel #" .. (i + 1)
+							local price = LSC_Config.prices.GENERIC_WHEEL
+							for n, w in pairs(LSC_Config.prices.suvwheels) do
+								if w.mod == i then
+									name = w.name
+									price = w.price
+								end
+							end
+							local btn = suvw:addPurchase(name, price)
+							btn.wtype = 3
+							btn.modtype = 23
+							btn.mod = i
 						end
 					offroadw = wtype:addSubMenu("OFFROAD WHEELS", "Offroad", nil,true)
-						for n, w in pairs(LSC_Config.prices.offroadwheels) do
-							local btn = offroadw:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+						for i = 0, 49 do
+							local name = "Offroad Wheel #" .. (i + 1)
+							local price = LSC_Config.prices.GENERIC_WHEEL
+							for n, w in pairs(LSC_Config.prices.offroadwheels) do
+								if w.mod == i then
+									name = w.name
+									price = w.price
+								end
+							end
+							local btn = offroadw:addPurchase(name, price)
+							btn.wtype = 4
+							btn.modtype = 23
+							btn.mod = i
 						end
 					tunerw = wtype:addSubMenu("TUNER WHEELS", "Tuner", nil,true)
-						for n, w in pairs(LSC_Config.prices.tunerwheels) do
-							local btn = tunerw:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+						for i = 0, 48 do
+							local name = "Tuner Wheel #" .. (i + 1)
+							local price = LSC_Config.prices.GENERIC_WHEEL
+							for n, w in pairs(LSC_Config.prices.offroadwheels) do
+								if w.mod == i then
+									name = w.name
+									price = w.price
+								end
+							end
+							local btn = tunerw:addPurchase(name, price)
+							btn.wtype = 5
+							btn.modtype = 23
+							btn.mod = i
 						end
-					hughendw = wtype:addSubMenu("HIGHEND WHEELS", "Highend", nil,true)
-						for n, w in pairs(LSC_Config.prices.highendwheels) do
-							local btn = hughendw:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+					highendw = wtype:addSubMenu("HIGHEND WHEELS", "Highend", nil,true)
+						for i = 0, 58 do
+							local name = "Highend Wheel #" .. (i + 1)
+							local price = LSC_Config.prices.GENERIC_WHEEL
+							for n, w in pairs(LSC_Config.prices.highendwheels) do
+								if w.mod == i then
+									name = w.name
+									price = w.price
+								end
+							end
+							local btn = highendw:addPurchase(name, price)
+							btn.wtype = 7
+							btn.modtype = 23
+							btn.mod = i
 						end
 					bennysw = wtype:addSubMenu("BENNY'S WHEELS", "Benny's", nil,true)
 						for n, w in pairs(LSC_Config.prices.bennyswheels) do
@@ -592,8 +670,19 @@ local function DriveInGarage()
 							local btn = bespokew:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
 						end
 					trackwheels = wtype:addSubMenu("TRACK WHEELS", "Track", nil,true)
-						for n, w in pairs(LSC_Config.prices.trackwheels) do
-							local btn = trackwheels:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+						for i = 0, 210 do
+							local name = "Track Wheel #" .. (i + 1)
+							local price = LSC_Config.prices.GENERIC_WHEEL
+							for n, w in pairs(LSC_Config.prices.trackwheels) do
+								if w.mod == i then
+									name = w.name
+									price = w.price
+								end
+							end
+							local btn = trackwheels:addPurchase(name, price)
+							btn.wtype = 12
+							btn.modtype = 23
+							btn.mod = i
 						end
 					streetwheels = wtype:addSubMenu("STREET WHEELS", "Street", nil,true)
 						for n, w in pairs(LSC_Config.prices.streetwheels) do

@@ -84,6 +84,8 @@ LSC_Config.prices = {}
 --------Prices---------
 LSC_Config.prices = {
 
+	GENERIC_WHEEL = 6000,
+
 	livery = {
 		price = 2000
 	},
