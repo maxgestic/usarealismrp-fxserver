@@ -330,8 +330,6 @@ local requestedIpl = {
 "h4_mph4_island_placement"
 }
 
-
-
 CreateThread(function()
 	for i = #requestedIpl, 1, -1 do
 		RequestIpl(requestedIpl[i])
@@ -385,4 +383,20 @@ end)
 
 Citizen.CreateThread(function()
   SetDeepOceanScaler(0.0)
+end)
+
+-- lock side door (for heist)
+CreateThread(function()
+	local doorThatNeedsLockingCoords = vector3(4959.3002929688, -5786.3178710938, 20.83810043335)
+	local doorModel = -1439869581
+	while true do
+		local mycoords = GetEntityCoords(PlayerPedId())
+		if #(mycoords - doorThatNeedsLockingCoords) < 300 then
+			local doorHandle = GetClosestObjectOfType(doorThatNeedsLockingCoords.x, doorThatNeedsLockingCoords.y, doorThatNeedsLockingCoords.z, 5.0, doorModel, false, false, false)
+			if DoesEntityExist(doorHandle) then
+				FreezeEntityPosition(doorHandle, true)
+			end
+		end
+		Wait(5000)
+	end
 end)
