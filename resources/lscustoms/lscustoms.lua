@@ -557,7 +557,7 @@ local function DriveInGarage()
 						end
 				else
 					sportw = wtype:addSubMenu("SPORT WHEELS", "Sport", nil,true)
-						for i = 0, 161 do
+						for i = 0, 224 do
 							local name = "Sport Wheel #" .. (i + 1)
 							local price = LSC_Config.prices.GENERIC_WHEEL
 							for n, w in pairs(LSC_Config.prices.sportwheels) do
