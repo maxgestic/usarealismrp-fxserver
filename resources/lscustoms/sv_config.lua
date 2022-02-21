@@ -84,6 +84,8 @@ LSC_Config.prices = {}
 --------Prices---------
 LSC_Config.prices = {
 
+	GENERIC_WHEEL = 6000,
+
 	livery = {
 		price = 2000
 	},
@@ -322,6 +324,7 @@ backwheel = {
 		{name = "Superfive", wtype = 0, mod = 21, price = 1000},
 		{name = "Endov2", wtype = 0, mod = 22, price = 1000},
 		{name = "Slitsix", wtype = 0, mod = 23, price = 1000},
+		
 	},
 -----Suv wheels------
 	suvwheels = {
