@@ -5,5 +5,5 @@
 	path = resources/[custom_clothing]/usarrp-customClothing-converted
 	url = git@github.com:minipunch/usarrp-customClothing-converted.git
 [submodule "resources/usarrp-customVehicles"]
-	path = resources/usarrp-customVehicles
+	path = resources/[custom_vehicles]
 	url = git@github.com:minipunch/usarrp-customVehicles.git
