@@ -385,16 +385,21 @@ Citizen.CreateThread(function()
   SetDeepOceanScaler(0.0)
 end)
 
--- lock side door (for heist)
+-- lock side doors (for heist)
 CreateThread(function()
-	local doorThatNeedsLockingCoords = vector3(4959.3002929688, -5786.3178710938, 20.83810043335)
+	local doorsThatNeedLockingCoords = {
+		vector3(4959.3002929688, -5786.3178710938, 20.83810043335),
+		vector3(5084.9326171875, -5731.7690429688, 15.772534370422)
+	}
 	local doorModel = -1439869581
 	while true do
 		local mycoords = GetEntityCoords(PlayerPedId())
-		if #(mycoords - doorThatNeedsLockingCoords) < 300 then
-			local doorHandle = GetClosestObjectOfType(doorThatNeedsLockingCoords.x, doorThatNeedsLockingCoords.y, doorThatNeedsLockingCoords.z, 5.0, doorModel, false, false, false)
-			if DoesEntityExist(doorHandle) then
-				FreezeEntityPosition(doorHandle, true)
+		for i = 1, #doorsThatNeedLockingCoords do
+			if #(mycoords - doorsThatNeedLockingCoords[i]) < 300 then
+				local doorHandle = GetClosestObjectOfType(doorsThatNeedLockingCoords[i].x, doorsThatNeedLockingCoords[i].y, doorsThatNeedLockingCoords[i].z, 5.0, doorModel, false, false, false)
+				if DoesEntityExist(doorHandle) then
+					FreezeEntityPosition(doorHandle, true)
+				end
 			end
 		end
 		Wait(5000)
