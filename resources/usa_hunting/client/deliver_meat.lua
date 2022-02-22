@@ -57,6 +57,14 @@ end)
 function promptSale()
     local beginTime = GetGameTimer()
     if IsControlJustPressed(0, 38) then
+        local hasMeat = TriggerServerCallback {
+            eventName = "hunting:doesHaveMeat",
+            args = {}
+        }
+        if not hasMeat then
+            exports.globals:notify("No meat to sell!")
+            return
+        end
         local pid = PlayerPedId()
         RequestAnimDict("anim@narcotics@trash")
         while (not HasAnimDictLoaded("anim@narcotics@trash")) do Wait(0) end

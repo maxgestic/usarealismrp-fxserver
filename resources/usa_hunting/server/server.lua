@@ -101,3 +101,11 @@ AddEventHandler("hunting:sellMeat", function()
 
     TriggerClientEvent("hunting:sellMeat", source)
 end)
+
+RegisterServerCallback {
+	eventName = 'hunting:doesHaveMeat',
+	eventCallback = function(source)
+        local char = exports["usa-characters"]:GetCharacter(source)
+		return char.hasItem("Butchered Meat")
+	end
+}
