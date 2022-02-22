@@ -4,11 +4,13 @@ shared_script '@pmc-callbacks/import.lua'
 
 -- Server
 server_scripts {
-	'server/server.lua'
+	'server/server.lua',
+	'@salty_tokenizer/init.lua'
 }
 -- Client
 client_scripts {
 	'client/hunt.lua',
 	'client/furtrade.lua',
-	'client/deliver_meat.lua'
+	'client/deliver_meat.lua',
+	'@salty_tokenizer/init.lua'
 }

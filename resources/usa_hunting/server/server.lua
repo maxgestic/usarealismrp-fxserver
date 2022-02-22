@@ -10,7 +10,10 @@ local REWARD_RANGES = {
 }
 
 RegisterServerEvent("hunting:skinforfurandmeat")
-AddEventHandler("hunting:skinforfurandmeat", function()
+AddEventHandler("hunting:skinforfurandmeat", function(securityToken)
+    if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
     local fur = {
@@ -50,7 +53,10 @@ AddEventHandler('hunting:cookMeat', function(itemName)
 end)
 
 RegisterServerEvent('hunting:giveCookedMeat')
-AddEventHandler('hunting:giveCookedMeat', function()
+AddEventHandler('hunting:giveCookedMeat', function(securityToken)
+    if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
     local char = exports["usa-characters"]:GetCharacter(source)
     local cookedMeat = {
         name = "Cooked Meat",

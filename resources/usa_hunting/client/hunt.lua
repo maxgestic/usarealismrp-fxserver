@@ -57,7 +57,7 @@ Citizen.CreateThread(function()
                             end
                             ClearPedTasks(myped)
                             if DoesEntityExist(otherPed) then
-                                TriggerServerEvent('hunting:skinforfurandmeat')
+                                TriggerServerEvent('hunting:skinforfurandmeat', securityToken)
                                 DeleteEntity(otherPed)
                             end
                         end
@@ -85,7 +85,7 @@ AddEventHandler('hunting:cookMeat', function()
             exports.globals:DrawTimerBar(beginTime, HUNTING_COOK_MEAT_TIME_SECONDS * 1000, 1.42, 1.475, 'Cooking Meat')
             Wait(1)
         end
-        TriggerServerEvent('hunting:giveCookedMeat')
+        TriggerServerEvent('hunting:giveCookedMeat', securityToken)
         ClearPedTasks(myped)
     end
 end)
