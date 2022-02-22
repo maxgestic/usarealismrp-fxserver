@@ -1,31 +1,38 @@
 -- Trader ped config
 local MEAT_TRADER_NPC_MODEL = "s_m_y_chef_01" 
-local meat_location = {959.75512695313, -2187.6110839844, 30.51185798645, 87.14}
+local meat_sell_locations = {
+    {x = 959.75512695313, y = -2187.6110839844, z = 30.51185798645, h = 87.14},
+    {x = -1202.5804443359, y = -895.58770751953, z = 13.995266914368, h = 291.0},
+    {x = -69.21866607666, y = 6270.1279296875, z = 31.323371887207, h = 68.0}
+}
 
 -- spawn fur trader NPC
 local meatTraderNPC = nil
 Citizen.CreateThread(function()
     while true do
         local playerCoords = GetEntityCoords(PlayerPedId(), false)
-        local x,y,z,heading = table.unpack(meat_location)
-        if Vdist(playerCoords, x, y, z) < 60 then
-            if not meatTraderNPC then
-                RequestModel(GetHashKey(MEAT_TRADER_NPC_MODEL))
-                while not HasModelLoaded(MEAT_TRADER_NPC_MODEL) do
-                    RequestModel(MEAT_TRADER_NPC_MODEL)
-                    Wait(1)
+        for i = 1, #meat_sell_locations do
+            if Vdist(playerCoords, meat_sell_locations[i].x, meat_sell_locations[i].y, meat_sell_locations[i].z) < 60 then
+                if not meat_sell_locations[i].meatTraderNPC then
+                    RequestModel(GetHashKey(MEAT_TRADER_NPC_MODEL))
+                    while not HasModelLoaded(MEAT_TRADER_NPC_MODEL) do
+                        RequestModel(MEAT_TRADER_NPC_MODEL)
+                        Wait(1)
+                    end
+                    meat_sell_locations[i].meatTraderNPC = CreatePed(0, MEAT_TRADER_NPC_MODEL, meat_sell_locations[i].x, meat_sell_locations[i].y, meat_sell_locations[i].z, meat_sell_locations[i].h, false, false) -- need to add distance culling
+                    SetEntityCanBeDamaged(meat_sell_locations[i].meatTraderNPC,false)
+                    SetPedCanRagdollFromPlayerImpact(meat_sell_locations[i].meatTraderNPC,false)
+                    SetBlockingOfNonTemporaryEvents(meat_sell_locations[i].meatTraderNPC,true)
+                    SetPedFleeAttributes(meat_sell_locations[i].meatTraderNPC,0,0)
+                    SetPedCombatAttributes(meat_sell_locations[i].meatTraderNPC,17,1)
+                    Wait(1000)
+                    FreezeEntityPosition(meat_sell_locations[i].meatTraderNPC, true)
                 end
-                meatTraderNPC = CreatePed(0, MEAT_TRADER_NPC_MODEL, x, y, z, heading, false, false) -- need to add distance culling
-                SetEntityCanBeDamaged(meatTraderNPC,false)
-                SetPedCanRagdollFromPlayerImpact(meatTraderNPC,false)
-                SetBlockingOfNonTemporaryEvents(meatTraderNPC,true)
-                SetPedFleeAttributes(meatTraderNPC,0,0)
-                SetPedCombatAttributes(meatTraderNPC,17,1)
-            end
-        else
-            if meatTraderNPC then
-                DeletePed(meatTraderNPC)
-                meatTraderNPC = nil
+            else
+                if meat_sell_locations[i].meatTraderNPC then
+                    DeletePed(meat_sell_locations[i].meatTraderNPC)
+                    meat_sell_locations[i].meatTraderNPC = nil
+                end
             end
         end
         Wait(1)
@@ -36,17 +43,18 @@ end)
 Citizen.CreateThread(function()
     while true do
         local mycoords = GetEntityCoords(PlayerPedId())
-        local x,y,z = table.unpack(meat_location)
-        if GetDistanceBetweenCoords(x, y, z, mycoords, true) < 1.5 then
-            promptSale(x,y,z)
+        for i = 1, #meat_sell_locations do
+            if GetDistanceBetweenCoords(meat_sell_locations[i].x, meat_sell_locations[i].y, meat_sell_locations[i].z, mycoords, true) < 1.5 then
+                exports.globals:DrawText3D(meat_sell_locations[i].x, meat_sell_locations[i].y, meat_sell_locations[i].z, "[E] - Sell Meat")
+                promptSale()
+            end
         end
-        Wait(0)
+        Wait(2)
     end
 end)
 
 -- Sell the fur
-function promptSale(location)
-    exports.globals:DrawText3D(meat_location[1], meat_location[2], meat_location[3], "[E] - Sell Meat")
+function promptSale()
     local beginTime = GetGameTimer()
     if IsControlJustPressed(0, 38) then
         local pid = PlayerPedId()
@@ -60,6 +68,6 @@ function promptSale(location)
             Wait(1)
         end
         ClearPedTasks(pid)
-        TriggerServerEvent("hunting:sellMeat", location)
+        TriggerServerEvent("hunting:sellMeat")
     end
 end
