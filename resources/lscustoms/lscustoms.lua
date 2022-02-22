@@ -560,6 +560,9 @@ local function DriveInGarage()
 						for i = 0, 224 do
 							local name = "Sport Wheel #" .. (i + 1)
 							local price = LSC_Config.prices.GENERIC_WHEEL
+							if i >= 72 then
+								price = LSC_Config.prices.NICER_WHEEL
+							end
 							for n, w in pairs(LSC_Config.prices.sportwheels) do
 								if w.mod == i then
 									name = w.name
