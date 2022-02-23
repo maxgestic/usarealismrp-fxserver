@@ -14,50 +14,12 @@ AddEventHandler("ServerValidEmote", function(target, requestedemote, otheremote)
 	TriggerClientEvent("SyncPlayEmoteSource", target, requestedemote)
 end)
 
-local PREMIUM_EMOTES = {
-	["Armored"] = true,
-	["Lemar"] = true,
-	["Lean Forward"] = true,
-	["Fire2"] = true,
-	["Lester"] = true,
-	["Lester2"] = true,
-	["Wide"] = true,
-	["Brave"] = true,
-	["Gangster3"] = true,
-	["Gangster4"] = true,
-	["Jog"] = true,
-	["Franklin"] = true,
-	["Cop"] = true,
-	["Cop2"] = true,
-	["Cop3"] = true
+RegisterServerCallback {
+	eventName = 'emote:isAtBlacklistedLocation',
+	eventCallback = function(source, emoteName)
+		return isAtBlacklistedLocation(source, emoteName[3])
+	end
 }
-
---[[
-RegisterServerEvent("dpemotes:walkstyleCheck") 
-AddEventHandler("dpemotes:walkstyleCheck", function(name)
-	local usource = source
-	local isSignedInWithFiveM = CanPlayerStartCommerceSession(usource)
-	if isSignedInWithFiveM and not IsPlayerCommerceInfoLoaded(usource) then
-		LoadPlayerCommerceData(usource)
-	end
-	while isSignedInWithFiveM and not IsPlayerCommerceInfoLoaded(usource) do 
-		Wait(100)
-	end
-	if isSignedInWithFiveM then
-		local user = exports["essentialmode"]:getPlayerFromId(usource)
-		if PREMIUM_EMOTES[name] and not DoesPlayerOwnSku(usource, 16) and user.getGroup() == "user" then 
-			TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase more walkstyles!")
-			return
-		end
-	else 
-		if PREMIUM_EMOTES[name] then 
-			TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase more walkstyles!")
-			return
-		end
-	end
-	TriggerClientEvent("dpemotes:continueWalkstyleChange", usource, name)
-end)
---]]
 
 function isAtBlacklistedLocation(src, emoteName)
 	local mycoords = GetEntityCoords(GetPlayerPed(src))
@@ -85,8 +47,15 @@ TriggerEvent('es:addCommand', 'e', function(source, args, char)
 end, { help = "List emotes" })
 
 TriggerEvent('es:addCommand', 'emote', function(source, args, char)
+	if args[2] and args[2]:lower() == "sunbatheback" and char.get("jailTime") > 0 then
+		return
+	end
+	if isAtBlacklistedLocation(source, args[2]) then
+		TriggerClientEvent("usa:notify", source, "Can't do that here!")
+		return
+	end
 	table.remove(args, 1)
-	TriggerClientEvent("dpemotes:command", source, 'emote', source, args)
+	TriggerClientEvent("dpemotes:command", source, 'e', source, args)
 end, { help = "List emotes" })
 
 TriggerEvent('es:addCommand', 'emotes', function(source, args, char)

@@ -298,6 +298,16 @@ end
 
 function OnEmotePlay(EmoteName)
 
+  local isBlacklisted = TriggerServerCallback {
+    eventName = "emote:isAtBlacklistedLocation",
+    args = {EmoteName}
+  }
+
+  if isBlacklisted then
+    exports.globals:notify("Can't do that here!")
+    return
+  end
+
   InVehicle = IsPedInAnyVehicle(PlayerPedId(), true)
   if not Config.AllowedInCars and InVehicle == 1 then
     return
