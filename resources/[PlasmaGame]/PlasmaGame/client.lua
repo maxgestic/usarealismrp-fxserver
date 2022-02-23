@@ -1117,7 +1117,7 @@ AddEventHandler('PaintBall:GoToLeaveMatchMSG', function(winner,maps)
 	leaveTheGame(winner,maps)
 end)
 
-
+--[[
 RegisterCommand("unfreeze", function(source, args, fullCommand)
 	FreezeEntityPosition(PlayerPedId(),false)
 	isLockWaiting = true
@@ -1126,6 +1126,7 @@ end, false)
 RegisterCommand('giveplasma', function(source, args, fullCommand)
 	GiveWeaponToPed(PlayerPedId(),GetHashKey(GunName),250,false,true)
 end, false)
+--]]
 
 
 -- RegisterCommand("switchTenu", function(source, args, fullCommand)
