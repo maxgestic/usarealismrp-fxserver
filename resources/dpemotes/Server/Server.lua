@@ -59,8 +59,25 @@ AddEventHandler("dpemotes:walkstyleCheck", function(name)
 end)
 --]]
 
+function isAtBlacklistedLocation(src, emoteName)
+	local mycoords = GetEntityCoords(GetPlayerPed(src))
+	if Config.BlacklistedLocations[emoteName] then
+		for i = 1, #Config.BlacklistedLocations[emoteName] do
+			local location = Config.BlacklistedLocations[emoteName][i]
+			if #(mycoords - location.coords) <= location.dist then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 TriggerEvent('es:addCommand', 'e', function(source, args, char)
 	if args[2] and args[2]:lower() == "sunbatheback" and char.get("jailTime") > 0 then
+		return
+	end
+	if isAtBlacklistedLocation(source, args[2]) then
+		TriggerClientEvent("usa:notify", source, "Can't do that here!")
 		return
 	end
 	table.remove(args, 1)

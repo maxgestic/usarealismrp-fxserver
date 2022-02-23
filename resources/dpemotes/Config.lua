@@ -284,3 +284,9 @@ Config.Languages = {
         ['keybindsinfo'] = "Utilizar"
   }
 }
+
+Config.BlacklistedLocations = {
+    ["sunbatheback"] = {
+        {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0} -- cayo perico mansion
+    }
+}
