@@ -364,26 +364,6 @@ end)
 -- BAITCAR SCRIPT CREATED BY TONI MORTON FOR THE FIVEM COMMUNITY, PLEASE GIVE CREDITS TO ME IF YOU USE THIS SCRIPT IN YOUR SERVER.  --
 -----------------------------------------------------------------------------------------------------------------------
 
--- KEEP DOOR OPEN ON EXIT (HOLD F) --
-Citizen.CreateThread(function()
-    while true do
-        local me = GetPlayerPed(-1)
-        if IsPedInAnyPoliceVehicle(me) and IsControlPressed( 2, 75 ) and GetLastInputMethod(0) then
-            Wait(150)
-            if IsPedInAnyPoliceVehicle(me) and IsControlPressed( 2, 75 ) then
-                local handle = GetVehiclePedIsIn(me, false)
-                TaskLeaveVehicle(me, handle, 256)
-            end
-        end
-        if isInBaitCar then
-            veh = GetVehiclePedIsIn(me)
-            SetVehicleEngineOn(veh, false, true)
-            DisableControlAction(0, 75, true)
-        end
-        Wait(0)
-    end
-end)
-
 ------------------end baitcar--------------------------
 
 -- todo: somehow convet RGB value of vehicle color to human readable name for 911 report above
