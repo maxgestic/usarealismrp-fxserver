@@ -28,6 +28,6 @@ client_scripts {
     "@NativeUI/UIMenu/UIMenu.lua",
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
-    'cl_barbershop.lua'
+    'cl_*.lua'
 }
 server_scripts {'sv_barbershop.lua'}

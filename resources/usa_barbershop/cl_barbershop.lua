@@ -27,7 +27,7 @@ local purchases = {}
 
 local closest_shop = nil --// keep track of closest shop to help keep track of shop player is currently at
 
-local old_head = {
+old_head = {
   parent1 = 0,
   --parent2 = 23,
   parent3 = 25,
@@ -251,6 +251,7 @@ function CreateBarberShopMenu(menu)
     --------------------------
     -- Checkout Button --
     --------------------------
+    --[[
     local checkout_item = NativeUI.CreateItem("Checkout", "Purchase price: $70.00")
     checkout_item.Activated = function(parentmenu, selected)
       -- Close Menu --
@@ -260,6 +261,7 @@ function CreateBarberShopMenu(menu)
       TriggerServerEvent("barber:checkout", old_head, business)
     end
     menu:AddItem(checkout_item)
+    --]]
 
     ---------------------
     -- Reset Button --
@@ -289,37 +291,47 @@ _menuPool:RefreshIndex()
 
 -- Draw Markers / Help Text / Listen for menu open key press --
 Citizen.CreateThread(function()
-    while true do
-        Wait(0)
-        -- vars --
-        local me = GetPlayerPed(-1)
-        local playerCoords = GetEntityCoords(me, false)
+  local openedMenu = false
+  while true do
+      Wait(0)
+      -- vars --
+      local me = GetPlayerPed(-1)
+      local playerCoords = GetEntityCoords(me, false)
 
-        -----------------------
-        -- Process Menu --
-        -----------------------
-        _menuPool:MouseControlsEnabled(false)
-        _menuPool:ControlDisablingEnabled(false)
-        _menuPool:ProcessMenus()
+      -----------------------
+      -- Process Menu --
+      -----------------------
+      _menuPool:MouseControlsEnabled(false)
+      _menuPool:ControlDisablingEnabled(false)
+      _menuPool:ProcessMenus()
 
-    	for i = 1, #BARBER_SHOPS do
-          if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z)  <  3 then
-              DrawText3D(BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z, '[E] - Barber Shop (~g~$70.00~s~)')
-              if IsControlJustPressed(1, MENU_OPEN_KEY) then
-                  closest_shop = BARBER_SHOPS[i] --// set shop player is at
-                  mainMenu:Visible(not mainMenu:Visible())
-              end
-          else
-              if closest_shop == BARBER_SHOPS[i] then
-                  closest_shop = nil
-                  TriggerServerEvent("usa:loadPlayerComponents")
-                  if mainMenu:Visible() then
-                      mainMenu:Visible(false)
-                  end
-              end
-          end
-    	end
+    for i = 1, #BARBER_SHOPS do
+        if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z)  <  3 then
+            DrawText3D(BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z, '[E] - Barber Shop (~g~$70.00~s~)')
+            if IsControlJustPressed(1, MENU_OPEN_KEY) then
+                closest_shop = BARBER_SHOPS[i] --// set shop player is at
+                mainMenu:Visible(not mainMenu:Visible())
+                if mainMenu:Visible() then
+                  openedMenu = true
+                end
+            end
+        else
+            if closest_shop == BARBER_SHOPS[i] then
+                closest_shop = nil
+                TriggerServerEvent("usa:loadPlayerComponents")
+                if mainMenu:Visible() then
+                    mainMenu:Visible(false)
+                end
+            end
+        end
     end
+
+    if openedMenu and not mainMenu:Visible() then
+      openedMenu = false
+      TriggerEvent("barber:openSaveConfirmationModal")
+      print("triggered event")
+    end
+  end
 end)
 
 function DrawText3D(x, y, z, text)
