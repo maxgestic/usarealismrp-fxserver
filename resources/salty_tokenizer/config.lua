@@ -5,7 +5,7 @@ Config = {}
 	VerboseClient should be disable in production since it exposed tokens
 ]]
 Config.VerboseClient = false
-Config.VerboseServer = false
+Config.VerboseServer = true
 
 --[[
 	Adjust the delay between when the client deploys the listeners and
