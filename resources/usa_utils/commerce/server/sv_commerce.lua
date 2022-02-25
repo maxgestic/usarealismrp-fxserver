@@ -57,13 +57,24 @@ TriggerEvent("es:addCommand", "claimreward", function(src, args, char, location)
     if transactionID and not transactionID:find(" ") then
         db.getDocumentById("tebex-transaction-ids", transactionID, function(doc)
             if doc then
-                TriggerClientEvent("usa:notify", src, "Claiming " .. doc.type .. " reward!")
-                if TEBEX_PACKAGE_FUNCTIONS[doc.type](src) then
-                    TriggerClientEvent("usa:notify", src, "Success!")
-                    db.deleteDocument("tebex-transaction-ids", transactionID, function(ok) end)
-                    print("Tebex package successfully claimed (" .. transactionID .. ") by " .. char.getFullName() .. "!")
-                else
-                    TriggerClientEvent("usa:notify", src, "Something went wrong!")
+                if not doc.claimInfo then
+                    TriggerClientEvent("usa:notify", src, "Claiming " .. doc.type .. " reward!")
+                    if TEBEX_PACKAGE_FUNCTIONS[doc.type](src) then
+                        TriggerClientEvent("usa:notify", src, "Success!")
+                        doc.claimInfo = {
+                            claimedBy = {
+                                identifier = GetPlayerIdentifiers(src)[1],
+                                name = char.getFullName(),
+                            },
+                            timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time()),
+                        }
+                        db.updateDocument("tebex-transaction-ids", transactionID, doc, function(ok) end)
+                        print("Tebex package successfully claimed (" .. transactionID .. ") by " .. char.getFullName() .. "!")
+                    else
+                        TriggerClientEvent("usa:notify", src, "Something went wrong!")
+                    end
+                else 
+                    TriggerClientEvent("usa:notify", src, "Transaction ID already claimed!")
                 end
             else
                 TriggerClientEvent("usa:notify", src, "Transaction ID not found!")
