@@ -165,6 +165,9 @@ function Cajas3D()
 							ClearPedTasksImmediately(PlayerPedId())
 							FreezeEntityPosition(PlayerPedId(),false)
 							TriggerEvent("av_warehouse:openCrate")
+							while securityToken == nil do
+								Wait(1)
+							end
 							TriggerServerEvent('av_warehouse:loot', a, i, securityToken)
 						else
 							exports.globals:notify("Need crowbar!")

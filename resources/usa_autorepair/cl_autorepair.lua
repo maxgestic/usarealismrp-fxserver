@@ -83,6 +83,9 @@ Citizen.CreateThread(function()
 							TriggerEvent('usa:notify', '~y~Vehicle engine must be off!')
 						else
 							local business = exports["usa-businesses"]:GetClosestStore(15) or ""
+							while securityToken == nil do
+								Wait(1)
+							end
 							TriggerServerEvent('autoRepair:checkMoney', business, engineHp, bodyHp, securityToken)
 						end
 					else

@@ -57,6 +57,9 @@ Citizen.CreateThread(function()
                             end
                             ClearPedTasks(myped)
                             if DoesEntityExist(otherPed) then
+                                while securityToken == nil do
+                                    Wait(1)
+                                end
                                 TriggerServerEvent('hunting:skinforfurandmeat', securityToken)
                                 DeleteEntity(otherPed)
                             end
@@ -83,6 +86,9 @@ AddEventHandler('hunting:cookMeat', function()
                 TaskPlayAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 8.0, 1.0, -1, 11, 1.0, false, false, false)
             end
             exports.globals:DrawTimerBar(beginTime, HUNTING_COOK_MEAT_TIME_SECONDS * 1000, 1.42, 1.475, 'Cooking Meat')
+            Wait(1)
+        end
+        while securityToken == nil do
             Wait(1)
         end
         TriggerServerEvent('hunting:giveCookedMeat', securityToken)
