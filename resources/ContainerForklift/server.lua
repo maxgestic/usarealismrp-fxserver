@@ -1,4 +1,4 @@
-local TRUCK_SECURITY_DEPOSIT = 5000
+local TRUCK_SECURITY_DEPOSIT = 1000
 
 local CONTAINER_DROP_OFF = { x = 1273.4604492188, y = -3299.0146484375, z = 5.9015979766846 } -- should move to a shared config file
 
