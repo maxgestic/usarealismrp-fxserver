@@ -73,7 +73,7 @@ function spawnContainer(info)
                 -- instruct and draw container drop off marker:
                 exports.globals:notify("Take the container to the drop off location")
                 Citizen.CreateThread(function()
-                    while isAttached and DoesEntityExist(containerHandle) do
+                    while DoesEntityExist(containerHandle) do
                         DrawMarker(27, CONTAINER_DROP_OFF.x, CONTAINER_DROP_OFF.y, CONTAINER_DROP_OFF.z - 0.85, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 5.0, 255 --[[r]], 150 --[[g]], 70 --[[b]], 90 --[[alpha]], 0, 0, 2, 0, 0, 0, 0)
                         Wait(1)
                     end
