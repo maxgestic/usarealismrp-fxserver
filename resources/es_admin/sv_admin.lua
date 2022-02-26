@@ -1501,8 +1501,9 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 	local grapplingHook = { name = "Grappling Hook", type = "misc", quantity = 1, weight = 10 }
 	local pantherItem = { name = "Panther", type = "misc", quantity = 1, weight = 20 }
 	local pumpShotgun = { name = "Pump Shotgun", type = "weapon", hash = `WEAPON_PUMPSHOTGUN`, quantity = 1, weight = 10 }
+	local ammo_12guage = { name = "12 Gauge Shells", type = "ammo", price = 50, weight = 0.5, quantity = 10 }
 	
-	local toGiveItem = stickyBomb
+	local toGiveItem = thermite
 	toGiveItem.quantity = (toGiveItem.quantity or 1)
 
 	toGiveItem.uuid = exports.globals:generateID()

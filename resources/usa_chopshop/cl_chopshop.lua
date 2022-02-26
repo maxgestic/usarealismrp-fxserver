@@ -69,6 +69,9 @@ Citizen.CreateThread(function()
               end
             end
             if chopped then
+              while securityToken == nil do
+								Wait(1)
+							end
               TriggerServerEvent("chopshop:reward", display_name, GetVehicleBodyDamage(handle), securityToken)
               SetEntityAsMissionEntity(handle, true, true)
               DeleteVehicle(handle)

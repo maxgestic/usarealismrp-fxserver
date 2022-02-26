@@ -80,6 +80,9 @@ Citizen.CreateThread(function()
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
             if meth.producingMeth then
                 for k = 1, #meth.methIngredients do
+                    while securityToken == nil do
+                        Wait(1)
+                    end
                     TriggerServerEvent("methJob:giveChemicals", meth.methIngredients[k], securityToken)
                 end
                 meth.methIngredients = {}
@@ -239,6 +242,9 @@ Citizen.CreateThread(function()
                     end
                 end
                 meth.methIngredients = {}
+                while securityToken == nil do
+                    Wait(1)
+                end
                 TriggerServerEvent("methJob:methProduced", methProduced, securityToken)
             end
         elseif meth.processingMeth then
@@ -273,6 +279,9 @@ Citizen.CreateThread(function()
             end
             meth.processingMeth = false
             if not failed then
+                while securityToken == nil do
+                    Wait(1)
+                end
                 TriggerServerEvent("methJob:methProcessed", processedMeth, securityToken)
             end
         end

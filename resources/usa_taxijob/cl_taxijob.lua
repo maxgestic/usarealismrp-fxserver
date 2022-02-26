@@ -267,6 +267,9 @@ Citizen.CreateThread(function()
 				JOB.isOnJob = false
 				JOB.end_time = GetGameTimer()
 				JOB.customer_ped = nil
+				while securityToken == nil do
+					Wait(1)
+				end
 				TriggerServerEvent("taxiJob:payDriver", Vdist(JOB.start.x, JOB.start.y, JOB.start.z, JOB.destination.x, JOB.destination.y, JOB.destination.z), securityToken)
 				Wait(1200)
 				SetVehicleDoorShut(JOB.taxi, 2, false)

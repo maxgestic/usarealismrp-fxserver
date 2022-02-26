@@ -124,6 +124,9 @@ CreateThread(function()
 								SetEntityHeading(ped, 160.0)
 							end)
 							Office()
+							while securityToken == nil do
+								Wait(1)
+							end
 							TriggerServerEvent('av_cayoheist:rewards',data['z'],'Office', securityToken)
 							busy = false
 							TriggerEvent('av_cayoheist:npc')
@@ -244,6 +247,9 @@ end)
 RegisterNetEvent('av_cayoheist:takemoney')
 AddEventHandler('av_cayoheist:takemoney', function()
 	money()
+	while securityToken == nil do
+		Wait(1)
+	end
 	TriggerServerEvent('av_cayoheist:rewards',data['z'],'Cash', securityToken)
 	busy = false
 	TriggerServerEvent("av_cayoheist:setZoneBusy", 2, false)
@@ -252,6 +258,9 @@ end)
 RegisterNetEvent('av_cayoheist:stand')
 AddEventHandler('av_cayoheist:stand', function()
 	Stand()
+	while securityToken == nil do
+		Wait(1)
+	end
 	TriggerServerEvent('av_cayoheist:rewards',data['z'],'Panther', securityToken)
 	busy = false
 	TriggerServerEvent("av_cayoheist:setZoneBusy", 3, false)
@@ -261,6 +270,9 @@ RegisterNetEvent('av_cayoheist:safe')
 AddEventHandler('av_cayoheist:safe', function()
 	local result = BasementSafe()
 	if result then
+		while securityToken == nil do
+			Wait(1)
+		end
 		TriggerServerEvent('av_cayoheist:rewards',data['z'],'Safe', securityToken)
 	end
 	busy = false

@@ -86,6 +86,9 @@ function spawnContainer(info)
                     DrawMarker(0, coords.x, coords.y, coords.z + 4.0, 0, 0, 0, 0, 0, 0, 0.91, 0.91, 0.91, 255 --[[r]], 150 --[[g]], 30 --[[b]], 90 --[[alpha]], 0, 0, 2, 0, 0, 0, 0)
                     -- dropping off:
                     if #(GetEntityCoords(containerHandle) - vector3(CONTAINER_DROP_OFF.x, CONTAINER_DROP_OFF.y, CONTAINER_DROP_OFF.z)) < 5 then
+                        while securityToken == nil do
+                            Wait(1)
+                        end
                         TriggerServerEvent("containerjob:reward", securityToken)
                         DeleteObject(containerHandle)
                         isDroppingOff = false

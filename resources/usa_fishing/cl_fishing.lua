@@ -81,6 +81,9 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 						ClearPedTasks(playerPed)
 						DeleteEntity(robObject)
 						fishing = false
+						while securityToken == nil do
+							Wait(1)
+						end
 						TriggerServerEvent('fish:giveFish', securityToken)
 						FreezeEntityPosition(playerPed, false)
 					end
@@ -130,6 +133,9 @@ AddEventHandler("fishing:startSeaFishing", function()
 						seaFishing = false
 						ClearPedTasks(playerPed)
 						DeleteEntity(robObject)
+						while securityToken == nil do
+							Wait(1)
+						end
 						TriggerServerEvent('fish:giveSeaFish', securityToken)
 					end
 				end

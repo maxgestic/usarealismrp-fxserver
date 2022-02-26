@@ -34,6 +34,9 @@ AddEventHandler('mining:startMining', function()
         Wait(1)
     end
     ClearPedTasksImmediately(ped)
+    while securityToken == nil do
+        Wait(1)
+    end
     TriggerServerEvent('mining:giveUserMiningGoods', securityToken)
 end)
 

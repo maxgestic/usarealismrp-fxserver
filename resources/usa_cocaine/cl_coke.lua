@@ -135,6 +135,9 @@ Citizen.CreateThread(function()
         end
         if cocaine.processingCocaine and GetDistanceBetweenCoords(playerCoords, COORDS.PROCESSING.X, COORDS.PROCESSING.Y, COORDS.PROCESSING.Z, true) > 6 then -- too far from being able to process
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
+            while securityToken == nil do
+                Wait(1)
+            end
             TriggerServerEvent("cocaineJob:giveUncut", securityToken)
             cocaine.processingCocaine = false
         elseif cocaine.activeJob then
@@ -336,6 +339,9 @@ AddEventHandler("cocaineJob:getSupplies", function(supplyType)
                     "Perfect, we're on our heads. Just wait here."
                 }
                 exports.globals:notify(messages[math.random(1, tonumber(#messages))], "^3Lester:^0 Alright, let me know if you need more. Go and cut this first at that barn in the Northern part of Grapeseed (make sure you have a Razor Blade) and then look for the red pill on your map to deliver the final product.")
+                while securityToken == nil do
+                    Wait(1)
+                end
                 TriggerServerEvent("cocaineJob:giveUncut", securityToken)
                 TriggerEvent('cocaineJob:setDelivery')
             else
@@ -376,6 +382,9 @@ Citizen.CreateThread(function()
             if cocaine.processingCocaine then
                 cocaine.processingCocaine = false
                 cocaine.activeJob = true
+                while securityToken == nil do
+                    Wait(1)
+                end
                 TriggerServerEvent("cocaineJob:givePackaged", securityToken)
                 TriggerServerEvent('cocaineJob:residueRazor')
                 exports.globals:notify("Now take this to get delivered! Check your map for the red pill.")

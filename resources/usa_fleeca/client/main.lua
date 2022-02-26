@@ -111,6 +111,9 @@ AddEventHandler('fleeca:startDrilling', function()
     shouldBePlayingAnim = true
     TriggerEvent("Drilling:Start", function(success)
         if success then
+            while securityToken == nil do
+                Wait(1)
+            end
             TriggerServerEvent('fleeca:drilledGoods', securityToken)
         else
             exports.globals:notify("The drill bit is too hot!")

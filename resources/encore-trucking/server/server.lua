@@ -57,7 +57,7 @@ AddEventHandler('encore_trucking:rentTruck', function()
 	local playerId = source
 
 	if not doesPlayerHaveValidLicense(playerId) then
-		TriggerClientEvent('encore_trucking:helper:showNotification', playerId, 'Your license is suspended!')
+		TriggerClientEvent('encore_trucking:helper:showNotification', playerId, 'Invalid driver\'s license!')
 		return
 	end
 

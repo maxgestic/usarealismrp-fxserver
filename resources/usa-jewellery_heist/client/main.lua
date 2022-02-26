@@ -46,6 +46,9 @@ AddEventHandler("jewelleryheist:plantThermite", function()
         ClearPedTasksImmediately(myped)
         TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 7, 'thermite', 0.5)
         Wait(2000)
+        while securityToken == nil do
+            Wait(1)
+        end
         TriggerServerEvent('jewelleryheist:plantThermite', securityToken)
     end
 end)
@@ -104,6 +107,9 @@ AddEventHandler("jewelleryheist:performSmashNGrab", function()
         Wait(1)
     end
     ClearPedTasks(pid)
+    while securityToken == nil do
+        Wait(1)
+    end
     TriggerServerEvent('jewelleryheist:stolengoods', securityToken)
 end)
 
