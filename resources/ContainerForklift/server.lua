@@ -98,7 +98,7 @@ AddEventHandler("containerjob:reward", function(securityToken)
         -- give reward
         local char = exports["usa-characters"]:GetCharacter(source)
         char.giveBank(reward + math.random(0, 200))
-        TriggerClientEvent("usa:notify", source, "~g~Reward:~w~ $" .. exports.globals:comma_value(reward))
+        TriggerClientEvent("usa:notify", source, "~g~Reward:~w~ $" .. exports.globals:comma_value(reward), "Container Reward: $" .. exports.globals:comma_value(reward))
         -- reset state
         onJob[source] = nil
     end
