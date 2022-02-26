@@ -68,6 +68,7 @@ local VEH_CLASS = {
 }
 
 local GLOBAL_WEAPON_DAMAGE_MODIFIER = 0.60
+local WEAPON_DAMAGE_MODIFIER_INTERVAL = 1000
 
 -- DISCORD RICH PRESENCE --
 SetDiscordAppId("517228692834091033")
@@ -1127,10 +1128,26 @@ for name, info in pairs(STATIC_OBJECTS) do
   FreezeEntityPosition(info.handle, true)
 end
 
+local WEAPON_DAMAGE_MODIFIERS = {
+  [`WEAPON_MUSKET`] = 0.4,
+  [`WEAPON_SNIPERRIFLE`] = 1.0,
+}
+
 -- GLOBAL WEAPON DAMAGE MODIFIER:
 Citizen.CreateThread(function()
+  local lastSelectedWeapon = nil
+  local lastCheck = 0
   while true do
-    SetPlayerWeaponDamageModifier(PlayerId(), GLOBAL_WEAPON_DAMAGE_MODIFIER)
-    Wait(5000)
+    if GetGameTimer() - lastCheck >= WEAPON_DAMAGE_MODIFIER_INTERVAL then
+      lastCheck = GetGameTimer()
+      local currentSelected = GetSelectedPedWeapon(PlayerPedId())
+      if not lastSelectedWeapon or lastSelectedWeapon ~= currentSelected then
+        lastSelectedWeapon = currentSelected
+        local newModifier = (WEAPON_DAMAGE_MODIFIERS[currentSelected] or 0.6)
+        SetPlayerWeaponDamageModifier(PlayerId(), newModifier)
+        --print("new damage modifier set to " .. newModifier)
+      end
+    end
+    Wait(1)
   end
 end)
