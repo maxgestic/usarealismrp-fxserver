@@ -611,6 +611,9 @@ end)
 
 RegisterServerEvent('mdt:checkFlags')
 AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
+	if vehPlate:len() < 5 then
+		return -- since this was triggering a lot of false flags with single, two, three, etc char plates
+	end
 	local _source = source
 	local char = exports["usa-characters"]:GetCharacter(_source)
 	local job = char.get("job")
