@@ -3,6 +3,8 @@ local repairingVehicle = false
 
 local REPAIR_TIME = 45000
 
+local EVENT_TRIGGER_DELAY = 2000
+
 -----------------------------------------------------------------------
 ----------------------------GARAGE-LOCATION----------------------------
 -----------------------------------------------------------------------
@@ -87,6 +89,10 @@ Citizen.CreateThread(function()
 								Wait(1)
 							end
 							TriggerServerEvent('autoRepair:checkMoney', business, engineHp, bodyHp, securityToken)
+							local begin = GetGameTimer()
+							while GetGameTimer() - begin < EVENT_TRIGGER_DELAY do
+								Wait(1)
+							end
 						end
 					else
 						TriggerEvent('usa:notify', '~y~Your vehicle does not require any repairs!')
