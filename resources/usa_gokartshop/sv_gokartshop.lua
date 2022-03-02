@@ -34,6 +34,13 @@ local KARTS = {
         HEADING = 179.0,
         PRICE = 50000
     },
+    {
+        MODEL = "Minisanchez",
+        HASH = GetHashKey("minisanchez"),
+        COORDS = vector3(-69.451683044434, -1836.3793945313, 25.912698745728),
+        HEADING = 211.0,
+        PRICE = 50000
+    },
 }
 
 local GO_KART_STORAGE_CAPACITY = 10.0
