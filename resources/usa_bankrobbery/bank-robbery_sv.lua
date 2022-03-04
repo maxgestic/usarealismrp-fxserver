@@ -16,7 +16,6 @@ local drilling_spots = {
 	{x = 262.2, y = 212.79, z = 101.68, drilled = false},
 }
 
-
 RegisterServerEvent("bank:beginRobbery")
 AddEventHandler("bank:beginRobbery", function(bank)
 	local usource = source
@@ -111,7 +110,10 @@ function resetBankHeist()
 end
 
 RegisterServerEvent('bank:drilledGoods')
-AddEventHandler('bank:drilledGoods', function()
+AddEventHandler('bank:drilledGoods', function(securityToken)
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local cash = math.random(1750, 12350)
 	char.giveMoney(cash)
