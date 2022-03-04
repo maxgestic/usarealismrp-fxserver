@@ -172,7 +172,10 @@ Citizen.CreateThread(function()
                         DrawText3D(currentJobLocations[i].x, currentJobLocations[i].y, currentJobLocations[i].z - 0.9, "[E] - Clean")
                         if IsControlJustPressed(0, START_CLEANING_KEY) then
                             local propHandle = AddPropToPlayer("prop_sponge_01", 28422, 0.0, 0.0, -0.01, 90.0, 0.0, 0.0)
-                            TriggerServerEvent("prison-janitor:markLocationAsBeingCleaned", i)
+                            while securityToken == nil do
+                                Wait(1)
+                            end
+                            TriggerServerEvent("prison-janitor:markLocationAsBeingCleaned", i, securityToken)
                             local beginTime = GetGameTimer()
                             local me = PlayerPedId()
                             while GetGameTimer() - beginTime < CLEAN_TIME_SECONDS * 1000 do
@@ -185,7 +188,10 @@ Citizen.CreateThread(function()
                                 Wait(1)
                             end
                             ClearPedTasks(me)
-                            TriggerServerEvent("prison-janitor:markLocationAsCleaned", i)
+                            while securityToken == nil do
+                                Wait(1)
+                            end
+                            TriggerServerEvent("prison-janitor:markLocationAsCleaned", i, securityToken)
                             currentJobLocations[i].cleaned = true
                             DeleteObject(propHandle)
                         end
