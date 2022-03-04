@@ -3,6 +3,9 @@ Settings = {
     NPCCheck = true --- Adds NPC Check to the code(Checks if there is any ped inside vehicle or not)
 }
 
+local MOTORCYCLE_VEH_CLASS = 8
+local BICYCLE_VEH_CLASS = 13
+
 CreateThread(function()
     local dist, index,ped
     while true do
@@ -25,29 +28,32 @@ CreateThread(function()
             else
                 local veh = GetVehiclePedIsTryingToEnter(ped)
                 if veh ~= 0 then
-                    if CanSit(veh) then
-                        local coords = GetEntityCoords(ped)
-                        if #(coords - GetEntityCoords(veh)) <= 3.5 then
-                            ClearPedTasks(ped)
-                            ClearPedSecondaryTask(ped)
-                            for i = 0, GetNumberOfVehicleDoors(veh), 1 do
-                                local coord = GetEntryPositionOfDoor(veh, i)
-                                if (IsVehicleSeatFree(veh, i - 1) and
-                                    GetVehicleDoorLockStatus(veh) ~= 2) then
-                                    if dist == nil then
-                                        dist = #(coords - coord)
-                                        index = i
-                                    end
-                                    if #(coords - coord) < dist then
-                                        dist = #(coords - coord)
-                                        index = i
+                    local vehClass = GetVehicleClass(veh)
+                    if vehClass ~= MOTORCYCLE_VEH_CLASS and vehClass ~= BICYCLE_VEH_CLASS then
+                        if CanSit(veh) then
+                            local coords = GetEntityCoords(ped)
+                            if #(coords - GetEntityCoords(veh)) <= 3.5 then
+                                ClearPedTasks(ped)
+                                ClearPedSecondaryTask(ped)
+                                for i = 0, GetNumberOfVehicleDoors(veh), 1 do
+                                    local coord = GetEntryPositionOfDoor(veh, i)
+                                    if (IsVehicleSeatFree(veh, i - 1) and
+                                        GetVehicleDoorLockStatus(veh) ~= 2) then
+                                        if dist == nil then
+                                            dist = #(coords - coord)
+                                            index = i
+                                        end
+                                        if #(coords - coord) < dist then
+                                            dist = #(coords - coord)
+                                            index = i
+                                        end
                                     end
                                 end
+                                if index then
+                                    TaskEnterVehicle(ped, veh, 10000, index - 1,1.0, 1, 0)
+                                end
+                                index, dist = nil, nil
                             end
-                            if index then
-                                TaskEnterVehicle(ped, veh, 10000, index - 1,1.0, 1, 0)
-                            end
-                            index, dist = nil, nil
                         end
                     end
                 end
