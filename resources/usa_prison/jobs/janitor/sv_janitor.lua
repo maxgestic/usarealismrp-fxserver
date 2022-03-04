@@ -74,7 +74,10 @@ AddEventHandler("prison-janitor:toggleJob", function(targetSrc)
 end)
 
 RegisterServerEvent("prison-janitor:markLocationAsCleaned")
-AddEventHandler("prison-janitor:markLocationAsCleaned", function(index)
+AddEventHandler("prison-janitor:markLocationAsCleaned", function(index, securityToken)
+    if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
     if currentlyCleaning[source][index].startCleanTime and os.difftime(os.time(), currentlyCleaning[source][index].startCleanTime) >= CLEANING_TIME_SECONDS then
         print("marking table " .. index .. " as cleaned")
         currentlyCleaning[source][index].cleaned = true
@@ -86,7 +89,10 @@ AddEventHandler("prison-janitor:markLocationAsCleaned", function(index)
 end)
 
 RegisterServerEvent("prison-janitor:markLocationAsBeingCleaned")
-AddEventHandler("prison-janitor:markLocationAsBeingCleaned", function(index)
+AddEventHandler("prison-janitor:markLocationAsBeingCleaned", function(index, securityToken)
+    if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
     print("marking table " .. index .. " as being cleaned")
     currentlyCleaning[source][index].startCleanTime = os.time()
 end)

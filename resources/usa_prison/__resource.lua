@@ -1,6 +1,7 @@
 resource_manifest_version '05cfa83c-a124-4cfa-a768-c24a5811d8f9'
 
 client_scripts {
+    '@salty_tokenizer/init.lua',
     "@NativeUI/Wrapper/Utility.lua",
     "@NativeUI/UIElements/UIVisual.lua",
     "@NativeUI/UIElements/UIResRectangle.lua",
@@ -35,6 +36,7 @@ client_scripts {
 }
 
 server_scripts {
+    '@salty_tokenizer/init.lua',
     'server.lua',
     'contraband/sv_contraband.lua',
     'jobs/janitor/sv_janitor.lua'
