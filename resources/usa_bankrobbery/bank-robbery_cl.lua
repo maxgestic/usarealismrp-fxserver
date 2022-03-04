@@ -292,7 +292,10 @@ AddEventHandler('bank:startDrilling', function(boxIndex)
 	shouldBePlayingAnim = true
 	TriggerEvent("Drilling:Start", function(success)
 		if success then
-			TriggerServerEvent('bank:drilledGoods')
+			while securityToken == nil do
+				Wait(1)
+			end
+			TriggerServerEvent('bank:drilledGoods', securityToken)
 		else
 			exports.globals:notify("The drill bit is too hot!")
 		end
