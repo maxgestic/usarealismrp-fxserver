@@ -25,7 +25,14 @@ client_scripts {
   'cl_buyItemsFromHospital.lua',
   'client/*.lua'
 }
-server_scripts {'config.lua', 'server.lua', 'sv_police.lua', 'sv_ems.lua', 'sv_civ.lua', 'sv_judge.lua'}
+server_scripts {
+  'config.lua',
+  'server.lua',
+  'sv_police.lua',
+  'sv_ems.lua',
+  'sv_civ.lua',
+  'sv_judge.lua'
+}
 
 exports {
   "areHandsTied",
