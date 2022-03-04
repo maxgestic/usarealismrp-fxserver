@@ -218,27 +218,6 @@ AddEventHandler("usa:removeItem", function(to_remove_item, quantity)
 	char.removeItem(to_remove_item, quantity)
 end)
 
-RegisterServerEvent("usa:insertItem")
-AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_source, cb)
-	local usource = source
-	if player_source then
-		usource = tonumber(player_source)
-	end
-	local char = exports["usa-characters"]:GetCharacter(usource)
-	to_insert_item.quantity = quantity
-	if char.canHoldItem(to_insert_item) then
-		char.giveItem(to_insert_item)
-		if cb then
-			cb(true)
-		end
-	else
-		TriggerClientEvent("usa:notify", usource, "Inventory full.")
-		if cb then
-			cb(false)
-		end
-	end
-end)
-
 RegisterServerEvent("usa:loadCivCharacter")
 AddEventHandler("usa:loadCivCharacter", function(id)
 	local usource = source
