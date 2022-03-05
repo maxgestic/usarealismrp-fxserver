@@ -25,7 +25,8 @@ local GENERAL_STORE_LOCATIONS = {
     {x = 1780.9207763672,y = 2598.8671875, z = 45.797817230225, prison = true}, -- Prison
     {x = 4503.35546875, y = -4520.0258789062, z = 4.4123592376709}, -- Cayo Perico island
     {x = -689.92376708984, y = 5798.9174804688, z = 17.3327293396}, -- bayview lodge in paleto bay
-    {x = -1486.119140625, y = -378.06628417969, z = 40.163429260254} -- prosperity st
+    {x = -1486.119140625, y = -378.06628417969, z = 40.163429260254}, -- prosperity st
+    {x = 1335.2287597656, y = -1650.7325439453, z = 52.239276885986} -- near fudge (secret coke lab mlo)
 }
 
 local ShopliftingAreas = {}
@@ -47,6 +48,7 @@ local HARDWARE_STORE_LOCATIONS = {
 --------------------
 local JOB_PEDS = { -- Z coords are Z-1 or the ped will float!
   --{x = -331.043, y = 6086.09, z = 30.40, heading = 180.0}
+  --[[
   {x = 1727.7, y = 6415.6, z = 34.03, heading = 250.0},
   {x = 549.2, y = 2670.9, z = 41.2, heading = 95.0, hash = -573920724}, -- harmony
   {x = 1165.9, y = 2710.9, z = 37.2, heading = 180.0, hash = -573920724}, -- harmony
@@ -64,7 +66,9 @@ local JOB_PEDS = { -- Z coords are Z-1 or the ped will float!
   {x = 1165.02, y = -323.60, z = 68.2, heading = 95.0}, -- los santos
   {x = 2557.145, y = 380.64, z = 107.62, heading = 350.0, hash = -573920724}, -- sandy
   {x = 2677.729, y = 3279.42, z = 54.24, heading = 330.0, hash = -573920724}, -- senora fwy
-  {x = -1819.304, y = 793.56, z = 137.088, heading = 132.0} -- richman
+  {x = -1819.304, y = 793.56, z = 137.088, heading = 132.0}, -- richman
+  --]]
+  {x = 1335.4675292969, y = -1651.5319824219, z = 51.249050140381, heading = 40.0}
 }
 
 local BLIPS = {}
@@ -325,7 +329,6 @@ Citizen.CreateThread(function()
   end
 end)
 
---[[
 Citizen.CreateThread(function()
   while true do
     local playerCoords = GetEntityCoords(PlayerPedId(), false)
@@ -361,7 +364,6 @@ Citizen.CreateThread(function()
     Wait(100)
   end
 end)
---]]
 
 RegisterNetEvent('generalStore:performShoplift')
 AddEventHandler('generalStore:performShoplift', function(area)
