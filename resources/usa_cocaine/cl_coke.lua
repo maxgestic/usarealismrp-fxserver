@@ -17,9 +17,8 @@ TriggerServerEvent("cocaineJob:giveItem", cocaineProduced)]]
 
 local COORDS = {
     PROCESSING = {
-        X = 1954.3068847656,
-        Y = 5179.9643554688,
-        Z = 47.858142852783
+        { X = 1954.3068847656, Y = 5179.9643554688, Z = 47.858142852783 },
+        { X = 1332.2707519531, Y = -1647.9100341797, Z = 44.252521514893 }
     }
 }
 
@@ -107,6 +106,15 @@ AddEventHandler('character:setCharacter', function()
     end
 end)
 
+function IsNearAnyCokeProcessingSpot(coords, range)
+    for i = 1, #COORDS.PROCESSING do
+        if GetDistanceBetweenCoords(coords, COORDS.PROCESSING[i].X, COORDS.PROCESSING[i].Y, COORDS.PROCESSING[i].Z, true) < (range or 3) then
+            return true
+        end
+    end
+    return false
+end
+
 -- JOB HANDLING
 Citizen.CreateThread(function()
     while true do
@@ -116,7 +124,9 @@ Citizen.CreateThread(function()
         DrawText3D(1088.18, -3187.18, -38.85, 5, '[E] - Exit')
         DrawText3D(1181.63, -3113.83, 6.03, 3, '[E] - Enter')
         DrawText3D(1273.708, -1709.06, 54.77, 5, '[E] - Buy Uncut Cocaine (~g~$' .. UNCUT_PRICE .. '.00~w~)')
-        DrawText3D(COORDS.PROCESSING.X, COORDS.PROCESSING.Y, COORDS.PROCESSING.Z, 5, '[E] - Process Cocaine')
+        for i = 1, #COORDS.PROCESSING do
+            DrawText3D(COORDS.PROCESSING[i].X, COORDS.PROCESSING[i].Y, COORDS.PROCESSING[i].Z, 5, '[E] - Process Cocaine')
+        end
         if IsControlJustPressed(0, INPUT_KEY) then
             if GetDistanceBetweenCoords(playerCoords, 1181.63, -3113.83, 6.03, true) < 0.7 then -- enter coke location
                 DoorTransition(playerPed, 1088.68, -3187.58, -38.99, 180.0)
@@ -129,11 +139,11 @@ Citizen.CreateThread(function()
                 else
                     TriggerEvent('usa:notify', 'Process and deliver the current batch first!')
                 end
-            elseif GetDistanceBetweenCoords(playerCoords, COORDS.PROCESSING.X, COORDS.PROCESSING.Y, COORDS.PROCESSING.Z, true) < 3 and not cocaine.processingCocaine then -- process/package cocaine rocks
+            elseif IsNearAnyCokeProcessingSpot(playerCoords) and not cocaine.processingCocaine then -- process/package cocaine rocks
                 TriggerServerEvent("cocaineJob:checkUserJobSupplies", cocaine.requiredItem, cocaine.requiredSupplies)
             end
         end
-        if cocaine.processingCocaine and GetDistanceBetweenCoords(playerCoords, COORDS.PROCESSING.X, COORDS.PROCESSING.Y, COORDS.PROCESSING.Z, true) > 6 then -- too far from being able to process
+        if cocaine.processingCocaine and not IsNearAnyCokeProcessingSpot(playerCoords, 6) then -- too far from being able to process
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
             while securityToken == nil do
                 Wait(1)
@@ -365,7 +375,7 @@ Citizen.CreateThread(function()
                 Citizen.Wait(100)
             end
             TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-            while GetGameTimer() - beginTime < COCAINE_PROCESS_WAIT_TIME do
+            while GetGameTimer() - beginTime < COCAINE_PROCESS_WAIT_TIME and IsNearAnyCokeProcessingSpot(GetEntityCoords(PlayerPedId()), 6) do
                 Citizen.Wait(0)
                 if cocaine.processingCocaine then
                     DrawTimer(beginTime, COCAINE_PROCESS_WAIT_TIME, 1.42, 1.475, 'PROCESSING')
