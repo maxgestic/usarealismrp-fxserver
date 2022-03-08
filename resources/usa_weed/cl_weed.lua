@@ -10,7 +10,7 @@ local WEED_PROCESS_LOCATIONS = {
   vector3(1145.2351074219, -1660.7742919922, 36.614681243896),
   vector3(-1075.3463134766, -1678.7690429688, 4.575234413147),
   vector3(2229.373046875, 5605.4873046875, 54.872550964355),
-  vector3(-260.02795410156, -1526.4647216797, 31.564123153687) -- chamberlain hills community center addon MLO
+  vector3(-247.1794128418, -1513.9282226563, 29.161888122559) -- chamberlain hills community center addon MLO
 }
 
 function isNearWeedProcessingSpot(range)
