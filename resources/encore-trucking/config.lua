@@ -258,5 +258,157 @@ Config.Routes = {
 		Destinations = {
 			vector3(2674.5617675781, 3527.9245605469, 51.765563964844) -- Fake Home Depot (You Tool, Senora FWY)
 		}
-	}
+	},
+	{
+        TrailerModel      = 'docktrailer',
+        PickupLocations = {
+            {
+                coords = vector3(937.025, -3151.095, 5.900801),
+                heading = 359.70
+            },
+            {
+                coords = vector3(937.025, -3189.076, 5.900801),
+                heading = 181.19
+            },
+            {
+                coords = vector3(924.8722, -3181.513, 5.900805),
+                heading = 0.81
+            },
+            {
+                coords = vector3(924.9418, -3150.585, 5.9008),
+                heading = 0.81
+            }
+        },
+        Destinations = {
+            vector3(1712.418, 4802.086, 41.76119), -- Grapeseed Arcade
+        }
+    },
+	{
+        TrailerModel      = 'trailers',
+        PickupLocations = {
+            {
+                coords = vector3(271.1104, -3173.413, 5.790268),
+                heading = 1.76
+            },
+            {
+                coords = vector3(277.6581, -3173.413, 5.790268),
+                heading = 0.60
+            }
+        },
+        Destinations = {
+            vector3(-1061.728, - 2021.795, 13.16158), -- Greenwich Depot
+        }
+    },
+	{
+        TrailerModel      = 'trailers3',
+        PickupLocations = {
+            {
+                coords = vector3(1270.69, -3322.198, 5.901593),
+                heading = 0.80
+            },
+            {
+                coords = vector3(1275.227, -3322.198, 5.901592),
+                heading = 0.80
+            },
+            {
+                coords = vector3(1280.393, -3322.198, 5.901592),
+                heading = 0.80
+            },
+            {
+                coords = vector3(1291.551, -3322.198, 5.906155),
+                heading = 0.80
+            }
+        },
+        Destinations = {
+            vector3(1165.757, -331.764, 68.88332), -- Mirror Park Supermarket
+        }
+    },
+	{
+        TrailerModel      = 'tr4',
+        PickupLocations = {
+            {
+                coords = vector3(595.5709, -2717.099, 6.051383),
+                heading = 0.23
+            },
+            {
+                coords = vector3(600.5709, -2717.099, 6.051383),
+                heading = 0.23
+            },
+            {
+                coords = vector3(605.5709, -2717.099, 6.051383),
+                heading = 0.23
+            },
+            {
+                coords = vector3(610.5709, -2717.099, 6.051383),
+                heading = 0.23
+            }
+        },
+        Destinations = {
+            vector3(-97.72832, 91.56564, 71.79246), -- Benefactor Dealership
+        }
+    },
+	{
+        TrailerModel      = 'trailers3',
+        PickupLocations = {
+            {
+                coords = vector3(-909.806, -2070.641, 9.29899),
+                heading = 45.05
+            },
+            {
+                coords = vector3(-906.8818, -2067.699, 9.29899),
+                heading = 45.05
+            },
+            {
+                coords = vector3(-902.9293, -2063.763, 9.298993),
+                heading = 45.05
+            },
+            {
+                coords = vector3(-898.4064, -2060.43, 9.298996),
+                heading = 45.05
+            }
+        },
+        Destinations = {
+            vector3(1995.596, 3060.001, 47.04906), -- Yellow Jack
+        }
+    },
+	{
+        TrailerModel      = 'trailers3',
+        PickupLocations = {
+            {
+                coords = vector3(-575.3141, -1160.52, 22.17823),
+                heading = 359.50
+            },
+            {
+                coords = vector3(-579.1, -1160.52, 22.17823),
+                heading = 359.50
+            },
+            {
+                coords = vector3(-583.1015, -1160.52, 22.17823),
+                heading = 359.50
+            }
+        },
+        Destinations = {
+            vector3(28.07294, -1305.509, 29.09071), -- Innocence supermarket
+        }
+    },	
+	{
+		TrailerModel      = 'trailers3',
+		PickupLocations = {
+			{
+				coords = vector3(937.5515, 3610.131, 32.75555),
+				heading = 0.40
+			},
+			{
+				coords = vector3(943.3855, 3610.131, 32.75555),
+				heading = 0.40
+			},
+			{
+				coords = vector3(947.5125, 3610.131, 32.75555),
+				heading = 0.40
+			}
+		},
+		Destinations = {
+			vector3(-25.59206, -1756.072, 29.08847), -- Grove supermarket
+		}
+	},
 }
