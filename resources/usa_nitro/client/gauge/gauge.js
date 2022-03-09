@@ -44,7 +44,6 @@ $(function() {
                 delete gauge;
             }
         } else if (event.data.type == "setGaugeData") {
-            console.log("setting gauge data! cur: " + event.data.current)
             if (gauge) {
                 gauge.maxValue = event.data.max;
                 gauge.set(event.data.current);
