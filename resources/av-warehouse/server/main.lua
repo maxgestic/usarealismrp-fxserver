@@ -47,7 +47,9 @@ local locations = {
 	[4]={x = -617.51, 	y = 314.43, 	z = 82.25, hint = "There's a door we can try to hack open across the street from the Liquor Hole on Eclipse Boulevard in LS."},
 	[5]={x = 150.54, 	y = 322.66, 	z = 112.33, hint = "There's a door inside a garage right where Las Lagunas Blvd meets Clinton Ave in LS."},
 	[6]={x = 569.06, 	y = 2796.66, 	z = 42.01, hint = "There's a door in Harmony we can try to get in to."},
-	[7]={x = 905.85, 	y = 3586.51, 	z = 33.42, hint = "There's a door in Sandy Shores we can try to hack in to."}
+	[7]={x = 905.85, 	y = 3586.51, 	z = 33.42, hint = "There's a door in Sandy Shores we can try to hack in to."},
+	[8] = {x = -707.56939697266, y = -2448.1044921875, z = 13.944402694702, hint = "There's a set of doors by the lowkey nightclub next to the Los Santos Airport that you can try and hack into."},
+	[9] = {x = -52.059631347656, y = 6395.5522460938, z = 31.490346908569, hint = "There's a door at one of the warehouses across from Clucking Bells in Paleto that you can try and hack into."}
 }
 
 RegisterServerCallback {
