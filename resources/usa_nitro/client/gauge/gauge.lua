@@ -1,7 +1,9 @@
+local NITRO_KEY = 21 -- shift
+
 local on = false
 local alreadyAskedForGaugeData = false
 local lastFetchedMaxNitroLevel = nil
-local NITRO_KEY = 21 -- shift
+local immersionModeOn = false
 
 function toggleGuageDisplay(enable)
     on = enable
@@ -17,16 +19,18 @@ Citizen.CreateThread(function()
         local me = PlayerPedId()
         local veh = GetVehiclePedIsIn(me)
 
-        if not alreadyAskedForGaugeData and veh and veh ~= 0 then
-            if GetPedInVehicleSeat(veh, -1) == me then
-                local vehPlate = GetVehicleNumberPlateText(veh)
-                TriggerServerEvent("nitro-gauge:fetchGuageData", vehPlate)
-                alreadyAskedForGaugeData = true
-            end
-        elseif alreadyAskedForGaugeData and (not veh or veh == 0) then
-            alreadyAskedForGaugeData = false
-            if on then
-                toggleGuageDisplay(false)
+        if not immersionModeOn then
+            if not alreadyAskedForGaugeData and veh and veh ~= 0 then
+                if GetPedInVehicleSeat(veh, -1) == me then
+                    local vehPlate = GetVehicleNumberPlateText(veh)
+                    TriggerServerEvent("nitro-gauge:fetchGuageData", vehPlate)
+                    alreadyAskedForGaugeData = true
+                end
+            elseif alreadyAskedForGaugeData and (not veh or veh == 0) then
+                alreadyAskedForGaugeData = false
+                if on then
+                    toggleGuageDisplay(false)
+                end
             end
         end
 
@@ -67,5 +71,15 @@ AddEventHandler("nitro-gauge:setGaugeData", function(current, max)
         lastFetchedMaxNitroLevel = max
         InitNitroFuel(veh)
         SetNitroFuelLevel(veh, current)
+    end
+end)
+
+AddEventHandler('usa:toggleImmersion', function(off)
+    if not off then
+        toggleGuageDisplay(false)
+        immersionModeOn = true
+    else
+        immersionModeOn = false
+        alreadyAskedForGaugeData = false
     end
 end)
