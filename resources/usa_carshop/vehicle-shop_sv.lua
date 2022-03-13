@@ -441,10 +441,19 @@ local vehicleShopItems = {
 			{make = "BMW", model = "BMW S1000RR (2016)", price = 90000, hash = "BMWS1000RR", storage_capacity = 20.0},
 			{make = "Ford", model = "Hula Girl (1932)", price = 60000, hash = "ford32hulagirl", storage_capacity = 160.0},
 			{make = "Ford", model = "GT500 (1967)", price = 130000, hash = "67GT500", storage_capacity = 140.0},
-			{make = "Bugatti", model = "Veyron Super Sport (2011)", price = 3200000, hash = "supersport", storage_capacity = 120.0},
+			{make = "Bugatti", model = "Veyron Super Sport (2011)", price = 3900000, hash = "supersport", storage_capacity = 120.0},
 			{make = "Volkswagen", model = "Passat (2016)", price = 60000, hash = "passat", storage_capacity = 190.0},
 			{make = "Honda", model = "Civic Type-R (2018)", price = 90000, hash = "FK8", storage_capacity = 190.0},
 			{make = "BMW", model = "i4 (2020)", price = 80000, hash = "ocni422spe", storage_capacity = 190.0},
+			{make = "Weeny", model = "Tamworth", price = 28000, hash = "tamworth", storage_capacity = 120.0},
+            {make = "Mercedes", model = "G-Class Brabus", price = 180000, hash = "w463a1", storage_capacity = 280.0},
+            {make = "Mercedes", model = "S650 Maybach (2019)", price = 220000, hash = "19S650", storage_capacity = 220.0},
+            {make = "Bentley", model = "Bentayga (2016)", price = 200000, hash = "bbentayga", storage_capacity = 280.0},
+            {make = "Rolls Royce", model = "Wraith (2016)", price = 400000, hash = "wraith", storage_capacity = 220.0},
+            {make = "Koenigsegg", model = "Agera RS (2017)", price = 3700000, hash = "agerars", storage_capacity = 120.0},
+            {make = "Honda", model = "Civic Type-R (2001)", price = 60000, hash = "ep3", storage_capacity = 190.0},
+            {make = "Toyota", model = "Sprinter Trueno GT Apex (AE86) (1985)", price = 78000, hash = "ae86", storage_capacity = 160.0},
+            {make = "Chevrolet", model = "Caprice Nip Donk (1973)", price = 90000, hash = "brainshack", storage_capacity = 160.0},
 		}
 	}
 }
