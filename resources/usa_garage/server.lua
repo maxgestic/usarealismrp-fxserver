@@ -3,7 +3,7 @@
 --# By: minipunch
 
 local WITHDRAW_FEE = 50
-local IMPOUND_FEE = 150
+local IMPOUND_FEE = 500
 
 local recentlyChangedPlates = {}
 
