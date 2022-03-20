@@ -3,7 +3,10 @@ local mainMenu = NativeUI.CreateMenu("Insurance", "~b~Manage your plan", 0 --[[X
 local MENU_KEY = 38
 local vehiclesToClaim
 
-local MENU_COORDS = {x = -1083.146484375, y = -248.03326416016, z = 37.763290405273}
+local MENU_COORDS = {
+	{name = "LS", x = -1083.146484375, y = -248.03326416016, z = 37.763290405273},
+	{name = "Grapeseed", x = 1682.8721923828, y = 4855.3203125, z = 42.061218261719, blipScale = 0.7}
+}
 local MENU_OPEN_MAX_DIST = 1.2
 
 _menuPool:Add(mainMenu)
@@ -92,31 +95,37 @@ CreateMenu(mainMenu)
 _menuPool:RefreshIndex()
 
 Citizen.CreateThread(function()
-	EnumerateBlips()
+	CreateBlips()
 	while true do
 		local playerPed = PlayerPedId()
-		DrawText3D(MENU_COORDS.x, MENU_COORDS.y, MENU_COORDS.z, 5, '[E] - Insurance')
-		-----------------------------------------------------------
-		-- watch for entering store and menu open keypress event --
-		-----------------------------------------------------------
-		if GetDistanceBetweenCoords(GetEntityCoords(playerPed), MENU_COORDS.x, MENU_COORDS.y, MENU_COORDS.z, true) < MENU_OPEN_MAX_DIST then
-			if not mainMenu:Visible() then
+		local wasNearby = false
+		for i = 1, #MENU_COORDS do
+			DrawText3D(MENU_COORDS[i].x, MENU_COORDS[i].y, MENU_COORDS[i].z, 5, '[E] - Insurance')
+			-----------------------------------------------------------
+			-- watch for entering store and menu open keypress event --
+			-----------------------------------------------------------
+			if GetDistanceBetweenCoords(GetEntityCoords(playerPed), MENU_COORDS[i].x, MENU_COORDS[i].y, MENU_COORDS[i].z, true) < MENU_OPEN_MAX_DIST then
+				wasNearby = true
 				if IsControlJustPressed(1, MENU_KEY) then
-					mainMenu:Visible(not mainMenu:Visible())
+					if not mainMenu:Visible() then
+						mainMenu:Visible(not mainMenu:Visible())
+					end
 				end
 			end
+		end
+		-- closing when too far:
+		if not wasNearby and mainMenu:Visible() then
+			mainMenu:Visible(false)
 		end
 		----------------------
 		-- process menu --
 		----------------------
-		_menuPool:MouseControlsEnabled(false)
-		_menuPool:ControlDisablingEnabled(false)
-		_menuPool:ProcessMenus()
-		-- closing menus --
-		if GetDistanceBetweenCoords(GetEntityCoords(playerPed), MENU_COORDS.x, MENU_COORDS.y, MENU_COORDS.z, true) > MENU_OPEN_MAX_DIST then
-			mainMenu:Visible(false)
-		end
-		Wait(0)
+		--if mainMenu:Visible() then
+			_menuPool:MouseControlsEnabled(false)
+			_menuPool:ControlDisablingEnabled(false)
+			_menuPool:ProcessMenus()
+		--end
+		Wait(1)
 	end
 end)
 
@@ -148,13 +157,15 @@ function comma_value(amount)
   return formatted
 end
 
-function EnumerateBlips()
-	local blip = AddBlipForCoord(-1082.47, -246.98, 38.00)
-	SetBlipSprite(blip, 408)
-	SetBlipDisplay(blip, 4)
-	SetBlipScale(blip, 0.8)
-	SetBlipAsShortRange(blip, true)
-	BeginTextCommandSetBlipName("STRING")
-	AddTextComponentString('Insurance')
-	EndTextCommandSetBlipName(blip)
+function CreateBlips()
+	for i = 1, #MENU_COORDS do
+		MENU_COORDS[i].blipHandle = AddBlipForCoord(MENU_COORDS[i].x, MENU_COORDS[i].y, MENU_COORDS[i].z)
+		SetBlipSprite(MENU_COORDS[i].blipHandle, 408)
+		SetBlipDisplay(MENU_COORDS[i].blipHandle, 4)
+		SetBlipScale(MENU_COORDS[i].blipHandle, (MENU_COORDS[i].blipScale or 0.8))
+		SetBlipAsShortRange(MENU_COORDS[i].blipHandle, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString('Insurance')
+		EndTextCommandSetBlipName(MENU_COORDS[i].blipHandle)
+	end
 end
