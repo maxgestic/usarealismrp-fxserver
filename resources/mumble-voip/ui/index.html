@@ -164,41 +164,43 @@
 				if (item.radioId != null) {
 					let radioListElem = document.getElementById("voip-radio-list");
 
-					if (!radioListElem.firstChild) { //add radio list header
-						let listHeader = document.createElement("div");
+					if (radioListElem) {
+						if (!radioListElem.firstChild) { //add radio list header
+							let listHeader = document.createElement("div");
 
-						listHeader.id = "voip-radio-list-header";
-						listHeader.textContent = "\uD83D\uDCE1Radio List";
-						listHeader.style.textDecorationLine = "underline";
+							listHeader.id = "voip-radio-list-header";
+							listHeader.textContent = "\uD83D\uDCE1Radio List";
+							listHeader.style.textDecorationLine = "underline";
 
-						radioListElem.appendChild(listHeader);
-					}
-
-					if (item.radioName != null) {
-						let listItem = document.createElement("div");
-
-						listItem.id = "voip-radio-list-item-" + item.radioId;
-						listItem.textContent = item.radioName + (item.self ? "\uD83D\uDD38" : "\uD83D\uDD39");
-
-						radioListElem.appendChild(listItem);
-					} else if (item.radioTalking != null) {
-						let listItem = document.getElementById("voip-radio-list-item-" + item.radioId)
-						
-						if (item.radioTalking) {
-							listItem.className = "talking"
-						} else {
-							listItem.className = ""
+							radioListElem.appendChild(listHeader);
 						}
-					} else {
-						let listItem = document.getElementById("voip-radio-list-item-" + item.radioId)
-						radioListElem.removeChild(listItem);
+
+						if (item.radioName != null) {
+							let listItem = document.createElement("div");
+
+							listItem.id = "voip-radio-list-item-" + item.radioId;
+							listItem.textContent = item.radioName + (item.self ? "\uD83D\uDD38" : "\uD83D\uDD39");
+
+							radioListElem.appendChild(listItem);
+						} else if (item.radioTalking != null) {
+							let listItem = document.getElementById("voip-radio-list-item-" + item.radioId)
+							
+							if (item.radioTalking) {
+								listItem.className = "talking"
+							} else {
+								listItem.className = ""
+							}
+						} else {
+							let listItem = document.getElementById("voip-radio-list-item-" + item.radioId)
+							radioListElem.removeChild(listItem);
+						}
 					}
 				}
 
 				if (item.clearRadioList) {
 					let radioListElem = document.getElementById("voip-radio-list");
 
-					while (radioListElem.firstChild) {
+					while (radioListElem && radioListElem.firstChild) {
 						radioListElem.removeChild(radioListElem.firstChild);
 					}
 				}
