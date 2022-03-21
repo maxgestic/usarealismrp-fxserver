@@ -200,11 +200,12 @@ local DOORS = {
   {name = "Jewellery Store Door 1", x = -631.91,y = -237.19, z = 38.06, model = 1425919976, locked = true, thermiteable = true, offset={0.0, -0.8, 0.0}, heading=305.0, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}, unlockedAfter = 8},
   {name = "Jewellery Store Door 2", x = -631.15,y = -238.21, z = 38.09, model = 9467943, locked = true, static = true, _dist = 1.0},
   --Bank stuff with new pick method
-  {name = "Pacific Standard Bank / Door 1", x = 261.96, y = 221.79, z= 106.28, model = 746855201, locked = true, offset ={0.0, -1.2, 0.0}, heading = 250.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', 'corrections'}},
-  {name = "Pacific Standard Bank / Door 2", x = 256.89, y = 220.34, z = 106.28, model = -222270721, locked = true, offset ={0.0, -1.2, 0.0}, heading = 340.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', 'corrections'}},
-  {name = "Pacific Standard Bank / Door 3", x = 256.76, y = 206.78, z = 110.28, model = 1956494919, locked = true, offset ={0.0, 1.25, -0.2}, heading = 250.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', 'corrections'}},
-  {name = "Pacific Standard Bank / Vault Door 1", x = 252.74, y = 221.24, z = 101.68, model = -1508355822, locked = true, offset ={0.0, 1.25, -0.2}, heading = 160.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', 'corrections'}},
-  {name = "Pacific Standard Bank / Vault Door 2", x = 261.14, y = 215.32, z = 101.68, model = -1508355822, locked = true, offset ={0.0, 1.25, -0.2}, heading = 250.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "Pacific Standard Bank / Door 1", x = 261.96, y = 221.79, z= 106.28, model = 746855201, locked = true, offset ={0.0, -1.2, 0.0}, heading = 250.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "Pacific Standard Bank / Door 2", x = 256.89, y = 220.34, z = 106.28, model = -222270721, locked = true, offset ={0.0, -1.2, 0.0}, heading = 340.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "Pacific Standard Bank / Door 3", x = 256.76, y = 206.78, z = 110.28, model = 1956494919, locked = true, offset ={0.0, 1.25, -0.2}, heading = 250.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "Pacific Standard Bank / Vault Door 1", x = 252.74, y = 221.24, z = 101.68, model = -1508355822, locked = true, offset ={0.0, 1.25, -0.2}, heading = 160.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "Pacific Standard Bank / Vault Door 2", x = 261.14, y = 215.32, z = 101.68, model = -1508355822, locked = true, offset ={0.0, 1.25, -0.2}, heading = 250.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "Pacific Standard Bank / Lobby Upstairs Door 1", x = 237.00645446777, y = 227.70278930664, z = 106.28684997559, model = 1956494919, locked = true, offset ={0.0, 1.2, 0.0}, heading = 338.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
 
   {name = "Legion Door 1", x = 147.37, y = -1045.01, z = 29.37, model = -1591004109, locked = true, offset ={0.0, -1.5, 0.0}, heading = 250.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', "corrections"}},
   {name = "Legion Door 2", x = 149.75, y = -1046.92, z = 29.35, model = -1591004109, locked = true, offset ={0.0, -1.5, 0.0}, heading = 160.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', "corrections"}},
@@ -225,14 +226,56 @@ local DOORS = {
 -- heading - the heading of the door in it's regular position (when a player is not holding it open) -- this value should always be somewhat a multiple of 5 as rockstar like uniformity e.g., 270, 90, 180, 30, 315
 -- ymap - true will result in the door not using any of the above new values for 3D text, and having the text display at the x, y, z coords on the list
 
-function toggleDoorLock(index)
-  if not DOORS[index].locked then
-    DOORS[index].locked = true
-    -- print("Locking ".. DOORS[index].name)
+function getNearestDoor(src)
+  local closest = nil
+  local playerCoords = GetEntityCoords(GetPlayerPed(src))
+
+  function isDoorCloser(doorInfo, lastClosest)
+    local doorCoords = vector3(doorInfo.x, doorInfo.y, doorInfo.z)
+    return #(doorCoords - playerCoords) < lastClosest.dist
+  end
+
+  for i = 1, #DOORS do
+    if not closest or isDoorCloser(DOORS[i], closest) then
+      closest = {}
+      closest.index = i 
+      closest.name = DOORS[i].name
+      closest.locked = DOORS[i].locked
+      closest.dist = #(vector3(DOORS[i].x, DOORS[i].y, DOORS[i].z) - playerCoords)
+    end
+  end
+
+  return closest
+end
+
+function toggleDoorLock(index, optionalVal)
+  if optionalVal then
+    DOORS[index].locked = optionalVal
   else
-    DOORS[index].locked = false
+    if not DOORS[index].locked then
+      DOORS[index].locked = true
+    else
+      DOORS[index].locked = false
+    end
   end
   TriggerClientEvent("doormanager:toggleDoorLock", -1, index, DOORS[index].locked, DOORS[index].x, DOORS[index].y, DOORS[index].z)
+end
+
+function toggleDoorLockByName(doorName, optionalVal)
+  for i = 1, #DOORS do
+    if DOORS[i].name:find(doorName) then
+      if optionalVal then
+        DOORS[i].locked = optionalVal
+      else
+        if not DOORS[i].locked then
+          DOORS[i].locked = true
+        else
+          DOORS[i].locked = false
+        end
+      end
+      TriggerClientEvent("doormanager:toggleDoorLock", -1, i, DOORS[i].locked, DOORS[i].x, DOORS[i].y, DOORS[i].z)
+    end
+  end
 end
 
 function canCharUnlockDoor(char, doorIndex, lsource)
