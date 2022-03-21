@@ -140,7 +140,9 @@ function resetBankHeist()
 	bankRobbable = true
 	alarmedTriggered = false
 	TriggerClientEvent('bank:resetVault', -1)
-	hasGuardSpawned = false
+	if hasDoorBeenThermited then
+		hasGuardSpawned = false
+	end
 	exports.usa_doormanager:toggleDoorLockByName("Pacific Standard Bank", true)
 	hasDoorBeenThermited = false
 end
