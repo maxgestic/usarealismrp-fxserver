@@ -10,3 +10,9 @@ files {
 	'html/jquery.js',
 	'html/init.js',
 }
+
+server_exports {
+	"toggleDoorLock",
+	"toggleDoorLockByName",
+	"getNearestDoor"
+}
