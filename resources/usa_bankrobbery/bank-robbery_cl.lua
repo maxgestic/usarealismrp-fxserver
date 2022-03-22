@@ -81,8 +81,6 @@ local didAskForCashCartData = false
 local carts = {} 
 local safes = {}
 
-local calledCops = false
-
 RegisterNetEvent('bank:loadDrillingSpots')
 AddEventHandler('bank:loadDrillingSpots', function(spots)
 	drilling_spots = spots
@@ -163,7 +161,6 @@ end)
 ---------------
 RegisterNetEvent("bank:startHacking")
 AddEventHandler("bank:startHacking", function(bank)
-	call911(bank)
 	hackPanel()
 end)
 
@@ -182,7 +179,6 @@ AddEventHandler('bank:resetVault', function()
 		FreezeEntityPosition(VaultDoor, true)
 	end
 	openVault =  false
-	calledCops = false
 end)
 
 Citizen.CreateThread(function()
@@ -539,7 +535,6 @@ AddEventHandler('bank:toggleAlarm', function(doPlay)
 	if doPlay then
 		xSound:PlayUrlPos(soundID,"https://www.mboxdrive.com/store-alarm.mp3", 0.1, ALARM_COORDS, true)
 		xSound:Distance(soundID, 30)
-		call911()
 	else
 		xSound:Destroy(soundID)
 	end
@@ -623,9 +618,6 @@ PacificVault:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, po
     if isPointInside then
 		if not carts[1] then
 			TriggerServerEvent("bank:getCashCartData")
-			if not calledCops then
-				call911()
-			end
 		end
     else
 		for i = 1, #carts do
@@ -1039,6 +1031,5 @@ function call911(bank)
 	else
 	  isMale = IsPedMale(playerPed)
 	end
-	calledCops = true
 	TriggerServerEvent("911:BankRobbery", x, y, z, lastStreetNAME, isMale, (bank and bank.name or "Pacific Standard Bank"), (bank and bank.camID or "N/A"))
 end
