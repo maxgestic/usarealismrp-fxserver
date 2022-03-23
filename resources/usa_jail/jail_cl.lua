@@ -185,7 +185,7 @@ AddEventHandler("jail:changeClothes", function(gender)
             SetPedComponentVariation(playerPed, 1, 0, 1, 2)
             SetPedComponentVariation(GetPlayerPed(-1), 4, 3, 7, 2)
             SetPedComponentVariation(GetPlayerPed(-1), 6, 40, 2, 2)
-            SetPedComponentVariation(GetPlayerPed(-1), 11, 64, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 11, 66, 0, 2) -- torso
             SetPedComponentVariation(GetPlayerPed(-1), 8, 15, 0, 2)
             SetPedComponentVariation(GetPlayerPed(-1), 7, 0, 0, 2)
             SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 0, 2)
