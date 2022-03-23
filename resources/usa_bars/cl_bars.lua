@@ -10,7 +10,8 @@ local LOCATIONS = {
     {x = -3022.3759765625,y = 39.504207611084, z = 10.117781639099},
     {x = 1110.4865722656,y = 207.48405456543, z = -49.440128326416}, -- diamond casino
     {x = 4904.83203125, y = -4941.8154296875, z = 3.379533290863}, -- Cayo Perico island
-    {x = -233.02548217773, y = -1498.24609375, z = 29.13104057312} -- chamberlain hills community center (addon MLO)
+    {x = -233.02548217773, y = -1498.24609375, z = 29.13104057312}, -- chamberlain hills community center (addon MLO)
+    {x = -1293.1474609375, y = -297.61184692383, z = 36.050827026367} -- arcade
 }
 
 local ITEMS = {} -- loaded from server
