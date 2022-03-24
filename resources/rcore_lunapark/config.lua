@@ -46,7 +46,7 @@ Config.Text = {}
 Config.Text.COASTER_NO_PLAYERS  = 'Not enough people on the Roller Coaster.'
 Config.Text.COASTER_NO_MONEY    = 'You haven\'t got enough money, you need $' .. Config.Prices.RollerCoaster
 Config.Text.COASTER_ROW_FULL    = 'Row full'
-Config.Text.COASTER_GET_ON      = '~INPUT_CONTEXT~ Get on ~g~$5~s~'
+Config.Text.COASTER_GET_ON      = '~INPUT_CONTEXT~ Get on ~g~$'..Config.Prices.RollerCoaster..'~s~'
 Config.Text.COASTER_GET_OFF     = '~INPUT_VEH_EXIT~ Get off'
 Config.Text.COASTER_START       = '~INPUT_SPRINT~ + ~INPUT_VEH_ACCELERATE~ Start the Roller Coaster' .. '~n~' .. Config.Text.COASTER_GET_OFF
 Config.Text.COASTER_TIMER       = 'The Roller Coaster starts in %s second(s).'
@@ -55,13 +55,13 @@ Config.Text.COASTER_HANDS_DOWN  = 'Hands down'
 
 Config.Text.WHEEL_NO_MONEY   = 'You haven\'t got enough money, you need $' .. Config.Prices.FerrisWheel
 Config.Text.WHEEL_CABIN_FULL = 'Cabin full'
-Config.Text.WHEEL_GET_ON     = '~INPUT_CONTEXT~ Get on ~g~$3~s~'
+Config.Text.WHEEL_GET_ON     = '~INPUT_CONTEXT~ Get on ~g~$'..Config.Prices.FerrisWheel..'~s~'
 Config.Text.WHEEL_GET_OFF    = '~INPUT_VEH_EXIT~ Get off'
 
 Config.Text.FREEFALL_NO_PLAYERS = 'Not enough players on the Attraction.'
 Config.Text.FREEFALL_NO_MONEY   = 'You haven\'t got enough money, you need $' .. Config.Prices.Freefall
 Config.Text.FREEFALL_FULL       = 'Seats are full'
-Config.Text.FREEFALL_GET_ON     = '~INPUT_CONTEXT~ Get on ~g~$3~s~'
+Config.Text.FREEFALL_GET_ON     = '~INPUT_CONTEXT~ Get on ~g~$'..Config.Prices.Freefall..'~s~'
 Config.Text.FREEFALL_GET_OFF    = '~INPUT_VEH_EXIT~ Get off'
 Config.Text.FREEFALL_START      = '~INPUT_SPRINT~ + ~INPUT_VEH_ACCELERATE~ Start the Freefall' .. '~n~' .. Config.Text.FREEFALL_GET_OFF
 Config.Text.FREEFALL_TIMER      = 'The freefall starts in %s second(s).'
