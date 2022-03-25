@@ -454,6 +454,15 @@ local vehicleShopItems = {
             {make = "Honda", model = "Civic Type-R (2001)", price = 60000, hash = "ep3", storage_capacity = 190.0},
             {make = "Toyota", model = "Sprinter Trueno GT Apex (AE86) (1985)", price = 78000, hash = "ae86", storage_capacity = 160.0},
             {make = "Chevrolet", model = "Caprice Nip Donk (1973)", price = 90000, hash = "brainshack", storage_capacity = 160.0},
+			{make = "Chevrolet", model = "Impala SS (1996)", price = 58000, hash = "impala", storage_capacity = 160.0},
+            {make = "Chevrolet", model = "C-10 Stepside Custom", price = 90000, hash = "c10custom", storage_capacity = 190.0},
+            {make = "Chevrolet", model = "Silverado (1986)", price = 56000, hash = "SILV86", storage_capacity = 190.0},
+            {make = "Ford", model = "Galaxie", price = 62000, hash = "galaxie", storage_capacity = 160.0},
+            {make = "GMC", model = "CadimaX 3500HD (2018)", price = 150000, hash = "GODzBGDCADIMAX", storage_capacity = 190.0},
+            {make = "Cadillac", model = "Escalade (2021)", price = 130000, hash = "21escalade", storage_capacity = 190.0},
+            {make = "Chevrolet", model = "Camaro (2021)", price = 150000, hash = "21camaro", storage_capacity = 160.0},
+            {make = "Declasse", model = "Silver-Star", price = 70000, hash = "silverstar", storage_capacity = 210.0},
+			{make = "Declasse", model = "Silver-Star (Lowrider)", price = 100000, hash = "silverstar2", storage_capacity = 210.0},
 		}
 	}
 }
