@@ -304,7 +304,7 @@ AddEventHandler("cuff:Handcuff", function(arrestingPlayerId, x, y, z, playerHead
 						SetPedComponentVariation(lPed, 7, 45, 0, 0)
 					elseif IsPedModel(lPed,"mp_m_freemode_01") then
 						prevMaleVariation = GetPedDrawableVariation(lPed, 7)
-	            		SetPedComponentVariation(lPed, 7, 57, 0, 0)
+	            		SetPedComponentVariation(lPed, 7, 59, 0, 0)
 					end
 				end
 			end)
