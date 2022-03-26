@@ -1160,6 +1160,9 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerServerEvent("rp-radio:checkForRadioItem")
 	elseif itemName == "Scuba Gear" then
 		TriggerEvent("scuba:useGear")
+	elseif itemName == "Speaker" then
+		local mycoords = GetEntityCoords(PlayerPedId())
+		TriggerServerEvent("speaker:create", vector3(mycoords.x, mycoords.y, mycoords.z - 0.98))
 	elseif wholeItem.type and wholeItem.type == "mechanicPart" then
 		if IsPedInAnyVehicle(PlayerPedId()) then
 			exports.globals:notify("Must not be inside vehicle")
