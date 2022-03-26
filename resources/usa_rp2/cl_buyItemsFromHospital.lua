@@ -50,7 +50,6 @@ Citizen.CreateThread(function()
     while true do
         -- draw 3d text for nearby locations:
         for i, isNearby in pairs(nearbyHospitalBuySpots) do
-            print("is nearby " .. i)
             local h = HOSPITAL_ITEM_PURCHASE_LOCATIONS[i]
             DrawText3D(h.x, h.y, h.z, '[E] - First Aid Kit ($' .. FIRST_AID_KIT_FEE .. ') | [Hold E] - Wheel Chair ($' .. WHEELCHAIR_FEE .. ')')
             -- listen to keypress events:
