@@ -80,18 +80,3 @@ CreateThread(function()
         Wait(1)
     end
 end)
-
-CreateThread(function()
-    while true do
-        for id, info in pairs(speakers) do
-            print(json.encode(info))
-        end
-        Wait(5000)
-    end
-end)
-
-
---xSound:PlayUrlPos(locations[i].id, locations[i].url, 0.1, locations[i].coords, true)
---xSound:Distance(locations[i].id, 20)
-
---xSound:Destroy(soundID)
