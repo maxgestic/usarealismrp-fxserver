@@ -31,6 +31,11 @@ $(function() {
     $("#play").click(function(){
         let dist = $("#distance").val()
 
+        if (!Number.isInteger(parseInt(dist))) {
+            $("#distance").effect("shake")
+            return
+        }
+
         if (parseInt(dist) > 50) {
             $("#distance").effect("shake")
             return
