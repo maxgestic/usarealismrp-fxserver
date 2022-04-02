@@ -36,7 +36,7 @@ $(function() {
             return
         }
 
-        if (parseInt(dist) > 50) {
+        if (parseInt(dist) > 100) {
             $("#distance").effect("shake")
             return
         }
