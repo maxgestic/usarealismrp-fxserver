@@ -240,6 +240,7 @@ local vehicleShopItems = {
 			{make = "Emperor", model = "Vectre", price = 65000, hash = "vectre", storage_capacity = 125.0},
 			{make = "Pfister", model = "Growler", price = 70000, hash = "growler", storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet S2", price = 70500, hash = "comet6", storage_capacity = 125.0},
+			{make = "Invetero", model = "Coquette D10", price = 90000, hash = "coquette4", storage_capacity = 145.0},
 		},
 		["Supers"] = {
 			{make = "Pegassi", model = "Infernus", price = 368621, hash = 418536135, storage_capacity = 100.0},
@@ -278,6 +279,11 @@ local vehicleShopItems = {
 			{make = "Principe", model = "Deveste Eight", price = 1200000, hash = "deveste", storage_capacity = 110.0},
 			{make = "Overflod", model = "Entity XXR", price = 862000, hash = "entity2", storage_capacity = 110.0},
 			{make = "Progen", model = "Emerus", price = 950000, hash = "emerus", storage_capacity = 110.0},
+			{make = "Lampadati", model = "Tigon", price = 600000, hash = "tigon", storage_capacity = 100.0},
+            {make = "Grotti", model = "Furia", price = 500000, hash = "furia", storage_capacity = 100.0},
+            {make = "Pegassi", model = "Zorrusso", price = 600000, hash = "zorrusso", storage_capacity = 100.0},
+            {make = "Benefactor", model = "Krieger", price = 800000, hash = "krieger", storage_capacity = 100.0},
+            {make = "Truffade", model = "Thrax", price = 550000, hash = "thrax", storage_capacity = 100.0},
 		},
 		["Classic"] = {
 			{make = "Declasse", model = "Tornado", price = 10250, hash = 464687292, storage_capacity = 150.0},
@@ -463,6 +469,15 @@ local vehicleShopItems = {
             {make = "Chevrolet", model = "Camaro (2021)", price = 150000, hash = "21camaro", storage_capacity = 160.0},
             {make = "Declasse", model = "Silver-Star", price = 70000, hash = "silverstar", storage_capacity = 210.0},
 			{make = "Declasse", model = "Silver-Star (Lowrider)", price = 100000, hash = "silverstar2", storage_capacity = 210.0},
+			{make = "Ford", model = "V-8 Coupé (1932)", price = 70000, hash = "fordc32", storage_capacity = 160.0},
+            {make = "Ford", model = "V-8 Coupé 2 (1932)", price = 80000, hash = "fordc32h", storage_capacity = 160.0},
+            {make = "Datsun", model = "Bluebird 910 SSS (1982)", price = 60000, hash = "datsun910", storage_capacity = 180.0},
+            {make = "Porsche", model = "928 GTS (1993)", price = 60000, hash = "928gts", storage_capacity = 160.0},
+            {make = "Maserati", model = "GranTurismo (2016)", price = 200000, hash = "stradale18", storage_capacity = 160.0},
+            {make = "Lexus", model = "LC 500 (2020)", price = 155000, hash = "lc500", storage_capacity = 160.0},
+            {make = "Land Rover", model = "Range Rover Vogue Mansory (2020)", price = 240000, hash = "mansrr", storage_capacity = 280.0},
+            {make = "Lincoln", model = "Continental (Custom Wheels) (2020)", price = 90000, hash = "cont", storage_capacity = 220.0},
+            {make = "Ford", model = "F-450 Platinum (2021)", price = 170000, hash = "f450plat", storage_capacity = 400.0},
 		}
 	}
 }
