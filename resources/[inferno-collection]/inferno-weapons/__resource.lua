@@ -24,6 +24,8 @@ client_script "client.lua"
 
 server_script "server.lua"
 
+shared_script '@pmc-callbacks/import.lua'
+
 files {
     "nui.html",
     "images/burst.png",
