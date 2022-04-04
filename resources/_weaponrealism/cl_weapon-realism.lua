@@ -19,24 +19,11 @@ function HashInTable( hash )
     return false 
 end 
 
-function ManageReticle()
-    local ped = GetPlayerPed( -1 )
-    local _, hash = GetCurrentPedWeapon( ped, true )
-        if not HashInTable( hash ) then 
-            HideHudComponentThisFrame( 14 )
-		end 
-end 
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		local ped = GetPlayerPed( -1 )
 		local weapon = GetSelectedPedWeapon(ped)
-		--print(weapon) -- To get the weapon hash by pressing F8 in game
-		
-		-- Disable reticle
-		
-		ManageReticle()
 		
 		-- Disable melee while aiming (may be not working)
 		

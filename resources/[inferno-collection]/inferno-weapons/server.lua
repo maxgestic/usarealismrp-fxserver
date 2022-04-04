@@ -34,3 +34,9 @@ AddEventHandler("Weapons:Server:Toggle", function(bool, flashlight, weapon)
 
     TriggerClientEvent("Weapons:Client:Return", -1, Flashlights)
 end)
+
+TriggerEvent('es:addCommand', 'crosshair', function(source, args, char)
+    TriggerClientEvent("inferno-weapons:toggleCrosshair", source)
+end, {
+	help = "Enable or disable crosshair"
+})

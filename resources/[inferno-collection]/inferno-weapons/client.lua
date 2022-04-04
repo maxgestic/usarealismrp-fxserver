@@ -117,6 +117,10 @@ Config.BloodEffects = {
 	"BigRunOverByVehicle"
 }
 
+Config.Crosshair = {
+	Enabled = false
+}
+
 -- Blood Effects
 -- Very small effects --
 	-- Car_Crash_Light
@@ -418,7 +422,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		-- If weapon does not require reticle, remove reticle
-		if not Config.Weapons.Reticle[FireMode.LastWeapon] and not IsPedInAnyVehicle(PlayerPedId(), true) then
+		if not Config.Crosshair.Enabled and not Config.Weapons.Reticle[FireMode.LastWeapon] and not IsPedInAnyVehicle(PlayerPedId(), true) then
 			HideHudComponentThisFrame(14)
 		end
 
@@ -632,6 +636,17 @@ RegisterNetEvent("Weapons:Client:resetAlreadyTriggeredOutOfAmmo")
 AddEventHandler("Weapons:Client:resetAlreadyTriggeredOutOfAmmo", function()
 	alreadyTriggeredOutOfAmmoForNonHandgun = false
 	alreadyTriggeredOutOfAmmoForHandgun = false
+end)
+
+RegisterNetEvent("inferno-weapons:toggleCrosshair") 
+AddEventHandler("inferno-weapons:toggleCrosshair", function(status)
+	if not status then status = not Config.Crosshair.Enabled end
+	Config.Crosshair.Enabled = status
+	if status then
+		exports.globals:notify("Crosshair enabled")
+	else
+		exports.globals:notify("Crosshair disabled")
+	end
 end)
 
 -- NUI function
