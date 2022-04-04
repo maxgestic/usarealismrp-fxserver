@@ -649,6 +649,13 @@ AddEventHandler("inferno-weapons:toggleCrosshair", function(status)
 	end
 end)
 
+Citizen.CreateThread(function()
+	Config.Crosshair.Enabled = TriggerServerCallback { 
+		eventName = "inferno-weapons:fetchCrosshairSetting",
+		args = {}
+	}
+end)
+
 -- NUI function
 function NewNUIMessage (Type, Load)
 	if Config.SelectorImages then
