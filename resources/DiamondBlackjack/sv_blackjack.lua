@@ -9,7 +9,7 @@ end
 local blackjackGameInProgress = {}
 local blackjackGameData = {}
 
-local MAX_BET = 500000
+local MAX_BET = 100000
 
 function tryTakeChips(source, amount)
     --returns true if taken 'chips' succesfully
