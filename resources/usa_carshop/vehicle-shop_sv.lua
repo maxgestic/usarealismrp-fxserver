@@ -283,7 +283,7 @@ local vehicleShopItems = {
             {make = "Grotti", model = "Furia", price = 500000, hash = "furia", storage_capacity = 100.0},
             {make = "Pegassi", model = "Zorrusso", price = 600000, hash = "zorrusso", storage_capacity = 100.0},
             {make = "Benefactor", model = "Krieger", price = 800000, hash = "krieger", storage_capacity = 100.0},
-            {make = "Truffade", model = "Thrax", price = 550000, hash = "thrax", storage_capacity = 100.0},
+            {make = "Truffade", model = "Thrax", price = 900000, hash = "thrax", storage_capacity = 100.0},
 		},
 		["Classic"] = {
 			{make = "Declasse", model = "Tornado", price = 10250, hash = 464687292, storage_capacity = 150.0},
