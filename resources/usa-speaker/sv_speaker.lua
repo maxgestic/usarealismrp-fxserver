@@ -28,6 +28,7 @@ AddEventHandler("speaker:play", function(data)
     TriggerClientEvent("speaker:play", -1, data)
     speakers[data.id].url = data.url
     speakers[data.id].distance = data.distance
+    speakers[data.id].volume = data.volume
     speakers[data.id].startedAt = os.time()
 end)
 
@@ -45,4 +46,10 @@ AddEventHandler("speaker:pickUp", function(data)
     TriggerClientEvent("speaker:pickUp", -1, data)
     local char = exports["usa-characters"]:GetCharacter(source)
     char.giveItem(speakerItem)
+end)
+
+RegisterServerEvent("speaker:updateVolume")
+AddEventHandler("speaker:updateVolume", function(data)
+    speakers[data.id].volume = data.new
+    TriggerClientEvent("speaker:updateVolume", -1, data)
 end)
