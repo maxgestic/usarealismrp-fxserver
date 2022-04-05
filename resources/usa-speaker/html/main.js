@@ -44,7 +44,8 @@ $(function() {
         $.post('http://usa-speaker/play', JSON.stringify({
             id: speakerId,
             url: $("#url").val(),
-            distance: $("#distance").val()
+            distance: $("#distance").val(),
+            volume: $("#volume").val()
         }));
         close();
     });
@@ -65,5 +66,12 @@ $(function() {
 
     $("#close").click(function(){
         close();
+    });
+
+    $("#volume").on("change", function(event) {
+        $.post('http://usa-speaker/updateVolume', JSON.stringify({
+            id: speakerId,
+            new: event.target.value
+        }));
     });
 });

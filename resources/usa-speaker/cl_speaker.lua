@@ -3,6 +3,8 @@ local globals = exports.globals
 
 local speakers = {}
 
+local SPEAKER_MAX_VOL = 0.5
+
 TriggerServerEvent("speaker:load")
 
 RegisterNetEvent("speaker:loaded")
@@ -10,7 +12,7 @@ AddEventHandler("speaker:loaded", function(loadedSpeakers)
     speakers = loadedSpeakers
     for id, info in pairs(speakers) do
         if info.startedAt then
-            xSound:PlayUrlPos(id, info.url, 0.2, info.coords, true)
+            xSound:PlayUrlPos(id, info.url, (info.volume / 100) * SPEAKER_MAX_VOL, info.coords, true)
             xSound:Distance(id, info.distance)
             Wait(1000)
             xSound:setTimeStamp(id, info.currentTimestamp)
@@ -25,7 +27,7 @@ end)
 
 RegisterNetEvent("speaker:play")
 AddEventHandler("speaker:play", function(data)
-    xSound:PlayUrlPos(data.id, data.url, 0.2, speakers[data.id].coords, true)
+    xSound:PlayUrlPos(data.id, data.url, (data.volume / 100) * SPEAKER_MAX_VOL, speakers[data.id].coords, true)
     xSound:Distance(data.id, data.distance)
 end)
 
@@ -41,6 +43,11 @@ AddEventHandler("speaker:pickUp", function(data)
         DeleteObject(speakers[data.id].handle)
     end
     speakers[data.id] = nil
+end)
+
+RegisterNetEvent("speaker:updateVolume")
+AddEventHandler("speaker:updateVolume", function(data)
+    xSound:setVolume(data.id, (data.new / 100) * SPEAKER_MAX_VOL)
 end)
 
 function createSpeakerObject(newSpeaker)

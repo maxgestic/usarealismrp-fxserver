@@ -23,3 +23,7 @@ end)
 RegisterNUICallback("close", function(data)
     SetNuiFocus(false, false)
 end)
+
+RegisterNUICallback("updateVolume", function(data)
+    TriggerServerEvent("speaker:updateVolume", data)
+end)
