@@ -1,0 +1,9 @@
+{
+    "private": true,
+    "main": "server/turn.js",
+    "version": "1.0.0",
+    "description": "Critical Scripts | Video Call TURN Server | https://criticalscripts.shop",
+    "dependencies": {
+        "node-turn": "^0.0.6"
+    }
+}
