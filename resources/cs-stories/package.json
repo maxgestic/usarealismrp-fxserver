@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "main": "server/hosting.js",
+    "version": "1.0.0",
+    "description": "Critical Scripts | Stories Hosting Server | https://criticalscripts.shop",
+    "dependencies": {
+        "express": "^4.17.2",
+        "express-fileupload": "^1.2.1"
+    }
+}

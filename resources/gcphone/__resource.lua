@@ -61,7 +61,8 @@ client_script {
 	"client/app_tchat.lua",
 	"client/bank.lua",
 	"client/twitter.lua",
-	"@cs-video-call/client/hooks/core.lua"
+	"@cs-video-call/client/hooks/core.lua",
+	"@cs-stories/client/hooks/core.lua"
 }
 
 server_script {
@@ -71,5 +72,6 @@ server_script {
 
 	"server/app_tchat.lua",
 	"server/twitter.lua",
-	"@cs-video-call/server/hooks/core.lua"
+	"@cs-video-call/server/hooks/core.lua",
+	"@cs-stories/server/hooks/core.lua"
 }
