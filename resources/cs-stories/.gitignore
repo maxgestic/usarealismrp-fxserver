@@ -1,0 +1,8 @@
+node_modules/
+.yarn.installed
+storage/videos/*
+!storage/videos/.gitkeep
+storage/thumbnails/*
+!storage/thumbnails/.gitkeep
+storage/meta/*
+!storage/meta/.gitkeep
