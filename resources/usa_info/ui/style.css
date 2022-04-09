@@ -42,7 +42,7 @@ button {
 	margin-top: 2em !important;
 }
 
-#command-doc iframe {
+iframe {
 	height: 100%;
 	width: 100%;
 }

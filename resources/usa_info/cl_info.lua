@@ -49,3 +49,5 @@ RegisterNUICallback('accept', function(data, cb)
 	display = false
 	TriggerServerEvent("info:acceptedRulesConfirm")
 end)
+
+-- todo: create NPC at coords that on E keypress will then present list of all legal jobs where user can click on them to receive a hint on how to start

@@ -17,7 +17,7 @@ $(function(){
 			}
 		});
 
-		$("button#accept").click(function(){
+		$("button#close").click(function(){
 			$.get('http://usa_info/accept', function(data) {})
 		});
 
@@ -25,7 +25,11 @@ $(function(){
 			ShowCommandListPage()
 		})
 
-		$("button#homeBtn").click(function() {
+		$("button#rules").click(function() {
+			ShowRulesPage()
+		})
+
+		$("button.homeBtn").click(function() {
 			ShowHomePage()
 		})
 
@@ -34,8 +38,13 @@ $(function(){
 			$("#command-doc").show()
 		}
 
+		function ShowRulesPage() {
+			$("#help-and-rules").hide()
+			$("#rules-doc").show()
+		}
+
 		function ShowHomePage() {
-			$("#command-doc").hide()
+			$("#command-doc,#rules-doc").hide()
 			$("#help-and-rules").show()
 		}
 
