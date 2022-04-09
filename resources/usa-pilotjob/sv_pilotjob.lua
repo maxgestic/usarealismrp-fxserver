@@ -4,6 +4,8 @@
 -- PERFORM FIRST TIME DB CHECK--
 exports["globals"]:PerformDBCheck("usa-pilotjob", "pilotjob")
 
+local BASE_PAY_PER_MISSION = 1000
+
 -- MISSIONS --
 local MISSIONS = {
   ["Trainee"] = {
@@ -1353,7 +1355,7 @@ AddEventHandler("pilotjob:jobComplete", function(job, givemoney)
             print("m.name: " .. m.name)
             print("job.name: " .. job.name)
             if m.name == job.name then
-              reward = m.pay + math.random(50, 200)
+              reward = m.pay + math.random(50, 200) + BASE_PAY_PER_MISSION
               print("reward set to: $" .. reward)
               break
             end
