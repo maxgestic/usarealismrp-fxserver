@@ -198,6 +198,16 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = {1, 2, 3},
 			hash = GetHashKey("bostonwhale")
+		},
+		["14suvrb"] = {
+			rank = 5,
+			allowedLiveries = {1},
+			hash = GetHashKey("14suvrb")
+		},
+		["npolchar"] = {
+			rank = 5,
+			allowedLiveries = {1, 2, 3, 4},
+			hash = GetHashKey("npolchar")
 		}
 	},
 	["corrections"] = {
@@ -390,6 +400,16 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = {1, 2, 3},
 			hash = GetHashKey("bostonwhale")
+		},
+		["14suvrb"] = {
+			rank = 5,
+			allowedLiveries = {1},
+			hash = GetHashKey("14suvrb")
+		},
+		["npolchar"] = {
+			rank = 5,
+			allowedLiveries = {1, 2, 3, 4},
+			hash = GetHashKey("npolchar")
 		}
 	},
 	["ems"] = {
