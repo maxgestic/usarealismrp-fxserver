@@ -93,13 +93,17 @@ function ApplyEffects(me)
 end
 
 function ApplyHPandArmorBuff(me)
+    local JOINT_ARMOR_BUFF_CAP_PERCENT = 0.85
     local maxHealth = GetEntityMaxHealth(me)
     SetEntityHealth(me, GetEntityHealth(me) + math.random(math.floor(0.10*maxHealth), math.floor(0.15*maxHealth)))
     local maxArmor = GetPlayerMaxArmour(PlayerId())
     local currentArmor = GetPedArmour(me)
     local newArmor = currentArmor + math.random(math.floor(0.15*maxArmor), math.floor(0.25*maxArmor))
-    if newArmor > 0.30 * maxArmor then
-        newArmor = math.floor(0.30 * maxArmor)
+    if currentArmor > JOINT_ARMOR_BUFF_CAP_PERCENT * maxArmor then
+        return
+    end
+    if newArmor > JOINT_ARMOR_BUFF_CAP_PERCENT * maxArmor then
+        newArmor = math.floor(JOINT_ARMOR_BUFF_CAP_PERCENT * maxArmor)
     end
     if newArmor > currentArmor then
         SetPedArmour(me, newArmor)
