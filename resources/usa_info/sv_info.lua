@@ -15,3 +15,5 @@ AddEventHandler("info:acceptedRulesConfirm", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	char.set("hasAcceptedRules", true)
 end)
+
+-- todo: add list of hints with waypoints on how to get started with all legal jobs here...
