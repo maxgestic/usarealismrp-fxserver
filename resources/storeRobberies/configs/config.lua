@@ -41,6 +41,7 @@ Config.PedRegisterOpenTimeMs = 25 * 1000
 Config.Shops = {
     [1] = {
         name = "Limited Ltd Grove St", --Name of the shop
+        camID = "store8",
         blip = vector3(-46.62, -1758.12, 29.42),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -65,6 +66,7 @@ Config.Shops = {
     },
     [2] = {
         name = "Rob's Liqour Prosperity St", --Name of the shop
+        camID = "store47",
         blip = vector3(-1486.2, -377.96, 40.42),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -89,6 +91,7 @@ Config.Shops = {
     },
     [3] = {
         name = "Rob's Liqour San Andreas Ave", --Name of the shop
+        camID = "store5",
         blip = vector3(-1221.93, -908.53, 12.57),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -113,6 +116,7 @@ Config.Shops = {
     },
     [4] = {
         name = "Limited Ltd Ginger St", --Name of the shop
+        camID = "store2",
         blip = vector3(-705.99, -913.71, 19.28),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -137,6 +141,7 @@ Config.Shops = {
     }, 
     [5] = {
         name = "24/7 Supermarkt Innocence Blvd", --Name of the shop
+        camID = "store4",
         blip = vector3(24.35, -1347.24, 29.52),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -161,6 +166,7 @@ Config.Shops = {
     }, 
     [6] = {
         name = "Rob's Liqour El Rancho Blvd", --Name of the shop
+        camID = "store1",
         blip = vector3(1134.25, -982.44, 46.37),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -185,6 +191,7 @@ Config.Shops = {
     }, 
     [7] = {
         name = "Limited Ltd West Mirror Drive", --Name of the shop
+        camID = "store48",
         blip = vector3(1164.78, -322.77, 69.29),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -209,6 +216,7 @@ Config.Shops = {
     },
     [8] = {
         name = "24/7 Supermarkt Clinton Ave", --Name of the shop
+        camID = "store7",
         blip = vector3(372.25, 326.58, 103.64),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -233,6 +241,7 @@ Config.Shops = {
         },
     [9] = {
         name = "Limited Ltd Banham Canyon Dr", --Name of the shop
+        camID = "store15",
         blip = vector3(-1819.93, 794.31, 138.05),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -257,6 +266,7 @@ Config.Shops = {
     },
     [10] = {
         name = "Rob's Liqour Great Ocean Hwy", --Name of the shop
+        camID = "store17",
         blip = vector3(-2966.14, 390.81, 15.18),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -281,6 +291,7 @@ Config.Shops = {
     },
     [11] = {
         name = "24/7 Supermarkt Ineseno Road", --Name of the shop
+        camID = "store11",
         blip = vector3(-3038.94, 584.26, 7.53),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -305,6 +316,7 @@ Config.Shops = {
     },
     [12] = {
         name = "24/7 Supermarkt Barbareno Rd", --Name of the shop
+        camID = "store16",
         blip = vector3(-3242.29, 999.78, 12.68),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -329,6 +341,7 @@ Config.Shops = {
     },
     [13] = {
         name = "24/7 Supermarkt Route 68", --Name of the shop
+        camID = "store14",
         blip = vector3(548.96, 2671.27, 42.1),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -353,6 +366,7 @@ Config.Shops = {
     },
     [14] = {
         name = "Rob's Liqour Route 68", --Name of the shop
+        camID = "store9",
         blip = vector3(1165.91, 2711.01, 38.28),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -377,6 +391,7 @@ Config.Shops = {
     },
     [15] = {
         name = "24/7 Supermarkt Senora Fwy", --Name of the shop
+        camID = "store13",
         blip = vector3(2677.91, 3279.15, 55.25),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -401,6 +416,7 @@ Config.Shops = {
     },
     [16] = {
         name = "24/7 Supermarkt Alhambra Dr", --Name of the shop
+        camID = "store6",
         blip = vector3(1959.97, 3739.98, 32.28),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.
@@ -425,6 +441,7 @@ Config.Shops = {
     },
     [17] = {
         name = "24/7 Supermarkt Senora Fwy", --Name of the shop
+        camID = "store13",
         blip = vector3(1727.52, 6415.41, 35.2),
         copsNeeded = 2, --Cops needed to start the robbery
         shopKeeper = nil, --Don't touch.

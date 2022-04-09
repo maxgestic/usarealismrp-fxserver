@@ -295,7 +295,7 @@ AddEventHandler('storeRobberies:client:callCops', function(store)
             }
             for i = 1, #Config.CopJobs do
                 if currentJob == Config.CopJobs[i] then
-                    TriggerEvent('chatMessage', '[911]', {255, 0, 0}, 'Store Robbery in progress at ' .. Config.Shops[store].name ..  '.')
+                    TriggerEvent('chatMessage', '[911]', {255, 0, 0}, 'Store Robbery in progress at ' .. Config.Shops[store].name ..  '. Camera: ' .. Config.Shops[store].camID .. '.')
                     TriggerEvent("storeRobberies:client:alertBlip", store)
                     Wait(500)
                     return
