@@ -1176,7 +1176,7 @@ end
 
 RegisterNetEvent("interaction:equipArmor")
 AddEventHandler("interaction:equipArmor", function()
-	SetPedArmour(PlayerPedId(), 40)
+	SetPedArmour(PlayerPedId(), 60)
 	TriggerEvent('usa:notify', "You have equipped light body armor!")
 end)
 
