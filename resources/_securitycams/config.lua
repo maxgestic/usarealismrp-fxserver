@@ -413,6 +413,23 @@ SecurityCamConfig.Locations = {
         }
     },
     {
+        camBox = {label = "Rob's Liqour (Prosperity St.)", id = 'store47'},
+        cameras = {
+            {label = "Outside", x = -1486.71, y = -389.62, z = 43.5, r = {x = -37.0, y = 0.0, z = 70.0}},
+            {label = "Shop Cam", x = -1483.04, y = -380.43, z = 42.50, r = {x = -35.0, y = 0.0, z = 85.0}},
+            {label = "Backroom Cam", x = -1479.52, y = -371.82, z = 41.50, r = {x = -45.0, y = 0.0, z = 180.0}},
+        }
+    },
+    {
+        camBox = {label = "Limited Ltd (West Mirror Drive)", id = 'store48'},
+        cameras = {
+            {label = "Outside", x = 1151.42, y = -328.54, z = 71.50, r = {x = -25.0, y = 0.0, z = 250.0}},
+            {label = "Shop Cam", x = 1153.77, y = -326.81, z = 71.54, r = {x = -30.0, y = 0.0, z = 325.0}},
+            {label = "Counter Cam", x = 1164.92, y = -318.61, z = 71.54, r = {x = -35.0, y = 0.0, z = 148.0}},
+            {label = "Backroom Cam", x = 1159.02, y = -314.21, z = 71.04, r = {x = -50.0, y = 0.0, z = 235.0}},
+        }
+    },
+    {
         camBox = {label = "Pillbox Medical Center", id = 'pillbox'},
         cameras = {
             {label = "Front Door", x = 301.9279, y = -576.0494, z = 46.0002, r = {x = -25.0, y = 0.0, z = 110.0}},
