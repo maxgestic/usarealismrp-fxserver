@@ -1,11 +1,11 @@
 local REWARD_RANGES = {
     fur = {
         low = 90,
-        high = 250
+        high = 200
     },
     meat = {
         low = 85,
-        high = 195
+        high = 145
     }
 }
 
