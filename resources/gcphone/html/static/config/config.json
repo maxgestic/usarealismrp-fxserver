@@ -169,12 +169,14 @@
       "pl_PL__name": "Kamera",
       "es_ES__name": "Cámara",
       "icons": "/html/static/img/icons_app/photo.png",
-      "routeName": "photo"
+      "routeName": "photo",
+      "inHomePage": true
     },
     {
       "name": "9GAG",
       "icons": "/html/static/img/icons_app/9gag.png",
-      "routeName": "9gag"
+      "routeName": "9gag",
+      "inHomePage": true
     }
   ],
   "defaultLanguage": "en_US",
