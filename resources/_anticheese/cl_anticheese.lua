@@ -139,7 +139,10 @@ local COORDS_THAT_ALLOW_INVISIBILITY = {
 	{x = 108.842,y = 6628.447, z = 31.072},  -- LSC 5
 	{x = -212.368,y = -1325.486, z = 30.176},  -- LSC 6
 	{x= 0.0, y= 0.0, z = 1.0}, -- unsure why, but this spot was flagging
-	{x = 306.6242980957, y = -590.22576904297, z = 43.283988952637} -- pillbox entrance
+	{x = 306.6242980957, y = -590.22576904297, z = 43.283988952637}, -- pillbox entrance
+	{x = -288.62399291992, y = 6229.2231445312, z = 32.454002380372}, -- was flagging when people spawn in
+	{x = 178.345993042, y = 6636.7797851562, z = 32.599998474122}, -- was flagging when people spawn in
+	{x = -4.214126586914, y = 6.2402596473694, z = -195.0}, -- was flagging when people spawn in
 }
 
 local BlacklistedWeapons = { -- weapons that will get people banned
