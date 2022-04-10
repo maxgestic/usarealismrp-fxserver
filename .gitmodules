@@ -7,3 +7,6 @@
 [submodule "resources/[custom_vehicles]"]
 	path = resources/[custom_vehicles]
 	url = git@github.com:minipunch/usarrp-customVehicles.git
+[submodule "resources/[custom_maps]"]
+	path = resources/[custom_maps]
+	url = git@github.com:minipunch/usarrp-custom-maps.git
