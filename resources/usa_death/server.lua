@@ -9,7 +9,6 @@ AddEventHandler("death:respawn", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
 	if job ~= "sheriff" and job ~= "corrections" and job ~= "ems" then
-		char.removeWeapons()
 		local m = char.get("money")
 		if m >= RESPAWN_FEE then
 			char.removeMoney(RESPAWN_FEE)
