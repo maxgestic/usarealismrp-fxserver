@@ -65,6 +65,7 @@ local vehicleShopItems = {
 			{make = "Karin", model = "Futo GTX", price = 20500, hash = "futo2", storage_capacity = 125.0},
 			{make = "Karin", model = "Sultan RS Classic", price = 25500, hash = "sultan3", storage_capacity = 125.0},
 			{make = "Dinka", model = "Jester RR", price = 60000, hash = "jester4", storage_capacity = 125.0},
+			{make = "Pfister", model = "Comet 4", price = 52765, hash = "comet4", storage_capacity = 125.0},
 			--{make = "Annis", model = "Savestra", price = 27560, hash = "savestra", storage_capacity = 125.0} -- has machine guns
 		},
 		["Muscles"] = {
@@ -359,6 +360,8 @@ local vehicleShopItems = {
 			{make = "Vapid", model = "Benson", price = 79573, hash = "benson", storage_capacity = 500.0},
 			{make = "Declasse", model = "Hotring Sabre", price = 120000, hash = "hotring", storage_capacity = 90.0},
 			{make = "Brute", model = "Tour Bus", price = 40000, hash = 1941029835, storage_capacity = 180.0},
+			{make = "Trailer", model = "Open", price = 30000, hash = "cotrailer", storage_capacity = 300.0},
+        	{make = "Trailer", model = "Closed", price = 80000, hash = "ctrailer", storage_capacity = 400.0},
 		},
 		["Electric"] = {
 			{make = "Coil", model = "Raider", price = 50000, hash = "raiden", storage_capacity = 150.0},
