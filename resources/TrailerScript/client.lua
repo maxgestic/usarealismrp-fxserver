@@ -13,7 +13,7 @@ local allowedTowModels = {
     ['ctrailer'] = {x = 0.0, y = 0.0, z = 0.25}, -- Closed Trailer
 }
 
-local allowTowingBoats = false -- Set to true if you want to be able to tow boats.
+local allowTowingBoats = true -- Set to true if you want to be able to tow boats.
 local allowTowingPlanes = false -- Set to true if you want to be able to tow planes.
 local allowTowingHelicopters = false -- Set to true if you want to be able to tow helicopters.
 local allowTowingTrains = false -- Set to true if you want to be able to tow trains.
