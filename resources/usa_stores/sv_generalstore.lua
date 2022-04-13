@@ -76,7 +76,8 @@ local GENERAL_STORE_ITEMS = {
 local HARDWARE_STORE_ITEMS = {
   ["Electronics"] = {
     { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_npc_phone_02", blockedInPrison = true },
-    { name = "Radio", price = 2000, type = "misc", quantity = 1, legality = "legal", weight = 10, objectModel = "prop_cs_hand_radio" }
+    { name = "Radio", price = 2000, type = "misc", quantity = 1, legality = "legal", weight = 10, objectModel = "prop_cs_hand_radio" },
+    { name = "Speaker", price = 5000, legality = "legal", quantity = 1, type = "misc", weight = 20, objectModel = "sm_prop_smug_speaker" }
   },
   ["Misc"] = {
     { name = "Repair Kit", price = 500, type = "misc", quantity = 1, legality = "legal", weight = 20, objectModel = "imp_prop_tool_box_01a"},
@@ -108,8 +109,7 @@ local HARDWARE_STORE_ITEMS = {
     { name = "Paint Remover", price = 1000, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "bkr_prop_meth_ammonia", remainingUses = 5, notStackable = true},
     { name = "Rag", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_shower_towel"},
     { name = "Sign Kit", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_cd_paper_pile1"},
-    { name = "Drill", price = 2000, legality = "legal", quantity = 1, type = "misc", weight = 10, objectModel = "hei_prop_heist_drill" },
-    { name = "Speaker", price = 5000, legality = "legal", quantity = 1, type = "misc", weight = 20, objectModel = "sm_prop_smug_speaker" }
+    { name = "Drill", price = 2000, legality = "legal", quantity = 1, type = "misc", weight = 10, objectModel = "hei_prop_heist_drill" }
   }
 }
 
