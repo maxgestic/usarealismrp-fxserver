@@ -34,13 +34,6 @@ To get started with your own testing environment:
 		- with resource scrambling: ``/start.sh`` from the ``server-data`` folder
 		- without resource scrambling: ``bash run.sh +exec server-data/server.cfg`` from folder where server .dlls are
 
-**Scrambler Requirements**
-For it to work properly you need to follow these rules:
-	- Use ``__resource.lua`` instead of ``fxmanifest.lua``
-	- No globbing syntax allowed in the ``__resource.lua`` (? need to test since using new scrambler)
-	- Use ``RegisterServerEvent``, not ``RegisterNetEvent`` in server scripts
-	- Don't name registered chat commands the same as events
-
 **Job Types**
 1. "civ"
 2. "sheriff" (AKA SASP)
@@ -89,10 +82,10 @@ For it to work properly you need to follow these rules:
 		- ``emit(doc._id, doc.owner);``
 	* **getBusinessStorage**
 		- ``emit(doc._id, doc.storage);``
-5) Must create index on the ``stored_location`` field in the ``vehicles`` database for ``usa-properties-og`` to function correctly when storing/retrieving vehicles from property garages.
-6) Must create indexes on the ``receiver`` and ``transmitter`` fields (in that order) in the ``phone-messages`` database for ``gcphone`` to function correctly when storing/retrieving/updating phone text messages.
-7) Should create indexes on the ``owner`` and ``num`` fields in the ``phone-calls`` database for ``gcphone`` to function most efficiently when storing/retrieving phone call history.
-8) Should create index on the ``owner.identifiers.id`` field in the ``businesses`` database for ``usa-businesses` to function most efficiently when retreiving owned businsess for a character. 
+5) [optional] Create index on the ``stored_location`` field in the ``vehicles`` database for ``usa-properties-og`` to function correctly when storing/retrieving vehicles from property garages.
+6) [optional] Create indexes on the ``receiver`` and ``transmitter`` fields (in that order) in the ``phone-messages`` database for ``gcphone`` to function correctly when storing/retrieving/updating phone text messages.
+7) [optional] Create indexes on the ``owner`` and ``num`` fields in the ``phone-calls`` database for ``gcphone`` to function most efficiently when storing/retrieving phone call history.
+8) [optional] Create index on the ``owner.identifiers.id`` field in the ``businesses`` database for ``usa-businesses` to function most efficiently when retreiving owned businsess for a character. 
 
 **Common Framework Usage**
 
