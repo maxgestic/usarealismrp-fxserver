@@ -2,7 +2,7 @@ Config = {}
 
 Config.Debug = false
 
-Config.Webhook = 'https://discord.com/api/webhooks/914838088876961793/yCuMqGUuf9XCHKYKVlDXtOPKYJqtApfD5TlLdCtODRDBDehEc7g5eUp45tFSOjSSfFFw'
+Config.Webhook = GetConvar("status-channel-webhook")
 Config.ServerName = 'USA Realism RP'
 
 Config.MessageId = '914841153050902568' --Copy messageid from deployed message and restart script!

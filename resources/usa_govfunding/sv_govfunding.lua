@@ -269,7 +269,7 @@ end
 
 function SendToDiscordLog()
 	local desc = "\n**Name:** " .. createdBy .. "\n**".. typeChanged ..":** $" .. comma_value(amountChanged) ..  "\n**Agency:** " .. agencyName
-	local url = 'https://discordapp.com/api/webhooks/634685043176112128/GKktpUN4GbOOguU6hxgAQHoY9aHJ45GZSeIAn5t189xLNlE41jP0m35lqKcZnw_dcVZn'
+	local url = GetConvar("gov-funds-webhook")
 	PerformHttpRequest(url, function(err, text, headers)
 	  if text then
 		print(text)

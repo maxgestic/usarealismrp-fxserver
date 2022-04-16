@@ -201,7 +201,7 @@ function jailPlayer(src, data, officerName, gender)
 		suspensions = suspensions .. "\nFP revoked permanently"
 	end
 	-- send to discord #jail-logs --
-	local url = 'https://discordapp.com/api/webhooks/617497481466478603/j-6d89PaZNtZYohmBVgHMATb5WvjfHogZBX9CtRscJQY91ybNWDi1hyZ7uSVV0la50MR'
+	local url = GetConvar("jail-log-webhook")
 	if not suspensions then suspensions = "None" end
 	PerformHttpRequest(url, function(err, text, headers)
 		if text then
@@ -240,7 +240,7 @@ end)
 
 RegisterServerEvent("jail:notifyEscapee")
 AddEventHandler("jail:notifyEscapee", function()
-	local WEBHOOK_URL = "https://discord.com/api/webhooks/876634488476692551/tvcqPzkDCod0gz5JmtZkbyV7ShW_W9B_SlutIFTLRBtw43soBtYowt0SFMVgn7q9J9sa"
+	local WEBHOOK_URL = GetConvar("detention-webhook")
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local inmate_name = char.getFullName()
 	local charid = char.get("_id")

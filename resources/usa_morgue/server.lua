@@ -38,7 +38,7 @@ TriggerEvent('es:addJobCommand', 'morgue', { "ems", "corrections", "sheriff", "d
 		}
 		target.giveItem(toeTag, 1)
 		local admitted_name = target.getFullName()
-		local url = 'https://discordapp.com/api/webhooks/618095805139779594/eFpM4lR_uR-7-EWNGxwseDmbW3WX5nLo4RVxme-52gJAFSDtv8rblQSWGLBQ0N3WmvIo'
+		local url = GetConvar("morgue-log-webhook")
 		PerformHttpRequest(url, function(err, text, headers)
 			if text then
 				print(text)

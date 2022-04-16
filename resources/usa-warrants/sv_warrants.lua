@@ -15,7 +15,7 @@ function createWarrant(src, warrant, notify_with_nui)
 	-- send warrant to discord:
 		-- send discord message
 	local desc = "\n**Name:** " .. warrant.first_name .. " " .. warrant.last_name .. "\n**Notes:** " .. warrant.notes ..  "\n**Officer:** " .. warrant.created_by .. "\n**Timestamp:** ".. warrant.timestamp
-	local url = 'https://discordapp.com/api/webhooks/618097403521925130/lt-EU8yOBWrC8lBTYvDQUYnLUKzuj1Ahy7Nt_iXg4koBn8RprgvJV4s4IOm2J7zWhKid'
+	local url = GetConvar("warrant-log-webhook")
 			PerformHttpRequest(url, function(err, text, headers)
 				if text then
 					print(text)

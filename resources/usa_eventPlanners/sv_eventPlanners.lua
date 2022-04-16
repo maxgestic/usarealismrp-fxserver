@@ -1,4 +1,4 @@
-local DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/870069621636612098/_hI-rNHA1H4Yr1auPtrYyJyRr7irCHtqjDqN1fTOcBlmgye_UiFGCmpDsnCqICJNKHFk"
+local DISCORD_WEBHOOK_URL = GetConvar("event-team-webhook")
 
 local currentlySignedInPlayers = {}
 
