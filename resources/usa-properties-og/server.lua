@@ -336,12 +336,15 @@ end)
 
 RegisterServerEvent("properties-og:moveItemToPropertyStorage")
 AddEventHandler("properties-og:moveItemToPropertyStorage", function(src, data)
-  print("moving item in to property")
   -- move item to property
   local char = exports["usa-characters"]:GetCharacter(src)
   data.toSlot = tostring(data.toSlot)
   data.fromSlot = tostring(data.fromSlot)
   data.quantity = tonumber(data.quantity)
+  if data.quantity <= 0 then
+    TriggerClientEvent("usa:notify", src, "Invalid quantity")
+    return
+  end
   local item = char.getItemByIndex(data.fromSlot)
   if item.type and item.type == "license" then
     TriggerClientEvent("usa:notify", src, "Can't move that")
