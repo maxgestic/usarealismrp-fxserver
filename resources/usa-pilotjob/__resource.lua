@@ -1,7 +1,11 @@
 resource_manifest_version '05cfa83c-a124-4cfa-a768-c24a5811d8f9'
 
 client_scripts {
-    "cl_pilotjob.lua"
+    "cl_pilotjob.lua",
+    '@salty_tokenizer/init.lua'
 }
 
-server_script "sv_pilotjob.lua"
+server_scripts {
+    "sv_pilotjob.lua",
+    '@salty_tokenizer/init.lua'
+}

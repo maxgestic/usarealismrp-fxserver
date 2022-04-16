@@ -344,7 +344,10 @@ function GetNextCheckpoint()
             DeleteEntity(active_job.current_passengers[i])
         end
     end
-    TriggerServerEvent("pilotjob:jobComplete", active_job, givemoney)
+    while securityToken == nil do
+        Wait(1)
+    end
+    TriggerServerEvent("pilotjob:jobComplete", active_job, givemoney, securityToken)
     active_job = nil
     -- Remove job clothing --
     TriggerServerEvent("usa:loadPlayerComponents")
