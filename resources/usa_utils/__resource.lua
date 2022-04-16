@@ -14,7 +14,6 @@ files {
 client_scripts { 
     "screenshots/cl_screenshots.lua",
     'commerce/client/*.lua',
-    'antimodder/cl_commerce.lua',
     'antilynx/config_c.lua',
     'antilynx/lcac_c.lua'
 }
@@ -23,7 +22,6 @@ server_scripts {
     'sessionmonitor.lua',
     'screenshots/sv_screenshots.lua',
     'commerce/server/*.lua',
-    'antimodder/sv_antimodder.lua',
    'antilynx/lcac_s.lua'
 }
 
