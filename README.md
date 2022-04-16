@@ -104,3 +104,31 @@ end
 if char.hasItem("Tuna Fish") then
 	-- do something
 end
+```
+
+**Webhooks**
+
+[optional] Set the following convars in your `server_internal.cfg` file like so:
+
+```
+set status-channel-webhook ""
+set server-monitor-webhook ""
+set ban-log-webhook ""
+set modder-log-webhook ""
+set property-log-webhook ""
+set search-warrant-log-webhook ""
+set warrant-log-webhook ""
+set dmv-log-webhook ""
+set event-team-webhook ""
+set gov-funds-webhook ""
+set hospital-log-webhook ""
+set jail-log-webhook ""
+set detention-webhook ""
+set morgue-log-webhook ""
+set sasp-timesheet-webhook ""
+set bcso-timesheet-webhook ""
+set ems-timesheet-webhook ""
+set doj-timesheet-webhook ""
+```
+
+Just replace the empty strings with your channel's webhook URL.
