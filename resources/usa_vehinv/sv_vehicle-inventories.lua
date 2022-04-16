@@ -9,7 +9,7 @@ AddEventHandler("vehicle:RemovePersonFromInventory", function(plate)
 end)
 
 RegisterServerEvent("vehicle:updateForOthers")
-AddEventHandler("vehicle:updateForOthers", function(plate, inv, isLocked) -- todo: this could be exploited/abused by lua injection, remove inv parameter and fetch inventory by plate again?
+AddEventHandler("vehicle:updateForOthers", function(plate, inv, isLocked) -- todo: tokenize this event
     if VehInventoryManager.beingAccessed[plate] then
         for id, val in pairs(VehInventoryManager.beingAccessed[plate]) do
             if IsPlayerActive(id) then
@@ -30,7 +30,7 @@ end)
 -- store an item in a vehicle
 -- note: assumes that the quantity provided is <= item.quantiy
 RegisterServerEvent("vehicle:storeItem")
-AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity, slot, cb) -- TODO: get item instead of passing as param to avoid lua injecting items
+AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity, slot, cb) -- todo: tokenize this event
     quantity = math.floor(quantity)
     local usource = tonumber(src)
     GetVehicleInventory(vehicle_plate, function(inv)
@@ -40,6 +40,11 @@ AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity
         end
         item.quantity = quantity
         if VehInventoryManager.canHoldItem(inv, item) then
+            local char = exports["usa-characters"]:GetCharacter(usource)
+            if not char.hasItem(item) then -- prevents 'lag switch' item dupe exploit when storing items
+                cb(false, inv)
+                return
+            end
             VehInventoryManager.putItemInSlot(vehicle_plate, inv, item, slot, function(success, msg)
                 if success == true then
                     if item.type == "weapon" then
