@@ -5,7 +5,7 @@ local DROPPED_AMOUNT_SM = 5
 
 local lastRecordedAmount = 0
 
-local WEBHOOK_URL = "https://discordapp.com/api/webhooks/613598358568828938/YVkkUeUF75IrnA9rsnV1A_O-rX---wd4gOl1-T627P1FY5gBmfYx638ZTszo4LxXLEmZ"
+local WEBHOOK_URL = GetConvar("server-monitor-webhook")
 
 local SECONDS_BEFORE_ACCEPTING_CONNECTIONS = 30
 local SERVER_START_TIME = os.time()

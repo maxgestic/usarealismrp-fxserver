@@ -601,7 +601,7 @@ AddEventHandler("properties:purchaseProperty", function(property)
       TriggerClientEvent("properties:setPropertyBlips", user_source, GetOwnedPropertyCoords(player.get("_id"), true))
 			-- send discord msg to #property-logs --
 			local desc = "\n**Property:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(PROPERTIES[property.name].fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
-			local url = 'https://discord.com/api/webhooks/618097005750648837/qjGutLzwwboVNFbgjeRdiR3rtaPEmtOgRlF5GDJEZxP0mBR3wb-_bh1XwRMM2xdzkOpP'
+			local url = GetConvar("property-log-webhook")
 			PerformHttpRequest(url, function(err, text, headers)
 				if text then
 					print(text)
@@ -703,7 +703,7 @@ AddEventHandler("properties:addLEO", function(property_name, id, source)
         local judge_name = judge.getFullName()
         local officer = exports["usa-characters"]:GetCharacter(tonumber(id))
         local officer_name = officer.getFullName()
-        local url = 'https://discord.com/api/webhooks/911750531419095060/n5wtA-5uAzStdgoRFq43L5KKQGBF9yct25W7uFIZT9t2c2hJu-_0eYfquQI7SDDUjY-O'
+        local url = GetConvar("search-warrant-log-webhook")
         if not suspensions then suspensions = "None" end
         PerformHttpRequest(url, function(err, text, headers)
           if text then
@@ -790,7 +790,7 @@ AddEventHandler("properties:removeLEO", function(property_name, id, source)
           local judge_name = judge.getFullName()
           local officer = exports["usa-characters"]:GetCharacter(tonumber(id))
           local officer_name = officer.getFullName()
-          local url = 'https://discord.com/api/webhooks/911750531419095060/n5wtA-5uAzStdgoRFq43L5KKQGBF9yct25W7uFIZT9t2c2hJu-_0eYfquQI7SDDUjY-O'
+          local url = GetConvar("search-warrant-log-webhook")
           if not suspensions then suspensions = "None" end
           PerformHttpRequest(url, function(err, text, headers)
             if text then

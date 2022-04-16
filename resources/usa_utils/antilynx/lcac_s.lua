@@ -1,5 +1,5 @@
 local minipunchDiscordID = "<@178016707292561409>"
-local WEBHOOK_URL = "https://discordapp.com/api/webhooks/618094411003199509/IeXSWsln5hPo83l5wles9m62kEAKAJQUry6cZvV0MQzCLa6mYgBZOEVdtwwjpC1MUwoh"
+local WEBHOOK_URL = GetConvar("ban-log-webhook")
 
 local enabled = true
 

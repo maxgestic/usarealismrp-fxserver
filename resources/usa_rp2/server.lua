@@ -269,35 +269,37 @@ end)
 local JOBS_TO_LOG = {
 	sheriff = {
 		DISPLAY_NAME = "SASP",
-		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777640062560239636/8cri7MtQA9Qm12hQgxgwb-xYFqzlLZMbizAZ7tLvA8xeXRPq4q6xGAg_rT_2_9PL26xk"
+		WEBHOOK_URL = GetConvar("sasp-timesheet-webhook")
+		
 	},
 	corrections = {
 		DISPLAY_NAME = "BCSO/Corrections",
-		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777640307814432799/EQjQ9DIE7rR5Iy4ipo-yjNpKazlXuYIMTKicFW8ejr089L9XRuPkvcfDaJHt2gP5ILwA"
+		WEBHOOK_URL = GetConvar("bcso-timesheet-webhook")
+		
 	},
 	ems = {
 		DISPLAY_NAME = "EMS",
-		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777640434398396417/xcOjuF1EwF82x3lMVGc5SbRcPPNDkHI9vFD2TWsVsMw91jEYt8DNhNSuAOrpchKYbuVw"
+		WEBHOOK_URL = GetConvar("ems-timesheet-webhook")
 	},
 	doctor = {
 		DISPLAY_NAME = "Pillbox Medical",
-		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777640434398396417/xcOjuF1EwF82x3lMVGc5SbRcPPNDkHI9vFD2TWsVsMw91jEYt8DNhNSuAOrpchKYbuVw"
+		WEBHOOK_URL = GetConvar("ems-timesheet-webhook")
 	},
 	realtor = {
 		DISPLAY_NAME = "REA",
-		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777652520013004850/7qTAZLylrFIZB24to7fZ0qJi8RZzjBKB5FaL-iAUtZNEXdHGi_mhpnJMtB_6TdHoAadx"
+		WEBHOOK_URL = ""
 	},
 	judge = {
 		DISPLAY_NAME = "Judge",
-		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777652709905661972/MduQ6-uICtA2Fv5y6JmEBqTMUYOZ6bF6u_4U6C98ZyGDSNkUJTc2OgfyTQeXkqP6zgu8"
+		WEBHOOK_URL = GetConvar("doj-timesheet-webhook")
 	},
 	lawyer = {
 		DISPLAY_NAME = "Attorney",
-		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777652709905661972/MduQ6-uICtA2Fv5y6JmEBqTMUYOZ6bF6u_4U6C98ZyGDSNkUJTc2OgfyTQeXkqP6zgu8"
+		WEBHOOK_URL = GetConvar("doj-timesheet-webhook")
 	},
 	da = {
 		DISPLAY_NAME = "District Attorney",
-		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777652709905661972/MduQ6-uICtA2Fv5y6JmEBqTMUYOZ6bF6u_4U6C98ZyGDSNkUJTc2OgfyTQeXkqP6zgu8"
+		WEBHOOK_URL = GetConvar("doj-timesheet-webhook")
 	}
 }
 

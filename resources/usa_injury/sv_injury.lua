@@ -64,7 +64,7 @@ injuries = { -- ensure this is the same as cl_injury.lua
     [GetHashKey("WEAPON_COMPACTRIFLE")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0}, -- WEAPON_COMPACTRIFLE
 }
 
-local WEBHOOK_URL = "https://discordapp.com/api/webhooks/618096654842593281/tz9hG-cD-2EqzMLr-4Z3KdRG1XHQyS8OhVLMWQLCIT6ebz6SGI6-iM0qgj-wXf8FBXBx"
+local WEBHOOK_URL = GetConvar("hospital-log-webhook")
 
 TriggerEvent('es:addCommand', 'injuries' , function(source, args, char)
 	TriggerClientEvent("injuries:showMyInjuries", source)
