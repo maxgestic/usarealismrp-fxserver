@@ -14,6 +14,9 @@ end)
 
 RegisterServerEvent('LCAC:setEnabled')
 AddEventHandler('LCAC:setEnabled', function(status)
+    if source ~= 0 and source ~= " " and source ~= "" then -- don't accept if event triggered by client
+        return
+    end
     print("LCAC set banning status to: " .. tostring(status))
     enabled = status
 end)
