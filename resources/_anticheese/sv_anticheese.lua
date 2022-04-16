@@ -461,6 +461,9 @@ end)
 
 RegisterServerEvent("anticheese:toggleViolationDetection")
 AddEventHandler("anticheese:toggleViolationDetection", function(status)
+	if source ~= 0 and source ~= " " and source ~= "" then -- don't accept if event triggered by client
+		return
+	end
 	print("setting anticheese banning to: " .. tostring(status))
 	violationDetectionEnabled = status
 end)
