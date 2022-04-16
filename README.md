@@ -132,3 +132,5 @@ set doj-timesheet-webhook ""
 ```
 
 Just replace the empty strings with your channel's webhook URL.
+
+You'll also either want to disable the `block_vpn` script or get an account api key from proxycheck.io and set the `block-vpn-token` convar equal to it.
