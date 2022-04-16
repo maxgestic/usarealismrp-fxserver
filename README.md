@@ -2,15 +2,13 @@
 
 To get started with your own testing environment:
 1) Download and install [couchDB](http://couchdb.apache.org/)
-    * Open a browser and navigate to `<ip>:<port>` to open your couchDB instance
-        - `ip` is `127.0.0.1` if you're running couchDB locally
-        - Default `port` is `5984`
+    * Once installed, open a browser and navigate to `http://127.0.0.1:5984/_utils/` to open your couchDB instance interface
     * Go to "Your Account" and create an admin account
     * Base64 encode your username and password in the format `username:password`
         - Save it for the next step
 2) Create the file `resources/essentialmode/sv_es-DB-config.lua`  
-    * Set the variable `ip` to your couchDB IP
-    * Set the variable `port` your couchDB port
+    * Set the variable `ip` to your couchDB IP (default = 127.0.0.1)
+    * Set the variable `port` your couchDB port (default = 5984)
     * Set your base64 encoded credentials to the variable `auth` as a string
     * Create three exports in the file to return the variables set above:
 		- ``getIP``
@@ -25,28 +23,13 @@ To get started with your own testing environment:
 5) Create your database views (see below view definitions)
 6) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when developing.
 7) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
-8) Add stop `weleho_status` into your `server_internal.cfg`. This is so you don't overwrite the live server's info (Discord webhook).
-9) Start the server.
+8) Start the server.
 	* Windows:
 		- with resource scrambling: ``./start.bat`` from the ``server-data`` folder
 		- without resource scrambling: ``..\FXServer.exe +exec server.cfg +set onesync on`` from the ``server-data`` folder
 	* Linux:
 		- with resource scrambling: ``/start.sh`` from the ``server-data`` folder
 		- without resource scrambling: ``bash run.sh +exec server-data/server.cfg`` from folder where server .dlls are
-
-**Job Types**
-1. "civ"
-2. "sheriff" (AKA SASP)
-3. "ems"
-4. "corrections" (AKA BCSO)
-5. "judge"
-6. "taxi"
-7. "tow"
-8. "reporter" (weazel news)
-9. "chickenFactory"
-10. "gopostal"
-11. "burgerShotEmployee"
-11. ... could be more ...
 
 **DB Notes**
 1)  Must create following couch db views in a ``vehicleFilters`` design doc in a ``vehicles`` db:  
@@ -87,25 +70,6 @@ To get started with your own testing environment:
 7) [optional] Create indexes on the ``owner`` and ``num`` fields in the ``phone-calls`` database for ``gcphone`` to function most efficiently when storing/retrieving phone call history.
 8) [optional] Create index on the ``owner.identifiers.id`` field in the ``businesses`` database for ``usa-businesses` to function most efficiently when retreiving owned businsess for a character. 
 
-**Common Framework Usage**
-
-```
---[[
-	The server-sided character object (from usa-characters) has a whole bunch of helpful properties and methods pertaining to the player's character
-]]
-
--- for example:
-local char = exports["usa-characters]:GetCharacter(source) -- get the usa-characters resource character object for player with given source
-
-if char.get("money") > 100 then
-	-- do something
-end
-
-if char.hasItem("Tuna Fish") then
-	-- do something
-end
-```
-
 **Webhooks**
 
 [optional] Set the following convars in your `server_internal.cfg` file like so:
@@ -134,3 +98,40 @@ set doj-timesheet-webhook ""
 Just replace the empty strings with your channel's webhook URL.
 
 You'll also either want to disable the `block_vpn` script or get an account api key from proxycheck.io and set the `block-vpn-token` convar equal to it.
+
+**Common Framework Usage**
+
+```
+--[[
+	The server-sided character object (from usa-characters) has a whole bunch of helpful properties and methods pertaining to the player's character
+]]
+
+-- for example:
+local char = exports["usa-characters]:GetCharacter(source) -- get the usa-characters resource character object for player with given source
+
+if char.get("money") > 100 then
+	-- do something
+end
+
+if char.hasItem("Tuna Fish") then
+	-- do something
+end
+
+if char.get("job") == "sheriff" then
+	-- do something
+end
+```
+
+**Job Types**
+1. "civ"
+2. "sheriff" (AKA SASP)
+3. "ems"
+4. "corrections" (AKA BCSO)
+5. "judge"
+6. "taxi"
+7. "tow"
+8. "reporter" (weazel news)
+9. "chickenFactory"
+10. "gopostal"
+11. "burgerShotEmployee"
+11. ... could be more ...
