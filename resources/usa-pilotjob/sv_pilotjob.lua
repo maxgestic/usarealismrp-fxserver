@@ -1330,7 +1330,10 @@ AddEventHandler("pilotjob:endJob", function()
 end)
 
 RegisterServerEvent("pilotjob:jobComplete")
-AddEventHandler("pilotjob:jobComplete", function(job, givemoney)
+AddEventHandler("pilotjob:jobComplete", function(job, givemoney, securityToken)
+  if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
   local usource = source
   local char = exports["usa-characters"]:GetCharacter(usource)
   char.set("job", "civ")
