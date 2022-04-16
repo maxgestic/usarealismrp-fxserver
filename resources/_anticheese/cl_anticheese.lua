@@ -948,7 +948,10 @@ end)
 
 -- anti resource stopping
 AddEventHandler("onResourceStop", function(resourceName)
-	TriggerServerEvent("anticheese:ViolationDetected", "\240\159\144\134 Anti-Resource-Stop Detection: " .. resourceName)
+	while securityToken == nil do 
+		Wait(1)
+	end
+	TriggerServerEvent("anticheese:ViolationDetected", "\240\159\144\134 Anti-Resource-Stop Detection: " .. resourceName, securityToken)
 end)
 
 RegisterNetEvent("makepedskillable")
