@@ -49,6 +49,7 @@ Citizen.CreateThread(function()
 
                 if vein:button('NO') then -- Draw button and check if it were pressed
                     isWindowOpened = false
+                    TriggerServerEvent("usa:loadPlayerComponents")
                 end
             vein:endRow()
 
