@@ -162,7 +162,7 @@ AddEventHandler('heli:spotlight', function(serverID, state)
 end)
 
 function IsPlayerInCompatibleHeli()
-	local compatibleHelis = {"polmav", "as350", "buzzard2"}
+	local compatibleHelis = {"polmav", "as350", "buzzard2", "c3swathawk"}
 	local lPed = GetPlayerPed(-1)
 	local vehicle = GetVehiclePedIsIn(lPed)
 	for i = 1, #compatibleHelis do
