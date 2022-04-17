@@ -64,7 +64,7 @@ injuries = { -- ensure this is the same as cl_injury.lua
     [GetHashKey("WEAPON_COMPACTRIFLE")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0}, -- WEAPON_COMPACTRIFLE
 }
 
-local WEBHOOK_URL = GetConvar("hospital-log-webhook")
+local WEBHOOK_URL = GetConvar("injury-log-webhook")
 
 TriggerEvent('es:addCommand', 'injuries' , function(source, args, char)
 	TriggerClientEvent("injuries:showMyInjuries", source)
