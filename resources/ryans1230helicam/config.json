@@ -14,5 +14,5 @@
   "AllowSpotlights": true,
   "UseRealisticFLIR": true,
   "AircraftHashes": [],
-  "HelicopterHashes": ["as350", "polmav", "buzzard2"]
+  "HelicopterHashes": ["as350", "polmav", "buzzard2", "c3swathawk"]
 }
