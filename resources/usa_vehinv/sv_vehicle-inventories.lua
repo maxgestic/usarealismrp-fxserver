@@ -9,7 +9,10 @@ AddEventHandler("vehicle:RemovePersonFromInventory", function(plate)
 end)
 
 RegisterServerEvent("vehicle:updateForOthers")
-AddEventHandler("vehicle:updateForOthers", function(plate, inv, isLocked) -- todo: tokenize this event
+AddEventHandler("vehicle:updateForOthers", function(plate, inv, isLocked)
+    if type(source) == "number" then -- restrict to server side to prevent lua injection
+        return
+    end
     if VehInventoryManager.beingAccessed[plate] then
         for id, val in pairs(VehInventoryManager.beingAccessed[plate]) do
             if IsPlayerActive(id) then
@@ -30,7 +33,10 @@ end)
 -- store an item in a vehicle
 -- note: assumes that the quantity provided is <= item.quantiy
 RegisterServerEvent("vehicle:storeItem")
-AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity, slot, cb) -- todo: tokenize this event
+AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity, slot, cb)
+    if type(source) == "number" then -- restrict to server side to prevent lua injection
+        return
+    end
     quantity = math.floor(quantity)
     local usource = tonumber(src)
     GetVehicleInventory(vehicle_plate, function(inv)
