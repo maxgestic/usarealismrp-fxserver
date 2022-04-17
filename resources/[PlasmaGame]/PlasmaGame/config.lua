@@ -357,18 +357,18 @@ TenuFemme = {
                                                  
 [7] = {model = 0, colorA = 0, colorB = 0},       --Accessories / Accessoires
 [8] = {model = 14, colorA = 0, colorB = 0},       --Undershirt / T-Shirt
-[11] = {model = 294, colorA = 2, colorB = 1}     --Tops / Veste
+[11] = {model = 308, colorA = 2, colorB = 1}     --Tops / Veste
                                                  
 }                                                
                                                  
 TenuHomme = {                              
 [3] = {model = 7, colorA = 0, colorB = 0},       -- Torso / Arms / Bras
-[4] = {model = 111, colorA = 2, colorB = 1},      -- Legs / Pants / Jambe
+[4] = {model = 112, colorA = 2, colorB = 1},      -- Legs / Pants / Jambe
 [6] = {model = 82, colorA = 2, colorB = 1},      -- Feet / Shoes / Chaussure
                                                  
 [7] = {model = 0, colorA = 0, colorB = 0},       --Accessories / Accessoires
 [8] = {model = 18, colorA = 0, colorB = 0},      --Undershirt / T-Shirt
-[11] = {model = 277, colorA = 2, colorB = 1},    --Tops / Veste
+[11] = {model = 287, colorA = 2, colorB = 1},    --Tops / Veste
 }
 
 
