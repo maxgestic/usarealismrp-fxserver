@@ -5,7 +5,7 @@ local permission = {
 
 local noNotifications = {}
 
-local WEBHOOK_URL = 'https://discordapp.com/api/webhooks/618094684849438730/ZN0KzS3EZfRU3Tyt4jn09ehK82BqXK_dtrTLkF2wRqq0b9lj-c4IafZtSiBK5BqlEJ5L'
+local WEBHOOK_URL = GetConvar("ban-log-webhook", "")
 
 -- Adding custom groups called owner, inhereting from superadmin. (It's higher then superadmin). And moderator, higher then user but lower then admin
 TriggerEvent("es:addGroup", "owner", "superadmin", function(group) end)
@@ -1129,7 +1129,7 @@ TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char
 		end
 		-- show message
 		--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-		sendMessageToModsAndAdmins(userSource, GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 for " .. time .. " hour(s) (" .. reason .. ").")
+		sendMessageToModsAndAdmins(userSource, (GetPlayerName(targetPlayer) or "UNDEFINED") .. " has been ^1temp banned^0 for " .. (time or "UNDEFINED") .. " hour(s) (" .. (reason or "UNDEFINED") .. ").")
 		-- get char name:
 		local player = exports["usa-characters"]:GetCharacter(targetPlayer)
 		local char_name = player.getFullName()
@@ -1502,8 +1502,13 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 	local pantherItem = { name = "Panther", type = "misc", quantity = 1, weight = 20 }
 	local pumpShotgun = { name = "Pump Shotgun", type = "weapon", hash = `WEAPON_PUMPSHOTGUN`, quantity = 1, weight = 10 }
 	local ammo_12guage = { name = "12 Gauge Shells", type = "ammo", price = 50, weight = 0.5, quantity = 10 }
-	
-	local toGiveItem = thermite
+	local tearGas = { name = "Tear Gas", type = "weapon", hash = `WEAPON_SMOKEGRENADE`, quantity = 1, weight = 10 }
+	local razorBlade = { name = "Razor Blade", type = "misc", quantity = 1, weight = 5 }
+	local speakerItem = { name = "Speaker", price = 10000, legality = "legal", quantity = 1, type = "misc", weight = 20, objectModel = "sm_prop_smug_speaker" }
+	local joint = { name = "Joint", type = "drug", weight = 2.0, quantity = 1, objectModel = "prop_sh_joint_01" }
+	local lighter = { name = "Bic Lighter", type = "misc", weight = 2.0, quantity = 1 }
+
+	local toGiveItem = joint
 	toGiveItem.quantity = (toGiveItem.quantity or 1)
 
 	toGiveItem.uuid = exports.globals:generateID()

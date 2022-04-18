@@ -1,5 +1,5 @@
 local minipunchDiscordID = "<@178016707292561409>"
-local WEBHOOK_URL = GetConvar("ban-log-webhook")
+local WEBHOOK_URL = GetConvar("ban-log-webhook", "")
 
 local enabled = true
 

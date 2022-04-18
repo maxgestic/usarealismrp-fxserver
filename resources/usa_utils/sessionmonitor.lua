@@ -5,7 +5,7 @@ local DROPPED_AMOUNT_SM = 5
 
 local lastRecordedAmount = 0
 
-local WEBHOOK_URL = GetConvar("server-monitor-webhook")
+local WEBHOOK_URL = GetConvar("server-monitor-webhook", "")
 
 local SECONDS_BEFORE_ACCEPTING_CONNECTIONS = 30
 local SERVER_START_TIME = os.time()

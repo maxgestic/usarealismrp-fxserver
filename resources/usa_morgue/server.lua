@@ -38,7 +38,7 @@ TriggerEvent('es:addJobCommand', 'morgue', { "ems", "corrections", "sheriff", "d
 		}
 		target.giveItem(toeTag, 1)
 		local admitted_name = target.getFullName()
-		local url = GetConvar("morgue-log-webhook")
+		local url = GetConvar("morgue-log-webhook", "")
 		PerformHttpRequest(url, function(err, text, headers)
 			if text then
 				print(text)

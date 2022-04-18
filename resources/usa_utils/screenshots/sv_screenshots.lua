@@ -1,4 +1,4 @@
-local WEBHOOK_URL = GetConvar("screenshots-channel-webhook")
+local WEBHOOK_URL = GetConvar("screenshots-channel-webhook", "")
 
 local record = {}
 local MAX_FREE_TIER_SCREENSHOTS = 2
