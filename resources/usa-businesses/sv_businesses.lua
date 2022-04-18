@@ -477,7 +477,7 @@ end
 
 function SendToDiscordLog(business)
   local desc = "\n**Property:** " .. business.name .. "\n**Purchase Price:** $" .. comma_value(business.fee.price) ..  "\n**Purchased By:** " .. business.owner.name.full .. "\n**End Date:** " .. business.fee.due.date
-  local url = GetConvar("property-log-webhook")
+  local url = GetConvar("property-log-webhook", "")
   PerformHttpRequest(url, function(err, text, headers)
     if text then
       print(text)

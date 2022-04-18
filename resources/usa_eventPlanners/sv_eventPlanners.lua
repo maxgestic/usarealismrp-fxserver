@@ -1,4 +1,4 @@
-local DISCORD_WEBHOOK_URL = GetConvar("event-team-webhook")
+local DISCORD_WEBHOOK_URL = GetConvar("event-team-webhook", "")
 
 local currentlySignedInPlayers = {}
 

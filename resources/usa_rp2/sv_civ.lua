@@ -486,7 +486,7 @@ function TradeVehicle(details)
 				"\n**Buyer:** " .. newOwnerName ..
 				"\n**Price:** $" .. details.price ..
 				"\n**Date:** ".. timestamp.month .. "/" .. timestamp.day .."/" .. timestamp.year
-				SendDiscordMessage(desc, GetConvar("dmv-log-webhook"), 524288)
+				SendDiscordMessage(desc, GetConvar("dmv-log-webhook", ""), 524288)
 			end)
 		end)
 	else

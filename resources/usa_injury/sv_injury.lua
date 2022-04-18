@@ -64,7 +64,7 @@ injuries = { -- ensure this is the same as cl_injury.lua
     [GetHashKey("WEAPON_COMPACTRIFLE")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0}, -- WEAPON_COMPACTRIFLE
 }
 
-local WEBHOOK_URL = GetConvar("injury-log-webhook")
+local WEBHOOK_URL = GetConvar("injury-log-webhook", "")
 
 TriggerEvent('es:addCommand', 'injuries' , function(source, args, char)
 	TriggerClientEvent("injuries:showMyInjuries", source)
@@ -336,10 +336,12 @@ AddEventHandler('injuries:requestData', function()
 end)
 
 TriggerEvent('es:addCommand', 'heal', function(source, args, char)
+	print("healing")
 	local group = exports["essentialmode"]:getPlayerFromId(source).getGroup()
 	if group ~= "user" or char.get("job") == "eventPlanner" then
 		local targetSource = tonumber(args[2])
 		if tonumber(args[2]) and GetPlayerName(args[2]) then
+			print("healing")
 			local target = exports["usa-characters"]:GetCharacter(targetSource)
 			target.set('injuries', {})
 			TriggerClientEvent('death:allowRevive', targetSource)

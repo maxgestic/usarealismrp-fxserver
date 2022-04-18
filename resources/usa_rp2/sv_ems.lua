@@ -305,7 +305,7 @@ TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", 
 	TriggerClientEvent("ems:admitMe", targetPlayerId, bed, reasonForAdmission)
 	TriggerClientEvent('usa:notify', source, 'Person has been hospitalized.')
 	--send to discord
-	local url = GetConvar("hospital-log-webhook")
+	local url = GetConvar("hospital-log-webhook", "")
 	PerformHttpRequest(url, function(err, text, headers)
 		if text then
 			print(text)

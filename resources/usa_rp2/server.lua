@@ -269,21 +269,21 @@ end)
 local JOBS_TO_LOG = {
 	sheriff = {
 		DISPLAY_NAME = "SASP",
-		WEBHOOK_URL = GetConvar("sasp-timesheet-webhook")
+		WEBHOOK_URL = GetConvar("sasp-timesheet-webhook", "")
 		
 	},
 	corrections = {
 		DISPLAY_NAME = "BCSO/Corrections",
-		WEBHOOK_URL = GetConvar("bcso-timesheet-webhook")
+		WEBHOOK_URL = GetConvar("bcso-timesheet-webhook", "")
 		
 	},
 	ems = {
 		DISPLAY_NAME = "EMS",
-		WEBHOOK_URL = GetConvar("ems-timesheet-webhook")
+		WEBHOOK_URL = GetConvar("ems-timesheet-webhook", "")
 	},
 	doctor = {
 		DISPLAY_NAME = "Pillbox Medical",
-		WEBHOOK_URL = GetConvar("ems-timesheet-webhook")
+		WEBHOOK_URL = GetConvar("ems-timesheet-webhook", "")
 	},
 	realtor = {
 		DISPLAY_NAME = "REA",
@@ -291,15 +291,15 @@ local JOBS_TO_LOG = {
 	},
 	judge = {
 		DISPLAY_NAME = "Judge",
-		WEBHOOK_URL = GetConvar("doj-timesheet-webhook")
+		WEBHOOK_URL = GetConvar("doj-timesheet-webhook", "")
 	},
 	lawyer = {
 		DISPLAY_NAME = "Attorney",
-		WEBHOOK_URL = GetConvar("doj-timesheet-webhook")
+		WEBHOOK_URL = GetConvar("doj-timesheet-webhook", "")
 	},
 	da = {
 		DISPLAY_NAME = "District Attorney",
-		WEBHOOK_URL = GetConvar("doj-timesheet-webhook")
+		WEBHOOK_URL = GetConvar("doj-timesheet-webhook", "")
 	}
 }
 

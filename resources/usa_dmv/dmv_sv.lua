@@ -135,7 +135,7 @@ AddEventHandler("dmv:orderCustomPlate", function(oldPlate, newPlate)
 						TriggerEvent("garage:notifyOfPlateChange", src, oldPlate, newPlate)
 
 						-- send to discord #dmv-log --
-						local url = GetConvar("dmv-log-webhook")
+						local url = GetConvar("dmv-log-webhook", "")
 						local owner_name = c.getFullName()
 						local car_make = oldVehDoc.make
 						local car_model = oldVehDoc.model
