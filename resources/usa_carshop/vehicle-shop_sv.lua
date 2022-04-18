@@ -481,6 +481,8 @@ local vehicleShopItems = {
             {make = "Land Rover", model = "Range Rover Vogue Mansory (2020)", price = 240000, hash = "mansrr", storage_capacity = 280.0},
             {make = "Lincoln", model = "Continental (Custom Wheels) (2020)", price = 90000, hash = "cont", storage_capacity = 220.0},
             {make = "Ford", model = "F-450 Platinum (2021)", price = 170000, hash = "f450plat", storage_capacity = 400.0},
+			{make = "Ford", model = "Bronco Wildtrak (2021)", price = 140000, hash = "wildtrak", storage_capacity = 300.0},
+        	{make = "Chevrolet", model = "Hoonigan K5 Blazer (1979)", price = 150000, hash = "k5", storage_capacity = 220.0},
 		}
 	}
 }
