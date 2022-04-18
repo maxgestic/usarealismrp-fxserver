@@ -92,7 +92,8 @@ AddEventHandler('encore_trucking:putKeysInTruck', function(plate)
 		model = "Truck",
 		plate = plate
 	}
-	TriggerEvent("vehicle:storeItem", source, plate, keys, 1, 0, function(success, inv) end)
+	keys.coords = GetEntityCoords(GetPlayerPed(source))
+    TriggerEvent("interaction:addDroppedItem", keys)
 end)
 
 RegisterServerEvent('encore_trucking:returnTruck')

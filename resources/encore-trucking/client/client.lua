@@ -218,7 +218,7 @@ function assignTask()
 
 	lastDropCoordinates = currentDestination
 
-	EncoreHelper.ShowNotification('Head to the ~y~pickup~s~ on your GPS. The keys are in the truck!')
+	EncoreHelper.ShowNotification('Head to the ~y~pickup~s~ on your GPS. Here are the keys!')
 
 	jobStatus = CONST_PICKINGUP
 
