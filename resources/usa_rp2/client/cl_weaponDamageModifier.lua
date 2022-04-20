@@ -62,8 +62,8 @@ Citizen.CreateThread(function()
       local currentGlobalModifier = GetPlayerWeaponDamageModifier(PlayerId())
       currentGlobalModifier = tonumber(string.format("%.3f", currentGlobalModifier))
       if currentGlobalModifier ~= whatItShouldBeModifier then
+        SetPlayerWeaponDamageModifier(PlayerId(), whatItShouldBeModifier)
         if GetSelectedPedWeapon(PlayerPedId()) ~= `WEAPON_UNARMED` then
-          SetPlayerWeaponDamageModifier(PlayerId(), whatItShouldBeModifier)
           TriggerServerEvent("usa:notifyStaff", "ANTICHEAT: Player with ID #" .. GetPlayerServerId(PlayerId()) .. " has modified their weapon damage! It was reset to what it should be.")
         end
       end
