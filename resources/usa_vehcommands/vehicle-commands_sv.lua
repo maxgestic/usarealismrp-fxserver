@@ -179,6 +179,16 @@ local VEHICLE_RANKS = {
 			allowedLiveries = {1, 2, 3},
 			hash = GetHashKey("valor18tahoe")
 		},
+		["valor21durango"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor20fpiu")
+		},
+		["valor21tahoe"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor18tahoe")
+		},
 		["valor15f150"] = {
 			rank = 1,
 			allowedLiveries = {1, 2, 3},
