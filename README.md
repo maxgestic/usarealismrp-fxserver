@@ -122,6 +122,17 @@ if char.get("job") == "sheriff" then
 end
 ```
 
+Check out the `exposedDB.*` functions in the `resources/essentialmode/db.lua` file for a bunch of functions you can call from other scripts to create/update/delete/edit data.
+
+To access the DB API from a server script with the above mentioned functions:
+
+```
+TriggerEvent("es:exposeDBFunctions", function(db)
+	-- access exposedDB.* functions with the db object
+	-- i.e. db.createDocument(...), db.getDocumentById(...)
+end)
+```
+
 **Job Types**
 1. "civ"
 2. "sheriff" (AKA SASP)
