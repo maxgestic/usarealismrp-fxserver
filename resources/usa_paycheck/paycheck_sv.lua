@@ -46,10 +46,12 @@ function DepositPayCheck(char)
         elseif cop_rank == 9 then
             paycheckAmount = 1650 -- Captain
         elseif cop_rank == 10 then
-            paycheckAmount = 1750 -- Deputy Commissioner
+            paycheckAmount = 1750 -- Assistant Commissioner
         elseif cop_rank == 11 then
-            paycheckAmount = 1850 -- Commissioner
+            paycheckAmount = 1750 -- Deputy Commissioner
         elseif cop_rank == 12 then
+            paycheckAmount = 1850 -- Commissioner
+        elseif cop_rank == 13 then
             paycheckAmount = 1950 -- Minipunch
         end
     elseif job == "ems" then

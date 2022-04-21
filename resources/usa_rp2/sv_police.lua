@@ -9,9 +9,10 @@ local POLICE_RANKS = {
 		[7] = "Staff Sergeant",
 		[8] = "Lieutenant",
 		[9] = "Captain",
-		[10] = "Deputy Commissioner",
-		[11] = "Commissioner",
-		[12] = "Director of Emergency Services"
+		[10] = "Assistant Commissioner",
+		[11] = "Deputy Commissioner",
+		[12] = "Commissioner",
+		[13] = "Director of Emergency Services"
 	},
 	["BCSO"] = {
 		[1] = "Correctional Deputy",
