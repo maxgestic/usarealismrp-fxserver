@@ -62,12 +62,12 @@ end
 function setupServerResource(resource)
 	resourceTokens[resource] = exports[GetCurrentResourceName()]:generateToken()
 	if Config.VerboseServer then
-		print("Generated token for resource " .. tostring(resource) .. ": " .. tostring(resourceTokens[resource]))
+		--print("Generated token for resource " .. tostring(resource) .. ": " .. tostring(resourceTokens[resource]))
 	end
 	AddEventHandler('salty_tokenizer:playerLoaded', function(player)
 		local _source = player
 		if Config.VerboseServer then
-			print("Sending token for " .. tostring(resource) .. " (Event: " .. tostring(getObfuscatedEvent(_source, resource)) .. " Token: " .. tostring(resourceTokens[resource]) .. ") to Player ID " .. tostring(_source) .. ".")
+			--print("Sending token for " .. tostring(resource) .. " (Event: " .. tostring(getObfuscatedEvent(_source, resource)) .. " Token: " .. tostring(resourceTokens[resource]) .. ") to Player ID " .. tostring(_source) .. ".")
 		end
 		TriggerClientEvent(getObfuscatedEvent(_source, resource), _source, resourceTokens[resource])
 	end)
@@ -81,7 +81,7 @@ function secureServerEvent(resource, player, token)
 		return true
 	else
 		if Config.VerboseServer then
-			print("Validating token for " .. tostring(resource) .. " for Player ID " .. tostring(_source) .. ". Provided: " .. tostring(token) .. " Stored: " .. tostring(resourceTokens[resource]))
+			--print("Validating token for " .. tostring(resource) .. " for Player ID " .. tostring(_source) .. ". Provided: " .. tostring(token) .. " Stored: " .. tostring(resourceTokens[resource]))
 		end
 		if token ~= resourceTokens[resource] then
 			if Config.VerboseServer then
