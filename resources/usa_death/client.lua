@@ -12,6 +12,9 @@ local RESPAWN_WAIT_TIME = 600 * 1000
 local diedTime = nil
 
 local isCarried = false
+
+local lastKillerID = nil
+
 AddEventHandler('death:allowRespawn', function()
 	allowRespawn = true
 end)
@@ -196,6 +199,8 @@ end)
 
 RegisterNetEvent('death:createLog')
 AddEventHandler('death:createLog', function(ped)
+	lastKillerID = nil -- reset
+
 	-- send death log
 	local deathLog = {
 		deadPlayerId = GetPlayerServerId(PlayerId()),
@@ -214,6 +219,7 @@ AddEventHandler('death:createLog', function(ped)
 			if GetPlayerPed(id) == deathLog.killer then -- save killer details
 				deathLog.killerId = GetPlayerServerId(id)
 				deathLog.killerName = GetPlayerName(id)
+				lastKillerID = deathLog.killerId
 			end
 		end
 	end
@@ -337,3 +343,10 @@ function ReviveNearestDeadPed()
 		end
 	end
 end
+
+RegisterClientCallback {
+	eventName = "death:getKillerID",
+	eventCallback = function()
+		return lastKillerID
+	end
+}
