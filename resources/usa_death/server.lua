@@ -173,3 +173,18 @@ AddEventHandler("death:newDeathLog", function(log)
 end)
 
 -- END DEATH LOG
+
+TriggerEvent('es:addCommand', 'whodownedme', function(src, args, char)
+	local lastKillerID = TriggerClientCallback {
+		source = src,
+		eventName = "death:getKillerID",
+		args = {}
+	}
+	if lastKillerID ~= nil then
+		TriggerClientEvent("usa:notify", src, "Last killer: " .. GetPlayerIdentifiers(lastKillerID)[1], "Last killer: " .. GetPlayerIdentifiers(lastKillerID)[1])
+	else
+		TriggerClientEvent("usa:notify", src, "Unknown!")
+	end
+end, {
+	help = "Display the Steam ID of the person who downed you to include in player report"
+})

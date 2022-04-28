@@ -146,3 +146,11 @@ end)
 10. "gopostal"
 11. "burgerShotEmployee"
 11. ... could be more ...
+
+**FiveM Asset Protection/Encryption**
+
+Some resources may not start for you; this is due to FiveM/Tebex's "asset protection" and encryption feature.
+
+You will see a message saying you "lack the entitlement" necessary to start it. This means you need to go to the author's tebex store and purchase it for it to be able to start on your own server.
+
+This also means a relatively small number of scripts are encrypted in this repository and the author would need to make them open source in order to update them.
