@@ -152,7 +152,7 @@ RegisterServerEvent("mechanic:giveRepairKit")
 AddEventHandler("mechanic:giveRepairKit", function(plate)
 	plate = exports.globals:trim(plate)
 	local repairKit = { name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 20, objectModel = "imp_prop_tool_box_01a"}
-	TriggerEvent("vehicle:storeItem", source, plate, repairKit, 1, 0, function(success, inv) end)
+	TriggerEvent("vehicle:storeItemInFirstFreeSlot", source, plate, repairKit, false, function(success, inv) end)
 end)
 
 RegisterServerEvent("mechanic:spawnTruck")

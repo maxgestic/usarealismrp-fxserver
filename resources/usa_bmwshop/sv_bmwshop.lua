@@ -165,7 +165,7 @@ AddEventHandler("bmwshop:buy", function(index)
                     model = VEHICLES[index].MODEL,
                     plate = plate
                 }
-                TriggerEvent("vehicle:storeItem", src, vehicle.plate, key, 1, 0, function(success, inv) end)
+                TriggerEvent("vehicle:storeItemInFirstFreeSlot", src, vehicle.plate, key, false, function(success, inv) end)
                 VEHICLES[index].plate = plate
                 TriggerClientEvent("bmwshop:spawn", src, VEHICLES[index])
                 local chatSentence1 = "Purchased a " .. VEHICLES[index].MODEL .. " for $" .. exports.globals:comma_value(VEHICLES[index].PRICE)

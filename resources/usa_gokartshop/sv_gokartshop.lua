@@ -87,7 +87,7 @@ AddEventHandler("gokarts:buy", function(index)
                     model = KARTS[index].MODEL,
                     plate = plate
                 }
-                TriggerEvent("vehicle:storeItem", src, vehicle.plate, key, 1, 0, function(success, inv) end)
+                TriggerEvent("vehicle:storeItemInFirstFreeSlot", src, vehicle.plate, key, false, function(success, inv) end)
                 KARTS[index].plate = plate
                 TriggerClientEvent("gokarts:spawn", src, KARTS[index])
                 local chatSentence1 = "Purchased a " .. KARTS[index].MODEL .. " for $" .. exports.globals:comma_value(KARTS[index].PRICE)
