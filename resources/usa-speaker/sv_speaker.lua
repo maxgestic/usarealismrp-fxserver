@@ -42,10 +42,12 @@ end)
 
 RegisterServerEvent("speaker:pickUp")
 AddEventHandler("speaker:pickUp", function(data)
-    speakers[data.id] = nil
-    TriggerClientEvent("speaker:pickUp", -1, data)
-    local char = exports["usa-characters"]:GetCharacter(source)
-    char.giveItem(speakerItem)
+    if speakers[data.id] then
+        speakers[data.id] = nil
+        TriggerClientEvent("speaker:pickUp", -1, data)
+        local char = exports["usa-characters"]:GetCharacter(source)
+        char.giveItem(speakerItem)
+    end
 end)
 
 RegisterServerEvent("speaker:updateVolume")
