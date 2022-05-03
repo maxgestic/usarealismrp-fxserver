@@ -39,7 +39,7 @@ end)
 RegisterNetEvent("speaker:pickUp")
 AddEventHandler("speaker:pickUp", function(data)
     xSound:Destroy(data.id)
-    if speakers[data.id].handle then
+    if speakers[data.id] and speakers[data.id].handle then
         DeleteObject(speakers[data.id].handle)
     end
     speakers[data.id] = nil
