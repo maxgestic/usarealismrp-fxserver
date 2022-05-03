@@ -806,7 +806,7 @@ function ShowHelp(isRank3)
 	end
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can order parts from the parts store and install them by 'using' them in your inventory near a vehicle (must be lvl 2 mechanic).")
 	Wait(3000)
-	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can get a repair kit from the hardware store and use that to repair vehicles.")
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can use the repair kit that is in your truck to repair vehicles.")
 end
 
 function isNearSignOnSpot(range)
