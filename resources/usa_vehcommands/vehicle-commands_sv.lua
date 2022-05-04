@@ -149,6 +149,16 @@ local VEHICLE_RANKS = {
 			rank = 5,
 			allowedLiveries = {1},
 			hash = GetHashKey("14suvrb")
+		},
+		["policet"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = -500937862
+		},
+		["pbus"] = {
+			rank = 1,
+			allowedLiveries = {1},
+			hash = GetHashKey("14suvrb")
 		}
 	},
 	["corrections"] = {
@@ -299,6 +309,16 @@ local VEHICLE_RANKS = {
 		},
 		["14suvrb"] = {
 			rank = 5,
+			allowedLiveries = {1},
+			hash = GetHashKey("14suvrb")
+		},
+		["policet"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = -500937862
+		},
+		["pbus"] = {
+			rank = 1,
 			allowedLiveries = {1},
 			hash = GetHashKey("14suvrb")
 		}
