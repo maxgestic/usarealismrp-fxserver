@@ -1,10 +1,10 @@
-local LEO_VEHICLES = {"code3cvpi","valor18charg", "valorfpis", "valor16fpiu", "valor20fpiu", "valor18tahoe", "valor21durango", "valor21tahoe", "valor15f150", "valorf250", "bwtrail", "pdcvpi", "pdtau", "pdchgr", "pdcharger", "pdexp", "pdfpiu", "sotruck", "hptahoe", "sheriff2", "policeb", "1200RT", "pbike", "chgr","fbi", "fbi2", "police4", "mustang19", "npolstang", "npolchal", "npolchar", "npolvette", "riot", "bearcatrb", "policet", "pbus", "14suvrb"}
+local LEO_VEHICLES = {"pcvpi","p14charger", "p14tahoe", "p16explorer", "p18charger", "p18f250", "p18taurus", "p20explorer", "p20tahoe", "p21durango", "p21tahoe", "p22sierra", "sotruck", "1200RT", "npolchar", "npolstang", "npolchal", "npolvette", "fbi2", "bearcatrb", "14suvrb", "pbus", "policet"}
 
 local JOB_VEHICLES = {
 	["sheriff"] = LEO_VEHICLES,
 	["corrections"] = LEO_VEHICLES,
-	["ems"] = {"ambulance", "paraexp", "firetruk", "lguard2", "blazer"},
-	["doctor"] = {"paraexp"}
+	["ems"] = {"ambulance", "p20explorer", "firetruk", "lguard2", "blazer", "sotruck"},
+	["doctor"] = {"p20explorer"}
 }
 
 RegisterServerEvent("pdmenu:checkWhitelistForGarage")
