@@ -116,6 +116,8 @@ AddEventHandler("properties:storeVehicle", function()
     -- delete veh --
     SetEntityAsMissionEntity(veh, true, true)
     Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
+    -- save fuel
+    TriggerServerEvent("fuel:save", plate)
 end)
 
 -- retrieving vehicle --
