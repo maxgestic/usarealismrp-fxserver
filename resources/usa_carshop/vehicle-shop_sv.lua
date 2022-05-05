@@ -431,7 +431,7 @@ local vehicleShopItems = {
 			{make = "Mercedes-Benz", model = "E55 AMG", price = 100000, hash = "benze55", storage_capacity = 175.0},
 			{make = "Tesla", model = "Model S", price = 125000, hash = "teslamodels", storage_capacity = 190.0},
 			{make = "Toyota", model = "4 Runner", price = 70000, hash = "4runner", storage_capacity = 280.0},
-			--{make = "Jeep", model = "Gladiator", price = 70000, hash = "jeepg", storage_capacity = 280.0}, -- bulletproof
+			{make = "Jeep", model = "Gladiator", price = 70000, hash = "jeepg", storage_capacity = 280.0},
 			{make = "Chevrolet", model = "Silverado (Single Cab)", price = 70000, hash = "silv20", storage_capacity = 280.0},
 			{make = "GMC", model = "Sierra (2006)", price = 80000, hash = "polar06seirra", storage_capacity = 280.0},
 			{make = "Chevrolet", model = "Tahoe (2008)", price = 80000, hash = "tahoe08", storage_capacity = 250.0},
