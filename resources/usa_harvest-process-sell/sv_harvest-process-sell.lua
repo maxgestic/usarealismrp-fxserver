@@ -26,7 +26,7 @@ local REWARDS = {
       legality = "legal",
       objectModel = "prop_cs_box_step"
     },
-    reward_amount = math.random(70, 200)
+    reward_amount = math.random(50, 250)
   }
 }
 
