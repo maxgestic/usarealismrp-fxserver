@@ -1559,6 +1559,45 @@ DP.Emotes = {
        PtfxInfo = Config.Languages[Config.MenuLanguage]['pee'],
        PtfxWait = 3000,
    }},
+    -- Custom Added Emotes = Thanks to Chango
+    --[emotename] = {dictionary, animation, displayname, targetemotename, additionalanimationoptions}
+   ["peeposhy"] = {"nikez@peepo", "shy", "Peepo Shy", AnimationOptions =
+   {
+        PtfxPlacement = {8.0, 8.0, -1, 49, 0, false, false, false},
+        EmoteMoving = true,
+        EmoteLoop = true
+   }},
+
+    ["orangejustice"] = {"div@justice@new", "orangejustice", "Cringe Justice", AnimationOptions =
+    {
+        PtfxPlacement = {8.0, 8.0, -1, 1, 0, false, false, false},
+        EmoteLoop = true
+    }},
+
+    ["loser"] = {"nikez@taunts@loser", "loser", "L bozo", AnimationOptions =
+    {
+        PtfxPlacement = {8.0, 8.0, -1, 54, 0, false, false, false},
+        EmoteStuck = true
+    }},
+
+    ["sheesh"] = {"clear@custom_anim", "sheesh_clip", "Sheeeeeesh", AnimationOptions =
+    {
+        PtfxPlacement = {8.0, 8.0, -1, 48, 0, false, false, false},
+        EmoteDuration = 2500,
+        EmoteMoving = true
+    }},
+
+    ["animerun"] = {"nikez@anime", "run", "Rush area 51", AnimationOptions =
+    {
+        PtfxPlacement = {8.0, 8.0, -1, 49, 0, false, false, false},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+
+    ["pumping"] = {"pumping@custom_anim@pumping", "pumping", "Pumping air", AnimationOptions =
+    {
+        PtfxPlacement = {2.0, 2.0, -1, 1, 0, false, false, false}
+    }},
 
 -----------------------------------------------------------------------------------------------------------
 ------ These are Scenarios, some of these dont work on women and some other issues, but still good to have.
