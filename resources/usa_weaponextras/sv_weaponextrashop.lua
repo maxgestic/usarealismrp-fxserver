@@ -61,6 +61,9 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
             },
             ["Bullpup Shotgun"] = {
                 {name = "Grip", value = "COMPONENT_AT_AR_AFGRIP", price = 250, weapon_hash = -1654528753}
+            },
+            ["Sniper Rifle"] = {
+                {name = "Suppressor", value = "COMPONENT_AT_AR_SUPP_02", price = 250, weapon_hash = 100416529}
             }
         },
         -- missing from below: Heavy shotgun
