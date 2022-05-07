@@ -22,6 +22,22 @@ TriggerEvent('es:addCommand', 'vest', function(source, args, char, location)
 	TriggerClientEvent("headprops:toggleComponent", source, 9)
 end, { help = "Take your vest on / off." })
 
+-- DatBoiWeep's Changes --
+-- Toggles shirt --
+TriggerEvent('es:addCommand', 'shirt', function(source, args, char, location)
+	TriggerClientEvent("headprops:toggleComponent", source, 11)
+end, { help = "Take your shirt(s) on / off." })
+
+-- Toggles pants --
+TriggerEvent('es:addCommand', 'pants', function(source, args, char, location)
+	TriggerClientEvent("headprops:toggleComponent", source, 4)
+end, { help = "Take your pants on / off." })
+
+-- Toggles backpacks --
+TriggerEvent('es:addCommand', 'backpack', function(source, args, char, location)
+	TriggerClientEvent("headprops:toggleComponent", source, 5)
+end, { help = "Take your backpack or bag on / off." })
+
 RegisterServerEvent("headprops:loadPropOrComponent")
 AddEventHandler("headprops:loadPropOrComponent", function(isProp, id, doEquip)
 	local char = exports["usa-characters"]:GetCharacter(source)
