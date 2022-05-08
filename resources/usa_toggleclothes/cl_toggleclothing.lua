@@ -137,7 +137,7 @@ AddEventHandler("headprops:toggleComponent", function(component_index)
 			end
 		end
 		-- End of pants
-	elseif component_index == 5 then -- /backpack
+	elseif component_index == 5 then -- /bag
 		TriggerEvent("usa:playAnimation", "clothingshirt", "try_shirt_neutral_d", -8, 1, -1, 53, 0, 0, 0, 0,  1.5)
 		if GetPedDrawableVariation(ped, component_index) ~= 0 then -- component is on, take off
 			local value = GetPedDrawableVariation(ped, component_index)
