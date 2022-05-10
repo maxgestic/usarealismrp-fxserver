@@ -38,3 +38,9 @@ server_script {
 server_exports {
 	"RemovePoliceWeapons"
 }
+
+files {
+    'peds.meta'
+}
+
+data_file 'PED_METADATA_FILE' 'peds.meta'
