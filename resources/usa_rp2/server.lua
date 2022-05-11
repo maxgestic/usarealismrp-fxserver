@@ -72,7 +72,7 @@ AddEventHandler("hospital:buyFirstAidKit", function()
 		type = "misc",
 		quantity = 1,
 		legality = "legal",
-		weight = 15,
+		weight = 5,
 		objectModel = "v_ret_ta_firstaid",
 		blockedInPrison = true
 	}

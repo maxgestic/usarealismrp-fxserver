@@ -433,7 +433,7 @@ local burglarySearchItems = {
 	{name = "Pepsi", price = 4, type = "drink", substance = 9.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ng_proc_sodacan_01b"},
 	{name = "Everclear Vodka (90%)", price = 35, type = "alcohol", substance = 5.0, quantity = 1, legality = "legal", weight = 10.0, strength = 0.10, objectModel = "prop_vodka_bottle"},
 	{name = 'Lockpick', type = 'misc', price = 400, legality = 'illegal', quantity = 1, weight = 5.0},
-	{name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 10.0, objectModel = "v_ret_ta_firstaid"},
+	{name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 5.0, objectModel = "v_ret_ta_firstaid"},
 	{name = "Packaged Weed", quantity = 1, weight = 5.0, type = "drug", legality = "illegal", objectModel = "bkr_prop_weed_bag_01a"},
 	{name = 'Packaged Meth', type = 'drug', legality = 'illegal', quantity = 1, weight = 7.0, objectModel = 'bkr_prop_meth_smallbag_01a'},
 	{name = 'Pistol', type = 'weapon', hash = 453432689, price = 1000, legality = 'illegal', quantity = 1, weight = 15, objectModel = "w_pi_pistol", notStackable = true},

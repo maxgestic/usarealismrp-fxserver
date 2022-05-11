@@ -3,7 +3,7 @@
 --# Made for the 24/7 stores as general stores for various items
 
 local STOLEN_GOODS = {
-  {name = "First Aid Kit", type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
+  {name = "First Aid Kit", type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
   {name = "Water", price = 25, type = "drink", substance = 40.0, quantity = 1, legality = "legal", weight = 10, objectModel = "ba_prop_club_water_bottle"},
   {name = "Arizona Iced Tea", price = 25, type = "drink", substance = 50.0, quantity = 1, legality = "legal", weight = 10, objectModel = "ba_prop_club_water_bottle"},
   {name = "Peanut Butter Cups", price = 35, type = "food", substance = 10.0, quantity = 1, legality = "legal", weight = 5, objectModel = "ng_proc_food_chips01a"},
@@ -62,7 +62,7 @@ local GENERAL_STORE_ITEMS = {
     { name = "Vape", price = 400, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "ba_prop_battle_vape_01", blockedInPrison = true}
   },
   ["Misc"] = {
-    { name = "First Aid Kit", price = 80, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
+    { name = "First Aid Kit", price = 80, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
     { name = "The Daily Weazel", price = 2, type = "misc", quantity = 1, legality = "legal", weight = 9, objectModel = "prop_cs_newspaper"},
     { name = "Condoms", price = 5, type = "misc", quantity = 3, legality = "legal", weight = 8, objectModel = "ng_proc_candy01a", blockedInPrison = true},
     { name = "KY Intense Gel", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 6, objectModel = "v_res_d_lube", blockedInPrison = true},
