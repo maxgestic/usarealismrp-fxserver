@@ -52,7 +52,7 @@ USARRP
 			return auth
 		end)
 		```
-7) Create the file `server_internal.cfg` in the project root directory
+7) Create a new file named `server_internal.cfg` in the `server-data` folder
     * write `sv_hostname <server name>`, replacing `<server name>` with a name of your choice
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
 8) Create path for log file (optional)
