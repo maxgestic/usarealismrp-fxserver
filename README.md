@@ -14,6 +14,24 @@ To get started with your own testing environment:
 		- ``getIP``
 		- ``getPort``
 		- ``getAuth``
+	* Example:
+		```
+		ip = '127.0.0.1'
+		port = '5984'
+		auth = "c29tZXVzZXJuYW1lOnNvbWVwYXNzd29yZA=="
+
+		exports("getIP", function()
+				return ip
+		end)
+
+		exports("getPort", function()
+				return port
+		end)
+
+		exports("getAuth", function()
+				return auth
+		end)
+		```
 3) Create the file `server_internal.cfg` in the project root directory
     * write `sv_hostname <server name>`, replacing `<server name>` with a name of your choice
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
