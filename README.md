@@ -4,7 +4,7 @@ To get started with your own testing environment:
 1) Download and install [couchDB](http://couchdb.apache.org/)
     * Once installed, open a browser and navigate to `http://127.0.0.1:5984/_utils/` to open your couchDB instance interface
     * Go to "Your Account" and create an admin account
-    * Base64 encode your username and password in the format `username:password`
+    * Base64 encode your username and password in the format `username:password` (https://www.base64encode.org/)
         - Save it for the next step
 2) Create the file `resources/essentialmode/sv_es-DB-config.lua`  
     * Set the variable `ip` to your couchDB IP (default = 127.0.0.1)
