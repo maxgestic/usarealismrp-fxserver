@@ -310,6 +310,18 @@ function CreateUniformMenu(menu)
 		TriggerEvent("ptt:isEmergency", false)
 	end
 	menu:AddItem(item)
+
+	-- Custom ped
+	local item = NativeUI.CreateItem("Change to Ped", "Change to a fancy ped")
+	item.Activated = function(parentmenu, selected)
+		local modelhashed = GetHashKey("ig_old_lady_cop")
+		RequestModel(modelhashed)
+		while not HasModelLoaded(modelhashed) do
+			Citizen.Wait(100)
+		end
+		SetPlayerModel(PlayerId(), modelhashed)
+	end
+	menu:AddItem(item)
 end
 
 function CreateArmoryMenu(menu)
