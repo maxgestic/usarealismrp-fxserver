@@ -21,15 +21,15 @@ To get started with your own testing environment:
 		auth = "c29tZXVzZXJuYW1lOnNvbWVwYXNzd29yZA=="
 
 		exports("getIP", function()
-				return ip
+			return ip
 		end)
 
 		exports("getPort", function()
-				return port
+			return port
 		end)
 
 		exports("getAuth", function()
-				return auth
+			return auth
 		end)
 		```
 3) Create the file `server_internal.cfg` in the project root directory
