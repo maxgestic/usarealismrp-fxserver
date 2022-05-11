@@ -1,12 +1,32 @@
 ## USA Realism RP Codebase
 
 To get started with your own testing environment:
-1) Download and install [couchDB](http://couchdb.apache.org/)
+
+1) Create a new folder named: `USARRP`
+2) Create two folders within that new folder: `server` and `server-data`
+3) Download the server files for the recommended server version and unzip its contents into the `server` folder you just made:
+	- For Windows: https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/
+	- For Linux: https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/
+4) Git clone this repository (or your own fork) into the `server-data` folder
+
+You should now have folders with this structure:
+```
+USARRP 
+│
+└───server
+│   │   <contains FiveM server files>
+│
+│   
+└───server-data
+    │   <contains this repository>
+```
+
+5) Download and install [couchDB](http://couchdb.apache.org/)
     * Once installed, open a browser and navigate to `http://127.0.0.1:5984/_utils/` to open your couchDB instance interface
     * Go to "Your Account" and create an admin account
     * Base64 encode your username and password in the format `username:password` (https://www.base64encode.org/)
         - Save it for the next step
-2) Create the file `resources/essentialmode/sv_es-DB-config.lua`  
+6) Create the file `resources/essentialmode/sv_es-DB-config.lua`  
     * Set the variable `ip` to your couchDB IP (default = 127.0.0.1)
     * Set the variable `port` your couchDB port (default = 5984)
     * Set your base64 encoded credentials to the variable `auth` as a string
@@ -32,16 +52,16 @@ To get started with your own testing environment:
 			return auth
 		end)
 		```
-3) Create the file `server_internal.cfg` in the project root directory
+7) Create the file `server_internal.cfg` in the project root directory
     * write `sv_hostname <server name>`, replacing `<server name>` with a name of your choice
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
-4) Create path for log file (optional)
+8) Create path for log file (optional)
     * We use this to expose a chat log via an HTTP web server, so we provide a path to a file in its public directory
 	* For example: ``C:/wamp/www/log.txt``
-5) Create your database views (see below view definitions)
-6) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when developing.
-7) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
-8) Start the server.
+9) Create your database views (see below view definitions)
+10) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when developing.
+11) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
+12) Start the server.
 	* Windows:
 		- with resource scrambling: ``./start.bat`` from the ``server-data`` folder
 		- without resource scrambling: ``..\FXServer.exe +exec server.cfg +set onesync on`` from the ``server-data`` folder
