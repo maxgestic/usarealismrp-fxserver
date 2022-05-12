@@ -56,19 +56,19 @@ function DepositPayCheck(char)
         end
     elseif job == "ems" then
         local rank = char.get("emsRank")
-        paycheckAmount = 900
+        paycheckAmount = 1100
         if rank == 2 then
-            paycheckAmount = 1000
-        elseif rank == 3 then
-            paycheckAmount = 1100
-        elseif rank == 4 then
             paycheckAmount = 1200
-        elseif rank == 5 then
+        elseif rank == 3 then
             paycheckAmount = 1300
-        elseif rank == 6 then
+        elseif rank == 4 then
             paycheckAmount = 1400
-        elseif rank == 7 then
+        elseif rank == 5 then
             paycheckAmount = 1500
+        elseif rank == 6 then
+            paycheckAmount = 1600
+        elseif rank == 7 then
+            paycheckAmount = 1700
         end
     elseif job == "taxi" then
         paycheckAmount = 575
@@ -105,7 +105,7 @@ function DepositPayCheck(char)
     elseif job == "lawyer" then
         paycheckAmount = 1500
     elseif job == "doctor" then
-        paycheckAmount = 1000
+        paycheckAmount = 1750
     elseif job == "da" then
         paycheckAmount = 1700
     elseif job == 'BurgerShotEmployee' then
