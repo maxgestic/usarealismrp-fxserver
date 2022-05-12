@@ -5,7 +5,7 @@ local vehicleSearchItems = {
 	{name = "Arizona Iced Tea", price = 1, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 1.0, objectModel = "ba_prop_club_water_bottle"},
 	{name = "Pepsi", price = 4, type = "drink", substance = 9.0, quantity = 1, legality = "legal", weight = 1.0, objectModel = "ng_proc_sodacan_01b"},
 	{name = "Everclear Vodka (90%)", price = 35, type = "alcohol", substance = 5.0, quantity = 1, legality = "legal", weight = 4.0, strength = 0.10, objectModel = "prop_vodka_bottle"},
-    {name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 8.0, objectModel = "imp_prop_tool_box_01a"},
+    {name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 20.0, objectModel = "imp_prop_tool_box_01a"},
     {name = 'Lockpick', type = 'misc', price = 400, legality = 'legal', quantity = 1, weight = 5.0},
     {name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 5.0, objectModel = "v_ret_ta_firstaid"},
     {name = "Packaged Weed", quantity = 1, weight = 2.0, type = "drug", legality = "illegal", objectModel = "bkr_prop_weed_bag_01a"}
