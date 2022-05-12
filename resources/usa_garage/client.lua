@@ -58,13 +58,12 @@ locations = {
 	{x = 419.80194091797, y = -1629.1114501953, z = 29.282044067383, noBlip = true}, -- Davis, LS tow yard
 	{x = 4527.1513671875, y = -4529.048828125, z = 4.2344647407532}, -- cayo perico island
 	{x = 5171.826171875, y = -4635.3139648438, z = 2.5622141551971, noBlip = true},
-	{x=1121.6781, y=-774.7593, z=57.8709, noBlip = true}, -- mirror park repair shop
+	{x = 1110.33, y = -780.18, z = 58.34, noBlip = true}, -- mirror park repair shop
 	{x = -1080.6645507813, y = -1257.9010009766, z = 5.5575938224792, noBlip = true},
 	{x = -2187.1748046875, y = 1135.5759277344, z = -23.259094238281, noBlip = true}, -- LS Car Meet
 	{x =  1013.5130004883, y = -2358.1096191406, z = 30.509565353394, noBlip = true}, -- LS Fight Club 
 	{x = -424.23614501953, y = -38.142559051514, z = 46.215244293213, noBlip = true}, -- cocaktoos
 	{x = 550.98217773438, y = -206.7356262207, z = 54.104431152344, noBlip = true} -- auto exotic repair on elgin ave
-
 }
 
 local VEHICLE_DAMAGES = {}
