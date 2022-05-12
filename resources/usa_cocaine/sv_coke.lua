@@ -3,7 +3,7 @@ local uncutCocaine = {
     legality = "illegal",
     quantity = 1,
     type = "chemical",
-    weight = 10
+    weight = 4
 }
 
 local cocaineProduced = {
@@ -11,7 +11,7 @@ local cocaineProduced = {
 	type = "drug",
 	legality = "illegal",
 	quantity = 1,
-	weight = 6
+	weight = 8
 }
 
 RegisterServerEvent("cocaineJob:givePackaged")
