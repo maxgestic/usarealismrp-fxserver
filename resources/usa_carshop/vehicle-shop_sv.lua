@@ -360,6 +360,7 @@ local vehicleShopItems = {
 			{make = "Vapid", model = "Benson", price = 79573, hash = "benson", storage_capacity = 500.0},
 			{make = "Declasse", model = "Hotring Sabre", price = 120000, hash = "hotring", storage_capacity = 90.0},
 			{make = "Brute", model = "Tour Bus", price = 40000, hash = 1941029835, storage_capacity = 180.0},
+			{make = "Coach", model = "RV", price = 140000, hash = "coachrv", storage_capacity = 500.0},
 			{make = "Trailer", model = "Open", price = 30000, hash = "cotrailer", storage_capacity = 300.0},
         		{make = "Trailer", model = "Closed", price = 80000, hash = "ctrailer", storage_capacity = 400.0},
 			{make = "Trailer", model = "Car Hauler (Gooseneck)", price = 60000, hash = "godzhauler", storage_capacity = 400.0},
@@ -487,6 +488,7 @@ local vehicleShopItems = {
             		{make = "Ford", model = "F-450 (2020)", price = 155000, hash = "20f450", storage_capacity = 300.0},
 			{make = "Ford", model = "F-350 (2020)", price = 160000, hash = "f350d", storage_capacity = 300.0},
         		{make = "GMC", model = "Sierra 3500HD (2020)", price = 150000, hash = "GODz3500HDWELDER", storage_capacity = 300.0},
+			{make = "Lexus", model = "LFA (2010)", price = 500000, hash = "lfa", storage_capacity = 120.0},
 		}
 	}
 }
