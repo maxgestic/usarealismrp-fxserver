@@ -584,8 +584,7 @@ Pacific:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
 				GiveWeaponToPed(ped, guard.weapon, 255, false, false)
 				SetPedDropsWeaponsWhenDead(ped, false)
 				SetPedFleeAttributes(ped, 0, false)	
-				SetPedRelationshipGroupHash(ped, GetHashKey("bankSecurity"))	
-				TaskGuardCurrentPosition(ped, 5.0, 5.0, 1)
+				SetPedRelationshipGroupHash(ped, GetHashKey("bankSecurity"))
 			end
 		end
 		TriggerServerEvent("bank:getSafeData")
