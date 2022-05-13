@@ -7,7 +7,7 @@ local PROPERTIES = {} -- loaded and updated by database
 
 local BUSINESS_PAY_PERIOD_DAYS = 7
 local HOUSE_PAY_PERIOD_DAYS = 30
-local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 5
+local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 7
 
 local NEARBY_DISTANCE = 500
 
