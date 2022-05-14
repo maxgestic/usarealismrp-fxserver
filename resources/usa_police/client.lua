@@ -300,17 +300,6 @@ function CreateUniformMenu(menu)
 		ClearPedProp(ped, 2)
 	end
 	submenu.SubMenu:AddItem(item)
-	-- Clock Out --
-	local item = NativeUI.CreateItem("Clock Out", "Sign off duty")
-	item:SetRightBadge(BadgeStyle.Lock)
-	item.Activated = function(parentmenu, selected)
-		RemoveAllPedWeapons(ped)
-		TriggerServerEvent("policestation2:offduty")
-		TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
-		TriggerEvent("ptt:isEmergency", false)
-	end
-	menu:AddItem(item)
-
 	-- Custom ped
 	local item = NativeUI.CreateItem("Change to Ped", "Change to a fancy ped")
 	item.Activated = function(parentmenu, selected)
@@ -320,6 +309,16 @@ function CreateUniformMenu(menu)
 			Citizen.Wait(100)
 		end
 		SetPlayerModel(PlayerId(), modelhashed)
+	end
+	menu:AddItem(item)
+	-- Clock Out --
+	local item = NativeUI.CreateItem("Clock Out", "Sign off duty")
+	item:SetRightBadge(BadgeStyle.Lock)
+	item.Activated = function(parentmenu, selected)
+		RemoveAllPedWeapons(ped)
+		TriggerServerEvent("policestation2:offduty")
+		TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
+		TriggerEvent("ptt:isEmergency", false)
 	end
 	menu:AddItem(item)
 end
