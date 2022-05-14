@@ -20,7 +20,9 @@ local fuelStations = {
 			{-33.22, 768.99, 223.42}, -- Scott Johnson
 			{-1023.3225097656, 173.47639465332, 63.475910186768}, -- Josef
 			{4436.0966796875, -4494.8461914062, 3.6910808086395},
-			{-252.3193, 6319.0859, 39.6596} -- paleto clinic
+			{-252.3193, 6319.0859, 39.6596}, -- paleto clinic
+			{-705.84326171875, -1464.5919189453, 5.0427398681641}, -- Shank St & Greenwhich Prkwy Pump 1
+			{-764.34759521484, -1434.9971923828, 5.0576033592224}, -- Shank St & Greenwhich Prkwy Pump 2
 		}
 	},
 	['Watercraft'] = {
@@ -57,7 +59,12 @@ local fuelStations = {
 			{1208.34, -1402.18, 36.22}, -- Capital Blvd, El Rancho Blvd.
 			{819.09, -1029.48, 27.404}, -- Popular St, Olympic Fwy
 			{172.5049, -1558.8756, 29.2453}, --McDonald Street, Davies Pump 1
-			{178.2956, -1565.0645, 29.2806} --McDonald Street, Davies Pump 2
+			{178.2956, -1565.0645, 29.2806}, --McDonald Street, Davies Pump 2
+			{-66.431640625, -2532.1586914063, 6.1358127593994}, -- Chupacabra Street (LS Docks)
+			{1785.6441650391, 3330.4682617188, 41.384426116943}, -- Panorama 
+			{264.04702758789, 2606.9008789063, 45.130905151367}, -- Route 68 Corner Gas
+			{1207.8255615234, 2660.1887207031, 37.899787902832}, -- Route 68 LS Customs
+			{2539.2724609375, 2594.6376953125, 37.944869995117} -- Senora Way (Purple Dinosaur)
 		}
 	}
 }
@@ -119,7 +126,7 @@ Citizen.CreateThread(function()
 		for type, v in pairs(fuelStations) do
 			for i = 1, #fuelStations[type].locations do
 				local x, y, z = table.unpack(fuelStations[type].locations[i])
-				if Vdist(GetEntityCoords(playerPed), x, y, z) < 7.0 then
+				if Vdist(GetEntityCoords(playerPed), x, y, z) < 5.5 then
 					nearbyFuelStations[type][i] = true
 				else
 					nearbyFuelStations[type][i] = nil
@@ -361,7 +368,7 @@ function IsNearFuelStation(stationType)
 		if k == stationType then
 			for i = 1, #fuelStations[k].locations do
 				local x, y, z = table.unpack(fuelStations[k].locations[i])
-				if Vdist(GetEntityCoords(playerPed), x, y, z) < 5.0 then
+				if Vdist(GetEntityCoords(playerPed), x, y, z) < 5.5 then
 					return true
 				end
 			end
