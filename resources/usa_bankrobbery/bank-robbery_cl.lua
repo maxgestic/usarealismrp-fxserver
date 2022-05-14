@@ -995,7 +995,11 @@ Citizen.CreateThread(function()
 								eventName = "bank:hasDoorBeenThermited",
 								args = {}
 							}
-							if hasDoorBeenThermited then
+							local enoughCopsOn = TriggerServerCallback {
+								eventName = "bank:areEnoughCopsOn",
+								args = {}
+							}
+							if hasDoorBeenThermited and enoughCopsOn then
 								TriggerEvent("pacific_safecracking:loop", i)
 							end
 						end
