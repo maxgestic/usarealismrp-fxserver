@@ -305,3 +305,19 @@ RegisterServerCallback {
 		return hasDoorBeenThermited
 	end
 }
+
+RegisterServerCallback {
+	eventName = "bank:areEnoughCopsOn",
+	eventCallback = function(source)
+		local waiting = true
+		local retVal = nil
+		exports.globals:getNumCops(function(numCops)
+			retVal = numCops >= COPS_NEEDED_TO_ROB
+			waiting = false
+		end)
+		while waiting do
+			Wait(1)
+		end
+		return retVal
+	end
+}
