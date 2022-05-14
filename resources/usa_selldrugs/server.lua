@@ -3,9 +3,9 @@ local debug = false
 local SELLABLE_ITEMS = {
 	["Packaged Meth"] = {150, 350},
 	["Packaged Blue Meth"] = {300, 450},
-	["Packaged Weed"] = {250, 350},
-	["Packaged Cocaine"] = {650, 1250},
-	["LSD Vial"] = {50, 400}
+	["Packaged Weed"] = {350, 500},
+	["Packaged Cocaine"] = {600, 1250},
+	["LSD Vial"] = {100, 400}
 }
 
 -- see if player has any items to sell to NPC
@@ -50,8 +50,8 @@ AddEventHandler('sellDrugs:completeSale', function()
 			local reward = math.random(SELLABLE_ITEMS[drug_item.name][1], SELLABLE_ITEMS[drug_item.name][2]) * quantity
 			local bonus = 0
 
-			if exports["usa-characters"]:GetNumCharactersWithJob("sheriff") >= 2 then
-				bonus = math.floor((reward * 1.10) - reward)
+			if exports["usa-characters"]:GetNumCharactersWithJob("sheriff") >= 3 then
+				bonus = math.floor((reward * 1.30) - reward)
 			end
 
 			char.removeItem(drug_item, quantity)
