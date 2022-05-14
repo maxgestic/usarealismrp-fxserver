@@ -1,7 +1,7 @@
 local SPIKE_STRIP_ITEM = {
    name = "Spike Strips",
    objectModel = "P_ld_stinger_s",
-   weight = "20.0",
+   weight = 15,
    legality = "legal",
    quantity = 1,
    type = "misc",

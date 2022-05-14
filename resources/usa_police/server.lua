@@ -14,10 +14,10 @@ local armoryItems = {
     { name = "Glock", type = "weapon", hash = 1593441988, price = 300, weight = 5 },
     { name = "Heavy Pistol", type = "weapon", hash = GetHashKey("WEAPON_HEAVYPISTOL"), price = 450, weight = 7 },
     { name = "Stun Gun", type = "weapon", hash = 911657153, price = 400, weight = 5 },
-    { name = "SMG", type = "weapon", hash = 736523883, price = 750, weight = 25, minRank = 3 },
-    { name = "SMG MK2", type = "weapon", hash = 0x78A97CD0, price = 750, weight = 20, minRank = 3 },
+    { name = "SMG", type = "weapon", hash = 736523883, price = 750, weight = 10, minRank = 3 },
+    { name = "MK2", type = "weapon", hash = -1075685676, price = 400, weight = 5, minRank = 2 },
     { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 700, weight = 25 },
-    { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, weight = 25, minRank = 2 },
+    { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, weight = 15, minRank = 2 },
     { name = "Sniper Rifle", type = "weapon", hash = 100416529, price = 2000, weight = 30, minRank = 4 },
     { name = "Spike Strips", price = 700 },
     { name = "Police Radio", price = 300, type = "misc", weight = 5, notStackable = true },
@@ -31,8 +31,7 @@ local armoryItems = {
     { name = "Empty 7.62mm Mag [10]", type = "magazine", price = 50, weight = 3, receives = "7.62mm", MAX_CAPACITY = 10, currentCapacity = 0 },
     { name = "5.56mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 20 },
     { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0 },
-    { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, weight = 25, minRank = 2 },
-    { name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.5, quantity = 1 }
+    { name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.2, quantity = 1 }
 }
 
 for i = 1, #armoryItems do
