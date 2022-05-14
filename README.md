@@ -63,11 +63,9 @@ USARRP
 11) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
 12) Start the server.
 	* Windows:
-		- with resource scrambling: ``./start.bat`` from the ``server-data`` folder
-		- without resource scrambling: ``..\FXServer.exe +exec server.cfg +set onesync on`` from the ``server-data`` folder
+		- ``..\FXServer.exe +exec server.cfg +set onesync on`` from the ``server-data`` folder
 	* Linux:
-		- with resource scrambling: ``/start.sh`` from the ``server-data`` folder
-		- without resource scrambling: ``bash run.sh +exec server-data/server.cfg`` from folder where server .dlls are
+		- ``bash run.sh +exec server-data/server.cfg`` from folder where server .dlls are
 
 **DB Notes**
 1)  Must create following couch db views in a ``vehicleFilters`` design doc in a ``vehicles`` db:  
