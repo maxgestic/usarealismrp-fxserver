@@ -190,3 +190,9 @@ Some resources may not start for you; this is due to FiveM/Tebex's "asset protec
 You will see a message saying you "lack the entitlement" necessary to start it. This means you need to go to the author's tebex store and purchase it for it to be able to start on your own server.
 
 This also means a relatively small number of scripts are encrypted in this repository and the author would need to make them open source in order to update them.
+
+**Help! I am getting an "unauthorized" error when cloning!**
+
+That is normal. Just ignore it and click cancel.
+
+It's because you don't have permission to access some of the private git submodules this repository contains (like clothing, vehicles, and map assets).
