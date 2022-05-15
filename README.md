@@ -191,7 +191,11 @@ You will see a message saying you "lack the entitlement" necessary to start it. 
 
 This also means a relatively small number of scripts are encrypted in this repository and the author would need to make them open source in order to update them.
 
-**Help! I am getting an "unauthorized" error when cloning!**
+**Help! I am getting a "Clone failed" error when cloning!**
+
+If you see an error that says "authentication failed" like this:
+
+![](https://media.discordapp.net/attachments/911848141622476871/975532220469088256/unknown.png?width=892&height=613)
 
 That is normal. Just ignore it and click cancel.
 
