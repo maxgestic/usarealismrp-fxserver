@@ -1,14 +1,14 @@
 math.randomseed(os.time())
 
 local common = {
-    {name = "Aluminum", type = "misc", price = 100, legality = "legal", quantity = 1, weight = 5.0},
-    {name = "Copper", type = "misc", price = 75, legality = "legal", quantity = 1, weight = 10.0},
-    {name = "Iron", type = "misc", price = 125, legality = "legal", quantity = 1, weight = 15.0}
+    {name = "Aluminum", type = "misc", price = 175, legality = "legal", quantity = 1, weight = 5.0},
+    {name = "Copper", type = "misc", price = 125, legality = "legal", quantity = 1, weight = 10.0},
+    {name = "Iron", type = "misc", price = 200, legality = "legal", quantity = 1, weight = 15.0}
 }
 
 local rare = {
-    {name = "Diamond", type = "misc", price = 600, legality = "legal", quantity = 1, weight = 25.0},
-    {name = "Gold", type = "misc", price = 800, legality = "legal", quantity = 1, weight = 35.0},
+    {name = "Diamond", type = "misc", price = 650, legality = "legal", quantity = 1, weight = 25.0},
+    {name = "Gold", type = "misc", price = 850, legality = "legal", quantity = 1, weight = 35.0},
 }
 
 RegisterServerEvent('mining:doesUserHaveCorrectItems')
