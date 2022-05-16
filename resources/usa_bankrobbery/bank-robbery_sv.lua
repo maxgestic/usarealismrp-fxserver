@@ -175,10 +175,16 @@ AddEventHandler('bank:drilledGoods', function(securityToken)
 	TriggerClientEvent("usa:notify", source, "You stole $".. cash .. ' from the deposit box!')
 end)
 
+function isOnSameZPlaneAsDoor(doorInfo, src)
+	local playerCoords = GetEntityCoords(GetPlayerPed(src))
+	local zDist = math.abs(playerCoords.z - doorInfo.coords.z)
+	return zDist <= 1.0
+end
+
 RegisterServerEvent("bank:useThermite")
 AddEventHandler("bank:useThermite", function()
-	local nearestDoor = exports.usa_doormanager:getNearestDoor(source)
-	if nearestDoor.name:find("Pacific Standard Bank / ") and nearestDoor.locked then
+	local nearestDoor = exports.usa_doormanager:getNearestDoor(source, 2.0)
+	if nearestDoor.name:find("Pacific Standard Bank / ") and nearestDoor.locked and isOnSameZPlaneAsDoor(nearestDoor, source) then
 		TriggerClientEvent("bank:makeGuardsAggressive", -1)
 		nearestDoor = addAnimInfoToDoorObj(nearestDoor)
 		local success = TriggerClientCallback {
