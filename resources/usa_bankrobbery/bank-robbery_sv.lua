@@ -193,9 +193,9 @@ AddEventHandler("bank:useThermite", function()
 			if not alarmedTriggered then
 				alarmedTriggered = true
 				TriggerClientEvent("bank:toggleAlarm", -1, true)
+				TriggerEvent("911:call", 252.0, 228.0, 102.0, "Armed Robbery (Pacific Standard Bank)", "Bank Robbery")
 			end
 			hasDoorBeenThermited = true
-			TriggerEvent("911:call", 252.0, 228.0, 102.0, "Armed Robbery (Pacific Standard Bank)", "Bank Robbery")
 		end
 	end
 end)
