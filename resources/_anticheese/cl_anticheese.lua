@@ -857,7 +857,7 @@ Citizen.CreateThread(function()
 				if not isAtAnLSC() then
 					local veh = GetVehiclePedIsIn(myped, false)
 					if veh and DoesEntityExist(veh) then
-						if GetEntityModel(veh) ~= GetHashKey("rcbandito") then
+						if GetEntityModel(veh) ~= GetHashKey("rcbandito") and GetEntityModel(veh) ~= GetHashKey("GODzC6FD_RC") then
 							TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(myped)) -- when not in an rcbandito, but in vehicle
 							SetEntityVisible(myped, true, 0)
 						end
