@@ -68,7 +68,7 @@ local VEHICLES = {
         HASH = "rmodm3e36",
         COORDS = vector3(-1237.3372802734, -354.88641357422, 36.292712249756),
         HEADING = 24.0,
-        PRICE = 100000,
+        PRICE = 70000,
         CAPACITY = 160
     },
     {
@@ -76,7 +76,7 @@ local VEHICLES = {
         HASH = "alpinae30",
         COORDS = vector3(-1233.5505371094, -352.83551025391, 36.317181243896),
         HEADING = 21.0,
-        PRICE = 90000,
+        PRICE = 80000,
         CAPACITY = 180
     },
     {
@@ -100,7 +100,7 @@ local VEHICLES = {
         HASH = "m3e46",
         COORDS = vector3(-1240.7839355469, -357.05194091797, 36.332832336426),
         HEADING = 21.0,
-        PRICE = 120000,
+        PRICE = 80000,
         CAPACITY = 165
     },
     {
