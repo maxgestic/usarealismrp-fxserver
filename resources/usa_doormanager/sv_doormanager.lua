@@ -226,7 +226,7 @@ local DOORS = {
 -- heading - the heading of the door in it's regular position (when a player is not holding it open) -- this value should always be somewhat a multiple of 5 as rockstar like uniformity e.g., 270, 90, 180, 30, 315
 -- ymap - true will result in the door not using any of the above new values for 3D text, and having the text display at the x, y, z coords on the list
 
-function getNearestDoor(src)
+function getNearestDoor(src, maxRange)
   local closest = nil
   local playerCoords = GetEntityCoords(GetPlayerPed(src))
 
@@ -241,8 +241,13 @@ function getNearestDoor(src)
       closest.index = i 
       closest.name = DOORS[i].name
       closest.locked = DOORS[i].locked
+      closest.coords = vector3(DOORS[i].x, DOORS[i].y, DOORS[i].z)
       closest.dist = #(vector3(DOORS[i].x, DOORS[i].y, DOORS[i].z) - playerCoords)
     end
+  end
+
+  if maxRange and closest.dist > maxRange then
+    closest = nil
   end
 
   return closest
