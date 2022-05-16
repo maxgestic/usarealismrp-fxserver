@@ -27,9 +27,9 @@ AddEventHandler('mining:giveUserMiningGoods', function(securityToken)
 		return false
 	end
     local char = exports["usa-characters"]:GetCharacter(source)
-    local gotSomething = math.random() <= 0.60
+    local gotSomething = math.random() <= 0.75
     if gotSomething then
-        local gotARareItem = math.random() <= 0.14
+        local gotARareItem = math.random() <= 0.25
         if gotARareItem then
             giveCharItem(char, source, "rare")
         else 
