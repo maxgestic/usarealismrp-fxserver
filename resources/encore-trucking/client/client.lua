@@ -247,6 +247,7 @@ AddEventHandler('encore_trucking:startJob', function()
 	local vehPlate = GetVehicleNumberPlateText(truckId)
 	vehPlate = exports.globals:trim(vehPlate)
 	TriggerServerEvent("encore_trucking:putKeysInTruck", vehPlate)
+	TriggerServerEvent("fuel:setFuelAmount", vehPlate, 100)
 
 	-- other stuff
 	lastDropCoordinates = Config.JobStart.Coordinates

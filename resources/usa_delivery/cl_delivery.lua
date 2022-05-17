@@ -198,6 +198,8 @@ function SpawnDeliveryVan(x, y, z, heading)
 		Wait(0)
 	end
 	local vehicle = CreateVehicle(numberHash, x, y, z, heading, true, false)
+	local plate = GetVehicleNumberPlateText(vehicle)
+	TriggerServerEvent("fuel:setFuelAmount", plate, 100)
 	SetVehicleOnGroundProperly(vehicle)
 	SetVehRadioStation(vehicle, "OFF")
 	SetEntityAsMissionEntity(vehicle, true, true)
