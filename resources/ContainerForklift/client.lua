@@ -49,6 +49,7 @@ function spawnTruck()
     SetEntityAsMissionEntity(truckHandle)
 	SetVehicleOnGroundProperly(truckHandle)
 	local vehPlate = GetVehicleNumberPlateText(truckHandle)
+	TriggerServerEvent("fuel:setFuelAmount", vehPlate, 100)
     TriggerServerEvent("containerjob:dropKeys", vehPlate)
 end
 
