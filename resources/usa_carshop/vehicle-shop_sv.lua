@@ -489,6 +489,8 @@ local vehicleShopItems = {
 			{make = "Ford", model = "F-350 (2020)", price = 160000, hash = "f350d", storage_capacity = 300.0},
         		{make = "GMC", model = "Sierra 3500HD (2020)", price = 150000, hash = "GODz3500HDWELDER", storage_capacity = 300.0},
 			{make = "Lexus", model = "LFA (2010)", price = 500000, hash = "lfa", storage_capacity = 120.0},
+			{make = "Acura", model = "RSX (2004)", price = 70000, hash = "dc5", storage_capacity = 160.0},
+			{make = "Audi", model = "A6 (2020)", price = 130000, hash = "a6", storage_capacity = 220.0},
 		}
 	}
 }
