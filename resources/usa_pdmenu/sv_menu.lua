@@ -3,8 +3,8 @@ local LEO_VEHICLES = {"pcvpi","p14charger", "p14tahoe", "p16explorer", "p18charg
 local JOB_VEHICLES = {
 	["sheriff"] = LEO_VEHICLES,
 	["corrections"] = LEO_VEHICLES,
-	["ems"] = {"ambulance", "p20explorer", "firetruk", "lguard2", "blazer", "sotruck"},
-	["doctor"] = {"p20explorer"}
+	["ems"] = {"ambulance", "p20explorer", "p21tahoe", "firetruk", "lguard2", "blazer", "sotruck"},
+	["doctor"] = {"p20explorer", "p21tahoe"}
 }
 
 RegisterServerEvent("pdmenu:checkWhitelistForGarage")
