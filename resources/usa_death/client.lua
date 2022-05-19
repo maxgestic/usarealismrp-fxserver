@@ -144,7 +144,6 @@ Citizen.CreateThread(function()
 			DisableControlAction(1, 4, true)
 			DisableControlAction(1, 6, true)
 			DisableControlAction(0, 26, true) -- LOOK BEHIND
-			DisableControlAction(0, 137, true) -- Talking On Radio
 			--DisableControlAction(0, 0, true) -- CHANGE CAMERA VIEW
 			--SetPlayerInvincible(ped, true) causes tens of anticheese flags lol
 			SetEntityHealth(ped, 1)
