@@ -334,6 +334,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = {1, 2, 3, 4, 5},
 			hash = GetHashKey("p20explorer")
 		},
+		["p21tahoe"] = {
+			rank = 3,
+			allowedLiveries = {1, 2, 3, 4},
+			hash = GetHashKey("p21tahoe")
+		},
 		["firetruk"] = {
 			rank = 1,
 			allowedLiveries = { 1 },
