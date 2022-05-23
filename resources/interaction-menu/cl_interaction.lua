@@ -1241,6 +1241,21 @@ AddEventHandler("interaction:vehicleInventoryLoaded", function(inventory, isLock
 	})
 end)
 
+RegisterNetEvent("interaction:forceShutGUI")
+AddEventHandler("interaction:forceShutGUI", function(data)
+	SendNUIMessage({
+		type = "enableui",
+		enable = false,
+	})
+	SetNuiFocus(false, false)
+	TransitionFromBlurred(1000)
+	menuEnabled = false
+	SetPedCanSwitchWeapon(GetPlayerPed(-1), not menuEnabled)
+	if data.secondaryInventoryType and data.secondaryInventoryType == "property" then
+		TriggerServerEvent("properties-og:markAsInventoryClosed")
+	end
+end)
+
 local EMOTE_CANCEL = 32
 Citizen.CreateThread(function()
 	while true do
