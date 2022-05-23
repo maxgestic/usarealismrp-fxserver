@@ -715,12 +715,15 @@ Citizen.CreateThread(function()
             _menuPool:MouseControlsEnabled(false)
             _menuPool:ControlDisablingEnabled(false)
             _menuPool:ProcessMenus()
-			if closest_coords then
-				if GetDistanceBetweenCoords(GetEntityCoords(me), closest_coords.x, closest_coords.y, closest_coords.z, true) > 2 then
-					closest_coords.x, closest_coords.y, closest_coords.z = nil, nil, nil
-					RemoveMenuPool(_menuPool)
-				end
-			end
+        end
+        if closest_coords.x then
+            if GetDistanceBetweenCoords(GetEntityCoords(me), closest_coords.x, closest_coords.y, closest_coords.z, true) > 2 then
+                closest_coords.x, closest_coords.y, closest_coords.z = nil, nil, nil
+                if _menuPool then
+                    RemoveMenuPool(_menuPool)
+                end
+                TriggerEvent("interaction:forceShutGUI", { secondaryInventoryType = "property" })
+            end
         end
     end
 end)
