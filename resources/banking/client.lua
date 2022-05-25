@@ -234,13 +234,13 @@ end)
 RegisterNetEvent('bank:givecash')
 AddEventHandler('bank:givecash', function(toPlayer, amount, fromName, src)
   if (IsNearPlayer(toPlayer) == true or giveCashAnywhere == true) then
-      local name = GetPlayerName(toPlayer)
+    local name = GetPlayerName(toPlayer)
     local player2 = GetPlayerFromServerId(toPlayer)
     local playing = IsPlayerPlaying(player2)
+    local playerPed = PlayerPedId()
     if playing then
       TriggerServerEvent("bank:givecash", toPlayer, tonumber(amount))
-      --TriggerEvent('chatMessage', "", {255, 255, 255}, fromName .. " has given you ^2$" .. amount .. "^0.");
-      --TriggerServerEvent('altchat:localChatMessage', src, "^6* " .. fromName .. " hands over money.")
+      TriggerEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
     else
       TriggerEvent('usa:notify', '~y~Player not found!')
     end
