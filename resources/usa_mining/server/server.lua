@@ -7,8 +7,8 @@ local common = {
 }
 
 local rare = {
-    {name = "Diamond", type = "misc", price = 650, legality = "legal", quantity = 1, weight = 25.0},
-    {name = "Gold", type = "misc", price = 850, legality = "legal", quantity = 1, weight = 35.0},
+    {name = "Diamond", type = "misc", price = 950, legality = "legal", quantity = 1, weight = 25.0},
+    {name = "Gold", type = "misc", price = 750, legality = "legal", quantity = 1, weight = 35.0},
 }
 
 RegisterServerEvent('mining:doesUserHaveCorrectItems')
