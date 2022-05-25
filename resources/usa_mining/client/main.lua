@@ -23,17 +23,22 @@ RegisterNetEvent('mining:startMining')
 AddEventHandler('mining:startMining', function()
     local ped = PlayerPedId()
     local begintime = GetGameTimer()
-    exports.globals:loadAnimDict("anim@move_m@trash")
+    local mycoords = GetEntityCoords(ped)
+    local propaxe = CreateObject(GetHashKey("prop_tool_pickaxe"), mycoords.x, mycoords.y, mycoords.z,  true,  true, true)
+    exports.globals:loadAnimDict("melee@large_wpn@streamed_core")
     while GetGameTimer() - begintime < 15000 do
         exports.globals:DrawTimerBar(begintime, 15000, 1.42, 1.475, 'Mining')
         DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
         DisableControlAction(0, 86, true) -- prevent spam clicking
-        if not IsEntityPlayingAnim(ped, "anim@move_m@trash", "pickup", 3) then
-            TaskPlayAnim(ped, "anim@move_m@trash", "pickup", 8.0, 1.0, 15000, 1.0, false, false, false)
+        if not IsEntityPlayingAnim(ped, "melee@large_wpn@streamed_core", "ground_attack_on_spot", 3) then
+            AttachEntityToEntity(propaxe, ped, GetPedBoneIndex(ped, 57005), 0.08, -0.4, -0.10, 80.0, -20.0, 175.0, true, true, false, true, 1, true)
+            TaskPlayAnim(ped, "melee@large_wpn@streamed_core", "ground_attack_on_spot", 8.0, 1.0, 15000, 1.0, false, false, false)
         end
         Wait(1)
     end
     ClearPedTasksImmediately(ped)
+    DetachEntity(propaxe, 1, 1)
+	DeleteObject(propaxe)
     while securityToken == nil do
         Wait(1)
     end
