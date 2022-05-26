@@ -281,10 +281,11 @@ local vehicleShopItems = {
 			{make = "Overflod", model = "Entity XXR", price = 862000, hash = "entity2", storage_capacity = 110.0},
 			{make = "Progen", model = "Emerus", price = 950000, hash = "emerus", storage_capacity = 110.0},
 			{make = "Lampadati", model = "Tigon", price = 600000, hash = "tigon", storage_capacity = 100.0},
-            {make = "Grotti", model = "Furia", price = 500000, hash = "furia", storage_capacity = 100.0},
-            {make = "Pegassi", model = "Zorrusso", price = 600000, hash = "zorrusso", storage_capacity = 100.0},
-            {make = "Benefactor", model = "Krieger", price = 800000, hash = "krieger", storage_capacity = 100.0},
-            {make = "Truffade", model = "Thrax", price = 900000, hash = "thrax", storage_capacity = 100.0},
+            		{make = "Grotti", model = "Furia", price = 500000, hash = "furia", storage_capacity = 100.0},
+            		{make = "Pegassi", model = "Zorrusso", price = 600000, hash = "zorrusso", storage_capacity = 100.0},
+            		{make = "Benefactor", model = "Krieger", price = 800000, hash = "krieger", storage_capacity = 100.0},
+            		{make = "Truffade", model = "Thrax", price = 900000, hash = "thrax", storage_capacity = 100.0},
+			{make = "Truffade", model = "Itali RSX", price = 700000, hash = "italirsx", storage_capacity = 100.0},
 		},
 		["Classic"] = {
 			{make = "Declasse", model = "Tornado", price = 10250, hash = 464687292, storage_capacity = 150.0},
@@ -491,6 +492,9 @@ local vehicleShopItems = {
 			{make = "Lexus", model = "LFA (2010)", price = 500000, hash = "lfa", storage_capacity = 120.0},
 			{make = "Acura", model = "RSX (2004)", price = 70000, hash = "dc5", storage_capacity = 160.0},
 			{make = "Audi", model = "A6 (2020)", price = 130000, hash = "a6", storage_capacity = 220.0},
+			{make = "Mitsubishi", model = "EVO IX", price = 85000, hash = "evoix", storage_capacity = 160.0},
+			{make = "Nissan", model = "Silvia S15", price = 80000, hash = "s15yoshio", storage_capacity = 220.0},
+			{make = "Toyota", model = "Chaser", price = 75000, hash = "razerchaser", storage_capacity = 160.0},
 		}
 	}
 }
