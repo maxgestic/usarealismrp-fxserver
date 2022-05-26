@@ -620,7 +620,7 @@ local function DriveInGarage()
 							btn.mod = i
 						end
 					offroadw = wtype:addSubMenu("OFFROAD WHEELS", "Offroad", nil,true)
-						for i = 0, 49 do
+						for i = 0, 54 do
 							local name = "Offroad Wheel #" .. (i + 1)
 							local price = LSC_Config.prices.GENERIC_WHEEL
 							for n, w in pairs(LSC_Config.prices.offroadwheels) do
