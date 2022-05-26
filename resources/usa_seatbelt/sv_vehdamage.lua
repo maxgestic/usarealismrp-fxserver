@@ -1,0 +1,5 @@
+RegisterServerEvent('usa:removeRepairKit')
+AddEventHandler('usa:removeRepairKit', function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	char.removeItem("Repair Kit", 1)
+end) 
