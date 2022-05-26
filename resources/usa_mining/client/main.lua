@@ -26,6 +26,7 @@ AddEventHandler('mining:startMining', function()
     local mycoords = GetEntityCoords(ped)
     local propaxe = CreateObject(GetHashKey("prop_tool_pickaxe"), mycoords.x, mycoords.y, mycoords.z,  true,  true, true)
     exports.globals:loadAnimDict("melee@large_wpn@streamed_core")
+    FreezeEntityPosition(ped, true)
     while GetGameTimer() - begintime < 15000 do
         exports.globals:DrawTimerBar(begintime, 15000, 1.42, 1.475, 'Mining')
         DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
@@ -36,6 +37,7 @@ AddEventHandler('mining:startMining', function()
         end
         Wait(1)
     end
+    FreezeEntityPosition(ped, false)
     ClearPedTasksImmediately(ped)
     DetachEntity(propaxe, 1, 1)
 	DeleteObject(propaxe)
