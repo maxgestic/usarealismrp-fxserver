@@ -471,7 +471,7 @@ local vehicleShopItems = {
             		{make = "Chevrolet", model = "Silverado (1986)", price = 56000, hash = "SILV86", storage_capacity = 190.0},
             		{make = "Ford", model = "Galaxie", price = 62000, hash = "galaxie", storage_capacity = 160.0},
             		{make = "GMC", model = "CadimaX 3500HD (2018)", price = 150000, hash = "GODzBGDCADIMAX", storage_capacity = 190.0},
-            		{make = "Cadillac", model = "Escalade (2021)", price = 130000, hash = "21escalade", storage_capacity = 190.0},
+            		{make = "Cadillac", model = "Escalade (2021)", price = 130000, hash = "21escalade", storage_capacity = 280.0},
             		{make = "Chevrolet", model = "Camaro (2021)", price = 150000, hash = "21camaro", storage_capacity = 160.0},
             		{make = "Declasse", model = "Silver-Star", price = 70000, hash = "silverstar", storage_capacity = 210.0},
 			{make = "Declasse", model = "Silver-Star (Lowrider)", price = 100000, hash = "silverstar2", storage_capacity = 210.0},
