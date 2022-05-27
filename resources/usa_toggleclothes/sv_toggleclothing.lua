@@ -38,6 +38,11 @@ TriggerEvent('es:addCommand', 'bag', function(source, args, char, location)
 	TriggerClientEvent("headprops:toggleComponent", source, 5)
 end, { help = "Take your bag on / off." })
 
+-- Toggles shoes--
+TriggerEvent('es:addCommand', 'shoes', function(source, args, char, location)
+	TriggerClientEvent("headprops:toggleComponent", source, 6)
+end, { help = "Take your shoes on / off." })
+
 RegisterServerEvent("headprops:loadPropOrComponent")
 AddEventHandler("headprops:loadPropOrComponent", function(isProp, id, doEquip)
 	local char = exports["usa-characters"]:GetCharacter(source)
