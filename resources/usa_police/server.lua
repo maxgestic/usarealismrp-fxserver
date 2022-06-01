@@ -8,7 +8,7 @@ local armoryItems = {
     { name = "First Aid Kit", price = 25, weight = 5 },
     { name = "Fire Extinguisher", type = "weapon", hash = 101631238, price = 100, weight = 20 },
     { name = "Flare", type = "weapon", hash = 1233104067, price = 200, weight = 5 },
-    { name = "Tear Gas", type = "weapon", hash = -1600701090, price = 300, weight = 5, minRank = 2 },
+    { name = "Tear Gas", type = "weapon", hash = -1600701090, price = 300, weight = 3, minRank = 2 },
     { name = "Flashlight", type = "weapon", hash = -1951375401, price = 25, weight = 4 },
     { name = "Nightstick", type = "weapon", hash = 1737195953, price = 100, weight = 4 },
     { name = "Glock", type = "weapon", hash = 1593441988, price = 300, weight = 5 },
@@ -31,7 +31,8 @@ local armoryItems = {
     { name = "Empty 7.62mm Mag [10]", type = "magazine", price = 50, weight = 3, receives = "7.62mm", MAX_CAPACITY = 10, currentCapacity = 0 },
     { name = "5.56mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 20 },
     { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0 },
-    { name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.2, quantity = 1 }
+    { name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.2, quantity = 1 },
+    { name = "Flashbang", type = "weapon", hash = GetHashKey("WEAPON_FLASHBANG"), price = 150, weight = 2, minRank = 6 }
 }
 
 for i = 1, #armoryItems do
