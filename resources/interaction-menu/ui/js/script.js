@@ -25,6 +25,7 @@ NO_TOOLTIP_WEAPONS.add("Fishing Pole");
 NO_TOOLTIP_WEAPONS.add("Crowbar");
 NO_TOOLTIP_WEAPONS.add("Calvary Dagger");
 NO_TOOLTIP_WEAPONS.add("Sticky Bomb");
+NO_TOOLTIP_WEAPONS.add("Flashbang");
 
 var itemImages = {
     "Driver's License": "https://i.imgur.com/dy0SpFh.png",
@@ -276,6 +277,7 @@ var itemImages = {
     "Panther": "https://i.imgur.com/EsXv2Yj.png",
     "Speaker": "https://i.imgur.com/4TW6JnZ.png",
     "Pistol Mk2" : "https://i.imgur.com/Y7lGpBc.png",
+    "Flashbang" : "https://i.imgur.com/r5qEqSI.png",
     // begin ammo
     "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
     "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",
