@@ -387,6 +387,42 @@ Config.Stickers = {
                 flip = false,
                 dict = 'japanese'
             }, 
+			{
+                name = 'So Clean',
+                price = 90,
+                flip = false,
+                dict = 'japanese'
+            }, 
+			{
+                name = 'Peace',
+                price = 120,
+                flip = false,
+                dict = 'japanese'
+            }, 
+			{
+                name = 'Shark NA',
+                price = 100,
+                flip = false,
+                dict = 'japanese'
+            }, 
+			{
+                name = 'Kid NOS',
+                price = 130,
+                flip = false,
+                dict = 'japanese'
+            }, 
+			{
+                name = 'Eat Sleep JDM',
+                price = 130,
+                flip = false,
+                dict = 'japanese'
+            }, 
+			{
+                name = 'Red Dragon',
+                price = 140,
+                flip = false,
+                dict = 'japanese'
+            }, 
         }
     },
     {
@@ -545,6 +581,96 @@ Config.Stickers = {
                 name2 = 'Yellow Flame Flipped',
                 price = 30,
                 flip = true,
+                dict = 'others'
+            },
+			{
+                name = 'Iron Man',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Vader',
+                price = 105,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Vader Chibi',
+                price = 115,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Groot',
+                price = 85,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Wolf',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Wolf 2',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Eagle',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Phoenix',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Peacock',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Owl',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Skull',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Snake',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Unicorn',
+                price = 100,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Astro',
+                price = 105,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Peekabo',
+                price = 95,
+                flip = false,
                 dict = 'others'
             }
         }
