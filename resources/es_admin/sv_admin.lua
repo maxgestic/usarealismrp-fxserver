@@ -1507,8 +1507,9 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 	local speakerItem = { name = "Speaker", price = 10000, legality = "legal", quantity = 1, type = "misc", weight = 20, objectModel = "sm_prop_smug_speaker" }
 	local joint = { name = "Joint", type = "drug", weight = 2.0, quantity = 1, objectModel = "prop_sh_joint_01" }
 	local lighter = { name = "Bic Lighter", type = "misc", weight = 2.0, quantity = 1 }
+	local glockParts = { name = "Glock Parts", type = "misc", weight = 15.0, quantity = 1 }
 
-	local toGiveItem = joint
+	local toGiveItem = glockParts
 	toGiveItem.quantity = (toGiveItem.quantity or 1)
 
 	toGiveItem.uuid = exports.globals:generateID()
