@@ -14,7 +14,7 @@ resources/carsounds
 resources/r34sound
 resources/r35sound
 resources/RES_Anticheat/events.lua
-resources [UNSCRAMBLED]
+resources/rcore_spray
 server2.cfg
 gitpull.bat
 CitizenFX.log
