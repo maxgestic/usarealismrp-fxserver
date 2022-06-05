@@ -3,11 +3,11 @@
 To get started with your own testing environment:
 
 1) Create a new folder named: `USARRP`
-2) Create two folders within that new folder: `server` and `server-data`
+2) Create a new folder within the `USARRP` folder named: `server`
 3) Download the server files for the recommended server version and unzip its contents into the `server` folder you just made:
 	- For Windows: https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/
 	- For Linux: https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/
-4) Git clone this repository (or your own fork) into the `server-data` folder
+4) Git clone this repository (or your own fork) into the `USARRP` folder
 
 You should now have folders with this structure:
 ```
@@ -17,8 +17,8 @@ USARRP
 │   │   <contains FiveM server files>
 │
 │   
-└───server-data
-    │   <contains this repository>
+└───usarealismrp-fxserver
+    │   <contains contents of this repository>
 ```
 
 5) Download and install [couchDB](http://couchdb.apache.org/)
@@ -65,7 +65,7 @@ USARRP
 	* Windows:
 		- ``..\FXServer.exe +exec server.cfg +set onesync on`` from the ``server-data`` folder
 	* Linux:
-		- ``bash run.sh +exec server-data/server.cfg`` from folder where server .dlls are
+		- ``bash ~/USARRP/server/run.sh +exec server.cfg +set onesync on`` from the `usarealismrp-fxserver` folder
 
 **DB Notes**
 1)  Must create following couch db views in a ``vehicleFilters`` design doc in a ``vehicles`` db:  
@@ -85,7 +85,7 @@ USARRP
 		- ``emit(doc._id, [doc.make, doc.model, doc.price, doc.stored, doc.stored_location, doc._id]);``  
 	* **getVehiclesToSellWithPlates**  
 		- ``emit(doc._id, [doc.plate, doc.make, doc.model, doc.price, doc._rev]);``
-2) Must create following views for ``gcphone``:
+2) Must create following views for ``gcphone`` in a `contactFilters` design doc:
 	* In the ``phone-contacts`` db:
 		* **getContactsByIdentifier**
 			- ``emit(doc.ownerIdentifier, doc);``
