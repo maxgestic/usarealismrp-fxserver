@@ -63,7 +63,7 @@ USARRP
 11) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
 12) Start the server.
 	* Windows:
-		- ``..\FXServer.exe +exec server.cfg +set onesync on`` from the ``server-data`` folder
+		- ``..\server\FXServer.exe +exec server.cfg +set onesync on`` from the ``usarealismrp-fxserver`` folder
 	* Linux:
 		- ``bash ~/USARRP/server/run.sh +exec server.cfg +set onesync on`` from the `usarealismrp-fxserver` folder
 
