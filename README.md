@@ -59,7 +59,7 @@ USARRP
     * We use this to expose a chat log via an HTTP web server, so we provide a path to a file in its public directory
 	* For example: ``C:/wamp/www/log.txt``
 9) Create your database views (see below view definitions)
-10) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when developing.
+10) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when restarting a script during development.
 11) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
 12) Start the server.
 	* Windows:
