@@ -73,14 +73,13 @@ AddEventHandler('veh:searchVeh', function()
       return
   end
   if not IsPedCuffed(playerPed) and GetPedInVehicleSeat(vehicle, -1) == playerPed and GetVehicleDoorLockStatus(vehicle) ~= 4 then
-    for k, v in pairs(searchedVehicles) do
-      local p = exports.globals:trim(GetVehicleNumberPlateText(vehicle))
-      if p == v then
-        -- vehicle has already been searched
-        return
+    local curVehPlate = exports.globals:trim(GetVehicleNumberPlateText(vehicle))
+    for _, searchedPlate in pairs(searchedVehicles) do
+      if curVehPlate == searchedPlate then
+        return -- vehicle has already been searched
       end
     end
-    table.insert(searchedVehicles, p)
+    table.insert(searchedVehicles, curVehPlate)
     RequestAnimDict('veh@handler@base')
     while not HasAnimDictLoaded('veh@handler@base') do
       Citizen.Wait(100)
