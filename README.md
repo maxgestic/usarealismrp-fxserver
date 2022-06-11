@@ -139,7 +139,7 @@ You'll also either want to disable the `block_vpn` script or get an account api 
 
 ```
 --[[
-	The server-sided character object (from usa-characters) has a whole bunch of helpful properties and methods pertaining to the player's character
+	The server-sided character object (from resources/usa-characters/classes/character.lua, see rTable functions) has a whole bunch of helpful properties and methods to manipulate character data which will be persistent across restarts
 ]]
 
 -- for example:
