@@ -80,7 +80,7 @@ USARRP
 	* **getVehicleInventoryByPlate**  
 		- ``emit(doc._id, [doc.inventory]);``  
 	* **getVehiclesForGarageMenu**  
-		- ``emit(doc._id, [doc.plate, doc.make, doc.model, doc.impounded, doc.stored, doc.hash, doc.owner, doc.stats, doc.upgrades]);``  
+		- ``emit(doc._id, [doc.plate, doc.make, doc.model, doc.impounded, doc.stored, doc.hash, doc.owner, doc.stats, doc.upgrades, doc.stored_location]);``  
 	* **getVehiclesForMenuWithPlates**  
 		- ``emit(doc._id, [doc.make, doc.model, doc.price, doc.stored, doc.stored_location, doc._id]);``  
 	* **getVehiclesToSellWithPlates**  
