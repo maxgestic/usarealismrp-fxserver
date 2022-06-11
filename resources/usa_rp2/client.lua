@@ -226,6 +226,8 @@ Citizen.CreateThread(function()
     end
 end)
 
+SetAudioFlag('PoliceScannerDisabled', true)
+
 -- spawn peds
 local locations = {
       stripclub = {
