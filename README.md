@@ -149,6 +149,10 @@ if char.get("money") > 100 then
 	-- do something
 end
 
+if char.get("bank") > 100 then
+	-- do something
+end
+
 if char.hasItem("Tuna Fish") then
 	-- do something
 end
@@ -156,6 +160,12 @@ end
 if char.get("job") == "sheriff" then
 	-- do something
 end
+
+char.set("job", "civ") -- player's job is now marked as civilian
+char.set("job", "mechanic") -- player's job is now marked as mechanic
+
+char.removeMoney(5000) -- remove $5,000 from player
+char.set("bank", char.get("bank") + math.random(100, 500)) -- give player random amount of money from $100 to $500
 ```
 
 Check out the `exposedDB.*` functions in the `resources/essentialmode/db.lua` file for a bunch of functions you can call from other scripts to create/update/delete/edit data.
