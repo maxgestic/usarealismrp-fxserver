@@ -302,6 +302,10 @@ RegisterServerEvent("properties-og:moveItemFromProperty")
 AddEventHandler("properties-og:moveItemFromProperty", function(src, data)
   data.fromSlot = tostring(data.fromSlot)
   data.quantity = tonumber(data.quantity)
+  if data.quantity <= 0 then
+    TriggerClientEvent("usa:notify", src, "Invalid quantity")
+    return
+  end
   -- get item from property storage
   local inv = inventoryAsMapNotArray(PROPERTIES[data.propertyName].storage.items)
   local item = inv[data.fromSlot]
