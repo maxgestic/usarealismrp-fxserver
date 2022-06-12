@@ -348,7 +348,16 @@ function updateDeliveryProgress(char, orders)
 				doc.deliveredParts = {}
 			end
 			for i = 1, #newDeliveries do
-				table.insert(doc.deliveredParts, newDeliveries[i])
+				local wasAlreadyInserted = false -- we were seeing ordered parts being doubled when delivered... so let's ensure that won't happen here..
+				for j = 1, #doc.deliveredParts do
+					if doc.deliveredParts[j].uuid == newDeliveries[i].uuid then
+						wasAlreadyInserted = true
+						break
+					end
+				end
+				if not wasAlreadyInserted then
+					table.insert(doc.deliveredParts, newDeliveries[i])
+				end
 			end
 			MechanicHelper.db.updateDocument("mechanicjob", doc._id, {deliveredParts = doc.deliveredParts, orderedParts = orders}, function(ok)
 				if ok then
