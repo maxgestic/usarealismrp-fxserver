@@ -210,7 +210,13 @@ This also means a relatively small number of scripts are encrypted in this repos
 
 If you see an error that says "authentication failed" like this:
 
+w/ GitHub Desktop
+
 ![](https://media.discordapp.net/attachments/911848141622476871/975532220469088256/unknown.png?width=892&height=613)
+
+w/ Command line
+
+![](https://i.imgur.com/xbY13lj.png)
 
 That is normal. Just ignore it and click cancel.
 
