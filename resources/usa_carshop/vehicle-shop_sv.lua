@@ -155,6 +155,8 @@ local vehicleShopItems = {
 			{make = "Declasse", model = "Yosemite Rancher", price = 25000, hash = "yosemite3", storage_capacity = 90.0},
 			{make = "Nagasaki", model = "Outlaw", price = 20000, hash = "outlaw", storage_capacity = 70.0},
 			{make = "Annis", model = "Hellion", price = 30000, hash = "hellion", storage_capacity = 90.0},
+			{make = "Declasse", model = "Silver-Star", price = 30000, hash = "silverstar", storage_capacity = 210.0},
+			{make = "Declasse", model = "Silver-Star (Lowrider)", price = 50000, hash = "silverstar2", storage_capacity = 210.0},
 		},
 		["Motorcycles"] = {
 			{make = "Pegassi", model = "Faggio", price = 2069, hash = -1842748181, storage_capacity = 30.0},
@@ -362,6 +364,7 @@ local vehicleShopItems = {
 			{make = "Declasse", model = "Hotring Sabre", price = 120000, hash = "hotring", storage_capacity = 90.0},
 			{make = "Brute", model = "Tour Bus", price = 40000, hash = 1941029835, storage_capacity = 180.0},
 			{make = "Coach", model = "RV", price = 140000, hash = "coachrv", storage_capacity = 500.0},
+			{make = "Voodoo", model = "Caddy S", price = 20000, hash = "voodoo_caddys", storage_capacity = 60.0},
 			{make = "Trailer", model = "Open", price = 30000, hash = "cotrailer", storage_capacity = 300.0},
         		{make = "Trailer", model = "Closed", price = 80000, hash = "ctrailer", storage_capacity = 400.0},
 			{make = "Trailer", model = "Car Hauler (Gooseneck)", price = 60000, hash = "godzhauler", storage_capacity = 400.0},
@@ -473,8 +476,6 @@ local vehicleShopItems = {
             		{make = "GMC", model = "CadimaX 3500HD (2018)", price = 150000, hash = "GODzBGDCADIMAX", storage_capacity = 190.0},
             		{make = "Cadillac", model = "Escalade (2021)", price = 130000, hash = "21escalade", storage_capacity = 280.0},
             		{make = "Chevrolet", model = "Camaro (2021)", price = 150000, hash = "21camaro", storage_capacity = 160.0},
-            		{make = "Declasse", model = "Silver-Star", price = 70000, hash = "silverstar", storage_capacity = 210.0},
-			{make = "Declasse", model = "Silver-Star (Lowrider)", price = 100000, hash = "silverstar2", storage_capacity = 210.0},
 			{make = "Ford", model = "V-8 Coupé (1932)", price = 70000, hash = "fordc32", storage_capacity = 160.0},
             		{make = "Ford", model = "V-8 Coupé 2 (1932)", price = 80000, hash = "fordc32h", storage_capacity = 160.0},
             		{make = "Datsun", model = "Bluebird 910 SSS (1982) (DRIFT)", price = 60000, hash = "datsun910", storage_capacity = 180.0},
@@ -495,6 +496,14 @@ local vehicleShopItems = {
 			{make = "Mitsubishi", model = "EVO IX (DRIFT)", price = 85000, hash = "evoix", storage_capacity = 160.0},
 			{make = "Nissan", model = "Silvia S15 (DRIFT)", price = 80000, hash = "s15yoshio", storage_capacity = 220.0},
 			{make = "Toyota", model = "Chaser (DRIFT)", price = 75000, hash = "razerchaser", storage_capacity = 160.0},
+			{make = "Lamborghini", model = "Huracan LW", price = 750000, hash = "lwhuracan", storage_capacity = 130.0},
+			{make = "Bentley", model = "Bacalar", price = 2500000, hash = "rmodbacalar", storage_capacity = 160.0},
+			{make = "Ferrari", model = "F12", price = 850000, hash = "rmodf12tdf", storage_capacity = 130.0},
+			{make = "Ferrari", model = "F40", price = 1200000, hash = "rmodf40", storage_capacity = 130.0},
+			{make = "Italdesign", model = "GTR50", price = 2000000, hash = "rmodgtr50", storage_capacity = 130.0},
+			{make = "Koenigsegg", model = "Jesko", price = 4500000, hash = "rmodjesko", storage_capacity = 130.0},
+			{make = "Aston Martin", model = "DBS", price = 450000, hash = "rmodmartin", storage_capacity = 130.0},
+			{make = "Lamborghini", model = "Sian", price = 3800000, hash = "rmodsianr", storage_capacity = 130.0},
 		}
 	}
 }
