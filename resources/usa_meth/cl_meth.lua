@@ -209,10 +209,10 @@ Citizen.CreateThread(function()
                 Citizen.Wait(100)
             end
             TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-            while GetGameTimer() - beginTime < 18000 do
+            while GetGameTimer() - beginTime < 23000 do
                 Citizen.Wait(0)
                 if meth.producingMeth then
-                    DrawTimer(beginTime, 18000, 1.42, 1.475, 'COOKING')
+                    DrawTimer(beginTime, 23000, 1.42, 1.475, 'COOKING')
                     if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
                         TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
                     end
@@ -221,7 +221,7 @@ Citizen.CreateThread(function()
                     break
                 end
             end
-if math.random() > 0.935 then
+if math.random() > 0.965 then
     if math.random() > 0.45 then
         AddExplosion(GetEntityCoords(PlayerPedId()), 9, 1.0, true, false, 1.0)
         --[[
