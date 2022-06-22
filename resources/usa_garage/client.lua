@@ -164,14 +164,21 @@ AddEventHandler("garage:storeVehicle", function()
 			[5] = IsVehicleTyreBurst(veh, 5, false)
 		}
 	}
-	-- delete veh --
-	SetEntityAsMissionEntity(veh, true, true)
-	TriggerEvent('persistent-vehicles/forget-vehicle', veh)
-	DeleteVehicle(veh)
-	-- store vehicle key with vehicle
-	TriggerServerEvent("garage:storeKey", plate)
-	-- save fuel
-	TriggerServerEvent("fuel:save", plate)
+	-- store vehicle only if we can delete it --
+	local start = GetGameTimer()
+	while DoesEntityExist(veh) and GetGameTimer() - start <= 10000 do
+		if NetworkGetEntityOwner(veh) ~= PlayerId() then
+			NetworkRequestControlOfEntity(veh)
+		end
+		SetEntityAsMissionEntity(veh, true, true)
+		DeleteVehicle(veh)
+	end
+	if not DoesEntityExist(veh) then
+		-- store vehicle key with vehicle
+		TriggerServerEvent("garage:storeKey", plate)
+		-- save fuel
+		TriggerServerEvent("fuel:save", plate)
+	end
 end)
 
 RegisterNetEvent("garage:vehicleStored")
