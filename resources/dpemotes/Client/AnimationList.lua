@@ -1598,6 +1598,21 @@ DP.Emotes = {
     {
         PtfxPlacement = {2.0, 2.0, -1, 1, 0, false, false, false}
     }},
+    ["handsbehind"] = {"tigerle@custom@jobs@handsonback", "tigerle_custom_handsonback", "Put your hands behind your back", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["holdvest2"] = {"tigerle@custom@jobs@vest2", "tigerle_custom_holdvest2", "Hold your vest like a popo", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["holdvest"] = {"tigerle@custom@jobs@vest", "tigerle_custom_holdvest", "Hold your vest like a popo", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
 
 -----------------------------------------------------------------------------------------------------------
 ------ These are Scenarios, some of these dont work on women and some other issues, but still good to have.
