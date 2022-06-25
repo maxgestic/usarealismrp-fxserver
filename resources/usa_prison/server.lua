@@ -8,15 +8,14 @@ local WEAPONS = {
     { hash = GetHashKey("WEAPON_STUNGUN"), type = "weapon", name = "Stun Gun", rank = 1, weight = 5, price = 200},
     { hash = 1593441988, type = "weapon", name = "Glock", rank = 1, weight = 5, price = 200},
 	{ name = "Heavy Pistol", type = "weapon", hash = GetHashKey("WEAPON_HEAVYPISTOL"), rank = 1, price = 400, weight = 7 },
-	{ hash = -1600701090, type = "weapon", name = "Tear Gas", rank = 2, weight = 5, price = 150},
-	{ name = "SMG", type = "weapon", hash = 736523883, rank = 2, price = 500, weight = 25 },
+	{ hash = -1600701090, type = "weapon", name = "Tear Gas", rank = 2, weight = 3, price = 150},
+	{ name = "SMG", type = "weapon", hash = 736523883, rank = 2, price = 500, weight = 10 },
 	{ name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, rank = 2, price = 500, weight = 25 },
-	{ name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, rank = 2, price = 500, weight = 25},
+	{ name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, rank = 2, price = 700, weight = 15},
 	{ name = "SMG MK2", type = "weapon", hash = 0x78A97CD0, price = 750, rank = 2, weight = 20 },
 	{ hash = 100416529,  type = "weapon", name = "Sniper Rifle", rank = 2, weight = 30, price = 2000},
 	{ name = "Spike Strips", type = "misc", rank = 4 },
     { name = "Police Radio", type = "misc", rank = 1, price = 300, type = "misc", weight = 5 },
-	{ name = "Stretcher", type = "misc", rank = 1, price = 400, type = "misc", weight = 35, invisibleWhenDropped = true },
 	{ name = "7.62mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
 	{ name = "Empty 7.62mm Mag [10]", type = "magazine", price = 50, weight = 3, receives = "7.62mm", MAX_CAPACITY = 10, currentCapacity = 0 },
 	{ name = "9mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
@@ -27,7 +26,7 @@ local WEAPONS = {
 	{ name = "5.56mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 20 },
     { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0 },
 	{ name = "12 Gauge Shells", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
-	{ name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.5, quantity = 1 }
+	{ name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.25, quantity = 1 }
 }
 
 for i = 1, #WEAPONS do
