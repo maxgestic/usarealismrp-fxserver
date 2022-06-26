@@ -45,7 +45,7 @@ Citizen.CreateThread(function()
     while true do
         if KEYS then
             if HOTKEYS_ENABLED then
-                if GetLastInputMethod(0) and not IsPlayerFreeAiming(PlayerId()) then -- keyboard only / not aiming
+                if GetLastInputMethod(0) and not IsPlayerFreeAiming(PlayerId()) and not IsControlPressed(0, KEYS.RIGHT_CLICK) then -- keyboard only / not aiming
                     local me = PlayerPedId()
                     local isModifierKeyPressed = IsControlPressed(0, MODIFIER_KEY)
                     local vehiclePlate = nil

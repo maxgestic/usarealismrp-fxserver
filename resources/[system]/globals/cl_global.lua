@@ -9,7 +9,8 @@ local KEYS = {
   E = 46,
   P = 199,
   V = 0,
-  Y = 246
+  Y = 246,
+  RIGHT_CLICK = 330
 }
 
 local MAX_ITEM_TRADE_DISTANCE = 1.5
