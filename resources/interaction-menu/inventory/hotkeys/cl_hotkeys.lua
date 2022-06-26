@@ -112,3 +112,17 @@ Citizen.CreateThread(function()
         Wait(1)
     end
 end)
+
+Citizen.CreateThread(function() -- prevent players from opening radio wheel to bypass forced 1st person when shooting from vehicle
+    local driveByDisabled = false
+    while true do
+        if not driveByDisabled and IsHudComponentActive(16) then -- radio wheel
+            SetPlayerCanDoDriveBy(PlayerId(), false)
+            driveByDisabled = true
+        elseif driveByDisabled and not IsHudComponentActive(16) then
+            SetPlayerCanDoDriveBy(PlayerId(), true)
+            driveByDisabled = false
+        end
+        Wait(200)
+    end
+end)
