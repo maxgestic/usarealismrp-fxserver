@@ -10,6 +10,8 @@ local KEYS = {
     E = 38
 }
 
+local isCooking = false
+
 -- handle hunting hint text
 Citizen.CreateThread(function()
     while true do
@@ -75,24 +77,31 @@ end)
 
 RegisterNetEvent('hunting:cookMeat')
 AddEventHandler('hunting:cookMeat', function()
-    local myped = PlayerPedId()
-    local playerCoords = GetEntityCoords(myped)
-    local campfire = getClosestCampfireInRange(playerCoords, 5)
-    if DoesEntityExist(campfire) then
-        local beginTime = GetGameTimer()
-        exports.globals:loadAnimDict("amb@medic@standing@kneel@idle_a")
-        while GetGameTimer() - beginTime < HUNTING_COOK_MEAT_TIME_SECONDS * 1000 do
-            if not IsEntityPlayingAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 3) then
-                TaskPlayAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+    if not isCooking then
+        local myped = PlayerPedId()
+        local playerCoords = GetEntityCoords(myped)
+        local campfire = getClosestCampfireInRange(playerCoords, 5)
+        if DoesEntityExist(campfire) then
+            isCooking = true
+            local beginTime = GetGameTimer()
+            exports.globals:loadAnimDict("amb@medic@standing@kneel@idle_a")
+            while GetGameTimer() - beginTime < HUNTING_COOK_MEAT_TIME_SECONDS * 1000 do
+                DisableControlAction(0, control, disable)
+                if not IsEntityPlayingAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 3) then
+                    TaskPlayAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+                end
+                exports.globals:DrawTimerBar(beginTime, HUNTING_COOK_MEAT_TIME_SECONDS * 1000, 1.42, 1.475, 'Cooking Meat')
+                Wait(1)
             end
-            exports.globals:DrawTimerBar(beginTime, HUNTING_COOK_MEAT_TIME_SECONDS * 1000, 1.42, 1.475, 'Cooking Meat')
-            Wait(1)
+            while securityToken == nil do
+                Wait(1)
+            end
+            TriggerServerEvent('hunting:giveCookedMeat', securityToken)
+            ClearPedTasks(myped)
+            isCooking = false
         end
-        while securityToken == nil do
-            Wait(1)
-        end
-        TriggerServerEvent('hunting:giveCookedMeat', securityToken)
-        ClearPedTasks(myped)
+    else
+        exports.globals:notify("Already cooking")  
     end
 end)
 
@@ -116,7 +125,6 @@ function isBlacklistedModel(model)
 end
 
 function getClosestCampfireInRange(coords, range)
-    print('alalal')
     for object in exports.globals:EnumerateObjects() do
         local pedCoords = GetEntityCoords(object)
         local distBetweenPedAndCampfire = Vdist(pedCoords, coords)
