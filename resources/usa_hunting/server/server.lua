@@ -59,16 +59,16 @@ AddEventHandler('hunting:giveCookedMeat', function(securityToken)
 	end
     local char = exports["usa-characters"]:GetCharacter(source)
     if char.hasItem("Butchered Meat") then
-        local cookedMeat = {
-            name = "Cooked Meat",
-            legality = "legal",
-            quantity = 1,
-            type = 'food',
-            substance = 25.0,
-            weight = 5
-        }
-        char.removeItem("Butchered Meat")
         if char.canHoldItem(cookedMeat) then
+            local cookedMeat = {
+                name = "Cooked Meat",
+                legality = "legal",
+                quantity = 1,
+                type = 'food',
+                substance = 25.0,
+                weight = 5
+            }
+            char.removeItem("Butchered Meat")
             char.giveItem(cookedMeat)
             TriggerClientEvent("usa:notify", source, "Your meat is now ready to eat!")
         else
