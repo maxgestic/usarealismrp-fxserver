@@ -172,6 +172,7 @@ AddEventHandler("garage:storeVehicle", function()
 		end
 		SetEntityAsMissionEntity(veh, true, true)
 		DeleteVehicle(veh)
+		Wait(1)
 	end
 	if not DoesEntityExist(veh) then
 		-- store vehicle key with vehicle
