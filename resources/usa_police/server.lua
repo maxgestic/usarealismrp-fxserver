@@ -19,6 +19,7 @@ local armoryItems = {
     { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 700, weight = 25 },
     { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, weight = 15, minRank = 2 },
     { name = "Sniper Rifle", type = "weapon", hash = 100416529, price = 2000, weight = 30, minRank = 6 },
+    { name = "Carbine Rifle", type = "weapon", hash = -2084633992, price = 1000, weight = 15, minRank = 3},
     { name = "Spike Strips", price = 700 },
     { name = "Police Radio", price = 300, type = "misc", weight = 5, notStackable = true },
     { name = "9mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
@@ -445,6 +446,11 @@ function GetWeaponAttachments(name)
     elseif name == "SMG MK2" then
         table.insert(attachments, "COMPONENT_AT_AR_FLSH")
         table.insert(attachments, "COMPONENT_AT_SIGHTS_SMG")
+    elseif name == "Carbine Rifle" then
+        table.insert(attachments, "COMPONENT_AT_AR_FLSH")
+        table.insert(attachments, "COMPONENT_AT_SCOPE_MEDIUM")
+        -- table.insert(attachments, "COMPONENT_AT_AR_SUPP")
+        table.insert(attachments, "COMPONENT_AT_AR_AFGRIP")
     end
     return attachments
 end

@@ -323,7 +323,8 @@ var itemImages = {
     "Compact Rifle Extended Mag": "https://i.imgur.com/UxpUdCO.png",
     "Compact Rifle Drum Mag": "https://i.imgur.com/AtnZkbY.png",
     "Machine Pistol Extended Mag": "https://i.imgur.com/bkP2aVs.png",
-    "Machine Pistol Drum Mag": "https://i.imgur.com/cycagWt.png"
+    "Machine Pistol Drum Mag": "https://i.imgur.com/cycagWt.png",
+    "Carbine Rifle": "https://i.imgur.com/f2Tb0nm.png"
 }
 
 var menuItems = [{
