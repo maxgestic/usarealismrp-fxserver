@@ -240,7 +240,8 @@ function Animal.Attach()
 	FreezeEntityPosition(Ped, true)
 
 	local AnimalPosition = GetEntityCoords(Animal.Handle, false)
-	SetEntityCoords(Ped, AnimalPosition.x, AnimalPosition.y, AnimalPosition.z)
+	print("teleporting entity!")
+SetEntityCoords(Ped, AnimalPosition.x, AnimalPosition.y, AnimalPosition.z)
 
 	AnimalName = "Deer"
 	AnimalType = 1
@@ -335,7 +336,8 @@ function Animal.Ride()
 		end
 		TaskPlayAnim(Ped, AminD2, "exit_left", 8.0, 1, -1, 0, 1.0, 0, 0, 0)
 		Wait(100)
-		SetEntityCoords(Ped, SideCoordinates.x, SideCoordinates.y, SideCoordinates.z)
+		print("teleporting entity!")
+SetEntityCoords(Ped, SideCoordinates.x, SideCoordinates.y, SideCoordinates.z)
 		SetEntityHeading(Ped, SideHeading)
 		ClearPedSecondaryTask(Ped)
 		ClearPedTasksImmediately(Ped)

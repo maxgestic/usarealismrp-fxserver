@@ -346,7 +346,8 @@ function toggleMenu(status, menu, characters)
 	if status then -- open
 		TriggerEvent('usa:toggleHUD', false)
 		SetDrawOrigin(0.0, 0.0, 0.0, 0)
-		SetEntityCoords(ped, 751.31121826172, 6454.3813476563, 31.926473617554, 0.0, 0, 0, 1)
+		print("teleporting entity!")
+SetEntityCoords(ped, 751.31121826172, 6454.3813476563, 31.926473617554, 0.0, 0, 0, 1)
 		FreezeEntityPosition(ped, true)
 		SetEnableHandcuffs(ped, true)
 		RemoveAllPedWeapons(ped, true)
@@ -380,7 +381,8 @@ function SpawnCharacter()
 	end
 	if spawn_coords_closed_menu then
 		RequestCollisionAtCoord(spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z)
-		SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1)
+		print("teleporting entity!")
+SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1)
 		if spawn_coords_closed_menu.heading then
 			SetEntityHeading(ped, spawn_coords_closed_menu.heading)
 		end
@@ -438,7 +440,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(1)
 		if menuOpen then
-			SetEntityCoords(GetPlayerPed(-1), while_menu_open_location.x, while_menu_open_location.y, while_menu_open_location.z, (while_menu_open_location.angle or 0.0), 0, 0, 1)
+SetEntityCoords(GetPlayerPed(-1), while_menu_open_location.x, while_menu_open_location.y, while_menu_open_location.z, (while_menu_open_location.angle or 0.0), 0, 0, 1)
 		end
 	end
 end)

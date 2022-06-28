@@ -31,7 +31,8 @@ Citizen.CreateThread(function()
 			DetachEntity(GetPlayerPed(-1), true, false)
 
 			if pos ~= nil then
-				SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z+0.5, 1, 0, 0, 1)
+				print("teleporting entity!")
+SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z+0.5, 1, 0, 0, 1)
 				pos = nil
 
 				if Pmodel ~= nil then

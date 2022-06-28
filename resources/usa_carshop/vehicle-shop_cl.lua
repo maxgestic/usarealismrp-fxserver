@@ -372,7 +372,8 @@ function EndPreview()
 		TriggerEvent('persistent-vehicles/forget-vehicle', menu_data.preview.handle)
 	    Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( menu_data.preview.handle ) )
 		menu_data.preview.handle = nil
-		SetEntityCoords(GetPlayerPed(-1), table.unpack(menu_data.preview.start_coords))
+		print("teleporting entity!")
+SetEntityCoords(GetPlayerPed(-1), table.unpack(menu_data.preview.start_coords))
 		menu_data.preview.prev_menu:Visible(true)
 	end
 	TriggerEvent("hotwire:enableKeyEngineCheck", true)

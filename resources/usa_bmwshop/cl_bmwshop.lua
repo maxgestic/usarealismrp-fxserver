@@ -46,7 +46,8 @@ local function PreviewVehicle(veh)
 end
 
 local function EndPreview(veh)
-    SetEntityCoords((myped.handle or PlayerPedId()), beforePreviewCoords)
+    print("teleporting entity!")
+SetEntityCoords((myped.handle or PlayerPedId()), beforePreviewCoords)
     SetVehicleEngineOn(veh, false, false, false)
     SetVehicleDoorsLocked(veh, 10)
     TriggerEvent("hotwire:enableKeyEngineCheck", true)

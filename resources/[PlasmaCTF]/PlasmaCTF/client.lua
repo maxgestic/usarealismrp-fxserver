@@ -83,7 +83,8 @@ function hasBeenHit()
 			activity.z = redCoords.z
 			
 			teleport(activity)
-			-- SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
+			-- print("teleporting entity!")
+SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
 		elseif currentTeam == "blue" then
 			-- isLockWaiting = true
 			activity = {}
@@ -93,7 +94,8 @@ function hasBeenHit()
 			activity.z = blueCoords.z
 			
 			teleport(activity)
-			-- SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
+			-- print("teleporting entity!")
+SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
 		end
 		isCurrentlyOutInGame = false
 		isLockWaiting = false
@@ -304,7 +306,8 @@ function OrbStolen(myTeam,orbs,coords)
 	if IsEntityAttached(orbs) then
 		print("erreur de-attache")
 	else
-		SetEntityCoords(orbs,coords.x,coords.y,coords.z)
+		print("teleporting entity!")
+SetEntityCoords(orbs,coords.x,coords.y,coords.z)
 		TriggerServerEvent("PaintBallCTF:OrbStolen",currentSession.idx,myTeam)
 		if currentTeam == "blue" then
 			IhaveTheredOrbs = false
@@ -333,7 +336,8 @@ function dropOrb(myTeam,orbs)
 	if IsEntityAttached(orbs) then
 		print("erreur de-attache")
 	else
-		-- SetEntityCoords(orbs,coords.x,coords.y,coords.z)
+		-- print("teleporting entity!")
+SetEntityCoords(orbs,coords.x,coords.y,coords.z)
 		TriggerServerEvent("PaintBallCTF:OrbDropped",currentSession.idx,myTeam)
 		if currentTeam == "blue" then
 			IhaveTheredOrbs = false
@@ -363,7 +367,8 @@ function resetOrb(myTeam,orbs,coords)
 			NetworkRequestControlOfEntity(orbs)
 			Wait(20)
 		end
-		SetEntityCoords(orbs,coords.x,coords.y,coords.z)
+		print("teleporting entity!")
+SetEntityCoords(orbs,coords.x,coords.y,coords.z)
 	end
 	-- TriggerServerEvent("PaintBallCTF:OrbReset",currentSession.idx,myTeam)
 
@@ -472,7 +477,8 @@ end)
 function teleport(coords)
 	local xrand = math.random(-1000,1000) / 1000
 	local yrand = math.random(-1000,1000) / 1000
-	SetEntityCoords(PlayerPedId(),coords.x+xrand,coords.y+yrand,coords.z+1)
+	print("teleporting entity!")
+SetEntityCoords(PlayerPedId(),coords.x+xrand,coords.y+yrand,coords.z+1)
 end
 
 function startGame(color,idx,manche)
@@ -508,7 +514,8 @@ function startGame(color,idx,manche)
 	TriggerEvent("PaintBallCTF:SwitchTenu",color)
 	
 	-- switchTenu(color)
-	-- SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
+	-- print("teleporting entity!")
+SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
 	
 	teleport(activity)
 	GiveWeaponToPed(PlayerPedId(),GetHashKey(GunName),250,false,true)

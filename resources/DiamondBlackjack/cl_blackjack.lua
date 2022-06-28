@@ -153,7 +153,10 @@ Citizen.CreateThread(function()
         SetPedConfigFlag(dealerEntity, 208, true)       
         setBlackjackDealerPedVoiceGroup(randomBlackShit,dealerEntity)
         setBlackjackDealerClothes(randomBlackShit,dealerEntity)
-        SetEntityCoordsNoOffset(dealerEntity, cfg.blackjackTables[i].dealerPos.x,cfg.blackjackTables[i].dealerPos.y,cfg.blackjackTables[i].dealerPos.z, 0,0,1)
+        print("teleporting entity!")
+print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(dealerEntity, cfg.blackjackTables[i].dealerPos.x,cfg.blackjackTables[i].dealerPos.y,cfg.blackjackTables[i].dealerPos.z, 0,0,1)
         SetEntityHeading(dealerEntity, cfg.blackjackTables[i].dealerHeading)
         if dealerModel == maleCasinoDealer then
             TaskPlayAnim(dealerEntity, dealerAnimDict, "idle", 1000.0, -2.0, -1, 2, 1148846080, 0) --anim_name is idle or female_idle depending on gender
@@ -519,7 +522,9 @@ AddEventHandler("Blackjack:beginBetsBlackjack",function(gameID,tableId)
     currentBetAmount = 0
     dealersHand = 0
     currentHand = 0
-    SetEntityCoordsNoOffset(dealerPed, cfg.blackjackTables[tableId].dealerPos.x,cfg.blackjackTables[tableId].dealerPos.y,cfg.blackjackTables[tableId].dealerPos.z, 0,0,1)
+    print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(dealerPed, cfg.blackjackTables[tableId].dealerPos.x,cfg.blackjackTables[tableId].dealerPos.y,cfg.blackjackTables[tableId].dealerPos.z, 0,0,1)
     SetEntityHeading(dealerPed, cfg.blackjackTables[tableId].dealerHeading)
     Citizen.CreateThread(function()
         drawTimerBar = true
@@ -782,7 +787,9 @@ function startSingleDealerDealing(dealerPed,gameId,cardData,nextCardCount,gotCur
         local iVar5 = cardQueue
         cardOffsetX,cardOffsetY,cardOffsetZ = blackjack_func_377(iVar5, 4, 1) --iVar9 is seat number 0-3
         local cardPos = GetObjectOffsetFromCoords(tablePosX, tablePosY, tablePosZ, vVar8.z, cardOffsetX, cardOffsetY, cardOffsetZ)
-        SetEntityCoordsNoOffset(nextCardObj, cardPos.x, cardPos.y, cardPos.z, 0, 0, 1)
+        print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(nextCardObj, cardPos.x, cardPos.y, cardPos.z, 0, 0, 1)
         Wait(400)
     else 
         --print("Failed to deal cards, entity doesn't exist or we don't have control")
@@ -826,7 +833,9 @@ function startSingleDealing(chairId,dealerPed,gameId,cardData,nextCardCount,gotC
             cardOffsetX,cardOffsetY,cardOffsetZ = 0.5737, 0.2376, 0.948025
         end
         local cardPos = GetObjectOffsetFromCoords(tablePosX, tablePosY, tablePosZ, vVar8.z, cardOffsetX, cardOffsetY, cardOffsetZ)
-        SetEntityCoordsNoOffset(nextCardObj, cardPos.x, cardPos.y, cardPos.z, 0, 0, 1)
+        print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(nextCardObj, cardPos.x, cardPos.y, cardPos.z, 0, 0, 1)
         vVar8 =  vector3(0.0, 0.0, getTableHeading(blackjack_func_368(chairId)))
         cardObjectOffsetRotation = vVar8 + func_376(iVar5, iVar9, 0, false)
         SetEntityRotation(nextCardObj, cardObjectOffsetRotation.x, cardObjectOffsetRotation.y, cardObjectOffsetRotation.z, 2, 1)
@@ -888,7 +897,9 @@ function startDealing(dealerPed,gameId,cardData,chairId,cardIndex,gotCurrentHand
             cardOffsetX,cardOffsetY,cardOffsetZ = blackjack_func_377(iVar5, 4, 1)
         end
         local cardPos = GetObjectOffsetFromCoords(tablePosX, tablePosY, tablePosZ, vVar8.z, cardOffsetX, cardOffsetY, cardOffsetZ)
-        SetEntityCoordsNoOffset(nextCardObj, cardPos.x, cardPos.y, cardPos.z, 0, 0, 1)
+        print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(nextCardObj, cardPos.x, cardPos.y, cardPos.z, 0, 0, 1)
         --print("fakeChairIdForDealerTurn",fakeChairIdForDealerTurn)
         if chairId <= 1000 then
             vVar8 =  vector3(0.0, 0.0, getTableHeading(blackjack_func_368(chairId))) 
@@ -964,7 +975,9 @@ function flipDealerCard(dealerPed,gotCurrentHand,tableId,gameId)
     end    
     local soundCardString = "MINIGAME_BJACK_DEALER_" .. tostring(gotCurrentHand)
     PlayAmbientSpeech1(dealerPed,soundCardString,"SPEECH_PARAMS_FORCE_NORMAL_CLEAR",1)
-    SetEntityCoordsNoOffset(cardObj, cardX,cardY,cardZ)
+    print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(cardObj, cardX,cardY,cardZ)
 end
 
 function checkCard(dealerPed,cardObj)
@@ -984,7 +997,9 @@ function checkCard(dealerPed,cardObj)
     end
     Wait(100)
     DetachEntity(cardObj,false,true)
-    SetEntityCoordsNoOffset(cardObj, cardX,cardY,cardZ)
+    print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(cardObj, cardX,cardY,cardZ)
 end
 
 RegisterNetEvent("Blackjack:endStandOrHitPhase")
@@ -1184,7 +1199,9 @@ function betChipsForNextHand(chipsAmount,chipsProp,something,chairID,someBool,zO
         cardObjects[tostring(chairID) .. "chips"] = {}
         table.insert(cardObjects[tostring(chairID) .. "chips"],chipsObj)
     end
-    SetEntityCoordsNoOffset(chipsObj, chipsOffset.x, chipsOffset.y, chipsOffset.z+zOffset, 0, 0, 1)
+    print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(chipsObj, chipsOffset.x, chipsOffset.y, chipsOffset.z+zOffset, 0, 0, 1)
     local chipOffsetRotation = blackjack_func_373(chipsAmount,0,getLocalChairIndexFromGlobalChairId(chairID),someBool)
     SetEntityRotation(chipsObj,vVar8 + chipOffsetRotation, 2, 1)
 
@@ -1242,7 +1259,9 @@ function getNewCardFromMachine(nextCard,chairId,gameId)
     SetEntityVisible(nextCardObj,false)
     SetModelAsNoLongerNeeded(nextCardHash)
     local cardObjectOffsetRotation = blackjack_func_398(blackjack_func_368(chairId))
-    SetEntityCoordsNoOffset(nextCardObj, cardObjectOffset.x, cardObjectOffset.y, cardObjectOffset.z, 0, 0, 1)
+    print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(nextCardObj, cardObjectOffset.x, cardObjectOffset.y, cardObjectOffset.z, 0, 0, 1)
     --vVar8 =  vector3(0.0, 0.0, getTableHeading(blackjack_func_368(chairId)))
     
     --if chairId > 99 then 

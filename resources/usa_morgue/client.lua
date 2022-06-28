@@ -20,10 +20,12 @@ AddEventHandler('morgue:toeTag', function(toeTag)
         RequestCollisionAtCoord(morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z)
         Wait(1000)
         TriggerServerEvent('InteractSound_SV:PlayOnSource', 'zip-close', 0.3)
-        SetEntityCoords(playerPed, morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z, morgueTeleportLocations[index].heading, 0, 0, 1) -- tp to morgue
+        print("teleporting entity!")
+SetEntityCoords(playerPed, morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z, morgueTeleportLocations[index].heading, 0, 0, 1) -- tp to morgue
         while not HasCollisionLoadedAroundEntity(playerPed) do
             Citizen.Wait(100)
-            SetEntityCoords(playerPed, morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z, morgueTeleportLocations[index].heading, 0, 0, 1) -- tp to hospital
+            print("teleporting entity!")
+SetEntityCoords(playerPed, morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z, morgueTeleportLocations[index].heading, 0, 0, 1) -- tp to hospital
         end
         Citizen.Wait(3000)
         DoScreenFadeIn(500)
@@ -47,10 +49,12 @@ AddEventHandler('morgue:release', function()
     RequestCollisionAtCoord(240.74, -1379.803, 33.74)
     Wait(1000)
     TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-shut', 0.3)
-    SetEntityCoords(playerPed, 240.74, -1379.803, 33.74, 138.0, 0, 0, 1) -- tp to exit morgue
+    print("teleporting entity!")
+SetEntityCoords(playerPed, 240.74, -1379.803, 33.74, 138.0, 0, 0, 1) -- tp to exit morgue
     while not HasCollisionLoadedAroundEntity(playerPed) do
         Citizen.Wait(100)
-        SetEntityCoords(playerPed, 240.74, -1379.803, 33.74, 138.0, 0, 0, 1) -- tp to exit morgue
+        print("teleporting entity!")
+SetEntityCoords(playerPed, 240.74, -1379.803, 33.74, 138.0, 0, 0, 1) -- tp to exit morgue
     end
     Citizen.Wait(3000)
     DoScreenFadeIn(500)

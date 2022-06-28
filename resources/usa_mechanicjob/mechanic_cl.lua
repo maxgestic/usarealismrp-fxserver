@@ -424,7 +424,8 @@ AddEventHandler('towJob:towVehicle', function()
 			end
 			ClearPedTasks(playerPed)
 			DetachEntity(currentlyTowedVehicle, true, true)
-			SetEntityCoords(currentlyTowedVehicle, detachCoords)
+			print("teleporting entity!")
+SetEntityCoords(currentlyTowedVehicle, detachCoords)
 			currentlyTowedVehicle = nil
 		end
 	end

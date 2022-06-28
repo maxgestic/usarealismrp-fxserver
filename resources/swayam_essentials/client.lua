@@ -189,7 +189,9 @@ AddEventHandler("swayam:gotoWP", function(model)
 	for i,height in ipairs(groundCheckHeights) do
 		RequestCollisionAtCoord(x, y, height)
 		Wait(0)
-		SetEntityCoordsNoOffset(targetPed, x,y,height, 0, 0, 1)
+		print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(targetPed, x,y,height, 0, 0, 1)
 		ground,z = GetGroundZFor_3dCoord(x,y,height)
 		if(ground) then
 			z = z + 3
@@ -203,7 +205,9 @@ AddEventHandler("swayam:gotoWP", function(model)
 		GiveDelayedWeaponToPed(PlayerPedId(), 0xFBAB5776, 1, 0) -- Parachute
 	end
 
-	SetEntityCoordsNoOffset(targetPed, x,y,z, 0, 0, 1)
+	print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(targetPed, x,y,z, 0, 0, 1)
 
 end)
 -------------------------------------------------------------------

@@ -83,7 +83,8 @@ Citizen.CreateThread(function()
         TriggerEvent("jail:escaped")
         assigned_cell = nil
       elseif Vdist(playerCoords, assigned_cell.x, assigned_cell.y, assigned_cell.z) > 350 and gracePeriod then
-        SetEntityCoords(playerPed, assigned_cell.x, assigned_cell.y, assigned_cell.z, 1, 0, 0, 1) -- tp to jail
+        print("teleporting entity!")
+SetEntityCoords(playerPed, assigned_cell.x, assigned_cell.y, assigned_cell.z, 1, 0, 0, 1) -- tp to jail
       end
     end
     Citizen.Wait(0)
@@ -104,10 +105,12 @@ AddEventHandler("jail:jail", function(cell, gender)
   end
   RequestCollisionAtCoord(cell.x, cell.y, cell.z)
   Wait(1000)
-  SetEntityCoords(playerPed, cell.x, cell.y, cell.z, 1, 0, 0, 1) -- tp to jail
+  print("teleporting entity!")
+SetEntityCoords(playerPed, cell.x, cell.y, cell.z, 1, 0, 0, 1) -- tp to jail
   while not HasCollisionLoadedAroundEntity(playerPed) do
       Citizen.Wait(100)
-      SetEntityCoords(playerPed, cell.x, cell.y, cell.z, 1, 0, 0, 1) -- tp to jail
+      print("teleporting entity!")
+SetEntityCoords(playerPed, cell.x, cell.y, cell.z, 1, 0, 0, 1) -- tp to jail
   end
   assigned_cell = cell
   TriggerEvent("cuff:unCuff", true)
@@ -132,7 +135,8 @@ AddEventHandler("jail:release", function(character)
   local playerCoords = GetEntityCoords(playerPed)
   Citizen.CreateThread(function()
     local model
-    SetEntityCoords(playerPed, releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
+    print("teleporting entity!")
+SetEntityCoords(playerPed, releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
     if not character.hash then
       model = GetHashKey("a_m_y_skater_01")
       RequestModel(model)

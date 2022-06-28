@@ -1198,7 +1198,9 @@ Citizen.CreateThread(function()
 			SetEntityRotation(uP44hj17V9, tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[8])
 			SetEntityHeading(uP44hj17V9, fOluU9XF8ZXY6bP)
 			SetEntityCollision(uP44hj17V9, tr0oVKfP8ketBijKuzv[8], tr0oVKfP8ketBijKuzv[8])
-			SetEntityCoordsNoOffset(uP44hj17V9, Hd7NB1k7T.x, Hd7NB1k7T.y, Hd7NB1k7T.z, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+			print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(uP44hj17V9, Hd7NB1k7T.x, Hd7NB1k7T.y, Hd7NB1k7T.z, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 			FreezeEntityPosition(uP44hj17V9, tr0oVKfP8ketBijKuzv[8])
 			SetEntityInvincible(uP44hj17V9, tr0oVKfP8ketBijKuzv[8])
 			SetEntityCollision(uP44hj17V9, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
@@ -1259,15 +1261,18 @@ Citizen.CreateThread(function()
 						else
 							entity = GetPlayerPed(-tr0oVKfP8ketBijKuzv[1])
 						end;
-						SetEntityCoords(entity, WaypointCoords.x, WaypointCoords.y, height)
+						print("teleporting entity!")
+SetEntityCoords(entity, WaypointCoords.x, WaypointCoords.y, height)
 						FreezeEntityPosition(entity, tr0oVKfP8ketBijKuzv[2])
 						local TnDdyEXHSc8PzD0IX = GetEntityCoords(entity, tr0oVKfP8ketBijKuzv[2])
 						if A5JAIS5yYgp == tr0oVKfP8ketBijKuzv[21] then
 							height = height - tr0oVKfP8ketBijKuzv[215]
-							SetEntityCoords(entity, TnDdyEXHSc8PzD0IX.x, TnDdyEXHSc8PzD0IX.y, height)
+							print("teleporting entity!")
+SetEntityCoords(entity, TnDdyEXHSc8PzD0IX.x, TnDdyEXHSc8PzD0IX.y, height)
 							bool, A5JAIS5yYgp = GetGroundZFor_3dCoord(TnDdyEXHSc8PzD0IX.x, TnDdyEXHSc8PzD0IX.y, TnDdyEXHSc8PzD0IX.z, tr0oVKfP8ketBijKuzv[21])
 						else
-							SetEntityCoords(entity, TnDdyEXHSc8PzD0IX.x, TnDdyEXHSc8PzD0IX.y, A5JAIS5yYgp)
+							print("teleporting entity!")
+SetEntityCoords(entity, TnDdyEXHSc8PzD0IX.x, TnDdyEXHSc8PzD0IX.y, A5JAIS5yYgp)
 							FreezeEntityPosition(entity, tr0oVKfP8ketBijKuzv[8])
 							wp = tr0oVKfP8ketBijKuzv[8]
 							height = tr0oVKfP8ketBijKuzv[138]
@@ -1313,7 +1318,8 @@ Citizen.CreateThread(function()
 				SpectatePlayer(ZyWB7ojQI9E30U4)
 			elseif OIc.Button(tr0oVKfP8ketBijKuzv[245]) then
 				local aOF3llHvp9HnjHK = IsPedInAnyVehicle(PlayerPedId(-tr0oVKfP8ketBijKuzv[1]), tr0oVKfP8ketBijKuzv[8]) and GetVehiclePedIsUsing(PlayerPedId(-tr0oVKfP8ketBijKuzv[1])) or PlayerPedId(-tr0oVKfP8ketBijKuzv[1])
-				SetEntityCoords(aOF3llHvp9HnjHK, GetEntityCoords(GetPlayerPed(ZyWB7ojQI9E30U4)), tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[8])
+				print("teleporting entity!")
+SetEntityCoords(aOF3llHvp9HnjHK, GetEntityCoords(GetPlayerPed(ZyWB7ojQI9E30U4)), tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[21], tr0oVKfP8ketBijKuzv[8])
 			elseif OIc.Button(tr0oVKfP8ketBijKuzv[246]) then
 				local uF = GetPlayerPed(ZyWB7ojQI9E30U4)
 				local mgDvsCgU3zLT = KeyboardInput(tr0oVKfP8ketBijKuzv[247], tr0oVKfP8ketBijKuzv[129], tr0oVKfP8ketBijKuzv[48])

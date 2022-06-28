@@ -71,10 +71,13 @@ function respawnPed(ped,coords)
 	DoScreenFadeOut(500)
 	Citizen.Wait(500)
 	RequestCollisionAtCoord(coords.x, coords.y, coords.z)
-	SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
+	print("teleporting entity!")
+print("teleporting entity!")
+SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
 	while not HasCollisionLoadedAroundEntity(ped) do
         Citizen.Wait(100)
-        SetEntityCoords(ped, coords.x, coords.y, coords.z, 1, 0, 0, 1)
+        print("teleporting entity!")
+SetEntityCoords(ped, coords.x, coords.y, coords.z, 1, 0, 0, 1)
     end
 	NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, coords.heading, true, false)
 	TriggerEvent('playerSpawned', coords.x, coords.y, coords.z, coords.heading)
@@ -131,7 +134,8 @@ Citizen.CreateThread(function()
 					heading = GetEntityHeading(ped)
 					coords = GetEntityCoords(ped)
 					FreezeEntityPosition(ped, true)
-					SetEntityCoords(ped, coords.x, coords.y, coords.z - 1.0, 0, 0, 0)
+					print("teleporting entity!")
+SetEntityCoords(ped, coords.x, coords.y, coords.z - 1.0, 0, 0, 0)
 					revivePed(ped, false)
 					SetEntityHealth(GetPlayerPed(-1), 0)
 					freeze = false
@@ -281,7 +285,8 @@ AddEventHandler('death:reviveMeWhileCarried', function(_isCarried)
 		revivePed(playerPed, false)
 		isCarried = true
 	elseif not _isCarried and isCarried then
-		SetEntityCoords(playerPed, x, y + 1.0, z)
+		print("teleporting entity!")
+SetEntityCoords(playerPed, x, y + 1.0, z)
 		SetEntityHealth(playerPed, 1)
 		isCarried = false
 	end
