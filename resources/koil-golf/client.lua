@@ -550,8 +550,7 @@ function swing()
 	end
 	local x,y,z = table.unpack(GetEntityCoords(mygolfball))
 	createBall(x,y,z)
-	--print("teleporting entity!")
-SetEntityCoords(GetPlayerPed(-1),GetEntityCoords(mygolfball))
+	--SetEntityCoords(GetPlayerPed(-1),GetEntityCoords(mygolfball))
 	FreezeEntityPosition(mygolfball, true)
 end
 

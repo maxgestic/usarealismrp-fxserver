@@ -138,8 +138,7 @@ function StretcheroutCar()
         if GetVehiclePedIsIn(playerPed, false) == 0 and DoesEntityExist(veh) and IsEntityAVehicle(veh) then
             FreezeEntityPosition(closestObject, false)
             DetachEntity(closestObject, true, true)
-            print("teleporting entity!")
-SetEntityCoords(closestObject, pedCoords)
+            SetEntityCoords(closestObject, pedCoords)
 
             local pedheading = GetEntityHeading(ped)
 
@@ -199,8 +198,7 @@ Use = function(pushable)
 			if pushable.canSteer then
 				if IsControlPressed(0, 32) then
 					local x, y, z  = table.unpack(GetEntityCoords(pushable.closestObject) + GetEntityForwardVector(pushable.closestObject) * -0.02)
-					print("teleporting entity!")
-SetEntityCoords(pushable.closestObject, x,y,z)
+					SetEntityCoords(pushable.closestObject, x,y,z)
 					PlaceObjectOnGroundProperly(pushable.closestObject)
 				end
 
@@ -231,8 +229,7 @@ SetEntityCoords(pushable.closestObject, x,y,z)
 					DetachEntity(PlayerPedId(), true, true)
 					isInStretcher = false
 					local x, y, z = table.unpack(GetEntityCoords(pushable.closestObject) + GetEntityForwardVector(pushable.closestObject) * - 0.7)
-					print("teleporting entity!")
-SetEntityCoords(PlayerPedId(), x,y,z)
+					SetEntityCoords(PlayerPedId(), x,y,z)
 				end
 			end
 		end

@@ -251,9 +251,7 @@ end
 
 function TeleportPet()
 	local x,y,z = table.unpack(GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0, -0.5, 0))
-	print("teleporting entity!")
-print("teleporting entity!")
-SetEntityCoordsNoOffset(my_pet.handle, x, y, z)
+	SetEntityCoordsNoOffset(my_pet.handle, x, y, z)
 end
 
 function Notify(text)

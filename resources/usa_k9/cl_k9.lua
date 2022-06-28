@@ -133,9 +133,7 @@ end
 function teleportPetToPlayer()
 	if k9.handle ~= nil then
 		local playerOffset = GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0, -0.5, 0)
-		print("teleporting entity!")
-print("teleporting entity!")
-SetEntityCoordsNoOffset(k9.handle, playerOffset)
+		SetEntityCoordsNoOffset(k9.handle, playerOffset)
 		k9.staying = false
 	end
 end

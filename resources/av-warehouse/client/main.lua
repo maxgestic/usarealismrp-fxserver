@@ -103,16 +103,14 @@ Citizen.CreateThread(function()
 					if sC ~= nil then
 						DoScreenFadeOut(1000)
 						Citizen.Wait(1500)
-						print("teleporting entity!")
-SetEntityCoords(p,sC)
+						SetEntityCoords(p,sC)
 						SetEntityHeading(p,180.90)
 						Citizen.Wait(1000)
 						DoScreenFadeIn(1500)
 					else
 						DoScreenFadeOut(1000)
 						Citizen.Wait(1500)
-						print("teleporting entity!")
-SetEntityCoords(p, Config.DefaultCoords[1], Config.DefaultCoords[2], Config.DefaultCoords[3])
+						SetEntityCoords(p, Config.DefaultCoords[1], Config.DefaultCoords[2], Config.DefaultCoords[3])
 						Citizen.Wait(1000)
 						DoScreenFadeIn(1500)
 					end				
@@ -120,16 +118,14 @@ SetEntityCoords(p, Config.DefaultCoords[1], Config.DefaultCoords[2], Config.Defa
 					if not currentlyInsideWarehouse then
 						DoScreenFadeOut(1000)
 						Citizen.Wait(1500)
-						print("teleporting entity!")
-SetEntityCoords(p, Config.DefaultCoords[1], Config.DefaultCoords[2], Config.DefaultCoords[3])
+						SetEntityCoords(p, Config.DefaultCoords[1], Config.DefaultCoords[2], Config.DefaultCoords[3])
 						Citizen.Wait(1000)
 						DoScreenFadeIn(1500)
 					else
 						BorrarCajas()
 						DoScreenFadeOut(1000)
 						Citizen.Wait(1500)
-						print("teleporting entity!")
-SetEntityCoords(p,sC)
+						SetEntityCoords(p,sC)
 						SetEntityHeading(p,180.90)
 						Citizen.Wait(1000)
 						DoScreenFadeIn(1500)
@@ -302,8 +298,7 @@ AddEventHandler("av_warehouse:teleport", function()
 	Citizen.Wait(1500)
 	SetEntityHeading(p, 88.37)
 	sC = GetEntityCoords(p)
-	print("teleporting entity!")
-SetEntityCoords(p,1071.48, -3102.28, -38.99)	
+	SetEntityCoords(p,1071.48, -3102.28, -38.99)	
 	currentlyInsideWarehouse = true
 	if Config.SpawnGuards then
 		local haveAlreadyBeenSpawned = TriggerServerCallback {

@@ -46,8 +46,7 @@ end
 function teleport(coords)
 	local xrand = math.random(-1000,1000) / 1000
 	local yrand = math.random(-1000,1000) / 1000
-	print("teleporting entity!")
-SetEntityCoords(PlayerPedId(),coords.x+xrand,coords.y+yrand,coords.z+1)
+	SetEntityCoords(PlayerPedId(),coords.x+xrand,coords.y+yrand,coords.z+1)
 end
 
 incircle = false
@@ -696,8 +695,7 @@ function startGame(color,idx,manche)
 	
 	Citizen.Wait(2000)
 	switchTenu(color)
-	-- print("teleporting entity!")
-SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
+	-- SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
 	
 	teleport(activity)
 	GiveWeaponToPed(PlayerPedId(),GetHashKey(GunName),250,false,true)
@@ -765,8 +763,7 @@ function startNextGame(color,idx,manche)
 	
 	Citizen.Wait(2000)
 	-- switchTenu(color)
-	-- print("teleporting entity!")
-SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
+	-- SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
 	teleport(activity)
 	GiveWeaponToPed(PlayerPedId(),GetHashKey(GunName),250,false,true)
 	ClearPedBloodDamage(PlayerPedId())
@@ -1010,8 +1007,7 @@ Citizen.CreateThread(function()
 							activity.z = redCoords.z
 							
 							teleport(activity)
-							-- print("teleporting entity!")
-SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
+							-- SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
 						elseif currentTeam == "blue" then
 							isLockWaiting = true
 							activity = {}
@@ -1021,8 +1017,7 @@ SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
 							activity.z = blueCoords.z
 							
 							teleport(activity)
-							-- print("teleporting entity!")
-SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
+							-- SetEntityCoords(PlayerPedId(),activity.x,activity.y,activity.z+1)
 						end
 						ClearEntityLastDamageEntity(PlayerPedId())
 						print("Plasma Game ClearEntityLastDamageEntity")

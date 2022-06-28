@@ -83,11 +83,9 @@ function ActivateBed(x, y, z, model)
     Citizen.CreateThread(function()
         local playerPed = PlayerPedId()
         RequestCollisionAtCoord(x, y, z)
-        print("teleporting entity!")
-SetEntityCoords(playerPed, x, y, z + 0.1)
+        SetEntityCoords(playerPed, x, y, z + 0.1)
         while not HasCollisionLoadedAroundEntity(playerPed) do
-            print("teleporting entity!")
-SetEntityCoords(playerPed, x, y, z + 0.1)
+            SetEntityCoords(playerPed, x, y, z + 0.1)
             Wait(1)
         end
         local coordSetTime = GetGameTimer()

@@ -86,8 +86,7 @@ function _unseatPedInternal(targetSource, playerPed)
 			RequestCollisionAtCoord(targetCoords)
 			Wait(10)
 		end
-		print("teleporting entity!")
-SetEntityCoords(playerPed, targetCoords.x, targetCoords.y, targetCoords.z - 0.9)
+		SetEntityCoords(playerPed, targetCoords.x, targetCoords.y, targetCoords.z - 0.9)
 	end
 end
 

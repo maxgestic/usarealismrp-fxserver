@@ -1052,8 +1052,7 @@ function interactionMenuUse(index, itemName, wholeItem)
 								TaskPlayAnim(playerPed, anim.dict, anim.name, 8.0, 1.0, -1, 11, 1.0, false, false, false)
 								Citizen.Wait(2000)
 								ClearPedTasks(playerPed)
-								print("teleporting entity!")
-SetEntityCoords(playerPed, x, y, z - 1.0, false, false, false, false)
+								SetEntityCoords(playerPed, x, y, z - 1.0, false, false, false, false)
 							end
 					if Vdist(car_coords, x, y, z) > 3.0 then
 						TriggerEvent("usa:notify", "Lockpick ~y~failed~s~, out of range!")

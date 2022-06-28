@@ -4,9 +4,7 @@ TeleportPlayer = function(x,y,z,h)
   local pos = (xType == "table" and x or xType == "vector3" and x or vector3(x,y,z))
   local head = (xType == "table" and y or xType == "vector3" and y or h and h or GetEntityHeading(plyPed))
 
-  print("teleporting entity!")
-print("teleporting entity!")
-SetEntityCoordsNoOffset(plyPed, pos.x,pos.y,pos.z)
+  SetEntityCoordsNoOffset(plyPed, pos.x,pos.y,pos.z)
   SetEntityHeading(plyPos,head)
   Wait(0)
 

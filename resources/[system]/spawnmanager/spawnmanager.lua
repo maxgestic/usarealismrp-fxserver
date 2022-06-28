@@ -276,8 +276,7 @@ function spawnPlayer(spawnIdx, cb)
         local ped = PlayerPedId()
 
         -- V requires setting coords as well
-        print("teleporting entity!")
-SetEntityCoordsNoOffset(ped, spawn.x, spawn.y, spawn.z, false, false, false, true)
+        SetEntityCoordsNoOffset(ped, spawn.x, spawn.y, spawn.z, false, false, false, true)
 
         NetworkResurrectLocalPlayer(spawn.x, spawn.y, spawn.z, spawn.heading, true, true, false)
 

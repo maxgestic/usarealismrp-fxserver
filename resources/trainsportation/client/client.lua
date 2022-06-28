@@ -68,8 +68,7 @@ function doTrains()
 				debugLog("exit")
 				if (Config.TrainVeh ~= 0) then
 					local off = GetOffsetFromEntityInWorldCoords(Config.TrainVeh, -2.0, -5.0, 0.6)
-					print("teleporting entity!")
-SetEntityCoords(GetPlayerPed(-1), off.x, off.y, off.z,false,false,false,false)
+					SetEntityCoords(GetPlayerPed(-1), off.x, off.y, off.z,false,false,false,false)
 				end
 				Config.inTrain = false
 				Config.inTrainAsPas = false
@@ -84,8 +83,7 @@ SetEntityCoords(GetPlayerPed(-1), off.x, off.y, off.z,false,false,false,false)
 						debugLog("T:" .. GetVehiclePedIsIn( ped, false ) .. "|M:" .. GetEntityModel(GetVehiclePedIsIn( ped, false )))
 					elseif getCanPassenger(Config.TrainVeh) then
 						local off = GetOffsetFromEntityInWorldCoords(Config.TrainVeh, 0.0, -5.0, 0.6)
-						print("teleporting entity!")
-SetEntityCoords(GetPlayerPed(-1), off.x, off.y, off.z)
+						SetEntityCoords(GetPlayerPed(-1), off.x, off.y, off.z)
 						Config.inTrainAsPas = true
 						debugLog("Set into Train as Passenger!")
 						debugLog("T:" .. GetVehiclePedIsIn( ped, false ) .. "|M:" .. GetEntityModel(GetVehiclePedIsIn( ped, false )))

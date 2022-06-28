@@ -231,8 +231,7 @@ AddEventHandler('cuff:playSuspectAnim', function(x, y, z, heading)
     end
     cuffanimplaying = true
     DisablePlayerFiring(playerPed, true)
-    print("teleporting entity!")
-SetEntityCoords(playerPed, x, y, z)
+    SetEntityCoords(playerPed, x, y, z)
     SetEntityHeading(playerPed, heading)
     Citizen.Wait(100)
     ClearPedTasksImmediately(playerPed)

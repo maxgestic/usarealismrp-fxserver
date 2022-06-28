@@ -258,8 +258,7 @@ AddEventHandler('veh:slimjimVehInFrontPolice', function()
           TaskPlayAnim(playerPed, 'veh@break_in@0h@p_m_one@', 'low_force_entry_ds', 8.0, 1.0, -1, 11, 1.0, false, false, false)
           Citizen.Wait(2000)
           ClearPedTasks(playerPed)
-          print("teleporting entity!")
-SetEntityCoords(playerPed, x, y, z - 1.0, false, false, false, false)
+          SetEntityCoords(playerPed, x, y, z - 1.0, false, false, false, false)
         end
         Citizen.Wait(0)
       end

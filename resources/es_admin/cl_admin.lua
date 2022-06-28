@@ -36,8 +36,7 @@ AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_na
 		NetworkSetInSpectatorMode(false, prevSpectate.target)
 		NetworkConcealPlayer(PlayerId(), false, false)
 		Wait(50)
-		print("teleporting entity!")
-SetEntityCoords(PlayerPedId(), prevSpectate.coords.x, prevSpectate.coords.y, prevSpectate.coords.z)
+		SetEntityCoords(PlayerPedId(), prevSpectate.coords.x, prevSpectate.coords.y, prevSpectate.coords.z)
 		SetEntityCollision(playerPed, true, true)
 		FreezeEntityPosition(playerPed, false)
 		if prevSpectate.veh.handle then
@@ -58,8 +57,7 @@ SetEntityCoords(PlayerPedId(), prevSpectate.coords.x, prevSpectate.coords.y, pre
 		end
 		RequestCollisionAtCoord(target.coords.x,target.coords.y,target.coords.z)
 		NetworkConcealPlayer(PlayerId(), true, true)
-		print("teleporting entity!")
-SetEntityCoords(playerPed, target.coords.x, target.coords.y, target.coords.z + 10.0)
+		SetEntityCoords(playerPed, target.coords.x, target.coords.y, target.coords.z + 10.0)
 		Wait(1000)
 		FreezeEntityPosition(playerPed, true)
 		local targetPlayer = GetPlayerFromServerId(target.src)
@@ -74,8 +72,7 @@ SetEntityCoords(playerPed, target.coords.x, target.coords.y, target.coords.z + 1
 					NetworkConcealPlayer(PlayerId(), false, false)
 					Wait(10)
 					FreezeEntityPosition(playerPed, false)
-					print("teleporting entity!")
-SetEntityCoords(playerPed, newCoords.x, newCoords.y, newCoords.z + 10.0)
+					SetEntityCoords(playerPed, newCoords.x, newCoords.y, newCoords.z + 10.0)
 					Wait(10)
 					NetworkConcealPlayer(PlayerId(), true, true)
 					FreezeEntityPosition(playerPed, true)
@@ -181,15 +178,13 @@ end)
 RegisterNetEvent('es_admin:teleportUser')
 AddEventHandler('es_admin:teleportUser', function(destination_server_id)
 	local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(destination_server_id))))
-	print("teleporting entity!")
-SetEntityCoords(GetPlayerPed(-1), x, y, z)
+	SetEntityCoords(GetPlayerPed(-1), x, y, z)
 	states.frozenPos = {x = x, y = y, z = z}
 end)
 
 RegisterNetEvent('es_admin:teleportUserByCoords')
 AddEventHandler('es_admin:teleportUserByCoords', function(x, y, z)
-	print("teleporting entity!")
-SetEntityCoords(GetPlayerPed(-1), x, y, z)
+	SetEntityCoords(GetPlayerPed(-1), x, y, z)
 	states.frozenPos = {x = x, y = y, z = z}
 end)
 
@@ -248,8 +243,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(10)
 		if(states.frozen)then
 			ClearPedTasksImmediately(GetPlayerPed(-1))
-			print("teleporting entity!")
-SetEntityCoords(GetPlayerPed(-1), states.frozenPos)
+			SetEntityCoords(GetPlayerPed(-1), states.frozenPos)
 		end
 	end
 end)
@@ -277,9 +271,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if(noclip)then
-			print("teleporting entity!")
-print("teleporting entity!")
-SetEntityCoordsNoOffset(GetPlayerPed(-1),  noclip_pos.x,  noclip_pos.y,  noclip_pos.z,  0, 0, 0)
+			SetEntityCoordsNoOffset(GetPlayerPed(-1),  noclip_pos.x,  noclip_pos.y,  noclip_pos.z,  0, 0, 0)
 
 			if(IsControlPressed(1,  34))then
 				heading = heading + 1.5

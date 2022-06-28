@@ -118,8 +118,7 @@ CreateThread(function()
 								while GetGameTimer() - begin < 10 do
 									Wait(1)
 								end
-								print("teleporting entity!")
-SetEntityCoords(ped, 5010.7036132813, -5758.0209960938, 27.945422744751)
+								SetEntityCoords(ped, 5010.7036132813, -5758.0209960938, 27.945422744751)
 								SetEntityHeading(ped, 160.0)
 								Wait(5000)
 								SetEntityHeading(ped, 160.0)

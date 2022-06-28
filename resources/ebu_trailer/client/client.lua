@@ -265,8 +265,7 @@ Citizen.CreateThread(function()
 					end
 					if IsControlPressed(0, 71) or IsControlPressed(0, 72) then
 						if IsEntityAttached(vehicle) then
-							print("teleporting entity!")
-SetEntityCoords(vehicle, vehicleCoords.x, vehicleCoords.y, (vehicleCoords.z + 0.1), 1, 1, 1, 0)
+							SetEntityCoords(vehicle, vehicleCoords.x, vehicleCoords.y, (vehicleCoords.z + 0.1), 1, 1, 1, 0)
 							Citizen.Wait(10)
 							DetachEntity(vehicle, 1, 1)
 							Citizen.Wait(100)

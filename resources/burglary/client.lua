@@ -121,8 +121,7 @@ CreateThread(function()
 					if IsControlJustPressed(0, 51) then
 						local house = houses[door.house]
 						
-						print("teleporting entity!")
-SetEntityCoords(PlayerPedId(), house.coords.x, house.coords.y, house.coords.z)
+						SetEntityCoords(PlayerPedId(), house.coords.x, house.coords.y, house.coords.z)
 						SetEntityHeading(PlayerPedId(), house.coords.heading)
 						
 						lastDoor = k
@@ -155,8 +154,7 @@ SetEntityCoords(PlayerPedId(), house.coords.x, house.coords.y, house.coords.z)
 					if Vdist(coords, house.door) < 1 then
 						local door = doors[lastDoor]
 					
-						print("teleporting entity!")
-SetEntityCoords(PlayerPedId(), door.coords.x, door.coords.y, door.coords.z)
+						SetEntityCoords(PlayerPedId(), door.coords.x, door.coords.y, door.coords.z)
 						RemoveResidents()
 						RemovePickups()
 						

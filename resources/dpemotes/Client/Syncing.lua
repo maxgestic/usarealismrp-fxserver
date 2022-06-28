@@ -55,9 +55,7 @@ AddEventHandler("SyncPlayEmoteSource", function(emote, player)
       end
     end
     SetEntityHeading(PlayerPedId(), heading - 180.1)
-    print("teleporting entity!")
-print("teleporting entity!")
-SetEntityCoordsNoOffset(PlayerPedId(), coords.x, coords.y, coords.z, 0)
+    SetEntityCoordsNoOffset(PlayerPedId(), coords.x, coords.y, coords.z, 0)
     EmoteCancel()
     Wait(300)
     if DP.Shared[emote] ~= nil then
