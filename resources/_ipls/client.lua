@@ -332,7 +332,7 @@ function DespawnFacility()
 	DisableInteriorProp(interiorID,  "Set_Int_02_outfit_serverfarm")
 end
 
-
+--[[ disabled due to random teleporting issue (not sure why since it looks like it should only TP if ur < 1.0 dist from it, but for now let's just disable this)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -401,3 +401,4 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+--]]
