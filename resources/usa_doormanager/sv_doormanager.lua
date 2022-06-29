@@ -217,6 +217,27 @@ local DOORS = {
   {name = 'Sandy Hospital Ward Front 2', x = 1828.3647, y = 3671.7383, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 120.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = 'Sandy Hospital Ward Rear 1', x = 1830.2230, y = 3682.6743, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 120.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = 'Sandy Hospital Ward Rear 2', x = 1831.0431, y = 3681.6572, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 300.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
+  
+  {name = "Cityhall / Courtroom back interior Door 1R", x = -510.73770141602, y = -205.75651550293, z = 38.219604492188, model = 736699661, locked = true, offset={0.0, -1.25, 0.00}, heading = 210, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall / Courtroom back interior Door 1L", x = -511.75021362305, y = -206.54103088379, z = 38.219604492188, model = 736699661, locked = true, static = true, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall / Courtroom Front Entrance 1", x = -527.95281982422, y = -184.66059875488, z = 38.219665527344, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall / Courtroom Front Entrance 2", x = -521.51867675781, y = -180.61590576172, z = 38.219612121582, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 210, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall / Judge Room 1", x = -556.85296630859, y = -191.81518554688, z = 69.975357055664, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 302, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall / Judge Room 2", x = -556.85296630859, y = -191.81518554688, z = 65.45267, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 302, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall / Judge Room 3", x = -556.85296630859, y = -191.81518554688, z = 60.91298, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 302, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall / Judge Room 4", x = -556.85296630859, y = -191.81518554688, z = 56.28806, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 302, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+
+  -- Exterior Doors -29187315
+  {name = "Cityhall Front Entrance A", x = -545.63146972656, y = -204.30975341797, z = 38.21928024292, model = -29187315, locked = true, static = true, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall Front Entrance B", x = -544.66729736328, y = -203.73197937012, z = 38.21928024292, model = -29187315, locked = false, offset={0.0, 1.0, 0.00}, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall NorthWest Entrance A", x = -533.05310058594, y = -167.81965637207, z = 38.345191955566, model = -29187315, locked = false, offset={0.25, 1.25, 0.00}, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall NorthWest Entrance B", x = -534.81530761719, y = -166.86143493652, z = 38.324367523193, model = -29187315, locked = true, static = true, heading = 210, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall NorthEast Entrance A", x = -582.62969970703, y = -194.16441345215, z = 38.324363708496, model = -29187315, locked = false, offset={0.25, 1.25, 0.00}, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall NorthEast Entrance B", x = -583.54992675781, y = -194.84582519531, z = 38.324363708496, model = -29187315, locked = true, static = true, heading = 210, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall SouthWest Entrance A", x = -515.65850830078, y = -209.71389770508, z = 38.219657897949, model = -29187315, locked = true, static = true, heading = 120, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}}, 
+  {name = "Cityhall SouthWest Entrance B", x = -516.09228515625, y = -211.42729187012, z = 38.170318603516, model = -29187315, locked = true, offset={0.0, 1.0, 0.00}, heading = 300, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  {name = "Cityhall SouthEast Entrance A", x = -556.04321289063, y = -227.78196716309, z = 38.184074401855, model = -29187315, locked = true, static = true, heading = 120, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}}, 
+  {name = "Cityhall SouthEast Entrance B", x = -555.36010742188, y = -228.73973083496, z = 38.183982849121, model = -29187315, locked = true, offset={0.0, 1.0, 0.00}, heading = 300, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
 }
 
 -- allowedJobs - table of job names allowed to use door, the player's job must match any value in the list for the door to lock/unlock

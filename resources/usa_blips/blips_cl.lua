@@ -12,7 +12,8 @@ local blips = {
     { title="Ammu-Nation", colour=4, id=110, x=812.4276, y=-2145.2118, z=29.3063 },]]
 	--{ title="Car Dealership", colour=76, id=225, scale = 0.7, x=120.924, y=6624.605, z=31.000 },
 	--{ title="DMV", colour=4, id=355, x= -447.845, y = 6013.775, z = 30.716 },
-	{ title="DMV", colour=4, id=355, scale = 0.65, x = -544.857, y = -204.422, z = 37.2152 },
+	-- { title="DMV", colour=4, id=355, scale = 0.65, x = -544.857, y = -204.422, z = 37.2152 }, -- Old location
+	{title="DMV", colour=4, id=355, scale = 0.65, x = -552.64324951172, y = -190.99810791016, z = 38.21964263916},
 	--{ title="Bubba's Tow Co.", colour=64, id=68, x = -196.027, y = 6265.625, z = 30.489 }, -- paleto
 	--{ title="Bubba's Tow Co.", colour=64, id=68, x = 2363.89, y = 3126.85, z = 47.211 }, -- sandy shores
 	--{ title="Bubba's Tow Co.", colour=64, id=68, x = 408.03, y = -1624.62, z = 28.29 }, -- los santos
@@ -79,7 +80,8 @@ local blips = {
 	--{ title="Watercraft Course", colour = 63, id = 38, x=2272.15, y=4321.29, z=39.8 },
 	--{ title="Barber Shop", colour = 4, id = 71, x=-278.174, y=6226.93, z=51.6 },
 	--{ title="Weed", colour = 2, id = 140, x = 2224.04, y = 5577.28, z = 52.7 },
-	{ title="Courthouse", colour = 84, id = 475, scale = 0.7, x = 243.34686279297,y = -1073.7106933594, z = 29.285400390625 },
+	{ title="Courthouse", colour = 84, id = 475, scale = 0.7, x = 243.34686279297,y = -1073.7106933594, z = 29.285400390625 }, -- LS courthouse
+	{ title="Courthouse", colour = 84, id = 475, scale = 0.7, x = -516.97155761719, y = -196.09248352051, z = 38.219612121582 }, -- Cityhall Courtroom
 	--{ title="Burns Events Center", colour = 4, id = 354, x = 1228.009, y = 3642.315, z = 32.79 },
 	{ title="Weazel News", colour = 4, id = 184, x = -249.6443, y = 6235.7524, z = 30.4893 },
 	{ title="Weazel News", colour = 4, id = 184, x = -599.5, y = -931.9, z = 23.9 },

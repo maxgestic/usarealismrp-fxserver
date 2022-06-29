@@ -9,6 +9,11 @@ local legal_peds = {
 	{x = -72.43, y = -820.04, z = 242.38, heading = 64.0, hash = GetHashKey('s_m_m_security_01'), task = 'WORLD_HUMAN_LEANING'},
 }
 
+local locations = {
+	{x = -563.69079589844, y = -192.7759552002, z = 38.219699859619}, -- Cityhall
+	{x =  243.48629760742, y = -1090.5107421875, z = 29.294260025024} -- LS Courthouse
+}
+
 Citizen.CreateThread(function()
 	EnumerateBlips()
 	while true do
@@ -16,7 +21,10 @@ Citizen.CreateThread(function()
 		local playerPed = PlayerPedId()
 		DrawText3D(233.29, -410.34, 48.11, 5, '[E] - Legal Offices')
 		DrawText3D(146.75, -738.35, 242.30, 5, '[E] - Exit')
-		DrawText3D(154.40, -742.87, 242.15, 5, '[E] - On/Off Duty (~g~Lawyer~s~)')
+		for i = 1, #locations do
+			DrawText3D(locations[i].x, locations[i].y, locations[i].z, 5, '[E] - On/Off Duty (~g~Lawyer~s~)')
+		end
+		-- DrawText3D(-563.69079589844, -192.7759552002, 38.219699859619, 5, '[E] - On/Off Duty (~g~Lawyer~s~)')
 		DrawText3D(-82.56, -806.42, 243.38, 2, '[E] - On/Off Duty (~g~DA~s~)')
 		DrawText3D(-79.87, -801.90, 243.41, 3, '[E] - MDT')
 		if IsControlJustPressed(0, 38, true) then -- E
@@ -25,12 +33,12 @@ Citizen.CreateThread(function()
 				DoorTransition(playerPed, 147.25, -738.05, 242.15, 250.0)
 			elseif Vdist(playerCoords, 147.25, -738.05, 242.15) < 2 then -- legal offices to courthouse
 				DoorTransition(playerPed, 233.39, -410.34, 48.11, 335.0)
-			elseif Vdist(playerCoords, 154.40, -742.87, 242.15) < 2 then
-				TriggerServerEvent('legal:checkBarCertificate')
 			elseif Vdist(playerCoords, -79.87, -801.90, 244.21) < 1.6 then
 				TriggerServerEvent('legal:openMDT')
 			elseif Vdist(playerCoords, -82.56, -806.42, 243.38) < 2.0 then
 				TriggerServerEvent('legal:onDutyDA')
+			elseif IsNearLawyerClockIn(playerCoords) then
+				TriggerServerEvent('legal:checkBarCertificate')
 			end
 		end
 	end
@@ -119,3 +127,12 @@ Citizen.CreateThread(function()
 		TaskStartScenarioInPlace(handle, ped.task, 0, true);
 	end
 end)
+
+function IsNearLawyerClockIn(coords, range)
+    for i = 1, #locations do
+        if GetDistanceBetweenCoords(coords, locations[i].x, locations[i].y, locations[i].z, true) < (range or 3) then
+            return true
+        end
+    end
+    return false
+end
