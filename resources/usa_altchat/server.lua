@@ -186,7 +186,7 @@ function showid(src, u, location)
 	local job = u.get("job")
 	local employer = nil
 	if job == 'corrections' then
-		if u.get("bcsoRank") > 3 then
+		if u.get("bcsoRank") > 2 then
             employer = jobNames[job]
         else
         	employer = 'Correctional Officer (BCSO)'
