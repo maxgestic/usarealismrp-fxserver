@@ -28,7 +28,8 @@ local locations = {
   { x = 845.46, y = -1029.78, z = 28.4, legal = true }, -- Vespucci
   --{ x = 129.6, y = -1920.3, z = 21.3, legal = false } -- grove st
   --{ x = 752.996, y = -3192.206, z = 6.07, legal = false } -- terminal, industrial LS
-  {x = 180.8, y = 2793.2, z = 45.7, legal = false, ped = { heading = 260.0, hash = -907676309 }} -- sandy shores, harmony area
+  {x = 180.8, y = 2793.2, z = 45.7, legal = false, ped = { heading = 260.0, hash = -907676309 }}, -- sandy shores, harmony area
+  { x = -540.18902587891, y = -588.16094970703, z = 34.681781768799, legal = true} -- MLO Gun Store
 }
 
 function comma_value(amount)

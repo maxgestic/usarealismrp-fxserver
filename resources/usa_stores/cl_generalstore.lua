@@ -26,7 +26,8 @@ local GENERAL_STORE_LOCATIONS = {
     {x = 4503.35546875, y = -4520.0258789062, z = 4.4123592376709}, -- Cayo Perico island
     {x = -689.92376708984, y = 5798.9174804688, z = 17.3327293396}, -- bayview lodge in paleto bay
     {x = -1486.119140625, y = -378.06628417969, z = 40.163429260254}, -- prosperity st
-    {x = 1335.2287597656, y = -1650.7325439453, z = 52.239276885986} -- near fudge (secret coke lab mlo)
+    {x = 1335.2287597656, y = -1650.7325439453, z = 52.239276885986}, -- near fudge (secret coke lab mlo)
+    {x = -549.00360107422, y = -584.84045410156, z = 34.681770324707} -- MLO Mall Convenient Store
 }
 
 local ShopliftingAreas = {}
@@ -68,7 +69,8 @@ local JOB_PEDS = { -- Z coords are Z-1 or the ped will float!
   {x = 2677.729, y = 3279.42, z = 54.24, heading = 330.0, hash = -573920724}, -- senora fwy
   {x = -1819.304, y = 793.56, z = 137.088, heading = 132.0}, -- richman
   --]]
-  {x = 1335.4675292969, y = -1651.5319824219, z = 51.249050140381, heading = 40.0}
+  {x = 1335.4675292969, y = -1651.5319824219, z = 51.249050140381, heading = 40.0},
+  {x = -547.81866455078, y = -582.59674072266, z = 34.681812286377, heading = 180.0}
 }
 
 local BLIPS = {}

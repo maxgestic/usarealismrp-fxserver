@@ -19,6 +19,8 @@ local CLOTHING_STORE_LOCATIONS = {
 	{x = 105.8, y = -1302.9, z = 27.7, noblip = true}, -- vanilla unicorn
 	{x = -82.16, y = -809.99, z = 243.38, noblip = true},
 	{x = -454.08, y = 282.46, z = 83.06, noblip = true}, -- Comedy Club
+	{x = -524.64996337891, y = -597.74438476563, z = 41.430221557617}, -- Upper Mall Store
+	{x = -566.6748046875, y = -586.27526855469, z = 34.681793212891}, -- Lower Mall Store
 }
 local me = nil
 local mycoords = nil

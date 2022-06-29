@@ -21,6 +21,7 @@ local ShopliftingAreas = {
   {x = -710.43, y = -911.96, z = 19.22, shoplifted = false},
   {x = 378.35, y = 329.75, z = 103.57, shoplifted = false},
   {x = 1164.44, y = 2707.41, z = 38.16, shoplifted = false},
+  {x = -556.88677978516, y = -585.63549804688, z = 34.68176651001, shoplifted = false},
 }
 
 local GENERAL_STORE_ITEMS = {
