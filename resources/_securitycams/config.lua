@@ -430,6 +430,30 @@ SecurityCamConfig.Locations = {
         }
     },
     {
+        camBox = {label = "247 Supermarket (Popular St.)", id = 'store49'},
+        cameras = {
+            {label = "Camera 1", x = 812.55676269531, y = -778.24578857422, z = 28.25, r = {x = -20.0, y = 0.0, z = 213.0}},
+            {label = "Camera 2", x = 821.66735839844, y = -783.48577880859, z = 28.25, r = {x = -40.0, y = 0.0, z = 45.0}},
+            {label = "Backroom Cam", x = 819.30493164063, y = -776.4384765625, z = 28.25, r = {x = -40.0, y = 0.0, z = 45.0}},
+        }
+    },
+    {
+        camBox = {label = "Otto's Auto Repair (Popular St.)", id = 'store50'},
+        cameras = {
+            {label = "Camera 1", x = 836.32385253906, y = -803.24066162109, z = 30.0, r = {x = -20.0, y = 0.0, z = 135.0}},
+            {label = "Waiting Area", x = 830.26306152344, y = -830.14465332031, z = 28.55, r = {x = -35.0, y = 0.0, z = 35.0}},
+            {label = "Office", x = 836.72625732422, y = -829.83239746094, z = 28.55, r = {x = -35.0, y = 0.0, z = 35.0}},
+            {label = "Front Outdoor Cam", x = 823.19537353516, y = -802.13824462891, z = 30.0, r = {x = -25.0, y = 0.0, z = 150.0}},
+            {label = "Back Outdoor Cam", x = 838.66571044922, y = -819.87347412109, z = 29.5, r = {x = -35.0, y = 0.0, z = 315.0}},
+        }
+    },
+    {
+        camBox = {label = "Auto Repair (Voodoo Place)", id = 'store51'},
+        cameras = {
+            {label = "Front Outdoor Cam", x = 156.05641174316, y = -3039.0925292969, z = 10.5, r = {x = -35.0, y = 0.0, z = 330.0}},
+        }
+    },
+    {
         camBox = {label = "Pillbox Medical Center", id = 'pillbox'},
         cameras = {
             {label = "Front Door", x = 301.9279, y = -576.0494, z = 46.0002, r = {x = -25.0, y = 0.0, z = 110.0}},

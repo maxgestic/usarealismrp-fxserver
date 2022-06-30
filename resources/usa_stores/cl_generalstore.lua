@@ -27,7 +27,8 @@ local GENERAL_STORE_LOCATIONS = {
     {x = -689.92376708984, y = 5798.9174804688, z = 17.3327293396}, -- bayview lodge in paleto bay
     {x = -1486.119140625, y = -378.06628417969, z = 40.163429260254}, -- prosperity st
     {x = 1335.2287597656, y = -1650.7325439453, z = 52.239276885986}, -- near fudge (secret coke lab mlo)
-    {x = -549.00360107422, y = -584.84045410156, z = 34.681770324707} -- MLO Mall Convenient Store
+    {x = -549.00360107422, y = -584.84045410156, z = 34.681770324707}, -- MLO Mall Convenient Store
+    {x = 814.14544677734, y = -782.78338623047, z = 26.175024032593} -- Otto's Garage
 }
 
 local ShopliftingAreas = {}

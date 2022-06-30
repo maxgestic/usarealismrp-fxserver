@@ -351,6 +351,28 @@ BUSINESSES = {
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 6500
+	},
+	["247 Supermarket (Popular St.)"] = {
+		position = {812.90832519531, -778.39324951172, 26.175024032593},
+		cameraID = 'store49',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 4500
+	},
+	["Auto Repair (Voodoo Place)"] = {
+		position = {125.19500732422, -3009.8500976563, 7.0408892631531},
+		cameraID = 'store51',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 10500,
+		notRobbable = true
+	},
+	["Otto's Auto Repair (Popular St.)"] = {
+		position = {832.59692382813, -826.30114746094, 26.332597732544},
+		cameraID = 'store50',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 7500
 	}
 }
 

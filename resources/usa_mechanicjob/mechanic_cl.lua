@@ -182,6 +182,29 @@ locations = {
 			disable_blip = true
 		}
 	},
+	["Otto's Auto Repair - Popular St."] = {
+		duty = {
+			x = 838.67279052734,
+			y = -799.18878173828,
+			z = 26.279302597046,
+		},
+		truck_spawn = {
+			x = 826.77111816406,
+			y = -797.47302246094,
+			z = 26.20956993103,
+			heading = 90.0
+		},
+		impound = nil,
+		ped = {
+			x = 838.67279052734,
+			y = -799.18878173828,
+			z = 26.279302597046,
+			heading = 75.0
+		},
+		show_blip = {
+			disable_blip = false
+		}
+	},
 }
 	
 -- S P A W N  J O B  P E D S

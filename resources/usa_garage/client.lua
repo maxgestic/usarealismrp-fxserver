@@ -65,7 +65,10 @@ locations = {
 	{x = -424.23614501953, y = -38.142559051514, z = 46.215244293213, noBlip = true}, -- cocaktoos
 	{x = 550.98217773438, y = -206.7356262207, z = 54.104431152344, noBlip = true}, -- auto exotic repair on elgin ave
 	{x = 2524.6560058594, y = 4109.4716796875, z = 38.584625244141, noBlip = true}, -- lunatix garage
-	{x = 366.37405395508, y = 293.75842285156, z = 103.41968536377, noBlip = false} -- Parking behing vault
+	{x = 366.37405395508, y = 293.75842285156, z = 103.41968536377, noBlip = false}, -- Parking behing vault
+	{x = 813.39111328125, y = -824.33929443359, z = 26.181001663208, noBlip = true}, -- Otto's Auto Repair
+	{x = 142.83195495605, y = -3044.2541503906, z = 7.0408906936646, noBlip = false}, -- Tuner Place MLO
+	{x = -464.47183227539, y = -619.52258300781, z = 31.174465179443, noBlip = false} -- Shopping Mall Garage
 }
 
 local VEHICLE_DAMAGES = {}
