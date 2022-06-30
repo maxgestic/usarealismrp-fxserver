@@ -1,6 +1,7 @@
 local policeLockerRooms = {
 	{x = -1107.5, y = -847.5, z = 19.4}, -- vespucci PD
-	{x = 370.3, y = -1608.4, z = 28.3}, -- davis PD
+	-- {x = 370.3, y = -1608.4, z = 28.3}, -- davis PD (OLD)
+	{x = 362.76776123047, y = -1593.638671875, z = 25.451694488525}, -- DavisPD (NEW)
 	{x = 826.5, y = -1291.3, z = 27.3}, -- la mesa PD
 	{x = 638.9, y = 1.9, z = 82.8}, -- vinewood PD, elgin ave.
 	{x = 463.69451904297, y = -998.14770507813, z = 30.842144012451}, -- mrpd
@@ -9,7 +10,8 @@ local policeLockerRooms = {
 
 local policeArmourys = {
 	{x = -1109.6, y = -844.7, z = 19.4}, -- vespucci PD
-	{x = 371.8, y = -1612.1, z = 28.4}, -- davis PD
+	-- {x = 371.8, y = -1612.1, z = 28.4}, -- davis PD (OLD)
+	{x = 365.51690673828, y = -1598.5163574219, z = 25.451700210571}, -- davis PD (NEW)
 	{x = 826.6, y = -1288.8, z = 28.2}, -- la mesa PD
 	{x = 637.5, y = -2.7, z = 82.8}, -- vinewood PD, elgine ave.
 	{x = 479.06399536133, y = -996.77844238281, z = 30.691987991333}, --MRPD
