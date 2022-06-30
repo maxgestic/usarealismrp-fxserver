@@ -197,6 +197,51 @@ Config.computerList = {
             rotate = true,
         },
     },
+    {
+        -- Otto's Auto Repair Machine 1 (left)
+        -- if false player dont need a ticket to play on this computer.
+        isInGamingHouse = false,
+        computerType = Config.RetroMachine,
+        computerGPU = Config.GPUList[2],
+        computerCPU = Config.CPUList[2],
+        markerType = 31,
+        position = vector3(827.55676269531, -829.14044189453, 26.332572937012),
+        markerOptions = {
+            scale = { x = 0.5, y = 0.5, z = 0.5 },
+            color = { r = 255, g = 255, b = 255, a = 125 },
+            rotate = false,
+        },
+    },
+    {
+        -- Otto's Auto Repair Machine 2 (right)
+        -- if false player dont need a ticket to play on this computer.
+        isInGamingHouse = false,
+        computerType = Config.RetroMachine,
+        computerGPU = Config.GPUList[2],
+        computerCPU = Config.CPUList[2],
+        markerType = 31,
+        position = vector3(826.685546875, -829.1318359375, 26.332572937012),
+        markerOptions = {
+            scale = { x = 0.5, y = 0.5, z = 0.5 },
+            color = { r = 255, g = 255, b = 255, a = 125 },
+            rotate = false,
+        },
+    },
+    {
+        -- Tuner Shop
+        -- if false player dont need a ticket to play on this computer.
+        isInGamingHouse = false,
+        computerType = Config.RetroMachine,
+        computerGPU = Config.GPUList[2],
+        computerCPU = Config.CPUList[2],
+        markerType = 31,
+        position = vector3(151.98062133789, -3017.166015625, 7.0408906936646),
+        markerOptions = {
+            scale = { x = 0.5, y = 0.5, z = 0.5 },
+            color = { r = 255, g = 255, b = 255, a = 125 },
+            rotate = false,
+        },
+    },
     -- Gaming computers
     {
         -- if false player dont need a ticket to play on this computer.
