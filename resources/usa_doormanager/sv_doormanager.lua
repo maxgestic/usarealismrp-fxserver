@@ -181,11 +181,32 @@ local DOORS = {
   {name = 'Nightclub / Door 2', x = -1621.15, y = -3019.06, z = -75.20, model = 1695461688, locked = true, static = true, _dist = 1.0},
   {name = 'Nightclub / Door 3', x = -1610.8, y = -3004.98, z = -79.0, model = 1743859485, locked = true, static = true, _dist = 1.0},
   {name = 'Legal Offices / Door 1', x = 121.21, y = -757.02, z = 242.15, model = -1821777087, locked = true, static = true, _dist = 1.0},
-  {name = 'Legal Offices / Door 2', x = 143.16, y = -759.65, z = 242.15, model = -1821777087, locked = true, static = true, _dist = 1.0},
-  {name = 'LSSD Davis / Door 1', x = 392.31, y = -1635.45, z = 29.29, model = -1156020871, locked = true, offset={0.0, -1.6, -0.1}, heading = 50, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
-  {name = 'LSSD Davis / Gate 1', x = 398.32, y = -1607.73, z = 29.29, model = 1286535678, locked = true, _dist = 8.0, gate = true, offset={3.0, -2.5, 1.5}, lockedCoords = {397.88, -1607.38, 28.33}, allowedJobs = {'sheriff', 'corrections'}},
-  {name = 'Mission Row / Front Gate', x = 411.4, y = -1028.26, z = 29.39, model = -512634970, locked = true, _dist = 10.0, gate = true, offset={0.0, 3.0, 1.5}, lockedCoords = {410.80, -1028.15, 28.38}, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Mission Row / Garage Door", x = 427.42, y = -1016.92, z = 28.97, model = 631614199, locked = true, offset={0.0, 1.12, 0.025}, heading=81, _dist = 1.0, allowedJobs = {'sheriff','corrections'}},
+  {name = 'Legal Offices / Door 2', x = 143.16, y = -759.65, z = 242.15, model = -1821777087, locked = true, static = true, _dist = 1.0},  
+  -- Gabz DavisPD MLO
+  {name = 'gabz_davispd_parkinglot_Door', x = 392.31, y = -1635.45, z = 29.29, model = -1156020871, locked = true, offset={0.0, -1.6, -0.1}, heading = 50, _dist = 1.0, allowedJobs = {'sheriff', 'corrections', 'ems', 'doctor'}},
+  {name = 'gabz_davispd_parkinglot_Gate', x = 398.32, y = -1607.73, z = 29.29, model = 1286535678, locked = true, _dist = 8.0, gate = true, offset={3.0, -2.5, 1.5}, lockedCoords = {397.88, -1607.38, 28.33}, allowedJobs = {'sheriff', 'corrections', 'ems', 'doctor'}},
+  {name = "gabz_davispd_maindoor_left", x = 379.7842, y = -1592.606, z = 30.20128, model = 1670919150, locked = true, offset={0.0, 1.0, 0.00}, heading = 140, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_maindoor_right", x = 381.776, y = -1594.277, z = 30.20128, model = 618295057, locked = true, static = true, _dist = 1.0},
+  {name = "gabz_davispd_backdoor_left", x = 371.512, y = -1615.871, z = 30.20128, model = 1670919150, locked = true, offset={0.0, 1.0, 0.00}, heading = 320, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_backdoor_right", x = 369.5202, y = -1614.2, z = 30.20128, model = 618295057, locked = true, static = true, _dist = 1.0},
+  {name = "gabz_davispd_main_receptionist", x = 382.8243, y = -1599.025, z = 30.14451, model = -425870000, locked = true, offset={0.0, 1.0, 0.00}, heading = 320, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_main_captainoffice_left", x = 361.6097, y = -1594.33, z = 31.14457, model = -425870000, locked = true, offset={0.0, 1.0, 0.00}, heading = 230, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_main_captainoffice_right", x = 363.1489, y = -1592.496, z = 31.14457, model = -425870000, locked = true, static = true, _dist = 1.0},
+  {name = "gabz_davispd_main_office_left", x = 358.3827, y = -1595.001, z = 31.14457, model = -425870000, locked = true, offset={0.0, 1.0, 0.00}, heading = 50, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_main_office_right", x = 363.2424, y = -1589.209, z = 31.14457, model = -425870000, locked = true, offset={0.0, 1.0, 0.00}, heading = 230, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_main_women_cell", x = 369.067, y = -1605.688, z = 29.94213, model = -674638964, locked = true, offset={0.0, -1.25, 0.10}, heading = 320, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_main_men_cell", x = 368.2669, y = -1605.016, z = 29.94213, model = -674638964, locked = true, offset={0.0, -1.25, 0.10}, heading = 140, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_main_staircase_left", x = 384.4286, y = -1601.96, z = 30.14451, model = -1335406364, locked = true, offset={0.0, 1.0, 0.10}, heading = 50, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_main_staircase_right", x = 374.636, y = -1613.63, z = 30.14451, model = -1335406364, locked = true, offset={0.0, 1.0, 0.10}, heading = 230, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_basement_observation", x = 375.543, y = -1608.151, z = 25.54451, model = -1335406364, locked = true, offset={0.0, 1.0, 0.10}, heading = 320, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_basement_interrogation", x = 371.9582, y = -1605.143, z = 25.54544, model = -728950481, locked = true, offset={0.0, 1.0, 0.10}, heading = 140, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_basement_women_cell", x = 375.0779, y = -1598.435, z = 25.34306, model = -674638964, locked = true, offset={0.0, -1.25, 0.10}, heading = 140, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_basement_men_cell", x = 375.878, y = -1599.106, z = 25.34306, model = -674638964, locked = true, offset={0.0, -1.25, 0.10}, heading = 320, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_basement_hallway_left", x = 368.864, y = -1600.432, z = 25.54544, model = -1335406364, locked = true, offset={0.0, 1.0, 0.00}, heading = 230, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_basement_hallway_right", x = 370.4107, y = -1598.589, z = 25.54544, model = -1335406364, locked = true, static = true, _dist = 1.0},
+  {name = "gabz_davispd_basement_armory", x = 367.119, y = -1601.082, z = 25.54451, model = -1335406364, locked = true, offset={0.0, 1.0, 0.10}, heading = 320, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "gabz_davispd_basement_lockers", x = 363.8884, y = -1595.472, z = 25.54544, model = -1335406364, locked = true, offset={0.0, 1.0, 0.10}, heading = 230, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+
   {name = "Eclipse Towers / Heist Room", x = -767.55, y = 331.14, z = 211.39, model = 34120519, locked = true, static = true, _dist = 1.0},
   {name = "DA Office / Door 1", x = -74.45, y = -821.88, z = 243.38, model = 220394186, locked = true, offset = {0.0, 0.7, 0.05}, heading = 340.0, _dist = 1.0, allowedJobs = {'da', 'judge'}},
   {name = "DA Office / Door 2", x = -75.15, y = -821.65, z = 243.38, model = 220394186, locked = true, static = true, _dist = 1.0},
@@ -217,7 +238,7 @@ local DOORS = {
   {name = 'Sandy Hospital Ward Front 2', x = 1828.3647, y = 3671.7383, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 120.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = 'Sandy Hospital Ward Rear 1', x = 1830.2230, y = 3682.6743, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 120.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = 'Sandy Hospital Ward Rear 2', x = 1831.0431, y = 3681.6572, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 300.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
-  
+  -- Cityhall MLO
   {name = "Cityhall / Courtroom back interior Door 1R", x = -510.73770141602, y = -205.75651550293, z = 38.219604492188, model = 736699661, locked = true, offset={0.0, -1.25, 0.00}, heading = 210, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
   {name = "Cityhall / Courtroom back interior Door 1L", x = -511.75021362305, y = -206.54103088379, z = 38.219604492188, model = 736699661, locked = true, static = true, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
   {name = "Cityhall / Courtroom Front Entrance 1", x = -527.95281982422, y = -184.66059875488, z = 38.219665527344, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
@@ -226,8 +247,6 @@ local DOORS = {
   {name = "Cityhall / Judge Room 2", x = -556.85296630859, y = -191.81518554688, z = 65.45267, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 302, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
   {name = "Cityhall / Judge Room 3", x = -556.85296630859, y = -191.81518554688, z = 60.91298, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 302, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
   {name = "Cityhall / Judge Room 4", x = -556.85296630859, y = -191.81518554688, z = 56.28806, model = 736699661, locked = true, offset={-0.1, -1.25, 0.00}, heading = 302, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
-
-  -- Exterior Doors -29187315
   {name = "Cityhall Front Entrance A", x = -545.63146972656, y = -204.30975341797, z = 38.21928024292, model = -29187315, locked = true, static = true, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
   {name = "Cityhall Front Entrance B", x = -544.66729736328, y = -203.73197937012, z = 38.21928024292, model = -29187315, locked = false, offset={0.0, 1.0, 0.00}, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
   {name = "Cityhall NorthWest Entrance A", x = -533.05310058594, y = -167.81965637207, z = 38.345191955566, model = -29187315, locked = false, offset={0.25, 1.25, 0.00}, heading = 30, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
@@ -238,6 +257,9 @@ local DOORS = {
   {name = "Cityhall SouthWest Entrance B", x = -516.09228515625, y = -211.42729187012, z = 38.170318603516, model = -29187315, locked = true, offset={0.0, 1.0, 0.00}, heading = 300, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
   {name = "Cityhall SouthEast Entrance A", x = -556.04321289063, y = -227.78196716309, z = 38.184074401855, model = -29187315, locked = true, static = true, heading = 120, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}}, 
   {name = "Cityhall SouthEast Entrance B", x = -555.36010742188, y = -228.73973083496, z = 38.183982849121, model = -29187315, locked = true, offset={0.0, 1.0, 0.00}, heading = 300, _dist = 1.5, allowedJobs = {'corrections', 'sheriff', 'judge'}},
+  -- Mall MLO 
+  {name = "Mall / Bank Back Entrance", x = -566.54650878906, y = -584.16949462891, z = 41.430225372314, model = -551608542, locked = true, offset={0.0, -1.15, 0.00}, heading = 0, _dist = 1.5, allowedJobs = {'corrections', 'sheriff'}},
+
 }
 
 -- allowedJobs - table of job names allowed to use door, the player's job must match any value in the list for the door to lock/unlock
