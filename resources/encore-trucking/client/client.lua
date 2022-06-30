@@ -196,13 +196,14 @@ function abortJob(msg)
 	jobStatus = CONST_NOTWORKING
 
 	exports.globals:notify(msg, "^3INFO: ^0" .. msg)
+	
+	local lastTrailerId = trailerId
+	trailerId = nil
 
 	Citizen.CreateThread(function()
 		Wait(90000) -- delay deletion of trailer object for a little
-
-		if trailerId and DoesEntityExist(trailerId) then
-			DeleteVehicle(trailerId)
-			trailerId		    = nil
+		if lastTrailerId and DoesEntityExist(lastTrailerId) then
+			DeleteVehicle(lastTrailerId)
 		end
 	end)
 end
