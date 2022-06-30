@@ -184,6 +184,8 @@ TriggerEvent("es:exposeDBFunctions", function(db)
 end)
 ```
 
+Also check out `resources/[system]/globals` for a library of some miscellaneous commonly used functions for both the server and client side.
+
 **Job Types**
 1. "civ"
 2. "sheriff" (AKA SASP)
