@@ -13,33 +13,13 @@ config = {
 		},
 		{ -- Cityhall Right
 			info = { id = 3, sound = { range = 10 } },
-			coords = {x = -548.3544921875, y = -195.16287231445, z = 38.219646453857, radius = 0.5 },
+			coords = {x = -546.04187011719, y = -201.1865234375, z = 38.226989746094, radius = 0.5 },
 			entity = { enable = true, heading = 30.0 }
 		},
 		{ -- Cityhall Left
 			info = { id = 4, sound = { range = 10 } },
-			coords = {x = -551.12506103516, y = -196.68525695801, z = 38.21968460083, radius = 0.5 },
+			coords = {x = -547.27020263672, y = -201.81419372559, z = 38.226989746094, radius = 0.5 },
 			entity = { enable = true, heading = 30.0 }
-		},
-		{ -- Cityhall Courthouse Right
-			info = { id = 5, sound = { range = 10 } },
-			coords = {x = -525.52526855469, y = -188.87544250488, z = 38.219615936279, radius = 0.5 },
-			entity = { enable = true, heading = 30.0 }
-		},
-		{ -- City Hall Courthouse Left
-			info = { id = 6, sound = { range = 10 } },
-			coords = {x = -518.71270751953, y = -185.11511230469, z = 38.219657897949, radius = 0.5 },
-			entity = { enable = true, heading = 30.0 }
-		},
-		{ -- LS Courthouse Right
-			info = { id = 7, sound = { range = 10 } },
-			coords = { x = 241.3592, y = -1079.2256, z = 29.2941, radius = 0.5 },
-			entity = { enable = false, heading = nil }
-		},
-		{ -- LS Courthouse Left
-			info = { id = 8, sound = { range = 10 } },
-			coords = { x = 245.6187, y = -1079.1475, z = 29.2941, radius = 0.5 },
-			entity = { enable = false, heading = nil }
 		},
 	},
 

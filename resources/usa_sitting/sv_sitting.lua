@@ -6,6 +6,10 @@ local BLACKLISTED_SIT_LOCATIONS = {
 	{
 		coords = vector3(257.16165161133, 220.75233459473, 106.28523254395),
 		distance = 100
+	},
+	{
+		coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), -- Paleto Bank
+		distance = 100
 	}
 }
 

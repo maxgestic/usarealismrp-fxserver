@@ -288,18 +288,22 @@ Config.Languages = {
 Config.BlacklistedLocations = {
     ["sunbatheback"] = {
         {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0}, -- cayo perico mansion
-        {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"}
+        {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"},
+        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"}
     },
     ["sunbathe3"] = {
         {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0}, -- cayo perico mansion
-        {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"}
+        {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"},
+        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"}
     },
     ["Sunbathe Back"] = {
         {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0}, -- cayo perico mansion
-        {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"}
+        {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"},
+        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"}
     },
     ["Sunbathe 3"] = {
         {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0}, -- cayo perico mansion
-        {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"}
+        {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"},
+        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"}
     }
 }
