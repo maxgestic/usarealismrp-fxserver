@@ -283,31 +283,31 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "The Pit (Vespucci Beach)", id = 'store28'},
         cameras = {
-            {label = "Main", x = -1156.4, y = -1427.1, z = 6.0, r = {x = -10.0, y = 00.0, z = -30.0}}
+            {label = "Main", x = -1157.31640625, y = -1427.0084228516, z = 7.0, r = {x = -20.0, y = 00.0, z = 290.0}}
         }
     },
     {
         camBox = {label = "Blazing Tattoo (Vinewood)", id = 'store29'},
         cameras = {
-            {label = "Main", x = 327.3, y = 181.7, z = 105.8, r = {x = -20.0, y = 00.0, z = 105.0}}
+            {label = "Main", x = 325.16162109375, y = 178.5611114502, z = 105.8, r = {x = -20.0, y = 00.0, z = 60.0}}
         }
     },
     {
         camBox = {label = "Sick Tats (Chumash)", id = 'store30'},
         cameras = {
-            {label = "Main", x = -3168.2, y = 1078.8, z = 21.8, r = {x = -5.0, y = 0.0, z = 150.0}}
+            {label = "Main", x = -3167.8825683594, y = 1078.3162841797, z = 23.0, r = {x = -25.0, y = 0.0, z = 140.0}}
         }
     },
     {
         camBox = {label = "Sick Tats (Sandy Shores)", id = 'store31'},
         cameras = {
-            {label = "Main", x = 1866.8, y = 3746.2, z = 34.0, r = {x = -25.0, y = 0.0, z = 80.0}}
+            {label = "Main", x = 1869.2139892578, y = 3747.33984375, z = 35.0, r = {x = -25.0, y = 0.0, z = 75.0}}
         }
     },
     {
         camBox = {label = "Sick Tats (Paleto Bay)", id = 'store32'},
         cameras = {
-            {label = "Main", x = -296.6, y = 6200.7, z = 32.5, r = {x = 0.0, y = 0.0, z = -100.0}}
+            {label = "Main", x = -298.99221801758, y = 6199.134765625, z = 33.0, r = {x = -20.0, y = 0.0, z = 275.0}}
         }
     },
     {
@@ -361,8 +361,18 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Bank (Paleto Bay)", id = 'bank2'},
         cameras = {
-            {label = "Front Door", x = -107.50, y = 6468.60, z = 33.826, r = {x = -15.0, y = 0.0, z = 160.0}},
-            {label = "Vault", x = -108.31112670898, y = 6462.7919921875, z = 34.046794891357, r = {x = -15.0, y = 0.0, z = 0.0}},
+            {label = "Front Parkinglot", x = -103.25258636475, y = 6451.4575195313, z = 34.25, r = {x = -25.0, y = 0.0, z = 84.0}},
+            {label = "Lobby", x = -108.03051757813, y = 6461.9130859375, z = 33.50, r = {x = -20.0, y = 0.0, z = 0.0}},
+            {label = "Lobby Two", x = -99.768119812012, y = 6465.2670898438, z = 33.50, r = {x = -30.0, y = 0.0, z = 85.0}},
+            {label = "Lobby Tree", x = -102.34830474854, y = 6475.54296875, z = 33.50, r = {x = -20.0, y = 0.0, z = 165.0}},
+            {label = "Tellers", x = -114.52364349365, y = 6470.3198242188, z = 33.50, r = {x = -20.0, y = 0.0, z = 275.0}},
+            {label = "Behind Tellers", x = -111.21256256104, y = 6475.72265625, z = 33.50, r = {x = -20.0, y = 0.0, z = 87.0}},
+            {label = "South Office", x = -101.80202484131, y = 6460.8056640625, z = 33.50, r = {x = -20.0, y = 0.0, z = 73.0}},
+            {label = "North Office", x = -97.629325866699, y = 6464.9248046875, z = 33.50, r = {x = -20.0, y = 0.0, z = 7.0}},
+            {label = "Admin Office", x = -105.70732116699, y = 6480.5986328125, z = 33.50, r = {x = -20.0, y = 0.0, z = 169.0}},
+            {label = "Vault", x = -95.758293151855, y = 6461.4848632813, z = 33.50, r = {x = -30.0, y = 0.0, z = 90.0}},
+            {label = "North Hallway", x = -99.992515563965, y = 6476.6811523438, z = 33.50, r = {x = -20.0, y = 0.0, z = 201.0}},
+            {label = "Security Room", x = -90.031547546387, y = 6466.8256835938, z = 33.50, r = {x = -20.0, y = 0.0, z = 95.0}},
         }
     },
     {
