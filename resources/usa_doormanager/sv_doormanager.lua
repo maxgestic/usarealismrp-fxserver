@@ -227,8 +227,10 @@ local DOORS = {
   {name = "Pacific Standard Bank / Vault Door 1", x = 252.74, y = 221.24, z = 101.68, model = -1508355822, locked = true, offset ={0.0, 1.25, -0.2}, heading = 160.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
   {name = "Pacific Standard Bank / Vault Door 2", x = 261.14, y = 215.32, z = 101.68, model = -1508355822, locked = true, offset ={0.0, 1.25, -0.2}, heading = 250.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
   {name = "Pacific Standard Bank / Lobby Upstairs Door 1", x = 237.00645446777, y = 227.70278930664, z = 106.28684997559, model = 1956494919, locked = true, offset ={0.0, 1.2, 0.0}, heading = 338.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
+  -- Legion Fleeca Bank
   {name = "Legion Door 1", x = 147.37, y = -1045.01, z = 29.37, model = -1591004109, locked = true, offset ={0.0, -1.5, 0.0}, heading = 250.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', "corrections"}},
   {name = "Legion Door 2", x = 149.75, y = -1046.92, z = 29.35, model = -1591004109, locked = true, offset ={0.0, -1.5, 0.0}, heading = 160.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', "corrections"}},
+
   {name = "Harmony Door 1", x = 1175.8, y = 2711.88, z = 38.09, model = -1591004109, locked = true, offset ={0.0, -1.5, 0.0}, heading = 90.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', "corrections"}},
   {name = "Harmony Door 2", x = 1173.16, y = 2712.46, z = 38.07, model = -1591004109, locked = true, offset ={0.0, -1.5, 0.0}, heading = 0.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', "corrections"}},
   {name = 'Sandy Hospital Ward Front 1', x = 1828.9033, y = 3670.8318, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 300.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
@@ -236,8 +238,8 @@ local DOORS = {
   {name = 'Sandy Hospital Ward Rear 1', x = 1830.2230, y = 3682.6743, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 120.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = 'Sandy Hospital Ward Rear 2', x = 1831.0431, y = 3681.6572, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 300.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   -- Townhall MLO
-  {name = "Gabz Townhall Entrance Left", x = -545.53942871094, y = -202.53967285156, z = 38.241428375244, model = 660342567, locked = false, offset ={0.0, 1.0, 0.0}, heading = 30.0, _dist = 2.0, allowedJobs = {'sheriff', "corrections", "judge", "ems"}},
-  {name = "Gabz Townhall Entrance Right", x = -546.48077392578, y = -202.84783935547, z = 38.241439819336, model = -1094765077, locked = true, static = true, _dist = 2.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
+  -- {name = "Gabz Townhall Entrance Left", x = -545.53942871094, y = -202.53967285156, z = 38.241428375244, model = 660342567, locked = false, offset ={0.0, 1.0, 0.0}, heading = 30.0, _dist = 2.0, allowedJobs = {'sheriff', "corrections", "judge", "ems"}},
+  -- {name = "Gabz Townhall Entrance Right", x = -546.48077392578, y = -202.84783935547, z = 38.241439819336, model = -1094765077, locked = true, static = true, _dist = 2.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
   {name = "Gabz Townhall Jury Room", x = -576.84936523438, y = -215.67018127441, z = 38.227031707764, model = 1762042010, locked = true, offset ={0.0, 1.20, 0.0}, heading = 300.0, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "judge"}},
   {name = "Gabz Townhall Judge Room", x = -581.36834716797, y = -207.5299987793, z = 38.227035522461, model = 1762042010, locked = true, offset ={0.0, 1.20, 0.0}, heading = 120.0, _dist = 2.0, allowedJobs = {'sheriff', "corrections", "judge"}},
   {name = "Gabz Townhall Court Room Hallway", x = -574.38049316406, y = -215.97418212891, z = 38.227035522461, model = 1762042010, locked = true, offset ={0.0, 1.20, 0.0}, heading = 208.0, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "judge", "ems"}},
