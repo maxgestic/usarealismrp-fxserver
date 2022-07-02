@@ -164,6 +164,17 @@ function CreateCharacter(data)
     return self.hasItem(item)
   end
 
+  rTable.hasItemOfQuantity = function(itemName, quantity)
+    local total = 0
+    for i = 0, self.inventory.MAX_CAPACITY - 1 do
+      local item = self.inventory.items[tostring(i)]
+      if item and item.name == itemName then
+        total = total + item.quantity
+      end
+    end
+    return total >= quantity
+  end
+
   rTable.hasItemWithExactName = function(item)
     local targetItemName = (item.name or item)
     local inv = self.inventory

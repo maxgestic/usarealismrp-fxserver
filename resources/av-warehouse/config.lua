@@ -110,9 +110,9 @@ Config.Rewards = {
 	[4] = {
 		type = 'weapons',		
 		reward = {
-			[1] = { name = "Pistol", type = "weapon", hash = `WEAPON_PISTOL`, quantity = 1, weight = 15, objectModel = "w_pi_pistol" },
-			[2] = { name = "AP Pistol", type = "weapon", hash = `WEAPON_APPISTOL`, quantity = 1, weight = 20, objectModel = "w_pi_appistol" },
-			[3] = { name = "Assault Rifle", type = "weapon", hash = `WEAPON_ASSAULTRIFLE`, quantity = 1, weight = 30, objectModel = "w_ar_assaultrifle" },
+			[1] = { name = "Pistol Parts", type = "weaponParts", weight = 10.0, quantity = 1 },
+			[2] = { name = "AP Pistol Parts", price = 20000, type = "weaponParts", weight = 15.0, quantity = 1 },
+			[3] = { name = "AK-47 Parts", type = "weaponParts", weight = 45.0, quantity = 1 },
 		}
 	},
 	[5] = {
@@ -167,7 +167,7 @@ Config.Rewards = {
 		reward = {
 			[1] = { name = "Assault Rifle MK2", type = "weapon", hash = `WEAPON_ASSAULTRIFLE_MK2`, quantity = 1, weight = 30, objectModel = "w_ar_assaultrifle" },
 			[2] = { name = "Battle Axe", type = "weapon", hash = `WEAPON_BATTLEAXE`, quantity = 1, weight = 15, objectModel = "prop_tool_fireaxe" },
-			[3] = { name = "Compact Rifle", type = "weapon", hash = `WEAPON_COMPACTRIFLE`, quantity = 1, weight = 30, objectModel = "w_ar_assaultrifle" },
+			[3] = { name = "Compact Rifle Parts", type = "weaponParts", weight = 40.0, quantity = 1 },
 		}
 	},
 	[10] = {
@@ -191,16 +191,16 @@ Config.Rewards = {
 	[12] = {
 		type = 'weapons',		
 		reward = {
-			[1] = { name = "Tommy Gun", type = "weapon", hash = `WEAPON_GUSENBERG`, quantity = 1, weight = 30, objectModel = "w_sb_gusenberg" },
-			[2] = { name = "Machine Pistol", type = "weapon", hash = `WEAPON_MACHINEPISTOL`, quantity = 1, weight = 25, objectModel = "w_pi_pistol" },
-			[3] = { name = "Micro SMG", type = "weapon", hash = `WEAPON_MICROSMG`, quantity = 1, weight = 30, objectModel = "w_sb_microsmg" },
+			[1] = { name = "Tommy Gun Parts", type = "weaponParts", weight = 45.0, quantity = 1 },
+			[2] = { name = "Machine Pistol Parts", type = "weaponParts", weight = 20.0, quantity = 1 },
+			[3] = { name = "Micro SMG Parts", type = "weaponParts", weight = 30.0, quantity = 1 },
 		}
 	},
 	[13] = {
 		type = 'weapons',		
 		reward = {
 			[1] = { name = "Mini SMG", type = "weapon", hash = `WEAPON_MINISMG`, quantity = 1, weight = 25, objectModel = "w_sb_microsmg" },
-			[2] = { name = "SMG", type = "weapon", hash = `WEAPON_SMG`, quantity = 1, weight = 30, objectModel = "w_sb_smg" },
+			[2] = { name = "SMG Parts", type = "weaponParts", weight = 35.0, quantity = 1 },
 			[3] = { name = "Tear Gas", type = "weapon", hash = `WEAPON_BZGAS`, quantity = 1, weight = 7, objectModel = "w_ex_grenadesmoke" },
 		}
 	},

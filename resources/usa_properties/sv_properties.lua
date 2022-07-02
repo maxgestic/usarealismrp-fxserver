@@ -454,6 +454,8 @@ local burglarySearchItems = {
 	{ name = ".45 Bullets", type = "ammo", price = 375, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_01" },
 	{ name = "12 Gauge Shells", type = "ammo", price = 300, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_02" },
 	{ name = "Pump Shotgun", legality = "illegal", type = "weapon", hash = 487013001, price = 4000, quantity = 1, weight = 25, objectModel = "w_sg_pumpshotgun", notStackable = true },
+	{ name = "Heavy Pistol Parts", price = 5500, type = "weaponParts", weight = 15.0, quantity = 1 },
+	{ name = "Pistol Parts", price = 3000, type = "weaponParts", weight = 10.0, quantity = 1 },
 }
 
 local interiors = {

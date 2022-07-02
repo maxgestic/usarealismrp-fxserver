@@ -25,6 +25,7 @@ NO_TOOLTIP_WEAPONS.add("Fishing Pole");
 NO_TOOLTIP_WEAPONS.add("Crowbar");
 NO_TOOLTIP_WEAPONS.add("Calvary Dagger");
 NO_TOOLTIP_WEAPONS.add("Sticky Bomb");
+NO_TOOLTIP_WEAPONS.add("Hand Grenade");
 NO_TOOLTIP_WEAPONS.add("Flashbang");
 
 var itemImages = {
@@ -80,6 +81,7 @@ var itemImages = {
     "Machete": "https://i.imgur.com/bMxYq8T.png",
     "Pistol": "https://steamuserimages-a.akamaihd.net/ugc/29613457985625199/0D5453A0ADC32EDBADEACF8D5CBE1EF129FCA5DC/",
     "Heavy Pistol": "https://i.imgur.com/weWweWG.png",
+    "Pistol .50": "https://i.imgur.com/W9sFoxi.png",
     ".50 Caliber": "https://i.imgur.com/W9sFoxi.png",
     "SNS Pistol": "https://vignette.wikia.nocookie.net/gtawiki/images/f/f5/SNSPistol-GTAV-SocialClub.png/revision/latest/scale-to-width-down/185?cb=20180202170333",
     "Combat Pistol": "https://vignette.wikia.nocookie.net/the-gta-online/images/4/4e/CombatPistol-GTA5-ingame.png/revision/latest?cb=20150519181654",
@@ -278,6 +280,7 @@ var itemImages = {
     "Speaker": "https://i.imgur.com/4TW6JnZ.png",
     "Pistol Mk2" : "https://i.imgur.com/Y7lGpBc.png",
     "Flashbang" : "https://i.imgur.com/r5qEqSI.png",
+    "Hand Grenade": "https://static.wikia.nocookie.net/gtawiki/images/5/52/Grenade-GTAV.png/revision/latest?cb=20190809090848",
     // begin ammo
     "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
     "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",
@@ -702,7 +705,9 @@ var interactionMenu = new Vue({
         },
         getItemImage: function(item) {
             let name = item.name || item;
-            if (item.type == "magazine") {
+            if (item.type == "weaponParts") {
+                return "https://i.imgur.com/LbHY4fF.png"
+            } else if (item.type == "magazine") {
                 name = name.split(" ");
                 name.splice(0, 1);
                 let strippedName = name.join(" "); // to remove the 'empty' or 'loaded' prefix
@@ -714,6 +719,7 @@ var interactionMenu = new Vue({
                 return itemImages["Key"];
             } else if (itemImages[name]) {
                 return itemImages[name];
+            
             } else {
                 return DEFAULT_ITEM_IMAGE;
             }

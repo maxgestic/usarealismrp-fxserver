@@ -1359,7 +1359,7 @@ AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
 		if item.magazine then
 			toGiveAmmo = item.magazine.currentCapacity
 		end
-		if item.name:find("Molotov") or item.name:find("Flare") or item.name:find("Tear Gas") or item.name:find("Stun Gun") or item.name:find("Sticky Bomb") or item.name:find("Flashbang") then
+		if item.name:find("Molotov") or item.name:find("Flare") or item.name:find("Tear Gas") or item.name:find("Stun Gun") or item.name:find("Sticky Bomb") or item.name:find("Flashbang") or item.name:find("Hand Grenade") then
 			toGiveAmmo = 1
 		end
 		if item.name:find("Fire Extinguisher") or item.name:find("Jerry Can") then
