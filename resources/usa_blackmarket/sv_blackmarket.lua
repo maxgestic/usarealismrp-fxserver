@@ -44,7 +44,7 @@ local markets = {
       --{name = 'Heavy Shotgun', type = 'weapon', hash = 984333226, price = 20000, legality = 'illegal', quantity = 1, weight = 35, stock = math.random(0, 2), objectModel = "w_sg_heavyshotgun"},
       { name = "Heavy Shotgun Parts", price = 15000, type = "weaponParts", weight = 35.0, quantity = 1, stock = math.random(0, 2) },
       --{name = 'SNS Pistol', type = 'weapon', hash = -1076751822, price = 3500, legality = 'illegal', quantity = 1, weight = 8, stock = math.random(0, 3), objectModel = "w_pi_sns_pistol"},
-      { name = "SNS Pistol Parts", price = 5000, type = "weaponParts", weight = 35.0, quantity = 1, stock = math.random(0, 3) },
+      { name = "SNS Pistol Parts", price = 5000, type = "weaponParts", weight = 8.0, quantity = 1, stock = math.random(0, 3) },
       --{name = 'Glock', type = 'weapon', hash = 1593441988, price = 5000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 3), objectModel = "w_pi_combatpistol"},
       { name = "Glock Parts", price = 6000, type = "weaponParts", weight = 10.0, quantity = 1, stock = math.random(0, 3) },
       {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 3)},
