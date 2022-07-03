@@ -16,61 +16,61 @@ local warp_locations = {
     },
     job_access = "civ"
   },
-  ['24/7 - Innocence Blvd.'] = { -- 24/7 little soul
-    entrance = {
-      coords = {26.365692138672, -1315.4512939453, 29.622989654541},
-      heading = 180.0
-    },
-    exit = {
-      coords = {31.172891616821,-1340.5278320313,29.497024536133},
-      heading = 180.0
-    },
-    job_access = 'civ'
-  },
-  ["24/7 - Paleto Back Door"] = { -- 24/7 paleto
-  	entrance = {
-      coords = {1741.41, 6419.52, 35.04},
-      heading = 340.0
-    },
-    exit = {
-      coords = {1736.7709960938, 6418.537109375, 35.037254333496},
-      heading = 62.0
-    },
-  job_access = "civ"
-  },
-  ["24/7 - Sandy Back Door"] = { -- 24/7 sandy
-  	entrance = {
-      coords = {1963.75, 3749.59, 32.26},
-      heading = 300.0
-    },
-    exit = {
-      coords = {1962.3913574219, 3749.0971679688, 32.343746185303},
-      heading = 125.0
-    },
-  job_access = "civ"
-  },
-  ['24/7 - Harmony Back Door'] = { -- 24/7 harmony
-    entrance = {
-      coords = {542.01, 2663.68, 42.17},
-      heading = 100.0
-    },
-    exit = {
-      coords = {543.06, 2663.99, 42.15},
-      heading = 270.0
-    },
-  job_access = 'civ'
-  },
-  ['24/7 - Canyon Back Door'] = { -- 24/7 banham canyon
-    entrance = {
-      coords = {-3047.55, 589.93, 7.78},
-      heading = 20.0
-    },
-    exit = {
-      coords = {-3047.39, 589.11, 7.90},
-      heading = 200.0
-    },
-  job_access = 'civ'
-  },
+  -- ['24/7 - Innocence Blvd.'] = { -- 24/7 little soul
+  --   entrance = {
+  --     coords = {26.365692138672, -1315.4512939453, 29.622989654541},
+  --     heading = 180.0
+  --   },
+  --   exit = {
+  --     coords = {31.172891616821,-1340.5278320313,29.497024536133},
+  --     heading = 180.0
+  --   },
+  --   job_access = 'civ'
+  -- },
+  -- ["24/7 - Paleto Back Door"] = { -- 24/7 paleto
+  -- 	entrance = {
+  --     coords = {1741.41, 6419.52, 35.04},
+  --     heading = 340.0
+  --   },
+  --   exit = {
+  --     coords = {1736.7709960938, 6418.537109375, 35.037254333496},
+  --     heading = 62.0
+  --   },
+  -- job_access = "civ"
+  -- },
+  -- ["24/7 - Sandy Back Door"] = { -- 24/7 sandy
+  -- 	entrance = {
+  --     coords = {1963.75, 3749.59, 32.26},
+  --     heading = 300.0
+  --   },
+  --   exit = {
+  --     coords = {1962.3913574219, 3749.0971679688, 32.343746185303},
+  --     heading = 125.0
+  --   },
+  -- job_access = "civ"
+  -- },
+  -- ['24/7 - Harmony Back Door'] = { -- 24/7 harmony
+  --   entrance = {
+  --     coords = {542.01, 2663.68, 42.17},
+  --     heading = 100.0
+  --   },
+  --   exit = {
+  --     coords = {543.06, 2663.99, 42.15},
+  --     heading = 270.0
+  --   },
+  -- job_access = 'civ'
+  -- },
+  -- ['24/7 - Canyon Back Door'] = { -- 24/7 banham canyon
+  --   entrance = {
+  --     coords = {-3047.55, 589.93, 7.78},
+  --     heading = 20.0
+  --   },
+  --   exit = {
+  --     coords = {-3047.39, 589.11, 7.90},
+  --     heading = 200.0
+  --   },
+  -- job_access = 'civ'
+  -- },
   ['24/7 - Grove Back Door'] = { -- LTD grove st.
     entrance = {
       coords = {-40.98, -1747.79, 29.32},
@@ -93,17 +93,17 @@ local warp_locations = {
     },
   job_access = 'civ'
   },
-  ['24/7 - LS Back Door'] = { -- 24/7 ls freeway
-    entrance = {
-      coords = {2546.47, 385.69, 108.61},
-      heading = 80.0
-    },
-    exit = {
-      coords = {2550.96, 387.99, 108.62},
-      heading = 175.0
-    },
-  job_access = 'civ'
-  },
+  -- ['24/7 - LS Back Door'] = { -- 24/7 ls freeway
+  --   entrance = {
+  --     coords = {2546.47, 385.69, 108.61},
+  --     heading = 80.0
+  --   },
+  --   exit = {
+  --     coords = {2550.96, 387.99, 108.62},
+  --     heading = 175.0
+  --   },
+  -- job_access = 'civ'
+  -- },
   ["Pillbox Helipad"] = {
   	entrance = {
       coords = {327.24771118164, -603.35797119141, 43.284008026123},

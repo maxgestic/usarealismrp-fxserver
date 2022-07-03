@@ -19,17 +19,16 @@ end)
 TriggerServerEvent("weaponExtraShop:getItems")
 
 local locations = {
-	{ x = -329.92, y = 6078.9, z = 31.6, legal = true }, -- paleto ammunation
-  { x = 1691.6, y = 3757.4, z = 34.7, legal = true }, -- sandy shores ammunation
-  { x = -1308.89, y = -390.27, z = 36.9, legal = true }, -- blvd. del perro ammunation
-  { x = 249.1, y = -45.58, z = 70.1, legal = true }, -- spanish ave.
-  { x  = -665.34, y = -938.9, z = 22.0, legal = true }, -- Linsday Circus
-  { x = 17.701, y = -1110.00, z = 29.95, legal = true }, -- Adam's Apple Blvd.
-  { x = 845.46, y = -1029.78, z = 28.4, legal = true }, -- Vespucci
+	{ x = -333.47109985352, y = 6082.3276367188, z = 31.454774856567, legal = true }, -- paleto ammunation
+  { x = 1690.5164794922, y = 3758.2292480469, z = 34.705326080322, legal = true }, -- sandy shores ammunation
+  { x = -1303.8515625, y = -391.65615844727, z = 36.695831298828, legal = true }, -- blvd. del perro ammunation
+  { x = 7.8259916305542, y = -1108.7192382813, z = 29.797222137451, legal = true }, -- Adam's Apple Blvd.
+  { x = 845.79321289063, y = -1034.9332275391, z = 28.1965675354, legal = true }, -- Vespucci
   --{ x = 129.6, y = -1920.3, z = 21.3, legal = false } -- grove st
   --{ x = 752.996, y = -3192.206, z = 6.07, legal = false } -- terminal, industrial LS
   {x = 180.8, y = 2793.2, z = 45.7, legal = false, ped = { heading = 260.0, hash = -907676309 }}, -- sandy shores, harmony area
-  { x = -540.18902587891, y = -588.16094970703, z = 34.681781768799, legal = true} -- MLO Gun Store
+  { x = -540.18902587891, y = -588.16094970703, z = 34.681781768799, legal = true}, -- MLO Gun Store
+  { x = 816.65960693359, y = -2150.2551269531, z = 29.619186401367, legal = true } -- Popular St.
 }
 
 function comma_value(amount)
