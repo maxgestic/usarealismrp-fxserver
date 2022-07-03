@@ -46,12 +46,6 @@ AddEventHandler("place:place", function(seatOption, placedByLEO, placerID)
 				end
 			end
 		end
-
-		-- try to prevent the car from locking when a person is placed inside (experimental):
-		local vplate = GetVehicleNumberPlateText(veh)
-		vplate = exports.globals:trim(vplate)
-		TriggerServerEvent("lock:setLocked", vplate, false)
-		SetVehicleDoorsLocked(veh, 1) -- unlock
 	end
 end)
 
