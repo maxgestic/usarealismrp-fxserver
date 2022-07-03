@@ -14,15 +14,18 @@ local STOLEN_GOODS = {
 
 local ShopliftingAreas = {
   {x = -1222.81, y = -904.39, z = 12.33, shoplifted = false},
-  {x = 31.72, y = -1345.48, z = 29.5, shoplifted = false},
+  {x = 30.127193450928, y = -1345.0743408203, z = 29.496971130371, shoplifted = false}, -- Innocence Blvd
   {x = -52.73, y = -1749.77, z = 29.42, shoplifted = false},
   {x = 1156.5, y = -323.1, z = 69.21, shoplifted = false},
-  {x = 377.34, y = 327.45, z = 103.57, shoplifted = false},
+  {x = 378.45764160156, y = 327.26797485352, z = 103.5662689209, shoplifted = false}, -- Clinton Ave
   {x = -710.43, y = -911.96, z = 19.22, shoplifted = false},
   {x = 378.35, y = 329.75, z = 103.57, shoplifted = false},
   {x = 1164.44, y = 2707.41, z = 38.16, shoplifted = false},
+  {x = 1963.7805175781, y = 3744.7399902344, z = 32.343688964844, shoplifted = false}, -- Sandy Shores 24/7
   {x = -556.88677978516, y = -585.63549804688, z = 34.68176651001, shoplifted = false},
   {x = 820.47875976563, y = -780.63116455078, z = 26.175024032593, shoplifted = false},
+  {x = 2555.3627929688, y = 386.50552368164, z = 108.62286376953, shoplifted = false}, -- Palomino Fwy
+  {x = 2678.8444824219, y = 3285.4152832031, z = 55.241065979004, shoplifted = false}, -- Senora Fwy
 }
 
 local GENERAL_STORE_ITEMS = {

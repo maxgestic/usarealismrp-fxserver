@@ -102,15 +102,17 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "247 Supermarket (Paleto Bay)", id = 'store3'},
         cameras = {
-            {label = "Camera 1", x = 1730.08, y = 6419.72, z = 37.0, r = {x = -20.0, y = 0.0, z = 200.0}},
-            {label = "Camera 2", x = 1736.74, y = 6417.39, z = 37.0, r = {x = -40.0, y = 0.0, z = 30.0}},
+            {label = "Camera 1", x = 1738.2928466797, y = 6414.9526367188, z = 37.037197113037, r = {x = -20.0, y = 0.0, z = 110.0}},
+            {label = "Camera 2", x = 1727.0703125, y = 6413.9208984375, z = 37.037143707275, r = {x = -20.0, y = 0.0, z = 288.0}},
+            {label = "Backroom 1", x = 1737.5500488281, y = 6419.6860351563, z = 37.037200927734, r = {x = -30.0, y = 0.0, z = 90.0}},
         }
     },
     {
         camBox = {label = "247 Supermarket (Innocence Blvd.)", id = 'store4'},
         cameras = {
-            {label = "Camera 1", x = 24.43, y = -1342.22, z = 31.49, r = {x = -20.0, y = 0.0, z = 230.0}},
-            {label = "Camera 2", x = 31.48, y = -1341.51, z = 31.49, r = {x = -40.0, y = 0.0, z = 47.0}},
+            {label = "Camera 1", x = 33.904010772705, y = -1342.9627685547, z = 31.496953964233, r = {x = -20.0, y = 0.0, z = 115.0}},
+            {label = "Camera 2", x = 24.343196868896, y = -1348.8208007813, z = 31.496961593628, r = {x = -20.0, y = 0.0, z = 314.0}},
+            {label = "Backroom 1", x = 31.244409561157, y = -1338.9979248047, z = 31.496967315674, r = {x = -30.0, y = 0.0, z = 117.0}},
         }
     },
     {
@@ -124,15 +126,18 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "247 Supermarket (Alhambra Dr.)", id = 'store6'},
         cameras = {
-            {label = "Camera 1", x = 1957.50, y = 3744.393, z = 34.34, r = {x = -20.0, y = 0.0, z = 259.0}},
-            {label = "Camera 2", x = 1963.19, y = 3748.604, z = 34.34, r = {x = -40.0, y = 0.0, z = 95.0}},
+            {label = "Camera 1", x = 1966.0869140625, y = 3748.4946289063, z = 34.34, r = {x = -20.0, y = 0.0, z = 150.0}},
+            {label = "Camera 2", x = 1960.7221679688, y = 3738.6267089844, z = 34.34, r = {x = -20.0, y = 0.0, z = 340.0}},
+            {label = "Backroom 1", x = 1961.7033691406, y = 3750.5632324219, z = 34.34, r = {x = -30.0, y = 0.0, z = 142.0}},
         }
     },
     {
         camBox = {label = "247 Supermarket (Clinton Ave.)", id = 'store7'},
         cameras = {
-            {label = "Camera 1", x = 373.75, y = 331.31, z = 105.56, r = {x = -20.0, y = 0.0, z = 213.0}},
-            {label = "Camera 2", x = 380.73, y = 330.38, z = 105.56, r = {x = -40.0, y = 0.0, z = 45.0}},
+            {label = "Camera 1", x = 372.12023925781, y = 325.00061035156, z = 105.56, r = {x = -20.0, y = 0.0, z = 295.0}},
+            {label = "Camera 2", x = 382.75973510742, y = 328.3473815918, z = 105.56, r = {x = -20.0, y = 0.0, z = 110.0}},
+            {label = "Backroom 1", x = 381.0602722168, y = 332.88198852539, z = 105.56, r = {x = -30.0, y = 0.0, z = 108.0}},
+            {label = "Backroom 2", x = 374.12866210938, y = 334.94152832031, z = 105.56, r = {x = -30.0, y = 0.0, z = 232.0}},
         }
     },
     {
@@ -160,29 +165,37 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "247 Supermarket (Ineseno Rd.)", id = 'store11'},
         cameras = {
-            {label = "Camera 1", x = -3043.79, y = 582.93, z = 9.9, r = {x = -20.0, y = 0.0, z = 340.0}},
-            {label = "Camera 2", x = -3046.67, y = 589.36, z = 9.9, r = {x = -40.0, y = 0.0, z = 175.0}}
+            {label = "Camera 1", x = -3037.5400390625, y = 584.88275146484, z = 9.9, r = {x = -20.0, y = 0.0, z = 63.0}},
+            {label = "Camera 2", x = -3045.9816894531, y = 592.1435546875, z = 9.9, r = {x = -20.0, y = 0.0, z = 236.0}},
+            {label = "Backroom 1", x = -3048.9775390625, y = 588.45928955078, z = 9.9, r = {x = -30.0, y = 0.0, z = 226.0}},
+            {label = "Backroom 2", x = -3047.0708007813, y = 581.38360595703, z = 9.9, r = {x = -30.0, y = 0.0, z = 348.0}},
         }
     },
     {
         camBox = {label = "247 Supermarket (Palomino Fwy.)", id = 'store12'},
         cameras = {
-            {label = "Camera 1", x = 2552.19, y = 381.01, z = 110.62, r = {x = -20.0, y = 0.0, z = 320.0}},
-            {label = "Camera 2", x = 2551.69, y = 388.04, z = 110.62, r = {x = -40.0, y = 0.0, z = 127.0}}
+            {label = "Camera 1", x = 2553.2390136719, y = 390.39920043945, z = 110.62, r = {x = -20.0, y = 0.0, z = 216.0}},
+            {label = "Camera 2", x = 2558.6240234375, y = 380.79837036133, z = 110.62, r = {x = -20.0, y = 0.0, z = 30.0}},
+            {label = "Backroom 1", x = 2549.1494140625, y = 387.9616394043, z = 110.62, r = {x = -30.0, y = 0.0, z = 210.0}},
+            {label = "Backroom 2", x = 2548.5227050781, y = 380.58926391602, z = 110.62, r = {x = -30.0, y = 0.0, z = 331.0}},
         }
     },
     {
         camBox = {label = "247 Supermarket (Senora Fwy.)", id = 'store13'},
         cameras = {
-            {label = "Camera 1", x = 2673.57, y = 3281.84, z = 57.24, r = {x = -20.0, y = 0.0, z = 297.0}},
-            {label = "Camera 2", x = 2676.314, y = 3288.30, z = 57.24, r = {x = -40.0, y = 0.0, z = 112.0}}
+            {label = "Camera 1", x = 2679.1784667969, y = 3278.6411132813, z = 57.24, r = {x = -20.0, y = 0.0, z = 17.0}},
+            {label = "Camera 2", x = 2678.8256835938, y = 3289.7592773438, z = 57.24, r = {x = -20.0, y = 0.0, z = 190.0}},
+            {label = "Backroom 1", x = 2674.078125, y = 3289.4196777344, z = 57.24, r = {x = -30.0, y = 0.0, z = 178.0}},
+            {label = "Backroom 2", x = 2670.2670898438, y = 3283.1315917969, z = 57.24, r = {x = -30.0, y = 0.0, z = 302.0}},
         }
     },
     {
         camBox = {label = "247 Supermarket (Harmony, Route 68)", id = 'store14'},
         cameras = {
-            {label = "Camera 1", x = 549.743, y = 2666.35, z = 44.15, r = {x = -20.0, y = 0.0, z = 57.0}},
-            {label = "Camera 2", x = 542.89, y = 2664.57, z = 44.15, r = {x = -40.0, y = 0.0, z = 242.0}}
+            {label = "Camera 1", x = 548.87902832031, y = 2672.4187011719, z = 44.15, r = {x = -20.0, y = 0.0, z = 140.0}},
+            {label = "Camera 2", x = 540.34674072266, y = 2665.7634277344, z = 44.15, r = {x = -20.0, y = 0.0, z = 319.0}},
+            {label = "Backroom 1", x = 543.90582275391, y = 2662.3525390625, z = 44.15, r = {x = -30.0, y = 0.0, z = 301.0}},
+            {label = "Backroom 2", x = 550.74383544922, y = 2662.8603515625, z = 44.15, r = {x = -30.0, y = 0.0, z = 68.0}},
         }
     },
     {
@@ -195,8 +208,10 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "247 Supermarket (Barbareno Rd.)", id = 'store16'},
         cameras = {
-            {label = "Camera 1", x = -3247.27, y = 1000.39, z = 14.83, r = {x = -20.0, y = 0.0, z = 318.0}},
-            {label = "Camera 2", x = -3247.449, y = 1007.466, z = 14.83, r = {x = -40.0, y = 0.0, z = 136.0}}
+            {label = "Camera 1", x = -3240.7653808594, y = 999.73986816406, z = 14.83, r = {x = -20.0, y = 0.0, z = 32.0}},
+            {label = "Camera 2", x = -3245.8166503906, y = 1009.7265625, z = 14.83, r = {x = -20.0, y = 0.0, z = 213.0}},
+            {label = "Backroom 1", x = -3249.9423828125, y = 1007.4242553711, z = 14.83, r = {x = -30.0, y = 0.0, z = 202.0}},
+            {label = "Backroom 2", x = -3250.9953613281, y = 1000.2867431641, z = 14.83, r = {x = -30.0, y = 0.0, z = 319.0}},
         }
     },
     {
@@ -225,7 +240,7 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Herr Kutz Barbers (Carson Ave.)", id = 'store20'},
         cameras = {
-            {label = "Camera 1", x = 138.18, y = -1703.68, z = 31.29, r = {x = -40.0, y = 0.0, z = 168.0}}
+            {label = "Camera 1", x = 135.40983581543, y = -1713.4879150391, z = 31.291858673096, r = {x = -30.0, y = 0.0, z = 2.0}}
         }
     },
     {
@@ -238,7 +253,7 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Herr Kutz Barbers (Niland Ave.)", id = 'store22'},
         cameras = {
-            {label = "Camera 1", x = 1928.06, y = 3732.89, z = 34.64, r = {x = -30.0, y = 0.0, z = 250.0}}
+            {label = "Camera 1", x = 1936.1729736328, y = 3726.9311523438, z = 34.54, r = {x = -30.0, y = 0.0, z = 72.0}}
         }
     },
     {
@@ -271,7 +286,7 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Herr Kutz Barber (Paleto Bay)", id = 'store26'},
         cameras = {
-            {label = "Main", x = -276.7, y = 6223.3, z = 32.7, r = {x = -20.0, y = 0.0, z = 30.0}}
+            {label = "Main", x = -283.64041137695, y = 6230.2924804688, z = 33.0, r = {x = -25.0, y = 0.0, z = 261.0}}
         }
     },
     {
@@ -339,9 +354,10 @@ SecurityCamConfig.Locations = {
         camBox = {label = "Ammunation (Popular St.)", id = 'store36'},
         cameras = {
             {label = "Front Door", x = 825.53, y = -2147.76, z = 35.1, r = {x = -30.0, y = 0.0, z = 42.0}},
-            {label = "Sales Counter", x = 814.21, y = -2159.79, z = 31.8, r = {x = -20.0, y = 0.0, z = 45.0}},
-            {label = "Office Door", x = 827.75, y = -2159.8, z = 31.8, r = {x = -20.0, y = 0.0, z = 45.0}},
-            {label = "Shooting Range", x = 815.33, y = -2160.92, z = 31.8, r = {x = -25.0, y = 0.0, z = 235.0}},
+            {label = "Camera 1", x = 809.75610351563, y = -2149.3115234375, z = 31.61, r = {x = -20.0, y = 0.0, z = 240.0}},
+            {label = "Camera 2", x = 809.76812744141, y = -2156.9240722656, z = 31.61, r = {x = -20.0, y = 0.0, z = 320.0}},
+            {label = "Shooting Range cam1", x = 827.30682373047, y = -2160.9685058594, z = 31.61, r = {x = -25.0, y = 0.0, z = 112.0}},
+            {label = "Shooting Range cam2", x = 827.529296875, y = -2177.1296386719, z = 31.61, r = {x = -25.0, y = 0.0, z = 31.0}},
         }
     },
     {
@@ -379,23 +395,27 @@ SecurityCamConfig.Locations = {
         camBox = {label = "Ammunation (Algonquin Boulevard)", id = 'store40'},
         cameras = {
             {label = "Front Door", x = 1697.74, y = 3750.5, z = 36.38, r = {x = -20.0, y = 0.0, z = 240.0}},
-            {label = "Main", x = 1688.87, y = 3758.35, z = 36.38, r = {x = -15.0, y = 0.0, z = 270.0}},
+            {label = "Camera 1", x = 1701.44140625, y = 3755.9829101563, z = 36.70, r = {x = -15.0, y = 0.0, z = 89.0}},
+            {label = "Camera 2", x = 1693.2550048828, y = 3763.4345703125, z = 36.70, r = {x = -15.0, y = 0.0, z = 188.0}},
         }
     },
     {
         camBox = {label = "Ammunation (Adams Apple Boulevard)", id = 'store41'},
         cameras = {
-            {label = "Front Door", x = 15.67, y = -1115.48, z = 30.79, r = {x = -20.0, y = 0.0, z = 180.0}},
+            {label = "Front Door", x = 8.7151536941528, y = -1113.05078125, z = 35.75, r = {x = -25.0, y = 0.0, z = 226.0}},
             {label = "Side Building", x = 21.39, y = -1116.04, z = 33.17, r = {x = -20.0, y = 0.0, z = 320.0}},
-            {label = "Main", x = 19.12, y = -1103.44, z = 31.8, r = {x = -20.0, y = 0.0, z = 210.0}},
-            {label = "Shooting Range", x = 6.45, y = -1098.48, z = 31.8, r = {x = -20.0, y = 0.0, z = 210.0}},
+            {label = "Camera 1", x = 19.74161529541, y = -1114.8033447266, z = 31.79, r = {x = -20.0, y = 0.0, z = 35.0}},
+            {label = "Camera 2", x = 22.375080108643, y = -1107.6020507813, z = 31.79, r = {x = -20.0, y = 0.0, z = 108.0}},
+            {label = "Camera 3", x = 3.3660831451416, y = -1108.8637695313, z = 31.79, r = {x = -20.0, y = 0.0, z = 292.0}},
+            {label = "Shooting Range cam1", x = 7.1933813095093, y = -1097.8397216797, z = 31.79, r = {x = -20.0, y = 0.0, z = 278.0}},
+            {label = "Shooting Range cam2", x = 12.509243011475, y = -1082.5765380859, z = 31.79, r = {x = -20.0, y = 0.0, z = 192.0}},
         }
     },
     {
         camBox = {label = "Ammunation (Paleto Bay)", id = 'store42'},
         cameras = {
             {label = "Front Door", x = -320.71, y = 6079.22, z = 34.26, r = {x = -20.0, y = 0.0, z = 200.0}},
-            {label = "Main", x = -334.92, y = 6082.7, z = 33.45, r = {x = -20.0, y = 0.0, z = 270.0}},
+            {label = "Main", x = -322.61849975586, y = 6079.6118164063, z = 33.45, r = {x = -30.0, y = 0.0, z = 87.0}},
         }
     },
     {
@@ -408,7 +428,7 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Herr Kutz Barber (Bay City)", id = 'store46'},
         cameras = {
-            {label = "Front Door", x = -1278.35, y = -1115.6, z = 8.6, r = {x = -20.0, y = 0.0, z = 125.0}}
+            {label = "Front Door", x = -1287.9822998047, y = -1119.5726318359, z = 8.5, r = {x = -25.0, y = 0.0, z = 311.0}}
         }
     },
     {

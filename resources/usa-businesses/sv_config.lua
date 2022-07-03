@@ -112,7 +112,7 @@ BUSINESSES = {
 		notRobbable = true
 	},
 	["Herr Kutz Barber (Bay City Ave.)"] = {
-		position = {-1283.7, -1115.3, 6.9},
+		position = {-1285.896484375, -1117.9365234375, 6.9903502464294},
 		cameraID = 'store46',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
@@ -275,7 +275,7 @@ BUSINESSES = {
 		purchasePercentage = 0.05
 	},
 	["Herr Kutz Barbers (Carson Ave.)"] = {
-		position = {134.45, -1707.75, 29.29},
+		position = {135.63157653809, -1710.966796875, 29.291839599609},
 		cameraID = 'store20',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
@@ -290,7 +290,7 @@ BUSINESSES = {
 		purchasePercentage = 0.35
 	},
 	["Herr Kutz Barbers (Niland Ave.)"] = {
-		position = {1930.57, 3728.08, 32.84},
+		position = {1934.0451660156, 3728.1030273438, 32.844657897949},
 		cameraID = 'store22',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
@@ -325,7 +325,7 @@ BUSINESSES = {
 		price = 8000
 	},
 	["Ammunation (Paleto Bay)"] = {
-		position = {-334.4, 6082.1, 31.5},
+		position = {-327.98010253906, 6084.3002929688, 31.454776763916},
 		cameraID = 'store42',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
@@ -346,7 +346,7 @@ BUSINESSES = {
 		price = 5000
 	},
 	["Ammunation (Algonquin Boulevard)"] = {
-		position = {1690.34, 3759.41, 34.71},
+		position = {1695.745, 3760.458, 34.70533},
 		cameraID = 'store40',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
