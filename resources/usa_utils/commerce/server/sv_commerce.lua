@@ -1,5 +1,15 @@
 local db = nil
 
+local july4thRewardItems = {
+    { name = "Large Firework", type = "misc", price = 2000, legality = "illegal", quantity = 5, weight = 15, objectModel = "ind_prop_firework_03" },
+    { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 5000, legality = "illegal", quantity = 1, weight = 35, objectModel = "w_lr_firework", notStackable = true },
+    { name = "Firework Projectile", legality = "illegal", type = "ammo", price = 400, weight = 15, quantity = 1 },
+    { name = "Firework Projectile", legality = "illegal", type = "ammo", price = 400, weight = 15, quantity = 1 },
+    { name = "Firework Projectile", legality = "illegal", type = "ammo", price = 400, weight = 15, quantity = 1 },
+    { name = "Firework Projectile", legality = "illegal", type = "ammo", price = 400, weight = 15, quantity = 1 },
+    { name = "Firework Projectile", legality = "illegal", type = "ammo", price = 400, weight = 15, quantity = 1 },
+}
+
 TriggerEvent('es:exposeDBFunctions', function(couchdb)
     db = couchdb
 end)
@@ -53,8 +63,8 @@ AddEventHandler('rconCommand', function(cmd, args)
 end)
 
 TriggerEvent("es:addCommand", "claimreward", function(src, args, char, location)
-    local transactionID = args[2]
-    if transactionID and not transactionID:find(" ") then
+    if args[2] and args[2]:find("tbx-") then
+        local transactionID = args[2]
         db.getDocumentById("tebex-transaction-ids", transactionID, function(doc)
             if doc then
                 if not doc.claimInfo then
@@ -80,14 +90,61 @@ TriggerEvent("es:addCommand", "claimreward", function(src, args, char, location)
                 TriggerClientEvent("usa:notify", src, "Transaction ID not found!")
             end
         end)
+    elseif args[2] and args[2] == "july4th" then
+        if char.get("job") ~= "eventPlanner" then
+            db.getDocumentById("july-4th-rewards", char.get("_id"), function(doc)
+                if not doc or (doc and not doc.claimed) then
+                    -- mark as claimed
+                    if not doc then
+                        db.createDocumentWithId("july-4th-rewards", {claimed = true}, char.get("_id"), function(ok) end)
+                    else
+                        db.updateDocument("july-4th-rewards", char.get("_id"), {claimed = true}, function(ok) end)
+                    end
+                    -- give reward items
+                    for i = 1, #july4thRewardItems do
+                        local item = july4thRewardItems[i]
+                        item.coords = GetEntityCoords(GetPlayerPed(src))
+                        local newCoords = {
+                            x = item.coords.x,
+                            y = item.coords.y,
+                            z = item.coords.z
+                        }
+                        newCoords.x = newCoords.x + (math.random() * 0.5)
+                        newCoords.y = newCoords.y + (math.random() * 0.5)
+                        newCoords.z = newCoords.z - 0.85
+                        item.coords = newCoords
+                        TriggerEvent("interaction:addDroppedItem", item)
+                    end
+                else
+                    TriggerClientEvent("usa:notify", src, "Already claimed 4th of july reward!")            
+                end
+            end)
+        else
+            -- give reward items
+            for i = 1, #july4thRewardItems do
+                local item = july4thRewardItems[i]
+                item.coords = GetEntityCoords(GetPlayerPed(src))
+                local newCoords = {
+                    x = item.coords.x,
+                    y = item.coords.y,
+                    z = item.coords.z
+                }
+                newCoords.x = newCoords.x + (math.random() * 0.5)
+                newCoords.y = newCoords.y + (math.random() * 0.5)
+                newCoords.z = newCoords.z - 0.85
+                item.coords = newCoords
+                TriggerEvent("interaction:addDroppedItem", item)
+            end
+        end
     else
-        TriggerClientEvent("usa:notify", src, "Must provide a valid tebex transaction ID!")
+        TriggerClientEvent("usa:notify", src, "Invalid reward code")
     end
 end, {
-    help = "Claim a tebex reward",
+    help = "Claim a reward",
     params = {
-        { name = "transaction ID", help = "The transaction ID of your purchase" },
+        { name = "rewardCode", help = "The reward code to claim" },
     }
 })
 
 exports["globals"]:PerformDBCheck("usa_utils", "tebex-transaction-ids", nil)
+exports["globals"]:PerformDBCheck("usa_utils", "july-4th-rewards", nil)
