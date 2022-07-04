@@ -47,6 +47,7 @@ local blips = {
 	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=207.106, y=-1641.45, z=28.5 }, -- LOS SANTOS
 	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=-375.435, y=6114.61, z=35.4397 }, -- PALETO
 	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=1694.01, y=3589.87, z=40.3212 }, -- SANDY
+	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x = 1200.6988525391, y = -1472.1934814453, z = 34.857078552246},
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -240.10, y = 6324.22, z = 32.43 }, -- paleto
 	--{ title="Hospital", colour = 48, id = 61, x = 360.3, y = -548.9, z = 28.8 }, -- LS, pillbox hill
 	--{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 308.1, y = -1434.7,  z = 29.9 },

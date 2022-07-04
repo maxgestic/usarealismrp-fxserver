@@ -1,8 +1,8 @@
 -- Global Variables --
 local EMSLockerRooms = {
 {x = -447.24325561523, y= -329.1171875, z = 33.601892089844}, -- mt. zonoah
-{x = 1196.320435703, y = -1465.4461669922, z = 34.859535217285}, -- LS fire station 9
-{x = 207.106, y = -1641.45, z = 28.5}, -- davis fire stations
+{x = 1205.3968505859, y = -1475.51171875, z = 34.857040405273}, -- LS fire station 9
+{x = 207.75733947754, y = -1656.556640625, z = 29.800746917725}, -- Davis Fire Station (New MLO)
 {x = 373.269, y = -1441.48, z = 28.5}, -- los santos central hospital rear clockon
 {x = 343.70, y = -1397.15, z = 32.50}, -- los santos central hospital main door
 {x=-380.01, y = 6118.63, z = 31.8497}, -- paleto
