@@ -203,8 +203,7 @@ AddEventHandler("weaponExtraShop:requestComponentPurchase", function(weapon, com
     end
     if component.price <= char.get("money") then -- see if user has enough money
         if wephash then -- not a magazine
-            wephash = wephash & 0xFFFFFFFF -- convert to unsigned weapon hash
-            local weapon = char.getItemWithField("hash", wephash)
+            local weapon = (char.getItemWithField("hash", wephash) or char.getItemWithField("hash", wephash & 0xFFFFFFFF))
             if weapon then
                 char.removeMoney(component.price)
                 TriggerClientEvent("usa:notify", source, "You have purchased a ~y~" .. component.name .. "~w~ weapon component.")
