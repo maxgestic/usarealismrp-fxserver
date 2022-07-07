@@ -20,7 +20,7 @@ vehicleRepairStation = {
 	{-355.011,6109.35,30.0},-- Paleto Bay FD
 	--{-222.407,-1329.69,30.89},
 	{480.805,-1317.43,29.2},
-	{201.339, -1656.36, 27.2832}, -- los santos fire department in davis
+	-- {201.339, -1656.36, 27.2832}, -- los santos fire department in davis
 	{1149.8494, -781.1504, 56.9987}, -- mirror park
 	{-35.4, -1088.7, 25.55}, -- ls dealership
 	--{-10.37, -1662.44, 28.74}, -- mosley dealership
