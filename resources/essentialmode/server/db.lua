@@ -459,7 +459,7 @@ function exposedDB.getDocumentByRow(db, row, value, callback)
 	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
-function exposedDB.updateDocument(db, documentID, updates, callback)
+function exposedDB.updateDocument(db, documentID, updates, callback, createDocIfNotExist)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
 		if err ~= 404 then
 			local doc = json.decode(rText)
@@ -474,7 +474,17 @@ function exposedDB.updateDocument(db, documentID, updates, callback)
 				callback(doc, err, rText)
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 		else
-			callback(nil)
+			if createDocIfNotExist then
+				exposedDB.createDocumentWithId(db, updates, documentID, function(ok)
+					if ok then
+						callback(updates, 201, "Document created with id: " .. documentID)
+					else
+						callback(nil)
+					end
+				end)
+			else
+				callback(nil)
+			end
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end

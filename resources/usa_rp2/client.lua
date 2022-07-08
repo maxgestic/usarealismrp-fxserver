@@ -654,30 +654,7 @@ AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
       --print("no tattoos!!!")
     end
     -- add any barber shop customizations if any --
-    if character.head_customizations then
-      --print("barber shop customizations existed!")
-      local head = character.head_customizations
-      SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
-      -- facial stuff like beards and ageing and what not --
-      for i = 1, #head.other do
-        SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
-        if head.other[i][2] ~= 255 then
-          if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
-            SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
-          elseif i == 6 or i == 9 then -- blush, lipstick
-            SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
-          elseif i == 14 then -- hair
-            --print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
-            SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
-            SetPedHairColor(ped, head.other[i][4], head.other[i][4])
-          end
-        end
-      end
-      -- eye color --
-			if head.eyeColor then
-				SetPedEyeColor(ped, head.eyeColor)
-			end
-    end
+    TriggerServerEvent("barber:loadCustomizations")
     -- give weapons
     if playerWeapons then
       for i = 1, #playerWeapons do
@@ -713,75 +690,7 @@ AddEventHandler("usa:setPlayerComponents", function(character)
         end
       end
       -- set barbershop customizations --
-      if character.head_customizations then
-        --print("player had barber shop customizations! applying!")
-        local head = character.head_customizations
-        SetPedHeadBlendData(playerPed, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
-        -- facial stuff like beards and ageing and what not --
-        for i = 1, #head.other do
-          SetPedHeadOverlay(playerPed, i - 1, head.other[i][2], 1.0)
-          if head.other[i][2] ~= 255 then
-            if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
-              SetPedHeadOverlayColor(playerPed, i - 1, 1, head.other[i][4])
-            elseif i == 6 or i == 9 then -- blush, lipstick
-              SetPedHeadOverlayColor(playerPed, i - 1, 2, head.other[i][4])
-            elseif i == 14 then -- hair
-              --print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
-              --SetPedComponentVariation(playerPed, 2, head.other[i][2], GetNumberOfPedTextureVariations(playerPed,2, 0), 2)
-              SetPedComponentVariation(playerPed, 2, head.other[i][2], 0, 1)
-              SetPedHairColor(playerPed, head.other[i][4], head.other[i][5] or 0)
-            end
-          end
-        end
-        -- eye color --
-        if head.eyeColor then
-          SetPedEyeColor(ped, head.eyeColor)
-        end
-      else
-        --print("no barber customizations!")
-        -- set default values --
-        -- default head & skin details --
-        local p1, p2 = 0, 0
-        if(GetEntityModel(playerPed) == -1667301416) then -- female
-          p1, p2 = 27
-        end
-        local old_head = {
-          parent1 = p1,
-          parent3 = 25,
-          parent2 = p2,
-          skin1 = 0,
-          skin3 = 20,
-          skin2 = 0,
-          mix1 = 0.5,
-          mix2 = 0.5,
-          mix3 = 0.0,
-          isParent = false,
-          other = {
-            {"Blemishes", 255, 23},
-            {"Facial Hair", 255, 28, 0},
-            {"Eyebrows", 255, 33, 0},
-            {"Ageing", 255, 14},
-            {"Makeup", 255, 74},
-            {"Blush", 255, 6, 0},
-            {"Complexion", 255, 11},
-            {"Sun Damage", 255, 10},
-            {"Lipstick", 255, 9, 0},
-            {"Moles/Freckles", 255, 17},
-            {"Chest Hair", 255, 16, 0},
-            {"Body Blemishes", 255, 11},
-            {"Add Body Blemishes", 255, 1},
-            {"Hair", 0, 100, 0}
-          }
-        }
-        SetPedHeadBlendData(playerPed, old_head.parent1, old_head.parent2, old_head.parent3, old_head.skin1, old_head.skin2, old_head.skin3, old_head.mix1, old_head.mix2, old_head.mix3, false) -- needed to apply head overlays like facial hair
-        for i = 1, #old_head.other do
-          SetPedHeadOverlay(playerPed, i - 1, 255, 1.0)
-        end
-        -- eye color --
-        if old_head.eyeColor then
-          SetPedEyeColor(ped, old_head.eyeColor)
-        end
-      end
+      TriggerServerEvent("barber:loadCustomizations")
     else
       -- non-MP model --
       Citizen.CreateThread(function()
