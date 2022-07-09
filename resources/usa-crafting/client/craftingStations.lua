@@ -1,5 +1,6 @@
 local globals = exports.globals
 local isMenuOpen = false
+local alreadyCrafting = false
 
 function spawnCraftingStation(station)
     local handle = CreateObject(station.object.model, station.coords, false, false, false)
@@ -70,25 +71,32 @@ end)
 
 RegisterNetEvent("crafting:beginCrafting")
 AddEventHandler("crafting:beginCrafting", function(recipe)
-    FreezeEntityPosition(PlayerPedId(), true)
-    TriggerEvent("dpemotes:command", 'e', GetPlayerServerId(PlayerId()), {"weld"})
-    ToggleGui()
-    CancellableProgress(
-            (recipe.craftDurationSeconds or Config.DEFAULT_CRAFT_DURATION_SECONDS) * 1000, 
-            'amb@world_human_welding@male@idle_a', 
-            'idle_a',
-            16,
-            function() -- success
-                while securityToken == nil do
-                    Wait(1)
+    if not alreadyCrafting then
+        alreadyCrafting = true
+        FreezeEntityPosition(PlayerPedId(), true)
+        TriggerEvent("dpemotes:command", 'e', GetPlayerServerId(PlayerId()), {"weld"})
+        ToggleGui()
+        CancellableProgress(
+                (recipe.craftDurationSeconds or Config.DEFAULT_CRAFT_DURATION_SECONDS) * 1000, 
+                'amb@world_human_welding@male@idle_a', 
+                'idle_a',
+                16,
+                function() -- finished
+                    while securityToken == nil do
+                        Wait(1)
+                    end
+                    TriggerServerEvent("crafting:finishedCrafting", recipe, securityToken)
+                    TriggerEvent("dpemotes:command", 'e', GetPlayerServerId(PlayerId()), {"c"})
+                    FreezeEntityPosition(PlayerPedId(), false)
+                    alreadyCrafting = false
+                end,
+                function() -- cancel
+                    TriggerEvent("dpemotes:command", 'e', GetPlayerServerId(PlayerId()), {"c"})
+                    FreezeEntityPosition(PlayerPedId(), false)
+                    alreadyCrafting = false
                 end
-                TriggerServerEvent("crafting:finishedCrafting", recipe, securityToken)
-                TriggerEvent("dpemotes:command", 'e', GetPlayerServerId(PlayerId()), {"c"})
-                FreezeEntityPosition(PlayerPedId(), false)
-            end,
-            function() -- cancel
-                TriggerEvent("dpemotes:command", 'e', GetPlayerServerId(PlayerId()), {"c"})
-                FreezeEntityPosition(PlayerPedId(), false)
-            end
-        )
+            )
+    else
+       exports.globals:notify("Already crafting") 
+    end
 end)
