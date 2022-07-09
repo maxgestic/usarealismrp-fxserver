@@ -273,6 +273,24 @@ local DOORS = {
   {name = "Davis Fire Station / Office 1", x = 200.44766235352, y = -1646.2545166016, z = 29.800731658936, model = -903733315, locked = true, offset ={0.0, -1.10, 1.0}, heading = 230.0, _dist = 2.0, allowedJobs = {'sheriff', "corrections", "ems", "doctor"}},
   {name = "Davis Fire Station / Office 2", x = 202.93838500977, y = -1643.4675292969, z = 29.800731658936, model = -903733315, locked = true, offset ={0.0, -1.10, 1.0}, heading = 50.0, _dist = 2.0, allowedJobs = {'sheriff', "corrections", "ems", "doctor"}},
   {name = "Davis Fire Station / Office 2 Exterior", x = 199.10472106934, y = -1635.9050292969, z = 30.021299362183, model = -585526495, locked = true, offset ={0.0, -1.25, 1.1}, heading = 50.0, _dist = 2.0, allowedJobs = {'sheriff', "corrections", "ems", "doctor"}}, 
+  -- La Mesa PD / Gabz MLO 
+  {name = "LaMesa PD / Front Left Entrance", x = 827.9521, y = -1288.786, z = 28.37117, model = 277920071, locked = false, offset ={0.0, 1.10, 0.0}, heading = 90.0, _dist = 2.0, allowedJobs = {'sheriff', "corrections"}},
+  {name = "LaMesa PD / Front Right Entrance", x = 827.9521, y = -1291.387, z = 28.37117, model = -34368499, locked = true, static = true, heading = 270.0, _dist = 2.0, allowedJobs = {'sheriff', "corrections"}},
+  {name = "LaMesa PD / Observation", x = 840.0884, y = -1280.999, z = 28.37117, model = -1011300766, locked = true, offset ={0.0, 1.25, 0.0}, heading = 270.0, _dist = 1.25, allowedJobs = {'sheriff', "corrections"}},
+  {name = "LaMesa PD / Interrogation", x = 840.0861, y = -1281.824, z = 28.37117, model = -1189294593, locked = true, offset ={0.0, 1.25, 0.0}, heading = 90.0, _dist = 1.25, allowedJobs = {'sheriff', "corrections"}},
+  {name = "LaMesa PD / Cells", x = 834.2814, y = -1295.986, z = 28.37117, model = 1162089799, locked = true, offset ={0.0, 1.25, 0.0}, heading = 90.0, _dist = 1.5, allowedJobs = {'sheriff', "corrections"}},
+  {name = "LaMesa PD / Break Room", x = 837.2611, y = -1309.514, z = 28.37111, model = 1491736897, locked = true, offset ={0.0, 1.25, 0.0}, heading = 270.0, _dist = 2.0, allowedJobs = {'sheriff', "corrections"}},
+  {name = "LaMesa PD / Evidence Room", x = 846.3696, y = -1310.04, z = 28.37111, model = 272264766, locked = true, offset = {0.0, 1.25, 0.0}, heading = 180.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "LaMesa PD / Locker Ent. 1", x = 854.7811, y = -1310.04, z = 28.37111, model = -1213101062, locked = true, offset = {0.0, 1.25, 0.0}, heading = 0.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "LaMesa PD / Locker Ent. 2", x = 855.7422, y = -1314.608, z = 28.37111, model = -1213101062, locked = true, offset = {0.0, 1.25, 0.0}, heading = 270.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "LaMesa PD / Hallway to Openspace (Left)", x = 856.5074, y = -1310.038, z = 28.37117, model = -375301406, locked = true, offset = {0.0, 1.25, 0.0}, heading = 180.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "LaMesa PD / Hallway to Openspace (Right)", x = 859.1082, y = -1310.038, z = 28.37117, model = -375301406, locked = true, static = true, heading = 0.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "LaMesa PD / Back Entrance (Hallway)", x = 859.0076, y = -1320.125, z = 28.37111, model = -1339729155, locked = true, offset = {0.0, 1.25, 0.0}, heading = 0.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "LaMesa PD / Back Entrance (BreakRoom)", x = 829.6385, y = -1310.128, z = 28.37117, model = -1246730733, locked = true, offset = {0.0, 1.25, 0.0}, heading = 180.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "LaMesa PD / Gate", x = 817.50970458984, y = -1320.8515625, z = 26.078126907349, model = -1372582968, locked = true, offset = {0.0, 4.5, 2.0}, gate = true, lockedCoords = {816.9862, -1325.258, 25.09328}, heading = 270.0, _dist = 8.0, allowedJobs = {'sheriff', 'corrections'}},
+  {name = "LaMesa PD / Front Fence Door", x = 835.9445, y = -1292.193, z = 27.78268, model = -147896569, locked = true, offset = {0.0, -0.58, 0.5}, heading = 270.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}},
+
+
 }
 
 -- allowedJobs - table of job names allowed to use door, the player's job must match any value in the list for the door to lock/unlock

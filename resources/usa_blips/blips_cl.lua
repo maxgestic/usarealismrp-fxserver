@@ -37,13 +37,14 @@ local blips = {
 	{ title="General Store", colour = 24 , id = 52, x=-3242.260, y=1001.569, z=12.830 },
 	{ title="General Store", colour = 24 , id = 52, x=-2968.126, y=390.579, z=15.043 },
   	--{ title="General Store", colour = 24 , id = 52, x=-1487.241, y=379.843, z=40.163 },]]
-	{ title="Police Department", colour = 38 , id = 60, scale = 0.7, x=451.255, y=-992.41, z=30.6896 }, -- LOS SANTOS
-	{ title="Police Department", colour = 38 , id = 60, scale = 0.7, x = 638.9, y = 1.9, z = 81.8 }, -- LOS SANTOS, vinewood, elgin ave.
-	{ title="Police Department", colour = 38 , id = 60, scale = 0.7, x = 826.5, y = -1291.3, z = 27.3 }, -- LOS SANTOS, la mesa PD
-	{ title="Police Department", colour = 38 , id = 60, scale = 0.7, x = 370.3, y = -1608.4, z = 28.3 }, -- LOS SANTOS, davis PD
-	{ title="Police Department", colour = 38 , id = 60, scale = 0.7, x = -1107.5, y = -847.5, z = 19.3 }, -- LOS SANTOS, vespucci PD
+	{ title="State Police Department", colour = 38 , id = 60, scale = 0.7, x=451.255, y=-992.41, z=30.6896 }, -- LOS SANTOS
+	{ title="State Police Department", colour = 38 , id = 60, scale = 0.7, x = 638.9, y = 1.9, z = 81.8 }, -- LOS SANTOS, vinewood, elgin ave.
+	-- { title="Police Department", colour = 38 , id = 60, scale = 0.7, x = 826.5, y = -1291.3, z = 27.3 }, -- LOS SANTOS, la mesa PD
+	{ title="State Police Department", colour = 38 , id = 60, scale = 0.7, x = 370.3, y = -1608.4, z = 28.3 }, -- LOS SANTOS, davis PD
+	{ title="State Police Department", colour = 38 , id = 60, scale = 0.7, x = -1107.5, y = -847.5, z = 19.3 }, -- LOS SANTOS, vespucci PD
 	{ title="Sheriff's Office", colour = 38 , id = 60, scale = 0.7, x=1853.2, y=3687.74, z=34.267 }, -- SANDY
 	{ title="Sheriff's Office", colour = 38 , id = 60, scale = 0.7, x=-447.041, y=6012.97, z=31.7164 }, -- PALETO
+	{ title="Sheriff's Office", colour = 38 , id = 60, scale = 0.7, x = 833.89385986328, y = -1289.7882080078, z = 28.244937896729 }, -- La Mesa PD / SO
 	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=207.106, y=-1641.45, z=28.5 }, -- LOS SANTOS
 	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=-375.435, y=6114.61, z=35.4397 }, -- PALETO
 	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=1694.01, y=3589.87, z=40.3212 }, -- SANDY
