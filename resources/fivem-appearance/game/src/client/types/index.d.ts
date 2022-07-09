@@ -222,6 +222,8 @@ interface CustomizationConfig {
   props: boolean;
   tattoos: boolean;
   automaticFade: boolean;
+  skipTattooSetOnExit: boolean;
+  skipModelSetOnExit: boolean;
 }
 
 interface CameraState {

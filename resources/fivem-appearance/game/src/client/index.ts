@@ -325,7 +325,7 @@ export function setPedProps(ped: number, props: PedProp[]): void {
   props.forEach(prop => setPedProp(ped, prop));
 }
 
-export async function setPlayerAppearance(appearance: PedAppearance): Promise<void> {
+export async function setPlayerAppearance(appearance: PedAppearance, ignoreTattoos: Boolean, ignoreModel: Boolean): Promise<void> {
   if (!appearance) return;
 
   const {
@@ -340,7 +340,9 @@ export async function setPlayerAppearance(appearance: PedAppearance): Promise<vo
     tattoos,
   } = appearance;
 
-  await setPlayerModel(model);
+  if (!ignoreModel) {
+    await setPlayerModel(model);
+  }
 
   const playerPed = PlayerPedId();
 
@@ -368,7 +370,7 @@ export async function setPlayerAppearance(appearance: PedAppearance): Promise<vo
     setPedEyeColor(playerPed, eyeColor);
   }
 
-  if (tattoos) {
+  if (tattoos && !ignoreTattoos) {
     setPedTattoos(playerPed, tattoos);
   }
 }

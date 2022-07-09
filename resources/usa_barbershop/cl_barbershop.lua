@@ -55,7 +55,9 @@ Citizen.CreateThread(function()
                   headOverlays = true,
                   components = false,
                   props = false,
-                  tattoos = false
+                  tattoos = false,
+                  skipTattooSetOnExit = true,
+                  skipModelSetOnExit = true
                 }
                 exports['fivem-appearance']:startPlayerCustomization(function (appearance)
                   if (appearance) then

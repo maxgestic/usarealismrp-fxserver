@@ -552,7 +552,6 @@ function startPlayerCustomization(
   RenderScriptCams(true, false, 0, true, true);
   DisplayRadar(false);
 
-  SetEntityInvincible(playerPed, true);
   TaskStandStill(playerPed, -1);
 
   const nuiMessage = {
@@ -572,7 +571,6 @@ export function exitPlayerCustomization(appearance?: PedAppearance): void {
   const playerPed = PlayerPedId();
 
   ClearPedTasksImmediately(playerPed);
-  SetEntityInvincible(playerPed, false);
 
   const nuiMessage = {
     type: 'appearance_hide',
@@ -582,10 +580,12 @@ export function exitPlayerCustomization(appearance?: PedAppearance): void {
   SendNuiMessage(JSON.stringify(nuiMessage));
 
   if (!appearance) {
-    setPlayerAppearance(getAppearance());
+    setPlayerAppearance(getAppearance(), config.skipTattooSetOnExit, config.skipModelSetOnExit);
   } else {
-    const { tattoos } = appearance;
-    setPedTattoos(playerPed, tattoos);
+    if (!config.skipTattooSetOnExit) {
+      const { tattoos } = appearance;
+      setPedTattoos(playerPed, tattoos);
+    }
   }
 
   if (callback) {
