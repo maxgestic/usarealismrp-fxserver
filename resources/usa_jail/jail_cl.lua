@@ -2,7 +2,7 @@
 --# for USA REALISM rep
 --# requres 'globals' resource to send notifications and usa_rp to change their model, check their jail time on join, and stuff like that
 
-local releaseX, releaseY, releaseZ = 1847.086, 2585.990, 45.672
+local releaseX, releaseY, releaseZ = 1840.3393554688, 2589.9916992188, 46.014316558838
 local assigned_cell = nil
 local tabletObject
 
