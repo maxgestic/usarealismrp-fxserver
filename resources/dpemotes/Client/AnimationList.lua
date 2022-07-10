@@ -372,6 +372,86 @@ DP.Dances = {
        PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
        EmoteLoop = true,
    }},
+   ["ashton"] = {"div@gdances@test", "ashton", "Ashton", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["charleston"] = {"div@gdances@test", "charleston", "Charleston", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["doggystrut"] = {"div@gdances@test", "doggystrut", "Strut", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["dreamfeet"] = {"div@gdances@test", "dreamfeet", "Dream Feet", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["eerie"] = {"div@gdances@test", "eerie", "Eerie", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["fancyfeet"] = {"div@gdances@test", "fancyfeet", "Fancy Feet", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["festivus"] = {"div@gdances@test", "festivus", "Rave Dance", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["flamingo"] = {"div@gdances@test", "flamingo", "Flamingo", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["fresh"] = {"div@gdances@test", "fresh", "Fresh", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["getgriddy"] = {"div@gdances@test", "getgriddy", "Get Griddy", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["handstand"] = {"div@gdances@test", "handstand", "Handstand", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["imsmooth"] = {"div@gdances@test", "imsmooth", "Smooth", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["keepdance"] = {"div@gdances@test", "keepdance", "Goof Off", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["montecarlo"] = {"div@gdances@test", "montecarlo", "Monte Carlo", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["octopus"] = {"div@gdances@test", "octopus", "Octopus", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["pointydance"] = {"div@gdances@test", "pointydance", "Pointy", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["ridingdance"] = {"div@gdances@test", "ridingdance", "Riding Cowboy", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["skeldance"] = {"div@gdances@test", "skeldance", "Skeleton Dance", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["spinny"] = {"div@gdances@test", "spinny", "Spinny", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["zombiewalk"] = {"div@gdances@test", "zombiewalk", "Zombie Walk", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
 }
 
 DP.Emotes = {
