@@ -100,7 +100,7 @@ AddEventHandler("jail:jail", function(cell, gender)
   DoScreenFadeOut(1000)
   Citizen.Wait(1000)
   if not cell then
-    cell = {x = 1769.625,y = 2581.7868652344, z = 45.797801971436, occupant = nil}
+    cell = {x = 1756.6555175781, y = 2483.0612792969, z = 45.740749359131, occupant = nil}
   end
   RequestCollisionAtCoord(cell.x, cell.y, cell.z)
   Wait(1000)
