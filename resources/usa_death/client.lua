@@ -19,8 +19,8 @@ AddEventHandler('death:allowRespawn', function()
 	allowRespawn = true
 end)
 
-RegisterNetEvent("death:toggleJailed")
-AddEventHandler("death:toggleJailed", function (toggle)
+RegisterNetEvent("usa:toggleJailedStatus")
+AddEventHandler("usa:toggleJailedStatus", function (toggle)
 	if jailed and not toggle then
 		if IsEntityDead(GetPlayerPed(-1)) then
 			allowRevive = true

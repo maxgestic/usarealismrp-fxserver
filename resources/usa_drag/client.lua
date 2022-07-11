@@ -10,19 +10,21 @@ local isCarried = false
 local sourceCarried = nil
 local isCarrying = false
 
+local jailed = false
+
 RegisterNetEvent("drag:attemptToDragNearest")
 AddEventHandler('drag:attemptToDragNearest', function()
 	if exports["usa_rp2"]:areHandsTied() then
 		exports.globals:notify("Hands are tied! Can't drag!")
 		return
 	end
-	if not isDragging and not isDragged and not isCarrying and not isCarried then
+	if not isDragging and not isDragged and not isCarrying and not isCarried and not jailed then
 		TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
     		if player then
 	        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
 				if player.id ~= 0 and not IsPedInAnyVehicle(PlayerPedId()) and IsEntityVisible(closestPed) then
 					TriggerServerEvent('drag:sendDragPlayer', player.id)
-					--print('sent??')
+					-- print('sent??')
 					sourceDragged = player.id
 				end
 			end
@@ -39,7 +41,7 @@ AddEventHandler('drag:attemptToCarryNearest', function()
 		exports.globals:notify("Hands are tied! Can't drag!")
 		return
 	end
-	if not isDragging and not isDragged and not isCarrying and not isCarried then
+	if not isDragging and not isDragged and not isCarrying and not isCarried and not jailed then
 		TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
 			if player then
 				local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
@@ -135,11 +137,16 @@ AddEventHandler('drag:toggleCarryAction', function(toggleOn, _source)
 	ClearPedTasksImmediately(PlayerPedId())
 end)
 
+RegisterNetEvent("usa:toggleJailedStatus")
+AddEventHandler("usa:toggleJailedStatus", function(toggle)
+  jailed = toggle
+end)
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if IsControlPressed(0, 19) and IsControlJustPressed(0, 47) then
-			if not isDragging and not isDragged and not isCarrying and not isCarried and not exports["usa_rp2"]:areHandsTied() then
+			if not isDragging and not isDragged and not isCarrying and not isCarried and not exports["usa_rp2"]:areHandsTied() and not jailed then
 				TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
 		    		if player then
 			        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))

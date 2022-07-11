@@ -111,7 +111,7 @@ Citizen.CreateThread(function()
 end)
 
 
-RegisterNetEvent("death:toggleJailed")
-AddEventHandler("death:toggleJailed", function(toggle)
+RegisterNetEvent("usa:toggleJailedStatus")
+AddEventHandler("usa:toggleJailedStatus", function(toggle)
   jailed = toggle
 end)

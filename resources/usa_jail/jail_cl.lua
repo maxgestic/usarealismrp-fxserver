@@ -120,7 +120,7 @@ AddEventHandler("jail:jail", function(cell, gender)
   end
   TriggerEvent("jail:changeClothes", gender)
   TriggerEvent("jail:removeWeapons")
-  TriggerEvent("death:toggleJailed", true)
+  TriggerEvent("usa:toggleJailedStatus", true)
   DoScreenFadeIn(1000)
   Wait(5000)
   gracePeriod = false
@@ -147,7 +147,7 @@ AddEventHandler("jail:release", function(character)
     TriggerServerEvent("jail:clearCell", assigned_cell, false)
     TriggerEvent("cuff:unCuff", true)
     assigned_cell = nil
-    TriggerEvent("death:toggleJailed", false)
+    TriggerEvent("usa:toggleJailedStatus", false)
   end)
 end)
 
@@ -156,7 +156,7 @@ AddEventHandler("jail:escaped", function()
   TriggerServerEvent("jail:clearCell", assigned_cell, true)
   TriggerServerEvent("jail:notifyEscapee")
   TriggerEvent("usa:notify", "You escaped prison!")
-  TriggerEvent("death:toggleJailed", false)
+  TriggerEvent("usa:toggleJailedStatus", false)
 end)
 
 RegisterNetEvent("jail:removeWeapons")

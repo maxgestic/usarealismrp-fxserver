@@ -8,6 +8,10 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, char)
 	if targetID == source then
 		TriggerClientEvent("usa:notify", source, "Can't drag yourself!")
 	end
+	if char.get("jailTime") > 0 then
+		TriggerClientEvent('usa:notify', source, "You can not use this here!")
+		return
+	end
 	if targetID then
 		local job = char.get("job")
 		local group = user.getGroup()
@@ -30,6 +34,10 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, char)
 end, {help = "Drag a tied up or handcuffed player."})
 
 TriggerEvent('es:addCommand', 'carry', function(source, args, char)
+	if char.get("jailTime") > 0 then
+		TriggerClientEvent('usa:notify', source, "You can not use this here!")
+		return
+	end
 	TriggerClientEvent('drag:attemptToCarryNearest', source)
 end, {help = "Carry a player."})
 
