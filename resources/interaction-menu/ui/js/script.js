@@ -27,6 +27,8 @@ NO_TOOLTIP_WEAPONS.add("Calvary Dagger");
 NO_TOOLTIP_WEAPONS.add("Sticky Bomb");
 NO_TOOLTIP_WEAPONS.add("Hand Grenade");
 NO_TOOLTIP_WEAPONS.add("Flashbang");
+NO_TOOLTIP_WEAPONS.add("Katana");
+NO_TOOLTIP_WEAPONS.add("Shiv");
 
 var itemImages = {
     "Driver's License": "https://i.imgur.com/dy0SpFh.png",
@@ -327,7 +329,9 @@ var itemImages = {
     "Compact Rifle Drum Mag": "https://i.imgur.com/AtnZkbY.png",
     "Machine Pistol Extended Mag": "https://i.imgur.com/bkP2aVs.png",
     "Machine Pistol Drum Mag": "https://i.imgur.com/cycagWt.png",
-    "Carbine Rifle": "https://i.imgur.com/f2Tb0nm.png"
+    "Carbine Rifle": "https://i.imgur.com/f2Tb0nm.png",
+    "Katana": "https://imgur.com/8UP49XZ.png",
+    "Shiv": "https://i.imgur.com/65LrH5e.png"
 }
 
 var menuItems = [{

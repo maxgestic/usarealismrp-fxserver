@@ -27,6 +27,8 @@ local meleeWeapons = {
 	"WEAPON_POOLCUE",
 	"WEAPON_BATTLEAXE",
 	"WEAPON_SWITCHBLADE",
+	"WEAPON_KATANAS",
+	"WEAPON_SHIV",
 }
 
 local smallWeapons = {

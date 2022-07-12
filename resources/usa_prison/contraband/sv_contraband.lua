@@ -31,8 +31,9 @@ for i = 1, #CONTRABAND_SPAWN_LOCATIONS do
 end
 
 local CONTRABAND_ITEMS = {
-    {name = 'Advanced Pick', type = 'misc', price = 150, legality = 'illegal', quantity = 1, weight = 7, objectModel = "prop_tool_screwdvr03", doNotAutoRemove = true},
-    { name = "Broken Bottle", type = "weapon", hash = -102323637, price = 75, legality = "illegal", quantity = 1, weight = 15, objectModel = "ng_proc_beerbottle_01a" }
+    { name = 'Advanced Pick', type = 'misc', price = 150, legality = 'illegal', quantity = 1, weight = 7, objectModel = "prop_tool_screwdvr03", doNotAutoRemove = true},
+    { name = "Broken Bottle", type = "weapon", hash = -102323637, price = 75, legality = "illegal", quantity = 1, weight = 15, objectModel = "ng_proc_beerbottle_01a" },
+    { name = "Shiv", type = "weapon", hash = GetHashKey("WEAPON_SHIV"), price = 50, legality = "illegal", quanity = 1, weight = 5, objectModel = "w_me_shiv"}
 }
 
 local ITEM_SPAWN_INTERVAL = 1

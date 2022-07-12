@@ -387,7 +387,9 @@ function isMeleeWeapon(weaponName)
         ["Crowbar"] = true,
         ["Hatchet"] = true,
         ["Wrench"] = true,
-        ["Machete"] = true
+        ["Machete"] = true,
+        ["Katanas"] = true,
+        ["Shiv"] = true
     }
     return (MELEE_WEPS[weaponName] or false)
 end

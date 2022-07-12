@@ -1894,7 +1894,9 @@ function isMeleeWeapon(wepHash)
         [`WEAPON_CROWBAR`] = true,
         [`WEAPON_HATCHET`] = true,
         [`WEAPON_WRENCH`] = true,
-        [`WEAPON_MACHETE`] = true
+        [`WEAPON_MACHETE`] = true,
+        [`WEAPON_KATANAS`] = true,
+        [`WEAPON_SHIV`] = true
     }
     return (MELEE_WEPS[wepHash] or false)
 end

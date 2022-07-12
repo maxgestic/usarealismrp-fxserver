@@ -3,7 +3,7 @@ math.random(); math.random(); -- prepare random price generator
 
 local markets = {
   ['marketA'] = {
-    ['coords'] = {-607.15, -1634.53, 33.05}, -- los santos
+    ['coords'] = {-424.69351196289, 179.0447845459, 80.596160888672}, -- los santos
     ['items'] = {
       {name = 'Lockpick', type = 'misc', price = 150, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 7)},
       --{name = 'Pistol', type = 'weapon', hash = 453432689, price = 3000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 3), objectModel = "w_pi_pistol"},
@@ -26,18 +26,19 @@ local markets = {
       --{ name = 'SMG', type = 'weapon', hash = 736523883, price = 45000, legality = 'illegal', quantity = 1, weight = 35, stock = math.random(0, 1), objectModel = "w_sb_smg"},
       { name = "SMG Parts", price = 30000, type = "weaponParts", weight = 35.0, quantity = 1, stock = math.random(0, 1) },
       { name = "Police Armor", type = "misc", price = 5000, legality = "illegal", quantity = 1, weight = 25, stock = math.random(0, 3), objectModel = "prop_bodyarmour_03" },
-      { name = "Empty 9mm Mag [12]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, legality = "legal", objectModel = "w_pi_combatpistol_mag1" },
-      { name = "Empty 9mm Mag [7]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "9mm", MAX_CAPACITY = 7, currentCapacity = 0, legality = "legal", objectModel = "w_pi_combatpistol_mag1" },
-      { name = "Empty .45 Mag [18]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = ".45", MAX_CAPACITY = 18, currentCapacity = 0, legality = "legal", objectModel = "w_pi_heavypistol_mag2"},
-      { name = "Empty .50 Cal Mag [9]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = ".50 Cal", MAX_CAPACITY = 9, currentCapacity = 0, legality = "legal", objectModel = "w_pi_combatpistol_mag1" },
+      { name = "Empty 9mm Mag [12]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, objectModel = "w_pi_combatpistol_mag1" },
+      { name = "Empty 9mm Mag [7]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "9mm", MAX_CAPACITY = 7, currentCapacity = 0, objectModel = "w_pi_combatpistol_mag1" },
+      { name = "Empty .45 Mag [18]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = ".45", MAX_CAPACITY = 18, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2"},
+      { name = "Empty .50 Cal Mag [9]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = ".50 Cal", MAX_CAPACITY = 9, currentCapacity = 0, objectModel = "w_pi_combatpistol_mag1" },
       { name = "Empty 9x18mm Mag [18]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "9x18mm", MAX_CAPACITY = 18, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
       { name = "Empty .45 Mag [16]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = ".45", MAX_CAPACITY = 16, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
-      { name = "Empty 9mm Mag [30]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, objectModel = "w_sb_gusenberg_mag1" }
+      { name = "Empty 9mm Mag [30]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, objectModel = "w_sb_gusenberg_mag1" },
+      { name = "Katana", type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(5,8), objectModel = "w_me_katana_lr"}
     },
     ["pedHash"] = -48477765
   },
   ['marketB'] = {
-    ['coords'] = {1579.81, 3613.78, 38.78}, -- sandy shores
+    ['coords'] = {-1936.9052734375, 2051.40625, 140.83247375488}, -- Vineyard
     ['items'] = {
       {name = 'Lockpick', type = 'misc', price = 150, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(1, 5)},
       {name = 'Hotwiring Kit', type = 'misc', price = 300, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 6)},
@@ -54,11 +55,12 @@ local markets = {
       { name = "Empty 12 Gauge Shells Mag [6]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "12 Gauge Shells", MAX_CAPACITY = 6, currentCapacity = 0 },
       { name = "Empty .45 Mag [6]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = ".45", MAX_CAPACITY = 6, currentCapacity = 0, objectModel = "w_pi_combatpistol_mag1" },
       { name = "Empty 9mm Mag [12]", type = "magazine", legality = "legal", price = 70, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, objectModel = "w_pi_combatpistol_mag1" },
+      { name = "Katana", type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(2,4), objectModel = "w_me_katana_lr"}
     },
     ["pedHash"] = -1773333796
   },
   ['marketC'] = {
-    ['coords'] = {2549.91, 4639.19, 34.08}, -- Grapeseed
+    ['coords'] = {4962.9575195313, -5108.0854492188, 2.9820621013641}, -- Island
     ['items'] = {
       { name = "Molotov", type = "weapon", hash = 615608432, price = 300, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 3), objectModel = "w_ex_molotov"},
       --{ name = "Tommy Gun", type = "weapon", hash = 1627465347, price = 50000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_sb_gusenberg" },
@@ -72,8 +74,9 @@ local markets = {
       { name = "Empty .45 Mag [30]", type = "magazine", price = 150, weight = 5, receives = ".45", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
       { name = "Empty 7.62mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
       { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
+      { name = "Katana", type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(1,3), objectModel = "w_me_katana_lr"}
     },
-    ['pedHash'] = 'a_m_o_soucent_03'
+    ['pedHash'] = 'mp_m_g_vagfun_01'
   },
   ['marketD'] = {
     ['coords'] = {113.24684906006, -1967.5310058594, 21.317762374878}, -- Grove St. house interior
@@ -87,7 +90,8 @@ local markets = {
       { name = ".50 Cal Bullets", type = "ammo", price = 500, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_01" },
       { name = "9x18mm Bullets", type = "ammo", price = 350, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_01" },
       { name = "5.56mm Bullets", type = "ammo", price = 600, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_03"  },
-      { name = "7.62mm Bullets", type = "ammo", price = 600, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_03" }
+      { name = "7.62mm Bullets", type = "ammo", price = 600, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_03" },
+      { name = "Katana", type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(3,6), objectModel = "w_me_katana_lr"}
     },
     ['pedHash'] = 'a_m_o_soucent_03',
     ['3dTextDistance'] = 7,
