@@ -80,19 +80,19 @@ function DepositPayCheck(char)
         paycheckAmount = 1700
     elseif job == "corrections" then
         local bcsoRank = char.get("bcsoRank")
-        paycheckAmount = 900 --Correctional Deputy
+        paycheckAmount = 850 --Correctional Deputy
         if bcsoRank == 2 then
-            paycheckAmount = 1100 --Sr Correctional Deputy
+            paycheckAmount = 950 --Sr Correctional Deputy
         elseif bcsoRank == 3 then
-            paycheckAmount = 1200 --Probational Deputy
+            paycheckAmount = 1050 --Probational Deputy
         elseif bcsoRank == 4 then
-            paycheckAmount = 850 -- Sheriff's Deputy
+            paycheckAmount = 1150 -- Sheriff's Deputy
         elseif bcsoRank == 5 then
-            paycheckAmount = 1050 -- Senior Sheriff's Deputy
+            paycheckAmount = 1250 -- Senior Sheriff's Deputy
         elseif bcsoRank == 6 then
-            paycheckAmount = 1150 -- Corporal
+            paycheckAmount = 1350 -- Corporal
         elseif bcsoRank == 7 then
-            paycheckAmount = 1350 -- Sergeant
+            paycheckAmount = 1450 -- Sergeant
         elseif bcsoRank == 8 then
             paycheckAmount = 1550 -- Captain
         elseif bcsoRank == 9 then
