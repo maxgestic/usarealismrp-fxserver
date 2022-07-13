@@ -39,7 +39,19 @@ local CHAIR_MODELS = {
   {hash = 2142033519, offset = 0.3},
   {hash = -1278649385, offset = -0.1},
   {hash = 1339364336, offset = -0.1},
-  {hash = -109356459, offset = 0.5}
+  {hash = -109356459, offset = 0.5},
+  {hash = 538002882, offset = -0.1},
+  {hash = -1118419705, offset = 0.5},
+  {hash = -377849416, offset = 0.5},
+  {hash = -1692811878, offset = 0.45},
+  {hash = 1816935351, offset = 0.5},
+  {hash = 1889748069, offset = 0.5},
+  {hash = 1577885496, offset = 0.5},
+  {hash = -729914417, offset = 0.5}, -- Bench Model (Davis)
+  {hash = -1507293404, offset = 0.5}, -- Bench Model (Davis)
+  {hash = 567446751, offset = 0.5}, -- Bench Model (La Mesa)
+  {hash = 438342263, offset = 0.3},
+  {hash = 1037469683, offset = 0.4}
 }
 
 local sitting_on = nil

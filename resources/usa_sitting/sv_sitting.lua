@@ -8,8 +8,8 @@ local BLACKLISTED_SIT_LOCATIONS = {
 		distance = 100
 	},
 	{
-		coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), -- Paleto Bank
-		distance = 100
+		coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), -- Paleto Bank Vault
+		distance = 5
 	},
 	{
 		coords = vector3(1616.5336914063, 2530.3994140625, 45.858158111572), -- Prison Yard 1
