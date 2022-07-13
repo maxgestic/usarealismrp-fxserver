@@ -33,7 +33,7 @@ local markets = {
       { name = "Empty 9x18mm Mag [18]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "9x18mm", MAX_CAPACITY = 18, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
       { name = "Empty .45 Mag [16]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = ".45", MAX_CAPACITY = 16, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
       { name = "Empty 9mm Mag [30]", type = "magazine", legality = "legal", price = 200, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, objectModel = "w_sb_gusenberg_mag1" },
-      { name = "Katana", type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(5,8), objectModel = "w_me_katana_lr"}
+      { name = "Katana", hash = GetHashKey("WEAPON_KATANAS"), type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(1,2), objectModel = "w_me_katana_lr"}
     },
     ["pedHash"] = -48477765
   },
@@ -55,7 +55,7 @@ local markets = {
       { name = "Empty 12 Gauge Shells Mag [6]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "12 Gauge Shells", MAX_CAPACITY = 6, currentCapacity = 0 },
       { name = "Empty .45 Mag [6]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = ".45", MAX_CAPACITY = 6, currentCapacity = 0, objectModel = "w_pi_combatpistol_mag1" },
       { name = "Empty 9mm Mag [12]", type = "magazine", legality = "legal", price = 70, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, objectModel = "w_pi_combatpistol_mag1" },
-      { name = "Katana", type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(2,4), objectModel = "w_me_katana_lr"}
+      { name = "Katana", hash = GetHashKey("WEAPON_KATANAS"), type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(1,4), objectModel = "w_me_katana_lr"}
     },
     ["pedHash"] = -1773333796
   },
@@ -74,12 +74,12 @@ local markets = {
       { name = "Empty .45 Mag [30]", type = "magazine", price = 150, weight = 5, receives = ".45", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
       { name = "Empty 7.62mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
       { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-      { name = "Katana", type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(1,3), objectModel = "w_me_katana_lr"}
+      { name = "Katana", hash = GetHashKey("WEAPON_KATANAS"), type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(4,8), objectModel = "w_me_katana_lr"}
     },
     ['pedHash'] = 'mp_m_g_vagfun_01'
   },
   ['marketD'] = {
-    ['coords'] = {113.24684906006, -1967.5310058594, 21.317762374878}, -- Grove St. house interior
+    ['coords'] = {113.24684906006, -1967.5310058594, 21.317762374878}, -- Grove St. house interior /gotoc 113.24684906006 -1967.5310058594 21.317762374878
     ['items'] = {
       { name = "Large Firework", type = "misc", price = 2000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(1, 10), objectModel = "ind_prop_firework_03" },
       { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 5000, legality = "illegal", quantity = 1, weight = 50, stock = math.random(1, 3), objectModel = "w_lr_firework" },
@@ -91,7 +91,7 @@ local markets = {
       { name = "9x18mm Bullets", type = "ammo", price = 350, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_01" },
       { name = "5.56mm Bullets", type = "ammo", price = 600, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_03"  },
       { name = "7.62mm Bullets", type = "ammo", price = 600, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_03" },
-      { name = "Katana", type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(3,6), objectModel = "w_me_katana_lr"}
+      { name = "Katana", hash = GetHashKey("WEAPON_KATANAS"), type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(1,3), objectModel = "w_me_katana_lr"}
     },
     ['pedHash'] = 'a_m_o_soucent_03',
     ['3dTextDistance'] = 7,
