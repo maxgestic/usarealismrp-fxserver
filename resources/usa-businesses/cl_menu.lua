@@ -294,14 +294,9 @@ Citizen.CreateThread(function()
         _menuPool:ControlDisablingEnabled(false)
         _menuPool:ProcessMenus()
       end
-      --[[
-      if closest_coords then
-        if GetDistanceBetweenCoords(GetEntityCoords(me), closest_coords.x, closest_coords.y, closest_coords.z, true) > 2 then
-          closest_coords.x, closest_coords.y, closest_coords.z = nil, nil, nil
-          RemoveMenuPool(_menuPool)
-        end
-      end
-      --]]
+      if mainMenu:Visible() and not GetClosestStore(5) then
+        mainMenu:Visible(false)
+      end 
     end
   end
 end)
