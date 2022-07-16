@@ -75,6 +75,7 @@ local GENERAL_STORE_ITEMS = {
     { name = "RAW Papers", price = 10, type = "misc", quantity = 5, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true},
     { name = "Bic Lighter", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true},
     { name = "Sign Kit", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_cd_paper_pile1"},
+    { name = "Beer Pong Kit", price = 300, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "apa_prop_cs_plastic_cup_01"}
   }
 }
 
@@ -114,7 +115,8 @@ local HARDWARE_STORE_ITEMS = {
     { name = "Paint Remover", price = 1000, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "bkr_prop_meth_ammonia", remainingUses = 5, notStackable = true},
     { name = "Rag", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_shower_towel"},
     { name = "Sign Kit", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_cd_paper_pile1"},
-    { name = "Drill", price = 2000, legality = "legal", quantity = 1, type = "misc", weight = 10, objectModel = "hei_prop_heist_drill" }
+    { name = "Drill", price = 2000, legality = "legal", quantity = 1, type = "misc", weight = 10, objectModel = "hei_prop_heist_drill" },
+    { name = "Beer Pong Kit", price = 300, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "apa_prop_cs_plastic_cup_01"}
   }
 }
 

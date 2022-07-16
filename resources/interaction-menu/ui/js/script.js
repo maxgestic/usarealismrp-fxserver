@@ -331,7 +331,8 @@ var itemImages = {
     "Machine Pistol Drum Mag": "https://i.imgur.com/cycagWt.png",
     "Carbine Rifle": "https://i.imgur.com/f2Tb0nm.png",
     "Katana": "https://imgur.com/8UP49XZ.png",
-    "Shiv": "https://i.imgur.com/65LrH5e.png"
+    "Shiv": "https://i.imgur.com/65LrH5e.png",
+    "Beer Pong Kit": "https://i.imgur.com/fSU0gRd.png",
 }
 
 var menuItems = [{

@@ -6,13 +6,15 @@
 -- SCRATCH THAT^^ TOUCHED BY MINIPUNCH HEHEHEHEEHE
 
 function LoadUser(identifier, source, new)
-	-- drop player if Users table contains player object with same identifier (prevent duping)
-	for k, v in pairs(Users) do
-		if v.getIdentifier() == identifier then
-			DropPlayer(source, "SECOND CLIENT!!! WE ARE WATCHING U .................................. BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BUDDY")
-			DropPlayer(v.get("source"), "kicking other client")
-			Users[k] = nil
-			return
+	if GetConvar("allowTwoClients", "false") == "false" then
+		-- drop player if Users table contains player object with same identifier (prevent duping)
+		for k, v in pairs(Users) do
+			if v.getIdentifier() == identifier then
+				DropPlayer(source, "SECOND CLIENT!!! WE ARE WATCHING U .................................. BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BUDDY")
+				DropPlayer(v.get("source"), "kicking other client")
+				Users[k] = nil
+				return
+			end
 		end
 	end
 	db.retrieveUser(identifier, function(user)
