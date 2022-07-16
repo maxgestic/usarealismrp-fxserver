@@ -3,7 +3,15 @@
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 
+-- SCRATCH THAT^^ TOUCHED BY MINIPUNCH HEHEHEHEEHE
+
 function LoadUser(identifier, source, new)
+	-- drop player if Users table contains player object with same identifier (prevent duping)
+	for k, v in pairs(Users) do
+		if v.getIdentifier() == identifier then
+			DropPlayer(source, "SECOND CLIENT!!! WE ARE WATCHING U .................................. BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BUDDY")
+		end
+	end
 	db.retrieveUser(identifier, function(user)
 		Users[source] = CreatePlayer(source, user.permission_level, user.identifier, user.group, user.policeCharacter, user.emsCharacter)
 		--print("loaded user " .. GetPlayerName(tonumber(source)) .. "from db...")
