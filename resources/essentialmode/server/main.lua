@@ -106,21 +106,19 @@ end
 ---------------------------------------------------------------------------
 
 AddEventHandler('playerDropped', function()
-	local numberSource = tonumber(source)
+	print("player " .. GetPlayerName(source) .. " (#" .. source .. ") dropped from the server!")
 	-- update anticheese (per MrFrz's change) --
-	TriggerEvent("anticheese:playerDropped", numberSource)
+	TriggerEvent("anticheese:playerDropped", source)
 	-- drop player --
-	if(Users[numberSource])then
+	if Users[source] then
 		-- log --
-		print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
-		TriggerEvent("chat:sendToLogFile", numberSource, "dropped from the server! Timestamp: " .. os.date('%m-%d-%Y %H:%M:%S', os.time()))
+		TriggerEvent("chat:sendToLogFile", source, "dropped from the server! Timestamp: " .. os.date('%m-%d-%Y %H:%M:%S', os.time()))
 		-- Trigger event / save player data --
-		TriggerEvent("es:playerDropped", Users[numberSource])
-		db.updateUser(Users[numberSource].get('identifier'), {policeCharacter = Users[numberSource].getPoliceCharacter(), emsCharacter = Users[numberSource].getEmsCharacter()}, function()
-			Users[numberSource] = nil
-		end)
+		TriggerEvent("es:playerDropped", Users[source])
+		Users[source] = nil
+		print("removed player from essentialmode player object collection")
 	else
-		print("Users[numberSource] did not exist!")
+		print("Users[source] did not exist!")
 	end
 end)
 
