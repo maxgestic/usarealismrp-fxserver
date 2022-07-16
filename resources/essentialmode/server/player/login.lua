@@ -10,6 +10,7 @@ function LoadUser(identifier, source, new)
 	for k, v in pairs(Users) do
 		if v.getIdentifier() == identifier then
 			DropPlayer(source, "SECOND CLIENT!!! WE ARE WATCHING U .................................. BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BAN BUDDY")
+			return
 		end
 	end
 	db.retrieveUser(identifier, function(user)
