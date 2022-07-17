@@ -6,7 +6,8 @@ local ITEMS = { -- must be kept in sync with one in sv_bike-shop.lua --
   {name = "Fixster", price = 350, hash = -836512833},
   {name = "Scorcher", price = 500, hash = -186537451},
   {name = "TriBike", price = 550, hash = 1127861609},
-  {name = "Low Rider Bike", price = 5000, hash = GetHashKey("lowriderb")}
+  {name = "Low Rider Bike", price = 5000, hash = GetHashKey("lowriderb")},
+  {name = "2022 Surron", price = 11500, hash = GetHashKey("22Surron")}
 }
 
 local locations = {
