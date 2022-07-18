@@ -21,7 +21,6 @@ end)
 
 RegisterNetEvent("nitro:getFuel")
 AddEventHandler("nitro:getFuel", function(vehPlate)
-    print("trying to use nitro")
     local src = source
     vehPlate = exports.globals:trim(vehPlate)
     local query = {
@@ -37,8 +36,6 @@ AddEventHandler("nitro:getFuel", function(vehPlate)
                 local fuelAmount = getNitroFuelAmount(vehPlate)
                 print("fuel amount: " .. fuelAmount)
                 TriggerClientEvent("nitro:setFuel", src, fuelAmount)
-            else
-                TriggerClientEvent("usa:notify", src, "Nitro kit & bottle not installed")
             end
         end
     end)
