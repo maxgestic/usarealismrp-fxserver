@@ -1519,8 +1519,9 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 	local lighter = { name = "Bic Lighter", type = "misc", weight = 2.0, quantity = 1 }
 	local glockParts = { name = "Glock Parts", type = "weaponParts", weight = 15.0, quantity = 1 }
 	local grenade = { name = "Hand Grenade", type = "weapon", hash = GetHashKey("WEAPON_GRENADE"), weight = 15.0, quantity = 1 }
+	local customRadio = { name = "Custom Radio", type = "mechanicPart", weight = 15.0, quantity = 1 }
 
-	local toGiveItem = grenade
+	local toGiveItem = customRadio
 	toGiveItem.quantity = (toGiveItem.quantity or 1)
 
 	toGiveItem.uuid = exports.globals:generateID()

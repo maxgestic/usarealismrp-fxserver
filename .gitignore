@@ -31,3 +31,5 @@ server_internal2.cfg
 .DS_Store
 
 db
+
+mysql_connection_string.cfg

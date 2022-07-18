@@ -49,5 +49,14 @@ PARTS = {
 		weight = 10,
 		type = "mechanicPart",
 		notStackable = true
+	},
+	["Custom Radio"] = {
+		name = "Custom Radio",
+		price = 10000,
+		quantity = 1,
+		weight = 15,
+		type = "mechanicPart",
+		notStackable = true,
+		objectModel = "sm_prop_smug_wall_radio_01"
 	}
 }

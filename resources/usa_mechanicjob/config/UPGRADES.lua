@@ -1,30 +1,4 @@
 UPGRADES = {
-    --[[
-    ["topspeed1"] = {
-        id = "topspeed1",
-        displayName = "Top Speed 1",
-        cost = 5000,
-        increaseAmount = 5.0,
-        doSync = true,
-        requiresItem = "Top Speed Tune 1"
-    },
-    ["topspeed2"] = {
-        id = "topspeed2",
-        displayName = "Top Speed 2",
-        cost = 10000,
-        increaseAmount = 10.0,
-        doSync = true,
-        requiresItem = "Top Speed Tune 2"
-    },
-    ["topspeed3"] = {
-        id = "topspeed3",
-        displayName = "Top Speed 3",
-        cost = 15000,
-        increaseAmount = 15.0,
-        doSync = true,
-        requiresItem = "Top Speed Tune 3"
-    },
-    --]]
     ["topspeed4"] = {
         id = "topspeed4",
         displayName = "Top Speed Tune",
@@ -110,5 +84,13 @@ UPGRADES = {
         requiresUpgrades = {
             "nitrokit"
         }
+    },
+    ["custom-radio"] = {
+        id = "custom-radio",
+        displayName = "Custom Radio",
+        requiresItem = "Custom Radio",
+        postInstall = function(vehPlate)
+            exports.rcore_radiocar:GiveRadioToCar(vehPlate, function() print("added radio to car") end)
+        end
     }
 }

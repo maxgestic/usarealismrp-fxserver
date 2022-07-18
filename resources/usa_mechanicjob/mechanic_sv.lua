@@ -12,8 +12,8 @@ local TRUCKS_FOR_RANK = {
 
 local PARTS_FOR_RANK = {
 	[1] = {},
-	[2] = {"NOS Install Kit", "NOS Bottle (Stage 1)", "NOS Bottle (Stage 2)", "Top Speed Tune", "NOS Gauge"},
-	[3] = {"NOS Install Kit", "NOS Bottle (Stage 1)", "NOS Bottle (Stage 2)", "NOS Bottle (Stage 3)", "Top Speed Tune", "NOS Gauge"}
+	[2] = {"NOS Install Kit", "NOS Bottle (Stage 1)", "NOS Bottle (Stage 2)", "Top Speed Tune", "NOS Gauge", "Custom Radio"},
+	[3] = {"NOS Install Kit", "NOS Bottle (Stage 1)", "NOS Bottle (Stage 2)", "NOS Bottle (Stage 3)", "Top Speed Tune", "NOS Gauge", "Custom Radio"}
 }
 
 local PARTS_DELIVERY_TIME_DAYS = 1
