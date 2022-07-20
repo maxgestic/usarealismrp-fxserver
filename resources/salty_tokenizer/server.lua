@@ -88,7 +88,7 @@ function secureServerEvent(resource, player, token)
 				print("Invalid token detected! Resource: " .. tostring(resource) .. ", Player ID: " .. tostring(_source) .. ". Provided: " .. tostring(token) .. " Stored: " .. tostring(resourceTokens[resource]))
 			end
 			if Config.CustomAction then
-				Config.CustomActionFunction(_source)
+				Config.CustomActionFunction(_source, resource)
 			else
 				DropPlayer(_source, Config.KickMessage)
 			end

@@ -25,7 +25,7 @@ Config.KickMessage = "Invalid security token detected."
 	If Config.CustomAction is false, the player will be dropped
 ]]
 Config.CustomAction = true
-Config.CustomActionFunction = function(source)
+Config.CustomActionFunction = function(source, resource)
 	print("Custom action executing for lua injector with source: " .. source)
-	exports["es_admin"]:BanPlayer(source, "Modding (lua code injection, sent an invalid token). If you feel this was a mistake please let a staff member know.")
+	exports["es_admin"]:BanPlayer(source, "Modding (lua code injection, sent an invalid token for resource: " .. resource .. "). If you feel this was a mistake please let a staff member know.")
 end
