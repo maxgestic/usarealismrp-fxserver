@@ -1693,6 +1693,45 @@ DP.Emotes = {
         EmoteLoop = true,
         EmoteMoving = true,
     }},
+    ["modelselfie"] = {"anim@model_car_fancy", "car_fancy_clip", "Model Insta Selfie 3 (Smos)", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = false,
+    }},
+
+    ["modelselfie2"] = {"anim@model_stretched_leg", "stretched_leg_clip", "Model Insta Selfie 4 (Smos)", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = false,
+    }},
+
+    ["carpose"] = {"anim@car_sitting_fuckyou", "sitting_fuckyou_clip", "Car Pose 3 (Smos)", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = false,
+    }},
+
+    ["carpose2"] = {"anim@car_sitting_cute", "sitting_cute_clip", "Car Pose 4 (Smos)", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = false,
+    }},
+
+    ["modelmoto1"] = {"anim@model_bike", "bike_clip", "Motorbike Modeling Pose 1 (Smos)", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = false,
+    }},
+    ["modelmoto2"] = {"anim@model_bike_two", "bike_two_clip", "Motorbike Modeling Pose 2 (Smos)", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = false,
+    }},
+    ["riflerelax"] = {"anim@fog_rifle_relaxed", "rifle_relaxed_clip", "Relaxed With Rifle (Smos)", AnimationOptions =
+    {
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
 
 -----------------------------------------------------------------------------------------------------------
 ------ These are Scenarios, some of these dont work on women and some other issues, but still good to have.
