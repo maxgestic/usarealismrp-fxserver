@@ -151,6 +151,7 @@ function AddGarageMenuItems(menu, vehs, job)
 
 						local plate = GetVehicleNumberPlateText(spawnedVeh)
 						plate = exports.globals:trim(plate)
+						TriggerServerEvent("fuel:setFuelAmount", plate, 100)
 
 						local vehicle_key = {
 							name = "Key -- " .. plate,
