@@ -86,6 +86,7 @@ function secureServerEvent(resource, player, token)
 		if token ~= resourceTokens[resource] then
 			if Config.VerboseServer then
 				print("Invalid token detected! Resource: " .. tostring(resource) .. ", Player ID: " .. tostring(_source) .. ". Provided: " .. tostring(token) .. " Stored: " .. tostring(resourceTokens[resource]))
+				TriggerEvent("chat:sendToLogFile", _source, "Player returned invalid token for Resource: ["..tostring(resource).."] and was yeeted.")
 			end
 			if Config.CustomAction then
 				Config.CustomActionFunction(_source, resource)

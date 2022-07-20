@@ -221,6 +221,7 @@ end)
 -- Noclip
 TriggerEvent('es:addGroupCommand', 'noclip', "mod", function(source, args, char)
 	TriggerClientEvent("es_admin:noclip", source, GetPlayerName(source))
+	TriggerEvent("chat:sendToLogFile", source, "NOCLIPPING has started/stopped at ["..GetEntityCoords(GetPlayerPed(source)).."]")
 end, {
 	help = "Move freely around the map."
 })
@@ -398,6 +399,7 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, char)
 	elseif args[2] == "wp" then
 		TriggerClientEvent("swayam:gotoWP", source)
 		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has teleported to waypoint.')
+		TriggerEvent("chat:sendToLogFile", source, "used /gotowp with the coordinates being ["..GetEntityCoords(GetPlayerPed(source)).."]")
 		return
 	elseif args[2] == "fd" then
 		local fdCoords = {x=-366.30380249023, y=6102.0532226563, z=35.439697265625}

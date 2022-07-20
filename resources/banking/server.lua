@@ -58,6 +58,8 @@ AddEventHandler('bank:transfer', function(targetID, amount)
 			target.giveBank(amount)
 			TriggerClientEvent("usa:notify", source, "Transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ complete!")
 			TriggerClientEvent("usa:notify", targetID, "A transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ has been transferred to your account!")
+			-- Write to Admin log
+			TriggerEvent("chat:sendToLogFile", source, "Player has transfered $" .. exports["globals"]:comma_value(amount) .. " to [ID:"..targetID.." / " ..GetPlayerIdentifiers(source)[1].."].")
 		else
 			TriggerClientEvent("usa:notify", source, "Error processing transfer request. Try again later.")
 		end
@@ -78,6 +80,8 @@ AddEventHandler('bank:deposit', function(amount)
 			local bank = char.get("bank")
 			if (rounded <= money and rounded > 0) then
 				print("BANK: Updating balance of "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."] after depositing money["..rounded.."], with new bank total of bank["..bank.."] and money["..money.."]!")
+				-- Write to admin log
+				TriggerEvent("chat:sendToLogFile", source, "Player's balance is being updated after depositing [$"..rounded.."]. Their new total is Bank:[$"..bank.."] and Money:[$"..money.."]!")
 				TriggerClientEvent("banking:updateBalance", source, (bank + rounded))
 				TriggerClientEvent("banking:addBalance", source, rounded)
 				char.removeMoney(rounded)
@@ -103,6 +107,7 @@ AddEventHandler('bank:withdraw', function(amount)
 		if bank and tonumber(rounded) then
 			if (tonumber(rounded) <= tonumber(bank)) then
 				print("BANK: Updating balance of "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."] after withdrawing money["..rounded.."], with new bank total of bank["..bank.."] and money["..money.."]!")
+				TriggerEvent("chat:sendToLogFile", source, "Player's balance is being updated after withdrawing [$"..rounded.."]. Their new total is Bank:["..bank.."] and Money:["..money.."]!")
 			  	TriggerClientEvent("banking:updateBalance", source, (bank - rounded))
 			 	TriggerClientEvent("banking:removeBalance", source, rounded)
 				char.giveMoney(rounded)

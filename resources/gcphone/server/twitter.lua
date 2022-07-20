@@ -285,6 +285,7 @@ AddEventHandler('gcPhone:twitter_createAccount', function(username, password, av
     if ok then
       TriggerClientEvent('gcPhone:twitter_setAccount', sourcePlayer, username, password, avatarUrl)
       TwitterShowSuccess(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_ACCOUNT_CREATE_SUCCESS')
+      TriggerEvent("chat:sendToLogFile", sourcePlayer, "User created Twitter Account:["..username.."].")
     else
       TwitterShowError(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_ACCOUNT_CREATE_ERROR')
     end
@@ -330,6 +331,7 @@ AddEventHandler('gcPhone:twitter_postTweets', function(username, password, messa
   local sourcePlayer = tonumber(source)
   local srcIdentifier = getPlayerID(source)
   TwitterPostTweet(username, password, message, sourcePlayer, srcIdentifier)
+  TriggerEvent("chat:sendToLogFile", sourcePlayer, "Player used TW Acct ["..username.."] to make the following tweet [START] " .. message .. " [END]")
 end)
 
 RegisterServerEvent('gcPhone:twitter_toogleLikeTweet')

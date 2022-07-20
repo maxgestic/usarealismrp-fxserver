@@ -72,6 +72,8 @@ end, {
 TriggerEvent('es:addGroupCommand', 'gotowp', 'mod', function(source, args, char)
 	TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has teleported to waypoint.')
 	TriggerClientEvent("swayam:gotoWP", source)
+	Wait(1000) -- Need this in order to register new Coords
+	TriggerEvent("chat:sendToLogFile", source, "used /gotowp and went to the following coords ["..GetEntityCoords(GetPlayerPed(source)).."]")
 end, {help = "Teleport to a set waypoint."})
 ----------------------------------------------------------------
 
