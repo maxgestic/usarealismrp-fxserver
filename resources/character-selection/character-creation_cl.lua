@@ -260,7 +260,7 @@ RegisterNUICallback('select-character', function(data, cb)
 				x = -555.16033935547,
 				y = -628.07855224609,
 				z = 34.67671585083,
-				heading = 0.0
+				heading = 174.0
 			}
 		elseif data.spawn:find("Property") then
 			spawn_coords_closed_menu = data.charSavedSpawn
