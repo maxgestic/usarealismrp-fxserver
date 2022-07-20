@@ -16,6 +16,7 @@ client_scripts {
 
 server_scripts {
 	'Config.lua',
+	'@mysql-async/lib/MySQL.lua',
 	'Server/Server.lua',
 	'Server/Updates.lua'
 }

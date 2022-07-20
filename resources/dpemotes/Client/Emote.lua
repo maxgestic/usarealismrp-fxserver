@@ -453,7 +453,9 @@ local COMMANDS = {
   emotemenu = function(src, args)  OpenEmoteMenu(src, args) end,
   emotes = function(src, args) EmotesOnCommand(src, args) end,
   walk = function(src, args) WalkCommandStart(src, args) end,
-  walks = function(src, args) WalksOnCommand(src, args) end
+  walks = function(src, args) WalksOnCommand(src, args) end,
+  emotebind = function(src, args) EmoteBindStart(src, args) end,
+  emotebinds = function(src, args) EmoteBindsStart(src, args) end
 }
 
 RegisterNetEvent("dpemotes:command")

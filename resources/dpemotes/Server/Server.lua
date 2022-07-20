@@ -83,6 +83,21 @@ TriggerEvent('es:addCommand', 'nearby', function(source, args, char)
 	TriggerClientEvent("dpemotes:nearbyCommand", source, args)
 end, { help = "Perform emote with someone nearby!" })
 
+TriggerEvent('es:addCommand', 'emotebind', function(src, args, char)
+	table.remove(args, 1)
+	TriggerClientEvent("dpemotes:command", src, 'emotebind', src, args)
+end, {
+	help = "Bind an emote",
+	params = {
+		{ name = "key", help = "num4, num5, num6, num7. num8, num9. Numpad 4-9!" },
+		{ name = "emote", help = "any valid emote name" },
+	}
+})
+
+TriggerEvent('es:addCommand', 'emotebinds', function(source, args, char)
+	TriggerClientEvent("dpemotes:command", source, 'emotebinds', args)
+end, { help = "See currently bound emotes" })
+
 -----------------------------------------------------------------------------------------------------
 -- Keybinding  --------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------

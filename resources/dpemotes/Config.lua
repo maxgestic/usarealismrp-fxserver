@@ -15,8 +15,8 @@ Config = {
 	MenuKeybindEnabled = true,
 	MenuKeybind = 56, -- Get the button number here https://docs.fivem.net/game-references/controls/
 -- You can disable the Favorite emote keybinding here.
-	FavKeybindEnabled = false,
-	FavKeybind = 171, -- Get the button number here https://docs.fivem.net/game-references/controls/
+	FavKeybindEnabled = true,
+	FavKeybind = 82, -- Get the button number here https://docs.fivem.net/game-references/controls/
 -- You can change the header image for the f3 menu here
 -- Use a 512 x 128 image!
 -- NOte this might cause an issue of the image getting stuck on peoples screens
@@ -25,8 +25,8 @@ Config = {
 -- You can change the menu position here
 	MenuPosition = "right", -- (left, right)
 -- You can disable the Ragdoll keybinding here.
-	RagdollEnabled = false,
-	RagdollKeybind = 303, -- Get the button number here https://docs.fivem.net/game-references/controls/
+	RagdollEnabled = true,
+	RagdollKeybind = 81, -- Get the button number here https://docs.fivem.net/game-references/controls/
 -- You can disable the Facial Expressions menu here.
 	ExpressionsEnabled = true,
 -- You can disable the Walking Styles menu here.
@@ -35,7 +35,7 @@ Config = {
     SharedEmotesEnabled = true,
     CheckForUpdates = false,
 -- If you have the SQL imported enable this to turn on keybinding.
-    SqlKeybinding = false,
+    SqlKeybinding = true,
 }
 
 Config.KeybindKeys = {
