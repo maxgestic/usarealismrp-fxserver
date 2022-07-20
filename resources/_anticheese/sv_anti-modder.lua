@@ -211,7 +211,7 @@ AddEventHandler('entityCreating', function(entity)
         local createdEntityModel = GetEntityModel(entity)
         if BLACKLISTED_HASHES[createdEntityModel] then
             print("[anticheese] blacklisted entity with model of " .. createdEntityModel .. " was created by src: " .. src)
-            local reason = "Spawning Entities."
+            local reason = "Spawning Entities [model: " .. createdEntityModel .. "]"
             local minipunchDiscordID = "<@178016707292561409>"
             local WEBHOOK_URL = GetConvar("ban-log-webhook", "")
             local msg = 'Player id [' .. src .. ' / ' .. (GetPlayerIdentifiers(src)[1] or 'N/A') .. '] was banned for anticheese violation!'
