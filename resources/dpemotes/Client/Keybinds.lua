@@ -12,6 +12,7 @@ local keyb4 = ""
 local keyb5 = ""
 local keyb6 = "" 
 local Initialized = false
+local disabled = false
 
 -----------------------------------------------------------------------------------------------------
 -- Commands / Events --------------------------------------------------------------------------------
@@ -27,7 +28,7 @@ Citizen.CreateThread(function()
         end
     end
 
-    if not IsPedSittingInAnyVehicle(PlayerPedId()) then
+    if not disabled and not IsPedSittingInAnyVehicle(PlayerPedId()) then
         for k, v in pairs(Config.KeybindKeys) do
             if IsControlJustReleased(0, v) then
                 if k == keyb1 then if emob1 ~= "" then EmoteCommandStart(nil,{emob1, 0}) end end
@@ -63,6 +64,16 @@ RegisterNetEvent("dp:ClientKeybindGetOne")
 AddEventHandler("dp:ClientKeybindGetOne", function(key, e)
     SimpleNotify(Config.Languages[lang]['bound'].."~y~"..e.."~w~ "..Config.Languages[lang]['to'].." ~g~"..firstToUpper(key).."~w~")
 	if key == "num4" then emob1 = e keyb1 = "num4" elseif key == "num5" then emob2 = e keyb2 = "num5" elseif key == "num6" then emob3 = e keyb3 = "num6" elseif key == "num7" then emob4 = e keyb4 = "num7" elseif key == "num8" then emob5 = e keyb5 = "num8" elseif key == "num9" then emob6 = e keyb6 = "num9" end
+end)
+
+RegisterNetEvent("dp:ClientToggleDisableKeybinds")
+AddEventHandler("dp:ClientToggleDisableKeybinds", function()
+    disabled = not disabled
+    if disabled then
+        exports.globals:notify("Emote binds: ~r~disabled")
+    else
+        exports.globals:notify("Emote binds: ~g~enabled")
+    end
 end)
 
 -----------------------------------------------------------------------------------------------------

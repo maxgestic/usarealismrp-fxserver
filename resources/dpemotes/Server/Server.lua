@@ -98,6 +98,10 @@ TriggerEvent('es:addCommand', 'emotebinds', function(source, args, char)
 	TriggerClientEvent("dpemotes:command", source, 'emotebinds', args)
 end, { help = "See currently bound emotes" })
 
+TriggerEvent('es:addCommand', 'togglebinds', function(source, args, char)
+	TriggerClientEvent("dp:ClientToggleDisableKeybinds", source)
+end, { help = "Disable / Enable emote keybinds" })
+
 -----------------------------------------------------------------------------------------------------
 -- Keybinding  --------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------
