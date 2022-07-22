@@ -58,15 +58,16 @@ USARRP
 10) Create a new MySQL database the scripts will use (name of DB used in following step)
 11) Create a new file named `mysql_connection_string.cfg` in the `usarealismrp-fxserver` folder
 	* It should contain the MySQL connection string like so: `set mysql_connection_string "user=<userNameHere>;password=<passwordHere>;server=localhost;database=<dbNameHere>;"`
-12) Create a new file named `server_internal.cfg` in the `usarealismrp-fxserver` folder
+12) Run any `.sql` scripts as required for any particular scripts
+13) Create a new file named `server_internal.cfg` in the `usarealismrp-fxserver` folder
     * write `sv_hostname <server name>`, replacing `<server name>` with a name of your choice
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
-13) Create path for log file (optional)
+14) Create path for log file (optional)
     * We use this to expose a chat log via an HTTP web server, so we provide a path to a file in its public directory
 	* For example: ``C:/wamp/www/log.txt``
-14) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when restarting a script during development.
-15) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
-16) Start the server.
+15) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when restarting a script during development.
+16) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
+17) Start the server.
 	* Windows:
 		- ``..\server\FXServer.exe +exec server.cfg +set onesync on`` from the ``usarealismrp-fxserver`` folder
 	* Linux:
