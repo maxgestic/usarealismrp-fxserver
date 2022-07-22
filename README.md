@@ -52,16 +52,21 @@ USARRP
 			return auth
 		end)
 		```
-7) Create a new file named `server_internal.cfg` in the `usarealismrp-fxserver` folder
+7) Create your CouchDB database views (see below view definitions). For more information about views: https://docs.couchdb.org/en/3.2.0/ddocs/views/index.html
+8) Download and install [MySQL 5.7](https://dev.mysql.com/downloads/mysql/5.7.html)
+9) Set up a user with password (used in step 11)
+10) Create a new MySQL database the scripts will use (name of DB used in following step)
+11) Create a new file named `mysql_connection_string.cfg` in the `usarealismrp-fxserver` folder
+	* It should contain the MySQL connection string like so: `set mysql_connection_string "user=<userNameHere>;password=<passwordHere>;server=localhost;database=<dbNameHere>;"`
+12) Create a new file named `server_internal.cfg` in the `usarealismrp-fxserver` folder
     * write `sv_hostname <server name>`, replacing `<server name>` with a name of your choice
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
-8) Create path for log file (optional)
+13) Create path for log file (optional)
     * We use this to expose a chat log via an HTTP web server, so we provide a path to a file in its public directory
 	* For example: ``C:/wamp/www/log.txt``
-9) Create your database views (see below view definitions)
-10) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when restarting a script during development.
-11) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
-12) Start the server.
+14) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when restarting a script during development.
+15) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
+16) Start the server.
 	* Windows:
 		- ``..\server\FXServer.exe +exec server.cfg +set onesync on`` from the ``usarealismrp-fxserver`` folder
 	* Linux:
@@ -109,7 +114,9 @@ USARRP
 6) [optional] Create index on the ``stored_location`` field in the ``vehicles`` database for ``usa-properties-og`` to function correctly when storing/retrieving vehicles from property garages.
 7) [optional] Create indexes on the ``receiver`` and ``transmitter`` fields (in that order) in the ``phone-messages`` database for ``gcphone`` to function correctly when storing/retrieving/updating phone text messages.
 8) [optional] Create indexes on the ``owner`` and ``num`` fields in the ``phone-calls`` database for ``gcphone`` to function most efficiently when storing/retrieving phone call history.
-9) [optional] Create index on the ``owner.identifiers.id`` field in the ``businesses`` database for ``usa-businesses` to function most efficiently when retreiving owned businsess for a character. 
+9) [optional] Create index on the ``owner.identifiers.id`` field in the ``businesses`` database for ``usa-businesses` to function most efficiently when retreiving owned businsess for a character.
+
+Most scripts use CouchDB (including the DB API @ `resources/essentialmode/db.lua`), however scripts can use the MySQL database instead with `mysql-async` (some do)
 
 **Webhooks**
 
