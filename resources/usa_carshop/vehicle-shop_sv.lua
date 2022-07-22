@@ -508,6 +508,7 @@ local vehicleShopItems = {
 			{make = "Mclaren", model = "600LT", price = 500000, hash = "600lt", storage_capacity = 145.0},
 			--
 			{make = "Mercedes-Benz", model = "300 SL", price = 700000, hash = "mb300sl", storage_capacity = 165.0},
+			{make = "Mercedes-Benz", model = "C63 AMG", price = 175000, hash = "C63AMG", storage_capacity = 175.0},
 			{make = "Mercedes-Benz", model = "E55 AMG", price = 100000, hash = "benze55", storage_capacity = 175.0},
 			{make = "Mercedes-Benz", model = "GT63", price = 215000, hash = "rmodgt63", storage_capacity = 175.0},
 			{make = "Mercedes-Benz", model = "G-Class Brabus", price = 180000, hash = "w463a1", storage_capacity = 280.0},
@@ -518,6 +519,7 @@ local vehicleShopItems = {
 			--
 			{make = "Nissan", model = "240SX (DRIFT)", price = 70000, hash = "rmod240sx", storage_capacity = 150.0},
 			{make = "Nissan", model = "240SX (s14) (DRIFT)", price = 75000, hash = "silvia3", storage_capacity = 150.0},
+			{make = "Nissan", model = "370Z Nismo", price = 110000, hash = "370z", storage_capacity = 130.0},
 			{make = "Nissan", model = "R34 GTR", price = 170000, hash = "skyline", storage_capacity = 175.0},
 			{make = "Nissan", model = "R35 GTR", price = 275000, hash = "gtr", storage_capacity = 130.0},
 			{make = "Nissan", model = "Silvia S15 (DRIFT)", price = 80000, hash = "s15yoshio", storage_capacity = 220.0},
@@ -537,6 +539,8 @@ local vehicleShopItems = {
 			{make = "Subaru", model = "WRX STI (2004)", price = 100000, hash = "subwrx", storage_capacity = 160.0},
 			{make = "Subaru", model = "WRX STI (2008)", price = 115000, hash = "subisti08", storage_capacity = 160.0},
 			{make = "Subaru", model = "WRX STI (2017)", price = 105000, hash = "sti17", storage_capacity = 230.0},
+			--
+			{make = "Sur Ron", model = "Lightbee Pxx (2022)", price = 11000, hash = "22Surron", storage_capacity = 40.0},
 			--
 			{make = "Toyota", model = "4Runner", price = 70000, hash = "4runner", storage_capacity = 280.0},
 			{make = "Toyota", model = "Chaser (DRIFT)", price = 75000, hash = "razerchaser", storage_capacity = 160.0},
