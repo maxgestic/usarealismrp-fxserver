@@ -2,15 +2,21 @@ local LEFT_CLICK = 24
 
 local modeBeforeChange = nil
 
-function forceFirstPerson()
+function forceFirstPerson(ped)
     if modeBeforeChange == nil then
         modeBeforeChange = GetFollowVehicleCamViewMode()
         SetFollowVehicleCamViewMode(4)
+        if IsPedOnAnyBike(ped) then
+            SetCamViewModeForContext(2, 4)
+        end
     end
 end
 
-function undoFirstPerson()
+function undoFirstPerson(ped)
     SetFollowVehicleCamViewMode(modeBeforeChange)
+    if IsPedOnAnyBike(ped) then
+        SetCamViewModeForContext(2, modeBeforeChange)
+    end
     modeBeforeChange = nil
 end
 
@@ -25,15 +31,15 @@ Citizen.CreateThread(function()
         end
         if IsPedInAnyVehicle(me) then
             local selectedPedWeapon = GetSelectedPedWeapon(me)
-            if IsPlayerFreeAiming(PlayerId()) and selectedPedWeapon ~= WEAPON_UNARMED_HASH then
-                forceFirstPerson()
-            elseif IsControlPressed(0, LEFT_CLICK) and selectedPedWeapon ~= WEAPON_UNARMED_HASH then
+            if IsPedDoingDriveby(me) then
+                forceFirstPerson(me)
+            elseif IsControlPressed(0, LEFT_CLICK) then
                 local veh = GetVehiclePedIsIn(me)
                 if me ~= GetPedInVehicleSeat(veh, -1) then -- not in driver seat
-                    forceFirstPerson()
+                    forceFirstPerson(me)
                 end
             elseif modeBeforeChange ~= nil then
-                undoFirstPerson()
+                undoFirstPerson(me)
             end
         end
         Wait(1)
