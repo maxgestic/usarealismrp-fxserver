@@ -444,7 +444,9 @@ local vehicleShopItems = {
 			--
 			{make = "Dodge", model = "Charger (2016)", price = 120000, hash = "16charger", storage_capacity = 160.0},
 			{make = "Dodge", model = "Challenger", price = 120000, hash = "16challenger", storage_capacity = 130.0},
+			{make = "Dodge", model = "Ram Donk (2019)", price = 160000, hash = "19ramdonk", storage_capacity = 300.0},
 			{make = "Dodge", model = "Ram SRT-10", price = 140000, hash = "ramsrt10", storage_capacity = 400.0},
+			{make = "Dodge", model = "Ram TRX", price = 190000, hash = "dodgetrx", storage_capacity = 400.0},
 			{make = "Dodge", model = "Viper (1999)", price = 250000, hash = "99viper", storage_capacity = 170.0},
 			--
 			{make = "Ferrari", model = "California (1957)", price = 600000, hash = "cali57", storage_capacity = 150.0},
@@ -454,11 +456,13 @@ local vehicleShopItems = {
 			--
 			{make = "Ford", model = "Bronco Wildtrak (2021)", price = 140000, hash = "wildtrak", storage_capacity = 300.0},
 			{make = "Ford", model = "Crown Victoria", price = 30000, hash = "crownvic2011", storage_capacity = 155.0},
+			{make = "Ford", model = "F100 Slammed", price = 140000, hash = "slammedf100", storage_capacity = 230.0},
 			{make = "Ford", model = "F150 Raptor", price = 150000, hash = "f150", storage_capacity = 280.0},
 			{make = "Ford", model = "F150 (1978)", price = 65000, hash = "f15078", storage_capacity = 280.0},
 			{make = "Ford", model = "F-150 SVT Lightning (1999)", price = 70000, hash = "flightning99", storage_capacity = 400.0},
 			{make = "Ford", model = "F150 Raptor 2", price = 140000, hash = "foxraptor", storage_capacity = 280.0},
 			{make = "Ford", model = "F350", price = 95000, hash = "wdf350", storage_capacity = 300.0},
+			{make = "Ford", model = "F350 Dually (2000)", price = 75000, hash = "00f350d", storage_capacity = 400.0},
             		{make = "Ford", model = "F-450 Platinum (2021)", price = 170000, hash = "f450plat", storage_capacity = 400.0},
 			{make = "Ford", model = "F-450 (2020)", price = 155000, hash = "20f450", storage_capacity = 300.0},
 			{make = "Ford", model = "F-350 (2020)", price = 160000, hash = "f350d", storage_capacity = 300.0},
@@ -466,10 +470,12 @@ local vehicleShopItems = {
 			{make = "Ford", model = "GT500 (1967)", price = 130000, hash = "67GT500", storage_capacity = 140.0},
 			--{make = "Ford", model = "Hula Girl (1932)", price = 60000, hash = "ford32hulagirl", storage_capacity = 160.0}, -- Model messed up, doesn't drive right
 			{make = "Ford", model = "Mustang", price = 100000, hash = "mgt", storage_capacity = 150.0},
+			{make = "Ford", model = "Raptor Pandem", price = 250000, hash = "razerpandemraptor", storage_capacity = 300.0},
 			{make = "Ford", model = "V-8 Coupé (1932)", price = 70000, hash = "fordc32", storage_capacity = 160.0},
             		{make = "Ford", model = "V-8 Coupé 2 (1932)", price = 80000, hash = "fordc32h", storage_capacity = 160.0},
 			--
 			{make = "GMC", model = "CadimaX 3500HD (2018)", price = 150000, hash = "GODzBGDCADIMAX", storage_capacity = 190.0},
+			{make = "GMC", model = "Denali (2018)", price = 90000, hash = "denali18", storage_capacity = 300.0},
         		{make = "GMC", model = "Sierra 3500HD (2020)", price = 150000, hash = "GODz3500HDWELDER", storage_capacity = 300.0},
 			{make = "GMC", model = "Sierra (2006)", price = 80000, hash = "polar06seirra", storage_capacity = 280.0},
 			--
