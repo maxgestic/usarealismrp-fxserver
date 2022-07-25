@@ -284,6 +284,26 @@ AddEventHandler("ammo:useMagazine", function(magazine)
     end
 end)
 
+RegisterServerEvent("ammo:ejectMag")
+AddEventHandler("ammo:ejectMag", function(itemIndex)
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local item = char.getItemByIndex(itemIndex)
+    if item.type == "weapon" then
+        -- remove mag from weapon
+        local mag = removeMagFromWeapon(char, item)
+        if mag then
+            -- put that mag in player inv
+            if char.canHoldItem(mag) then
+                char.giveItem(mag)
+            else
+                TriggerClientEvent("usa:notify", source, "Inventory full!")
+            end
+        else
+            TriggerClientEvent("usa:notify", source, "No magazine!")
+        end
+    end
+end)
+
 RegisterServerEvent("ammo:save")
 AddEventHandler("ammo:save", function(newAmmoCount)
     local char = exports["usa-characters"]:GetCharacter(source)
@@ -376,6 +396,14 @@ function DoesMagFitWeapon(mag, weaponHash)
         end
     end
     return false
+end
+
+function removeMagFromWeapon(char, wepItem)
+    if wepItem.type == "weapon" then
+        local mag = wepItem.magazine
+        char.removeAttributesFromItemByUUID(wepItem.uuid, {"magazine"})
+        return mag
+    end
 end
 
 function isMeleeWeapon(weaponName)

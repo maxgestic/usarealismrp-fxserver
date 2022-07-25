@@ -457,6 +457,7 @@ var interactionMenu = new Vue({
             left: 0,
             clickedInventoryIndex: 0,
             doShowReloadOption: false,
+            doShowUnloadOption: false,
             openMenu: function(clickedInventoryIndex, fullItem, isInVehicle) {
                 /* Show context menu */
                 this.showContextMenu = true
@@ -466,10 +467,12 @@ var interactionMenu = new Vue({
                 /* Saved clicked inventory index */
                 this.clickedInventoryIndex = clickedInventoryIndex;
                 /* Show 'Reload' option if clicked on weapon */
-                if (fullItem.type == "weapon" && isInVehicle) {
+                if (fullItem.type == "weapon") {
                     this.doShowReloadOption = true;
+                    this.doShowUnloadOption = true;
                 } else {
                     this.doShowReloadOption = false;
+                    this.doShowUnloadOption = false;
                 }
             },
         },
@@ -639,6 +642,10 @@ var interactionMenu = new Vue({
             /* Perform Action */
             if (action == "Reload") {
                 $.post('http://interaction-menu/reloadWeapon', JSON.stringify({
+                    inventoryItemIndex: index
+                }));
+            } else if (action == "Unload") {
+                $.post('http://interaction-menu/unloadWeapon', JSON.stringify({
                     inventoryItemIndex: index
                 }));
             } else if (action == "Drop") {

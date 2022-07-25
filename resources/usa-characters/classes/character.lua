@@ -553,6 +553,21 @@ function CreateCharacter(data)
     end
   end
 
+  rTable.removeAttributesFromItemByUUID = function(uuid, attributesToRemove)
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local lookingAtItem = inv.items[tostring(i)]
+      if lookingAtItem then
+        if lookingAtItem.uuid and lookingAtItem.uuid == uuid then
+          for j = 1, #attributesToRemove do
+            self.inventory.items[tostring(i)][attributesToRemove[j]] = nil
+          end
+          return
+        end
+      end
+    end
+  end
+
   rTable.modifyItem = function(itemName, field, newVal)
     local n = (itemName.name or itemName)
     for i = 0, self.inventory.MAX_CAPACITY - 1 do

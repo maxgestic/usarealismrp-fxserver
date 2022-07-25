@@ -53,6 +53,7 @@
 					<li @click="contextMenuClicked(event, 'Give')">Give to <span v-if="nearestPlayer && nearestPlayer.id && nearestPlayer.id != 0">{{ nearestPlayer.id }}</span><span v-else>no one</span></li>
 					<li @click="contextMenuClicked(event, 'Drop')">Drop</li>
 					<li v-if="contextMenu.doShowReloadOption" @click="contextMenuClicked(event, 'Reload')">Reload</li>
+					<li v-if="contextMenu.doShowUnloadOption" @click="contextMenuClicked(event, 'Unload')">Unload</li>
 				</ul>
 
 				<!-- Inventory item hover tooltip -->

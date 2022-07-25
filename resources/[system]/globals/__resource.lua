@@ -25,7 +25,8 @@ exports {
   "GetKeys",
   "getClosestVehicle",
   "trim",
-  "createCulledNonNetworkedPedAtCoords"
+  "createCulledNonNetworkedPedAtCoords",
+  "playAnimation"
 }
 
 -- global server functions/tables

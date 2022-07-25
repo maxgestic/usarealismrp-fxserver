@@ -319,3 +319,30 @@ function createCulledNonNetworkedPedAtCoords(model, locations, maxDist, _3dText,
     end
   end)
 end
+
+function playAnimation(dict, name, duration, flag, timerBarText)
+  exports.globals:loadAnimDict(dict)
+  Citizen.CreateThread(function()
+      TriggerEvent("interaction:setBusy", true)
+      local me = PlayerPedId()
+      local startTime = GetGameTimer()
+      while GetGameTimer() - startTime < duration do
+          if timerBarText then
+              exports.globals:DrawTimerBar(startTime, duration, 1.42, 1.475, timerBarText)
+          end
+          if not IsEntityPlayingAnim(me, dict, name, 3) then
+              TriggerEvent("usa:playAnimation", dict, name, -8, 1, -1, flag, 0, 0, 0, 0)
+          end
+          Wait(1)
+      end
+      if not IsPedInAnyVehicle(me, true) then
+          ClearPedTasksImmediately(me)
+      else
+          if IsEntityPlayingAnim(me, dict, name, 3) then
+              StopAnimTask(me, dict, name, 1.0)
+          end
+          ClearPedTasks(me)
+      end
+      TriggerEvent("interaction:setBusy", false)
+  end)
+end
