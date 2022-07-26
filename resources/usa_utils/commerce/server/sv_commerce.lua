@@ -53,14 +53,14 @@ AddEventHandler("commerce:purchase", function(id)
     end)
 end)
 
-AddEventHandler('rconCommand', function(cmd, args)
-    if cmd == 'giveSupporterReward' then
+RegisterCommand("giveSupporterReward", function(source, args, rawCommand)
+    if source == 0 then
         local type = args[1]
         local transactionID = args[2]
         print("storing " .. type .. " reward for claim! transaction ID: " .. transactionID)
         db.createDocumentWithId("tebex-transaction-ids", { type = type }, transactionID, function(ok) end)
     end
-end)
+end, false)
 
 TriggerEvent("es:addCommand", "claimreward", function(src, args, char, location)
     if args[2] and args[2]:find("tbx-") then
