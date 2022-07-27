@@ -54,6 +54,7 @@ AddEventHandler("rcore_radiocar:openUI", function(spz)
     end
 
     if Config.OnlyCarWhoHaveRadio then
+        spz = spz:gsub("%s+", "") -- remove whitespace (since custom plates provided by clients here often have < 8 chars and trailing whitespace, but in DB entry whitespace is removed)
         if exports.rcore_radiocar:HasCarRadio(spz) then
             TriggerClientEvent("rcore_radiocar:openUI", player)
         end
