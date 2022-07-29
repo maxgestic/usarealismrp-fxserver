@@ -476,7 +476,9 @@ function teleport(coords)
 end
 
 function startGame(color,idx,manche)
-	
+
+	exports["_anticheese"]:Disable()
+
 	blueOrbsIsTaken = false
 	redOrbsIsTaken = false
 
@@ -550,6 +552,8 @@ function startGame(color,idx,manche)
 end
 
 function endTheGame(winner)
+
+	exports["_anticheese"]:Enable()
 
 	local activity = {}
 	
