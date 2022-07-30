@@ -6,16 +6,16 @@ function forceFirstPerson(ped)
     if modeBeforeChange == nil then
         modeBeforeChange = GetFollowVehicleCamViewMode()
         SetFollowVehicleCamViewMode(4)
-        if IsPedOnAnyBike(ped) then
-            SetCamViewModeForContext(2, 4)
+        for i = 2, 7 do
+            SetCamViewModeForContext(i, 4)
         end
     end
 end
 
 function undoFirstPerson(ped)
     SetFollowVehicleCamViewMode(modeBeforeChange)
-    if IsPedOnAnyBike(ped) then
-        SetCamViewModeForContext(2, modeBeforeChange)
+    for i = 2, 7 do
+        SetCamViewModeForContext(i, modeBeforeChange)
     end
     modeBeforeChange = nil
 end
