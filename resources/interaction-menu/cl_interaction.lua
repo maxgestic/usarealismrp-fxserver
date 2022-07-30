@@ -339,6 +339,24 @@ local VEH_ACTIONS = {
 	end
 }
 
+local THROWABLES = {
+	["Molotov"] = true,
+	["Flare"] = true,
+	["Tear Gas"] = true,
+	["Stun Gun"] = true,
+	["Sticky Bomb"] = true,
+	["Flashbang"] = true,
+	["Hand Grenade"] = true,
+	["Brick"] = true,
+	["Ninja Star"] = true,
+	["Ninja Star 2"] = true,
+	["Rock"] = true,
+	["Throwing Knife"] = true,
+	["Black Shoe"] = true,
+	["Blue Shoe"] = true,
+	["Red Shoe"] = true
+}
+
 RegisterNUICallback('escape', function(data, cb)
 	DisableGui()
 	if data.vehicle.plate then
@@ -1366,7 +1384,7 @@ AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
 		if item.magazine then
 			toGiveAmmo = item.magazine.currentCapacity
 		end
-		if item.name:find("Molotov") or item.name:find("Flare") or item.name:find("Tear Gas") or item.name:find("Stun Gun") or item.name:find("Sticky Bomb") or item.name:find("Flashbang") or item.name:find("Hand Grenade") then
+		if THROWABLES[item.name] then
 			toGiveAmmo = 1
 		end
 		if item.name:find("Fire Extinguisher") or item.name:find("Jerry Can") then

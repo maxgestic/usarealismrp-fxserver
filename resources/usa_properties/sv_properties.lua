@@ -456,6 +456,14 @@ local burglarySearchItems = {
 	{ name = "Pump Shotgun", legality = "illegal", type = "weapon", hash = 487013001, price = 4000, quantity = 1, weight = 25, objectModel = "w_sg_pumpshotgun", notStackable = true },
 	{ name = "Heavy Pistol Parts", price = 5500, type = "weaponParts", weight = 15.0, quantity = 1 },
 	{ name = "Pistol Parts", price = 3000, type = "weaponParts", weight = 10.0, quantity = 1 },
+	{ name = "Brick", type = "weapon", hash = GetHashKey("WEAPON_BRICK"), weight = 15.0, quantity = 1 },
+	{ name = "Ninja Star", type = "weapon", hash = GetHashKey("WEAPON_NINJASTAR"), weight = 5.0, quantity = 1 },
+	{ name = "Ninja Star 2", type = "weapon", hash = GetHashKey("WEAPON_NINJASTAR2"), weight = 5.0, quantity = 1 },
+	{ name = "Rock", type = "weapon", hash = GetHashKey("WEAPON_ROCK"), weight = 5.0, quantity = 1 },
+	{ name = "Throwing Knife", type = "weapon", hash = GetHashKey("WEAPON_THROWINGKNIFE"), weight = 8.0, quantity = 1 },
+	{ name = "Black Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOEBLACK"), weight = 8.0, quantity = 1 },
+	{ name = "Red Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOERED"), weight = 8.0, quantity = 1 },
+	{ name = "Blue Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOEBLUE"), weight = 8.0, quantity = 1 }
 }
 
 local interiors = {

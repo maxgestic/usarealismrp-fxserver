@@ -90,6 +90,24 @@ local WEPS_NO_MAGS = {
     }
 }
 
+local THROWABLES = {
+	["Molotov"] = true,
+	["Flare"] = true,
+	["Tear Gas"] = true,
+	["Stun Gun"] = true,
+	["Sticky Bomb"] = true,
+	["Flashbang"] = true,
+	["Hand Grenade"] = true,
+	["Brick"] = true,
+	["Ninja Star"] = true,
+	["Ninja Star 2"] = true,
+	["Rock"] = true,
+	["Throwing Knife"] = true,
+	["Black Shoe"] = true,
+	["Blue Shoe"] = true,
+	["Red Shoe"] = true
+}
+
 -- ensure matching hash keys for weapons by not mixing signed and unsigned hash keys, here we convert all to unsigned and any wep hashes we use we will convert to unsigned also --
 for k, v in pairs(WEPS_WITH_MAGS) do
     WEPS_WITH_MAGS[k & 0xFFFFFFFF] = v
@@ -316,7 +334,7 @@ AddEventHandler("ammo:save", function(newAmmoCount)
                 wep.magazine.currentCapacity = newAmmoCount
                 char.modifyItemByUUID(wep.uuid, { magazine = wep.magazine })
             else
-                if wep.name:find("Molotov") or wep.name:find("Flare") or wep.name:find("Tear Gas") or wep.name:find("Sticky Bomb") or wep.name:find("Flashbang") or wep.name:find("Hand Grenade") then
+                if THROWABLES[wep.name] then
                     char.removeItemByIndex(invIndexOfItemToSaveAmmo, 1)
                 end
             end

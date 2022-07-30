@@ -239,7 +239,18 @@ Config.Rewards = {
 		reward = {
 			[1] = {name = "Grappling Hook", legality = "legal", quantity = 1, type = "misc", weight = 25},
 		}
-	}
+	},
+	[18] = {
+		type = 'items',		
+		reward = {
+			[1] = { name = "Ninja Star Kit", type = "weaponParts", weight = 5.0, quantity = 3 },
+			[2] = { name = "Ninja Star 2 Kit", type = "weaponParts", weight = 5.0, quantity = 3 },
+			[3] = { name = "Throwing Knife", type = "weapon", hash = GetHashKey("WEAPON_THROWINGKNIFE"), weight = 8.0, quantity = 3 },
+			[4] = { name = "Black Shoe", type = "weapon", hash = `WEAPON_THROWINGSHOEBLACK`, quantity = 3, weight = 8 },
+			[5] = { name = "Red Shoe", type = "weapon", hash = `WEAPON_THROWINGSHOERED`, quantity = 3, weight = 8 },
+			[6] = { name = "Blue Shoe", type = "weapon", hash = `WEAPON_THROWINGSHOEBLUE`, quantity = 3, weight = 8 },
+		}
+	},
 }
 
 Config.Lang = {

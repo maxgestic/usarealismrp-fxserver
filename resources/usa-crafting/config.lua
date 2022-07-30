@@ -22,6 +22,42 @@ Config.craftingLocations = {
 Config.recipes = {
     weapons = {
         { 
+            name = "Ninja Star",
+            image = "https://i.imgur.com/4O5FjCK.png",
+            requires = {
+                { name = "Ninja Star Kit", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Ninja Star",
+                    hash = GetHashKey("WEAPON_NINJASTAR"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 5
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "weapons"
+        },
+        { 
+            name = "Ninja Star 2",
+            image = "https://i.imgur.com/KjU5asW.png",
+            requires = {
+                { name = "Ninja Star 2 Kit", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Ninja Star 2",
+                    hash = GetHashKey("WEAPON_NINJASTAR2"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 5
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "weapons"
+        },
+        { 
             name = "Glock",
             image = "https://i.imgur.com/UjZeF6e.png",
             requires = {
