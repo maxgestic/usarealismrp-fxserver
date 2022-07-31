@@ -45,9 +45,9 @@ RegisterServerEvent('mining:sellMinedItems')
 AddEventHandler('mining:sellMinedItems', function()
     local char = exports["usa-characters"]:GetCharacter(source)
     for i = 1, #common do
-        if char.hasItem(common[i]) then
+        if char.hasItem(common[i].name) then
             char.giveMoney(common[i].price)
-            char.removeItem(common[i])
+            char.removeItem(common[i].name)
             TriggerClientEvent("usa:notify", source, "You Sold " .. common[i].name .. " for $" .. common[i].price)
         end
     end
