@@ -36,7 +36,7 @@ local markets = {
       { name = "Katana", hash = GetHashKey("WEAPON_KATANAS"), type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(1,2), objectModel = "w_me_katana_lr"},
       { name = "Ninja Star Kit", price = 200, type = "weaponParts", weight = 5.0, quantity = 1, stock = math.random(1, 10) },
       { name = "Ninja Star 2 Kit", price = 200, type = "weaponParts", weight = 5.0, quantity = 1, stock = math.random(1, 10) },
-      { name = "Throwing Knife", type = "weapon", hash = GetHashKey("WEAPON_THROWINGKNIFE"), weight = 8.0, quantity = 1, stock = math.random(1, 10) },
+      { name = "Throwing Knife", price = 300, type = "weapon", hash = GetHashKey("WEAPON_THROWINGKNIFE"), weight = 8.0, quantity = 1, stock = math.random(1, 10) },
     },
     ["pedHash"] = -48477765
   },
