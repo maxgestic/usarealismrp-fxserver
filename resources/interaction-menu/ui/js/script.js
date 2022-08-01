@@ -29,6 +29,12 @@ NO_TOOLTIP_WEAPONS.add("Hand Grenade");
 NO_TOOLTIP_WEAPONS.add("Flashbang");
 NO_TOOLTIP_WEAPONS.add("Katana");
 NO_TOOLTIP_WEAPONS.add("Shiv");
+NO_TOOLTIP_WEAPONS.add("Throwing Knife");
+NO_TOOLTIP_WEAPONS.add("Rock");
+NO_TOOLTIP_WEAPONS.add("Brick");
+NO_TOOLTIP_WEAPONS.add("Black Shoe");
+NO_TOOLTIP_WEAPONS.add("Red Shoe");
+NO_TOOLTIP_WEAPONS.add("Blue Shoe");
 
 var itemImages = {
     "Driver's License": "https://i.imgur.com/dy0SpFh.png",
