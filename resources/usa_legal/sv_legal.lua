@@ -75,14 +75,20 @@ AddEventHandler('legal:openMDT', function()
 end)
 
 RegisterServerEvent('lawyer:payLawyer')
-AddEventHandler('lawyer:payLawyer', function(targetSource, targetAmount)
+AddEventHandler('lawyer:payLawyer', function(targetSource, targetAmount, securityToken)
+	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
+	local srcJob = exports["usa-characters"]:GetCharacter(source).get("job")
 	local target = exports["usa-characters"]:GetCharacter(targetSource)
-	local targetMoney = target.get('bank')
-	local targetName = target.getFullName()
-	target.giveBank(targetAmount)
-	TriggerClientEvent('usa:notify', source, 'Person has been paid ~y~$'..targetAmount..'~s~ by the ~y~San Andreas Court Administration~s~.')
-	TriggerClientEvent('usa:notify', targetSource, 'You have been paid ~y~$'..targetAmount..'~s~ by the ~y~San Andreas Court Administration~s~.')
-	print('LEGAL: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has paid (for free) amount['..targetAmount..'] to '..GetPlayerName(targetSource)..'['..GetPlayerIdentifier(targetSource)..'] for legal reward.')
+	if target.get("job") == "lawyer" and (srcJob == "sheriff" or srcJob == "corrections" or srcJob == "judge") then
+		local targetMoney = target.get('bank')
+		local targetName = target.getFullName()
+		target.giveBank(targetAmount)
+		TriggerClientEvent('usa:notify', source, 'Person has been paid ~y~$'..targetAmount..'~s~ by the ~y~San Andreas Court Administration~s~.')
+		TriggerClientEvent('usa:notify', targetSource, 'You have been paid ~y~$'..targetAmount..'~s~ by the ~y~San Andreas Court Administration~s~.')
+		print('LEGAL: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has paid (for free) amount['..targetAmount..'] to '..GetPlayerName(targetSource)..'['..GetPlayerIdentifier(targetSource)..'] for legal reward.')
+	end
 end)
 
 RegisterServerEvent('legal:onDutyDA')

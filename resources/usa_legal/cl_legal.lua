@@ -49,7 +49,7 @@ AddEventHandler('lawyer:checkDistanceForPayment', function(targetSource, targetA
 	local playerPed = PlayerPedId()
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(targetSource))
 	if Vdist(GetEntityCoords(playerPed), GetEntityCoords(targetPed)) < 5.0 then
-		TriggerServerEvent('lawyer:payLawyer', targetSource, targetAmount)
+		TriggerServerEvent('lawyer:payLawyer', targetSource, targetAmount, securityToken)
 	else
 		TriggerEvent('usa:notify', 'You are too far away!')
 	end
