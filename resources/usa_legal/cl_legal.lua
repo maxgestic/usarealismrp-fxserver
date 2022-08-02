@@ -14,6 +14,12 @@ local locations = {
 	-- {x =  243.48629760742, y = -1090.5107421875, z = 29.294260025024} -- LS Courthouse
 }
 
+local DA_SIGN_IN = {
+	x = -72.639091491699,
+	y = -816.05432128906,
+	z = 243.3857421875
+}
+
 Citizen.CreateThread(function()
 	EnumerateBlips()
 	while true do
@@ -25,7 +31,7 @@ Citizen.CreateThread(function()
 			DrawText3D(locations[i].x, locations[i].y, locations[i].z, 5, '[E] - On/Off Duty (~g~Lawyer~s~)')
 		end
 		-- DrawText3D(-563.69079589844, -192.7759552002, 38.219699859619, 5, '[E] - On/Off Duty (~g~Lawyer~s~)')
-		DrawText3D(-82.56, -806.42, 243.38, 2, '[E] - On/Off Duty (~g~DA~s~)')
+		DrawText3D(DA_SIGN_IN.x, DA_SIGN_IN.y, DA_SIGN_IN.z, 2, '[E] - On/Off Duty (~g~DA~s~)')
 		DrawText3D(-79.87, -801.90, 243.41, 3, '[E] - MDT')
 		if IsControlJustPressed(0, 38, true) then -- E
 			local playerCoords = GetEntityCoords(playerPed)
@@ -35,7 +41,7 @@ Citizen.CreateThread(function()
 				DoorTransition(playerPed, 233.39, -410.34, 48.11, 335.0)
 			elseif Vdist(playerCoords, -79.87, -801.90, 244.21) < 1.6 then
 				TriggerServerEvent('legal:openMDT')
-			elseif Vdist(playerCoords, -82.56, -806.42, 243.38) < 2.0 then
+			elseif Vdist(playerCoords, DA_SIGN_IN.x, DA_SIGN_IN.y, DA_SIGN_IN.z) < 2.0 then
 				TriggerServerEvent('legal:onDutyDA')
 			elseif IsNearLawyerClockIn(playerCoords) then
 				TriggerServerEvent('legal:checkBarCertificate')
