@@ -45,6 +45,22 @@ local PICK_UP_ANIMATION = {
 	NAME = "idle_d"
 }
 
+local NO_EVIDENCE_WEAPONS = {
+	[101631238] = true,
+	[911657153] = true,
+	[883325847] = true,
+	[GetHashKey("WEAPON_SNOWBALL")] = true,
+	[-1600701090] = true,
+	[GetHashKey("WEAPON_ROCK")] = true,
+	[GetHashKey("WEAPON_BRICK")] = true,
+	[GetHashKey("WEAPON_THROWINGKNIFE")] = true,
+	[GetHashKey("WEAPON_THROWINGSHOEBLACK")] = true,
+	[GetHashKey("WEAPON_THROWINGSHOEBLUE")] = true,
+	[GetHashKey("WEAPON_THROWINGSHOERED")] = true,
+	[GetHashKey("WEAPON_NINJASTAR")] = true,
+	[GetHashKey("WEAPON_NINJASTAR2")] = true,
+}
+
 RegisterNetEvent('evidence:updateData')
 AddEventHandler('evidence:updateData', function(key, value)
 	playerData[key] = value
@@ -632,17 +648,5 @@ function HasEvidenceNamed(name)
 end
 
 function WeaponDropsEvidence(wep)
-	if wep == 101631238 then
-		return false
-	elseif wep == 911657153 then
-		return false
-	elseif wep == 883325847 then
-		return false
-	elseif wep == GetHashKey("WEAPON_SNOWBALL") then
-		return false
-	elseif wep == -1600701090 then
-		return false
-	else
-		return true
-	end
+	return NO_EVIDENCE_WEAPONS[wep]
 end

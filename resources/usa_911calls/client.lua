@@ -31,6 +31,14 @@ prohibitedWeapons["shotsFired"][883325847] = true
 prohibitedWeapons["shotsFired"][883325847] = true
 prohibitedWeapons["shotsFired"][`WEAPON_PLASMAP`] = true
 prohibitedWeapons["shotsFired"][`WEAPON_FLASHBANG`] = true
+prohibitedWeapons["shotsFired"][`WEAPON_ROCK`] = true
+prohibitedWeapons["shotsFired"][`WEAPON_BRICK`] = true
+prohibitedWeapons["shotsFired"][`WEAPON_THROWINGKNIFE`] = true
+prohibitedWeapons["shotsFired"][`WEAPON_NINJASTAR`] = true
+prohibitedWeapons["shotsFired"][`WEAPON_NINJASTAR2`] = true
+prohibitedWeapons["shotsFired"][`WEAPON_THROWINGSHOEBLACK`] = true
+prohibitedWeapons["shotsFired"][`WEAPON_THROWINGSHOEBLUE`] = true
+prohibitedWeapons["shotsFired"][`WEAPON_THROWINGSHOERED`] = true
 
 Citizen.CreateThread(function()
 	while true do
