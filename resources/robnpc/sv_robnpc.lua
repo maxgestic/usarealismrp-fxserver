@@ -7,7 +7,10 @@ local items = {
 }
 
 
-AddEventHandler('Mugging:GiveReward', function()
+AddEventHandler('Mugging:GiveReward', function(securityToken)
+    if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
+		return false
+	end
     local char = exports["usa-characters"]:GetCharacter(source)
     local reward = math.random(20,150)
     local PERCENT_CHANCE_ITEM = math.random()

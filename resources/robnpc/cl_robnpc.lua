@@ -85,7 +85,7 @@ Citizen.CreateThread(function()
                         if canceled then
                             canceled = false
                         else
-                            TriggerServerEvent("Mugging:GiveReward")
+                            TriggerServerEvent("Mugging:GiveReward", securityToken)
                         end    
                     end
                 end
