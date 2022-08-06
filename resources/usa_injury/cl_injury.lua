@@ -76,6 +76,9 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [GetHashKey("WEAPON_COUGAR")] = {type = 'laceration', bleed = 900, string = 'Animal Attack', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 0.9}, -- WEAPON_COUGAR
     [GetHashKey("WEAPON_KNIFE")] = {type = 'laceration', bleed = 480, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_KNIFE
     [GetHashKey("WEAPON_SHIV")] = {type = 'laceration', bleed = 2100, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 130, dropEvidence = 1.0}, -- WEAPON_SHIV
+    [GetHashKey("WEAPON_THROWINGKNIFE")] = {type = 'laceration', bleed = 2100, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 130, dropEvidence = 1.0},
+    [GetHashKey("WEAPON_NINJASTAR")] = {type = 'laceration', bleed = 2100, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 130, dropEvidence = 1.0},
+    [GetHashKey("WEAPON_NINJASTAR2")] = {type = 'laceration', bleed = 2100, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 130, dropEvidence = 1.0},
     [GetHashKey("WEAPON_KATANAS")] = {type = 'laceration', bleed = 1750, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_KATANA
     [GetHashKey("WEAPON_NIGHTSTICK")] = {type = 'blunt', bleed = 2400, string = 'Blunt Object', treatableWithBandage = true, treatmentPrice = 30, dropEvidence = 0.8}, -- WEAPON_NIGHTSTICK
     [GetHashKey("WEAPON_HAMMER")] = {type = 'blunt', bleed = 1200, string = 'Concentrated Blunt Object', treatableWithBandage = true, treatmentPrice = 30, dropEvidence = 0.9}, -- WEAPON_HAMMER
