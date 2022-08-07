@@ -5,28 +5,13 @@ files {
     'img/loading.gif',
 	'img/loadscreen.jpg',
     'img/logo.png',
-	'img/bg-1.jpg',
-    'img/bg-2.jpg',
-	'img/bg-3.jpg',
-	'img/bg-4.jpg',
-    'img/bg-5.jpg',
-	'img/bg-6.jpg',
-	'img/bg-7.jpg',
-    'img/bg-8.jpg',
-	'img/bg-9.jpg',
-	'img/bg-10.jpg',
+	'img/*.jpg',
+	'img/*.png',
+	'img/*.mp4',
     'img/timeout.png',
 	'css/bootstrap.css',
-    'css/owl.carousel.css',
 	'css/style.css',
-	'infobox/1.png',
-	'infobox/2.png',
-	'infobox/3.png',
-	'infobox/4.png',
-	'js/jquery.backstretch.min.js',
-    'js/jquery-1.11.0.min.js',
-	'js/main.js',
-    'js/owl.carousel.min.js'
+	'js/*.js'
 }
 
 loadscreen 'index.html'

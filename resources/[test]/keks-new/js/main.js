@@ -4,6 +4,12 @@
   $(document).ready(function () {
 
     // backstretch
+    /*
+    $(".carousel-bg").backstretch([
+      "https://www.youtube.com/watch?v=5P7i9jV9jew"
+    ], { duration: 4400, fade: 1500 });
+    */
+    /*
     $(".carousel-bg").backstretch([
       "img/bg-1.jpg"
       , "img/bg-2.jpg"
@@ -15,6 +21,7 @@
       , "img/bg-8.jpg"
       , "img/bg-9.jpg"
     ], { duration: 4400, fade: 1500 });
+    */
 
     /* BEGIN HOWL RADIO PLAYER */
     var stations = [
