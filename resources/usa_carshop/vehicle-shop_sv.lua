@@ -438,6 +438,7 @@ local vehicleShopItems = {
 			{make = "Chevrolet", model = "Silverado 2500 HD", price = 125000, hash = "silv2500hd", storage_capacity = 300.0},
 			{make = "Chevrolet", model = "Tahoe (2008)", price = 80000, hash = "tahoe08", storage_capacity = 250.0},
 			--
+			{make = "Chrysler", model = "300 SRT8", price = 85000, hash = "300srt8", storage_capacity = 180.0},
 			{make = "Chrysler", model = "Pacifica Limited S (2020)", price = 45000, hash = "pacificasb", storage_capacity = 375.0},
 			--
 			{make = "Datsun", model = "Bluebird 910 SSS (1982) (DRIFT)", price = 60000, hash = "datsun910", storage_capacity = 180.0},
@@ -469,6 +470,7 @@ local vehicleShopItems = {
 			{make = "Ford", model = "Galaxie", price = 62000, hash = "galaxie", storage_capacity = 160.0},
 			{make = "Ford", model = "GT500 (1967)", price = 130000, hash = "67GT500", storage_capacity = 140.0},
 			--{make = "Ford", model = "Hula Girl (1932)", price = 60000, hash = "ford32hulagirl", storage_capacity = 160.0}, -- Model messed up, doesn't drive right
+			{make = "Ford", model = "Mach-E", price = 92000, hash = "mache", storage_capacity = 240.0},
 			{make = "Ford", model = "Mustang", price = 100000, hash = "mgt", storage_capacity = 150.0},
 			{make = "Ford", model = "Raptor Pandem", price = 250000, hash = "razerpandemraptor", storage_capacity = 300.0},
 			{make = "Ford", model = "V-8 Coupé (1932)", price = 70000, hash = "fordc32", storage_capacity = 160.0},

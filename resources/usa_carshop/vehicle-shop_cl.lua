@@ -26,7 +26,7 @@ local SHOPS = {
 		blipName = "Benefactor Dealership",
 		displayVehicles = {
 			{
-				HASHES = {"lp700r", "zl12017", "models", "subwrx", "f8t"},
+				HASHES = {"300srt8", "MachE", "lwhuracan", "s15yoshio", "rmodgtr50"},
 				COORDS = vector3(-76.197906494141, 75.080581665039, 70.911987304688),
 				HEADING = 204.0
 			}
