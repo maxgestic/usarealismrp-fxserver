@@ -1540,10 +1540,6 @@ DP.Emotes = {
        EmoteLoop = true,
        EmoteMoving = true,
    }},
-   ["clown5"] = {"rcm_barry2", "clown_idle_6", "Clown 5", AnimationOptions =
-   {
-       EmoteLoop = true,
-   }},
    ["tryclothes"] = {"mp_clothing@female@trousers", "try_trousers_neutral_a", "Try Clothes", AnimationOptions =
    {
        EmoteLoop = true,
