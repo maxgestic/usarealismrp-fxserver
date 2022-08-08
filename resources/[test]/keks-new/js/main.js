@@ -3,25 +3,14 @@
 
   $(document).ready(function () {
 
-    // backstretch
-    /*
-    $(".carousel-bg").backstretch([
-      "https://www.youtube.com/watch?v=5P7i9jV9jew"
-    ], { duration: 4400, fade: 1500 });
-    */
-    /*
-    $(".carousel-bg").backstretch([
-      "img/bg-1.jpg"
-      , "img/bg-2.jpg"
-      , "img/bg-3.jpg"
-      , "img/bg-4.jpg"
-      , "img/bg-5.jpg"
-      , "img/bg-6.jpg"
-      , "img/bg-7.jpg"
-      , "img/bg-8.jpg"
-      , "img/bg-9.jpg"
-    ], { duration: 4400, fade: 1500 });
-    */
+    // choose random load screen video
+    const LOADSCREEN_VIDEOS = [
+      "img/loadscreen-video.mp4",
+      "img/loadscreen-video-2.mp4"
+    ]
+    let chosenVideo = LOADSCREEN_VIDEOS[Math.floor(Math.random() * LOADSCREEN_VIDEOS.length)];
+    console.log("chosenVideo: " + chosenVideo)
+    $("video").attr("src", chosenVideo)
 
     /* BEGIN HOWL RADIO PLAYER */
     var stations = [
