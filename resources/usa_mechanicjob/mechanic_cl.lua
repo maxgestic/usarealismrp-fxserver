@@ -514,7 +514,6 @@ RegisterNetEvent("mechanic:tryInstall")
 AddEventHandler("mechanic:tryInstall", function(upgrade, rank)
 	if isNearAnyRepairShop() then
 		local veh = MechanicHelper.getClosestVehicle(5)
-		if not isVehMotorcycle(veh) then
 			if veh then
 				exports.globals:notify("Installing " .. upgrade.displayName .. " upgrade!")
 				MechanicHelper.installUpgrade(veh, upgrade, function()
@@ -525,9 +524,6 @@ AddEventHandler("mechanic:tryInstall", function(upgrade, rank)
 			else
 				exports.globals:notify("No vehicle found!")
 			end
-		else
-			exports.globals:notify("Incompatible vehicle!")
-		end
 	else
 		exports.globals:notify("You must be at a mechanic shop!")
 	end
@@ -579,23 +575,6 @@ function isNearAnyRepairShop()
 		end
 	end
 	return false
-end
-
-function isVehMotorcycle(veh)
-	local model = GetEntityModel(veh)
-	if GetVehicleClass(veh) == 8 then
-		return true
-	elseif model == GetHashKey("blazer") then
-		return true
-	elseif model == GetHashKey("blazer2") then
-		return true
-	elseif model == GetHashKey("blazer3") then
-		return true
-	elseif model == GetHashKey("blazer4") then
-		return true
-	else
-		return false
-	end
 end
 
 function EnumerateBlips()
