@@ -58,7 +58,7 @@ function attemptPickup(src, item, cb)
 		TriggerClientEvent("usa:notify", src, "You picked up (x1) " .. item.name)
 		TriggerClientEvent("usa:playAnimation", src, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
 		cb(true)
-		TriggerEvent("chat:sendToLogFile", src, "User picked up an item ["..item.name.."]")
+		-- TriggerEvent("chat:sendToLogFile", src, "User picked up an item ["..item.name.."]") -- Disbled for now because people like to pick up 1000 weed buds in a day lol
 	else
 		TriggerClientEvent("usa:notify", src, "You can't hold that item! Inventory full.")
 		cb(false)

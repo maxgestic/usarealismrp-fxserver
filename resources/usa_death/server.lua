@@ -20,6 +20,7 @@ AddEventHandler("death:respawn", function()
 	TriggerClientEvent("crim:blindfold", source, false, true)
 	TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", source)
 	TriggerClientEvent("evidence:updateData", source, "levelBAC", 0.0)
+	TriggerEvent("chat:sendToLogFile", source, "Player respawned at Timestamp: ".. os.date('%m-%d-%Y %H:%M:%S', os.time()))
 end)
 
 RegisterServerEvent('death:revivePerson')

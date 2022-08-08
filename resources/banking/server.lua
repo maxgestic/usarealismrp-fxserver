@@ -79,9 +79,11 @@ AddEventHandler('bank:deposit', function(amount)
 			local money = char.get("money")
 			local bank = char.get("bank")
 			if (rounded <= money and rounded > 0) then
-				print("BANK: Updating balance of "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."] after depositing money["..rounded.."], with new bank total of bank["..bank.."] and money["..money.."]!")
-				-- Write to admin log
-				TriggerEvent("chat:sendToLogFile", source, "Player's balance is being updated after depositing [$"..rounded.."]. Their new total is Bank:[$"..bank.."] and Money:[$"..money.."]!")
+				local UpdBank = bank + rounded
+				local UpdMoney = rounded - money
+				-- Console + Admin Log
+				print("BANK: Updating balance of "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."] after depositing money["..rounded.."], with new bank total of bank["..UpdBank.."] and money["..UpdMoney.."]!")
+				TriggerEvent("chat:sendToLogFile", source, "Player's balance is being updated after depositing [$"..rounded.."]. Their new total is Bank:[$"..UpdBank.."] and Money:[$"..UpdMoney.."]!")
 				TriggerClientEvent("banking:updateBalance", source, (bank + rounded))
 				TriggerClientEvent("banking:addBalance", source, rounded)
 				char.removeMoney(rounded)
@@ -106,12 +108,15 @@ AddEventHandler('bank:withdraw', function(amount)
 		local bank = char.get("bank")
 		if bank and tonumber(rounded) then
 			if (tonumber(rounded) <= tonumber(bank)) then
-				print("BANK: Updating balance of "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."] after withdrawing money["..rounded.."], with new bank total of bank["..bank.."] and money["..money.."]!")
-				TriggerEvent("chat:sendToLogFile", source, "Player's balance is being updated after withdrawing [$"..rounded.."]. Their new total is Bank:["..bank.."] and Money:["..money.."]!")
+				local UpdBank = bank - rounded
+				local UpdMoney = rounded + money
+				-- Console + Admin Log
+				print("BANK: Updating balance of "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."] after withdrawing money["..rounded.."], with new bank total of bank["..UpdBank.."] and money["..UpdMoney.."]!")
+				TriggerEvent("chat:sendToLogFile", source, "Player's balance is being updated after withdrawing [$"..rounded.."]. Their new total is Bank:["..UpdBank.."] and Money:["..UpdMoney.."]!")
 			  	TriggerClientEvent("banking:updateBalance", source, (bank - rounded))
 			 	TriggerClientEvent("banking:removeBalance", source, rounded)
 				char.giveMoney(rounded)
-				char.removeBank(rounded)
+				char.removeBank(rounded)	
 			else
 			  TriggerClientEvent('usa:notify', source, "Amount to withdraw is over allowance!")
 			end
