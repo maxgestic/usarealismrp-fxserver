@@ -1,4 +1,4 @@
-local POLICE_LAWYER_PAY = 500
+local POLICE_LAWYER_PAY = 10000
 
 local onTimeout = {}
 
@@ -44,7 +44,7 @@ TriggerEvent('es:addJobCommand', 'paylawyer', { 'sheriff', 'corrections' , 'judg
 						TriggerClientEvent('usa:notify', source, '~y~Invalid amount, please contact staff to do this.')
 					end
 				else
-					if targetAmount > 500 then targetAmount = POLICE_LAWYER_PAY end
+					if targetAmount > 10000 then targetAmount = POLICE_LAWYER_PAY end
 					TriggerClientEvent('lawyer:checkDistanceForPayment', source, targetSource, targetAmount)
 					onTimeout[char.get("_id")] = os.time()
 				end
