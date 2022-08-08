@@ -192,7 +192,7 @@ AddEventHandler("aircraft:purchaseLicense", function(business)
         status = "valid",
         type = "license",
         notDroppable = true,
-        weight = 2.0
+        weight = 0
     }
     if char.hasItem('Aircraft License') then
         TriggerClientEvent("usa:notify", source, 'You already have a pilots license!')

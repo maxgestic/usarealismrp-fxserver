@@ -145,7 +145,7 @@ AddEventHandler("gunShop:purchaseLicense", function(business)
       status = "valid",
       type = "license",
       notDroppable = true,
-      weight = 2.0
+      weight = 0
     }
     if char.hasItem(NEW_GUN_LICENSE) then
       TriggerClientEvent("usa:notify", usource, "You already have a firearm permit!")

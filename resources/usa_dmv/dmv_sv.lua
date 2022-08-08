@@ -43,7 +43,7 @@ AddEventHandler("dmv:buyLicense", function()
 			status = "valid",
 			notDroppable = true,
 			type = "license",
-			weight = 2.0
+			weight = 0
 		}
 		char.giveItem(license, 1)
 		TriggerClientEvent("usa:notify", source, "You have ~g~successfully~w~ purchased a Driver's License.")

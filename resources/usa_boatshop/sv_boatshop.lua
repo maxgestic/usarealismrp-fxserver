@@ -125,7 +125,7 @@ AddEventHandler("boats:purchaseLicense", function()
     type = "license",
     notDroppable = true,
     expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
-    weight = 2.0
+    weight = 0
   }
   if char.get("money") < LICENSE_PURCHASE_PRICE then
       TriggerClientEvent("usa:notify", source, "Not enough money!")

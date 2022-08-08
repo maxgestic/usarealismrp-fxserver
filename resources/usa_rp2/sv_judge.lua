@@ -274,7 +274,7 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff', 'corrections'}, f
 					status = "valid",
 					type = "license",
 					notDroppable = true,
-					weight = 2.0
+					weight = 0
 				}
 			elseif type == "fp" then
 				target_item_name = "Firearm Permit"
@@ -289,7 +289,7 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff', 'corrections'}, f
 					status = "valid",
 					type = "license",
 					notDroppable = true,
-					weight = 2.0
+					weight = 0
 				}
 			elseif type == 'bl' then
 				target_item_name = "Boat License"
@@ -303,7 +303,7 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff', 'corrections'}, f
 					status = "valid",
 					type = "license",
 					notDroppable = true,
-					weight = 2.0
+					weight = 0
 				}
 			elseif type == 'al' then
 				target_item_name = "Aircraft License"
@@ -318,7 +318,7 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff', 'corrections'}, f
 					status = "valid",
 					type = "license",
 					notDroppable = true,
-					weight = 2.0
+					weight = 0
 				}
 			elseif type == 'bar' then
 				if char.get("job") == "judge" then 
@@ -334,7 +334,7 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff', 'corrections'}, f
 						status = "valid",
 						type = "license",
 						notDroppable = true,
-						weight = 2.0
+						weight = 0
 					}
 				else
 					TriggerClientEvent("usa:notify", source, "Only Judges can issue BAR Certificates!")
