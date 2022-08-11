@@ -61,9 +61,8 @@ AddEventHandler('vns_cs_wheel:give', function(s, reward, securityToken)
 	if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), s, securityToken) then
 		return false
 	end
-	local user = exports["essentialmode"]:getPlayerFromId(s)
-	if not playerRewardRecord[user.getIdentifier()] then -- prevent lua injection exploit, limit calling of this event by any client to 1 per restart to match the script
-		local char = exports["usa-characters"]:GetCharacter(s)
+	local char = exports["usa-characters"]:GetCharacter(s)
+	if not playerRewardRecord[char.get("_id")] then -- prevent lua injection exploit, limit calling of this event by any client to 1 per restart to match the script
 		isRoll = false
 		if reward.type == 'car' then
 			print("won car: " .. car)
@@ -111,7 +110,7 @@ AddEventHandler('vns_cs_wheel:give', function(s, reward, securityToken)
 			TriggerClientEvent("usa:notify", s, "Won: $" .. exports.globals:comma_value(reward.count) .. "!", "INFO: " .. "You won $" .. exports.globals:comma_value(reward.count) .. "!")
 		end
 		TriggerClientEvent("vns_cs_wheel:rollFinished", -1)
-		playerRewardRecord[user.getIdentifier()] = true
+		playerRewardRecord[char.get("_id")] = true
 	end
 end)
 
