@@ -761,3 +761,25 @@ function RemoveVehicleFromDB(vehicle, cb)
 		cb(err, rText)
 	end, "DELETE", "", {["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
+
+function GetVehicleByHashName(hashName)
+	local hash = GetHashKey(hashName)
+	for category, items in pairs(vehicleShopItems["vehicles"]) do
+		for i = 1, #items do
+			if type(items[i].hash) == "string" then
+				if items[i].hash == hashName then
+					return items[i]
+				end
+			elseif type(items[i].hash) == "number" then
+				if items[i].hash == hash then
+					return items[i]
+				end
+			end
+		end
+	end
+	return nil
+end
+
+exports("AddVehicleToDB", AddVehicleToDB)
+exports("GetVehicleByHashName", GetVehicleByHashName)
+exports("generate_random_number_plate", generate_random_number_plate)

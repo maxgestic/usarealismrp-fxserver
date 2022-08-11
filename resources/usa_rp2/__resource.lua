@@ -14,6 +14,10 @@ files {
 -- Requiring essentialmode
 dependency 'essentialmode'
 
+shared_scripts {
+  "ITEMS.lua"
+}
+
 -- General
 client_scripts {
   'client.lua',
