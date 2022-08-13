@@ -42,10 +42,7 @@ class SoundPlayer
 	setDistance(result)  { this.distance = result;   }
 	setDynamic(result)   { this.dynamic = result;    }
 	setLocation(x_,y_,z_){ this.pos = [x_,y_,z_];    }
-	
-	setSoundUrl(result) {
-	    this.url = result.replace(/<[^>]*>?/gm, '');
-	}
+	setSoundUrl(result)  { this.url = result;        }
 
 	setLoop(result) {
         if(!this.isYoutube)
@@ -64,33 +61,25 @@ class SoundPlayer
 		this.volume = result;
 		if(this.max_volume == -1) this.max_volume = result; 
 		if(this.max_volume > (this.volume - 0.01)) this.volume = this.max_volume;
-		if(this.isMuted_ || IsAllMuted){
+		if(this.isMuted_){
 			if(!this.isYoutube)
 			{
-				if(this.audioPlayer != null){
-				    this.audioPlayer.volume(0);
-				}
+				if(this.audioPlayer != null) this.audioPlayer.volume(0);
 			}
 			else
 			{
-				if(this.yPlayer && this.youtubeIsReady){
-				    this.yPlayer.setVolume(0);
-				}
+				if(this.yPlayer && this.youtubeIsReady){this.yPlayer.setVolume(0);}
 			}			
 		}
 		else
 		{
 			if(!this.isYoutube)
 			{
-				if(this.audioPlayer != null) {
-				    this.audioPlayer.volume(result);
-				}
+				if(this.audioPlayer != null) this.audioPlayer.volume(result);
 			}
 			else
 			{
-				if(this.yPlayer && this.youtubeIsReady){
-				    this.yPlayer.setVolume(result * 100);
-				}
+				if(this.yPlayer && this.youtubeIsReady){this.yPlayer.setVolume(result * 100);}
 			}
 		}
 	}
@@ -112,7 +101,7 @@ class SoundPlayer
                 loop: false,
                 html5: true,
                 autoplay: false,
-                volume: 0.0,
+                volume: 0.00,
                 format: ['mp3'],
                 onend: function(event){
                     ended(null);
@@ -131,9 +120,6 @@ class SoundPlayer
             $("#" + this.div_id).remove();
             $("body").append("<div id='"+ this.div_id +"'></div>");
             this.yPlayer = new YT.Player(this.div_id, {
-
-                startSeconds:Number,
-
                 videoId: link,
                 origin: window.location.href,
                 enablejsapi: 1,
@@ -146,8 +132,6 @@ class SoundPlayer
                         isReady(event.target.getIframe().id);
                     },
                     'onStateChange': function(event){
-                        event.target.unMute();
-                        event.target.setVolume(0);
                         if (event.data == YT.PlayerState.ENDED) {
                             isLooped(event.target.getIframe().id);
                             ended(event.target.getIframe().id);
@@ -194,7 +178,7 @@ class SoundPlayer
         {
             distance = distance * 100;
             var far_away = 100 - distance;
-            vol = (this.max_volume / 100) * far_away;
+            vol = (this.max_volume / 100) * far_away;;
 			this.setVolume(vol);
 			this.isMuted_ = false;
         }

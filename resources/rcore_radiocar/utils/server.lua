@@ -2,22 +2,29 @@ ESX = nil
 CachedOwners = {}
 
 if Config.FrameWork == 1 then
-    TriggerEvent("esx:getSharedObject", function(esx) ESX = esx end)
+    TriggerEvent("esx:getSharedObject", function(esx)
+        ESX = esx
+    end)
 end
 
 if Config.FrameWork == 2 then
-	QBCore = Config.GetQBCoreObject()
-	ESX = {}
+    QBCore = Config.GetQBCoreObject()
+    ESX = {}
 
-	ESX.GetPlayerFromId = function(source)
-		local xPlayer = {}
-		local qbPlayer = QBCore.Functions.GetPlayer(source)
-		---------
-		xPlayer.identifier = qbPlayer.PlayerData.citizenid
-		---------
-		return xPlayer
-	end
+    ESX.GetPlayerFromId = function(source)
+        local xPlayer = {}
+        local qbPlayer = QBCore.Functions.GetPlayer(source)
+        ---------
+        xPlayer.identifier = qbPlayer.PlayerData.citizenid
+        ---------
+        return xPlayer
+    end
 end
+
+RegisterNetEvent("rcore_radiocar:fetchPermission")
+AddEventHandler("rcore_radiocar:fetchPermission", function()
+    TriggerClientEvent("rcore_radiocar:fetchPermission", source, IsPlayerAceAllowed(source, "radiocar.use"))
+end)
 
 function IsVehiclePlayer(source, licensePlate, cb)
     if Config.FrameWork == 0 then
@@ -54,7 +61,6 @@ AddEventHandler("rcore_radiocar:openUI", function(spz)
     end
 
     if Config.OnlyCarWhoHaveRadio then
-        spz = spz:gsub("%s+", "") -- remove whitespace (since custom plates provided by clients here often have < 8 chars and trailing whitespace, but in DB entry whitespace is removed)
         if exports.rcore_radiocar:HasCarRadio(spz) then
             TriggerClientEvent("rcore_radiocar:openUI", player)
         end
@@ -63,10 +69,10 @@ AddEventHandler("rcore_radiocar:openUI", function(spz)
     if Config.OnlyOwnerOfTheCar then
         if ESX then
             if not CachedOwners[spz] then
-				local sql = "SELECT * FROM owned_vehicles WHERE plate = @plate AND owner = @identifier"
-				if Config.FrameWork == 2 then
-					sql = "SELECT * FROM player_vehicles WHERE plate = @plate AND citizenid = @identifier"
-				end
+                local sql = "SELECT * FROM owned_vehicles WHERE plate = @plate AND owner = @identifier"
+                if Config.FrameWork == 2 then
+                    sql = "SELECT * FROM player_vehicles WHERE plate = @plate AND citizenid = @identifier"
+                end
 
                 local result = MySQLSyncfetchAll(sql, { ['@plate'] = spz, ['@identifier'] = xPlayer.identifier })
                 if #result ~= 0 then
@@ -90,12 +96,12 @@ AddEventHandler("rcore_radiocar:openUI", function(spz)
     else
         if ESX then
             if not CachedOwners[spz] then
-				local sql = "SELECT * FROM owned_vehicles WHERE plate = @plate"
-				if Config.FrameWork == 2 then
-					sql = "SELECT * FROM player_vehicles WHERE plate = @plate"
-				end
+                local sql = "SELECT * FROM owned_vehicles WHERE plate = @plate"
+                if Config.FrameWork == 2 then
+                    sql = "SELECT * FROM player_vehicles WHERE plate = @plate"
+                end
 
-				local result = MySQLSyncfetchAll(sql, { ['@plate'] = spz })
+                local result = MySQLSyncfetchAll(sql, { ['@plate'] = spz })
                 if #result ~= 0 then
                     TriggerClientEvent("rcore_radiocar:openUI", player)
                 end
@@ -115,12 +121,11 @@ if Config.MysqlType ~= 0 then
     MysqlInit(function()
         CreateThread(function()
             MySQLSyncexecute([[
-            CREATE TABLE IF NOT EXISTS `radiocar`
+            CREATE TABLE IF NOT EXISTS `radiocar_music`
             (`id` INT(11) NOT NULL AUTO_INCREMENT ,
             `label` VARCHAR(64) NOT NULL ,
             `url` VARCHAR(256) NOT NULL ,
-            `spz` VARCHAR(32) NOT NULL ,
-            `index_music` INT(11) NOT NULL ,
+            `plate` VARCHAR(32) NOT NULL ,
             PRIMARY KEY (`id`));
         ]], {})
 

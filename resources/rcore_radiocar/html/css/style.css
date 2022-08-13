@@ -36,7 +36,7 @@ body{
     margin: auto;
 }
 
-#playCustom{
+.playCustom{
     position: absolute;
     height: 201px;
     width: 656px;
@@ -44,18 +44,32 @@ body{
     left: 137px;
 }
 
-#playCustom p{
+.playCustom p{
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
     text-align: center;
     font-size: 21px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 #playSong{
     font-size: 44px;
     position: absolute;
     top: 136px;
-    left: 304px;
+    left: 254px;
+    height: 52px;
+    width: 159px;
+}
+
+
+#playSong i{
+    text-align: center;
+}
+
+#playSong i:hover{
+	color: #ff7878;
 }
 
 #playSong:hover{
@@ -63,7 +77,7 @@ body{
 	cursor: pointer;
 }
 
-#playCustom input{
+.playCustom input{
     color: black;
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
@@ -74,6 +88,7 @@ body{
     text-align: center;
     border: solid 3px;
     border-radius: 5px;
+    margin-top: 10px;
 }
 
 #time{
@@ -93,35 +108,53 @@ body{
 	display: flex;
 }
 
+#UrlForQue{
+	text-align: center;
+	color: black;
+    width: 350px;
+    position: relative;
+    right: 81px;
+}
+
+i.far.fa-trash-alt.active {
+    color: #08ff08;
+}
+
 #AddName {
 	text-align: center;
 	color: black;
+    width: 350px;
+    position: relative;
+    right: 81px;
 }
 #AddUrl{
     text-align: center;
     color: black;
+    width: 350px;
+    position: relative;
+    right: 81px;
 }
 
-#editSong p{
+.editSong p{
     font-family: 'Montserrat', sans-serif;
     font-weight: 900;
     font-size: 20px;
 	text-align: center;
 }
 
-#editSong span{
+.editSong span{
 	font-size: 45px;
     position: relative;
     top: 15px;
-    left: 60px;
+    left: 36px;
 }
 
-#editSong span:hover{
+.editSong span:hover{
 	color: #30f96e;
 	cursor: pointer;
 }
 
-#editSong{
+.editSong{
     position: absolute;
     height: 193px;
     width: 179px;
@@ -146,11 +179,32 @@ body{
     position: absolute;
     top: 92px;
     left: 137px;
+    overflow: overlay;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border: 2px solid white;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .music{
-    height: 137px;
-    width: 219px;
+    height: 108px;
+    width: 218px;
     float: left;
     text-align: center;
     font-size: 31px;
@@ -187,16 +241,25 @@ body{
 	cursor: pointer;
 }
 
+.correctVolumeText{
+	
+}
 
 .box{
     height: 63px;
-	width: 132px;
+    width: 110.1px;
     float: left;
     text-align: center;
     font-size: 31px;
     display: flex;
     justify-content: center;
-    align-items: center;	
+    align-items: center;
+}
+
+.box.full{
+    height: 210px;
+    width: 50%;
+    display: unset;
 }
 
 .box:hover{
@@ -208,4 +271,11 @@ body{
 .box:hover i{
 	color: #ff7878;
 	cursor: pointer;
+}
+
+.center-box{
+    display: block;
+    height: 50%;
+    width: 100%;
+    transform: translate(0, 50%);
 }

@@ -1,27 +1,57 @@
 var yPlayer = null;
 
-function updateName(url){
-    var skip = false;
-    if(url.includes(".ogg")){
-        var res = url.split("/");
-        url = res[res.length - 1];
-        url = url.replace(".ogg", "");
-        skip = true;
-    }
-
-    if(getYoutubeUrlId(url) === "" && !skip)
+function getNameFromURL(URL, cb){
+    if(getYoutubeUrlId(URL) === "")
 	{
-        $("#nameSong").text(editString(url));
+        var audioPlayer = new Howl({
+                src: [URL],
+                loop: false,
+                html5: true,
+                autoplay: true,
+                volume: 0.0,
+                format: ['mp3'],
+                onplay: function(){
+                    cb(editString(URL), audioPlayer._duration);
+                    audioPlayer.pause();
+                    audioPlayer.stop();
+                    audioPlayer.unload();
+                },
+        });
+    }
+    else
+    {
+		var test = new YT.Player("trash",
+        {
+            height: '0',
+            width: '0',
+            videoId: getYoutubeUrlId(URL),
+            events:
+            {
+                'onReady': function(event){
+                    cb(event.target.getVideoData().title, test.getDuration());
+                    test.stopVideo();
+                    test.destroy();
+                },
+            }
+        });
+    }
+}
+
+function updateName(url){
+    if(getYoutubeUrlId(url) === "")
+	{
+        $(".nameSong").text(editString(url));
+        currentSongName = editString(url);
     }else{
-        if(!skip) url = getYoutubeUrlId(url)
 		yPlayer = new YT.Player("trash",
         {
             height: '0',
             width: '0',
-            videoId: url,
+            videoId: getYoutubeUrlId(url),
             events:
             {
                 'onReady': function(event){
+                    currentSongName = event.target.getVideoData().title;
                     getName(event.target.getVideoData().title);
                 },
             }
@@ -64,7 +94,7 @@ function editString(string){
 }
 
 function getName(name){
-    $("#nameSong").text(name);
+    $(".nameSong").text(name);
     if (this.yPlayer) {
         if (typeof this.yPlayer.stopVideo === "function" && typeof this.yPlayer.destroy === "function") {
             yPlayer.stopVideo();

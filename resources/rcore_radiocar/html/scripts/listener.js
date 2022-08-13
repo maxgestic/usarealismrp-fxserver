@@ -1,7 +1,7 @@
 var currentIndex = null;
-var IsAllMuted = false;
 var soundList = [];
 var closeToPlayer = [];
+var currentSongName = "";
 
 var playerPos = [-90000,-90000,-90000];
 
@@ -10,13 +10,70 @@ var vueJS = new Vue({
 	data: 
 	{
 		songs: [],
+		userSongs: [],
+		customPlayList: [],
+		framework: 0,
+
 		visible: false,
 		page: "custom",
+		adding: false,
 		locales: localesex,
+
+		oldURL: "",
+		oldLabel: "",
+
+		index: null,
+
+		maxTimeStamp: 0,
+		timeSong: 0,
 		volume: 30,
 	},
 	
 	methods: {
+	    playQueList: function(){
+            $.post("https://rcore_radiocar/playque", JSON.stringify({}))
+	    },
+
+	    stopQueList: function(){
+            $.post("https://rcore_radiocar/stopque", JSON.stringify({}))
+	    },
+
+	    removeFromPlayList: function(index, item){
+            $.post("https://rcore_radiocar/removeMusicFromQue", JSON.stringify({
+                index: item.index,
+            }))
+            vueJS.customPlayList[index].removed = true;
+	    },
+
+	    addToQue: function(){
+	        var URL = $("#UrlForQue").val();
+            getNameFromURL(URL, function(name, timestamp){
+                $.post("https://rcore_radiocar/addToPlayListCache", JSON.stringify({
+                    timeStamp: timestamp,
+                    time: timestamp,
+                    name: name,
+                    url: URL,
+                    active: false,
+                }))
+
+                vueJS.customPlayList.push({
+                    label: name,
+                    url: URL,
+                    active: false,
+                    removed: false,
+                    index: vueJS.customPlayList.length + 1,
+                });
+
+                vueJS.page = "quemusic";
+            });
+	    },
+
+	    slideInputChanged: function(){
+            $.post("https://rcore_radiocar/timestamp", JSON.stringify({
+                timeStamp: $("#timestamp_drag").val(),
+            }))
+	    },
+
 	    changeVolume: function(minus){
 	        if(minus){
                 $.post('https://rcore_radiocar/volumedown', JSON.stringify({}));
@@ -26,33 +83,67 @@ var vueJS = new Vue({
 	    },
 
 	    turnOffMusic: function(){
-            $("#status").text(localesex.nothing);
-            $("#nameSong").text(localesex.nameSong);
-            $("#timeSong").text("00:00:00")
+            $(".status").text(localesex.nothing);
+            currentSongName = localesex.nameSong;
+            $(".nameSong").text(localesex.nameSong);
+            $(".timeSong").text("00:00:00")
             $.post('https://rcore_radiocar/stop', JSON.stringify({}));
 	    },
 
+	    pauseMusic: function(pg){
+            $.post('https://rcore_radiocar/pausesong', JSON.stringify({}));
+	    },
+
 	    changePage: function(pg){
+            $("#AddName").val("");
+            $("#AddUrl").val("");
 	        this.page = pg;
+            this.$nextTick(function () {
+                $(".nameSong").text(currentSongName);
+            })
 	    },
 
 	    playCustomMusic: function(){
-	        $("#status").text(localesex.playing);
-            updateName($("#url").val());
+	        if ($("#url").val() !== "") {
+                $(".status").text(localesex.playing);
+                updateName($("#url").val());
+	        }
             $.post('https://rcore_radiocar/play', JSON.stringify(
             {
                 url: $("#url").val(),
             }));
 	    },
 
+        editMusic: function(url, label, adding, index){
+            vueJS.index = index;
+            vueJS.adding = adding;
+            if(adding){
+                this.page = "edit";
+                this.$nextTick(function () {
+                    $("#AddName").val("");
+                    $("#AddUrl").val("");
+                })
+            }
+            else
+            {
+                this.page = "edit";
+                this.$nextTick(function () {
+                    $("#AddName").val(label);
+                    $("#AddUrl").val(url);
+                })
+
+                this.oldURL = url;
+                this.oldLabel = label;
+            }
+        },
+
 		showIndex: function (index) {
 			currentIndex = index;
 		},	
 		
-		playMusic: function (index) {
-			var url = this.songs[index].url
+		playMusic: function (url) {
 			updateName(url);
-			$("#status").text(localesex.playing);
+			$(".status").text(localesex.playing);
 			$.post('https://rcore_radiocar/play', JSON.stringify({
 				url: url,
 			}));
@@ -61,13 +152,56 @@ var vueJS = new Vue({
 }) 
 
 function editSong(){
-	vueJS.songs[currentIndex].label = $("#AddName").val();
-	vueJS.songs[currentIndex].url = $("#AddUrl").val();
+    if($("#AddName").val().length == 0 || $("#AddUrl").val().length == 0){
+        return;
+    }
+
 	$.post('https://rcore_radiocar/editSong', JSON.stringify({
 		index: currentIndex,
 		label: $("#AddName").val(),
 		url: $("#AddUrl").val(),
+        oldURL: vueJS.oldURL,
+        oldLabel: vueJS.oldLabel,
 	}));
+
+    if(vueJS.index != null){
+        vueJS.userSongs[vueJS.index].label = $("#AddName").val();
+        vueJS.userSongs[vueJS.index].url = $("#AddUrl").val();
+    }
+
+    vueJS.$nextTick(function () {
+	    vueJS.changePage('playlist');
+    })
+
+    if(vueJS.adding != null){
+        for(var i = 0; i < vueJS.userSongs.length; i ++){
+            if(vueJS.userSongs[i].label === $("#AddName").val() || vueJS.userSongs[i].url === $("#AddUrl").val()){
+                vueJS.userSongs[i].label = $("#AddName").val();
+                vueJS.userSongs[i].url = $("#AddUrl").val();
+                return;
+            }
+        }
+
+        vueJS.userSongs.push({
+            label: $("#AddName").val(),
+            url: $("#AddUrl").val(),
+            active: true,
+        });
+    }
+}
+
+function removeSong(){
+	$.post('https://rcore_radiocar/removeSong', JSON.stringify({
+        oldURL: vueJS.oldURL,
+        oldLabel: vueJS.oldLabel,
+	}));
+
+    vueJS.$nextTick(function () {
+	    vueJS.changePage('playlist');
+        if(vueJS.index != null){
+            vueJS.userSongs[vueJS.index].active = false;
+        }
+    })
 }
 
 $(function(){
@@ -130,7 +264,6 @@ $(function(){
                 sd.play();
                 soundList[item.name] = sd;
                 break;
-
             case "distance":
                 var sound = soundList[item.name];
                 if(sound != null)
@@ -182,7 +315,6 @@ $(function(){
                 {
                     sound.destroyYoutubeApi();
                     sound.delete();
-                    delete soundList[item.name];
                 }
                 break;
             case "repeat":
@@ -223,7 +355,6 @@ $(function(){
                 }
                 break;
             case "unmuteAll":
-                IsAllMuted = false;
                 for (var soundName in soundList)
                 {
                     sound = soundList[soundName];
@@ -234,7 +365,6 @@ $(function(){
                 updateVolumeSounds();
                 break;
             case "muteAll":
-                IsAllMuted = true;
                 for (var soundName in soundList)
                 {
                     sound = soundList[soundName];
@@ -247,16 +377,50 @@ $(function(){
             case "ui":
 			    vueJS.visible = item.status
                 break;
-
+            case "resetUserSongs":
+                vueJS.userSongs = [];
+                break;
+            case "FrameWork":
+                vueJS.framework = item.frameWork;
+                break;
             case "edit":
-                vueJS.songs[item.index].label = item.label;
-                vueJS.songs[item.index].url = item.url;
+                vueJS.userSongs.push({
+                    label: item.label,
+                    url: item.url,
+                    active: true,
+                });
                 break;
 
             case "clear":
                 vueJS.songs = []
                 break;
+            case "resetQueMusic":
+                vueJS.customPlayList = [];
+                break;
+            case "updateIndex":
+                for(var i = 0; i < vueJS.customPlayList.length; i ++){
+                    vueJS.customPlayList[i].active = false;
+                }
 
+                for(var i = 0; i < vueJS.customPlayList.length; i ++){
+                    if (vueJS.customPlayList[i].index == item.index){
+                        vueJS.customPlayList[i].active = true;
+                    }
+                }
+                break;
+            case "addQueMusic":
+                vueJS.customPlayList.push({
+                    label: item.name,
+                    index: item.indexKey,
+                    url: item.URL,
+                    active: item.active,
+                    removed: item.removed,
+                });
+
+                vueJS.customPlayList = vueJS.customPlayList.sort(function(a, b) {
+                    return a.index - b.index
+                });
+                break;
             case "add":
                 vueJS.songs.push({
                     label: item.label,
@@ -266,16 +430,19 @@ $(function(){
 
             case "timeSong":
                 var leftTime = (item.timeSong + "").toHHMMSS();
-                $("#timeSong").text(leftTime.format("00:00:00"))
+                $(".timeSong").text(leftTime.format("00:00:00"))
+                vueJS.maxTimeStamp = item.maxDuration;
+                vueJS.timeSong = item.timeSong;
                 break;
 
             case "update":
-                $("#status").text(localesex.playing);
+                $(".status").text(localesex.playing);
                 updateName(item.url);
                 break;
 
             case "reset":
                 vueJS.locales.nothing = localesex.nothing;
+                currentSongName = localesex.nameSong;
                 vueJS.locales.nameSong = localesex.nameSong;
                 vueJS.locales.timeSong = localesex.timeSong.format("00:00:00");
                 break;
@@ -327,28 +494,26 @@ function Between(loc1,loc2)
 
 function addToCache()
 {
-    if(!IsAllMuted){
-        closeToPlayer = [];
-        var sound = null;
-        for (var soundName in soundList)
-        {
-            sound = soundList[soundName];
-            if(sound.isDynamic())
-            {
-                var distance = Between(playerPos,sound.getLocation());
-                var distance_max = sound.getDistance();
-                if(distance < distance_max + 40)
-                {
-                    closeToPlayer[soundName] = soundName;
+    closeToPlayer = [];
+    var sound = null;
+	for (var soundName in soundList)
+	{
+		sound = soundList[soundName];
+		if(sound.isDynamic())
+		{
+			var distance = Between(playerPos,sound.getLocation());
+			var distance_max = sound.getDistance();
+			if(distance < distance_max + 40)
+			{
+                closeToPlayer[soundName] = soundName;
+			}
+			else
+			{
+                if(sound.loaded()) {
+                    sound.mute();
                 }
-                else
-                {
-                    if(sound.loaded()) {
-                        sound.mute();
-                    }
-                }
-            }
-        }
+			}
+		}
 	}
 }
 
@@ -356,22 +521,20 @@ setInterval(addToCache, 1000);
 
 function updateVolumeSounds()
 {
-    if(!IsAllMuted){
-        var sound = null;
-        for (var name in closeToPlayer)
+    var sound = null;
+    for (var name in closeToPlayer)
+    {
+        sound = soundList[name];
+        if(sound.isDynamic())
         {
-            sound = soundList[name];
-            if(sound.isDynamic())
+            var distance = Between(playerPos,sound.getLocation());
+            var distance_max = sound.getDistance();
+            if(distance < distance_max)
             {
-                var distance = Between(playerPos,sound.getLocation());
-                var distance_max = sound.getDistance();
-                if(distance < distance_max)
-                {
-                    sound.updateVolume(distance,distance_max);
-                    continue;
-                }
-                sound.mute();
+                sound.updateVolume(distance,distance_max);
+                continue;
             }
+            sound.mute();
         }
     }
 }

@@ -1,3 +1,4 @@
+// its not completed, check in index.html and translate there the rest.
 var localesex = {
     timeSong: "{0}",
     nameSong: "...",

@@ -14,6 +14,15 @@ Config.MysqlType = 2
 -- 2 QBCore
 Config.FrameWork = 0
 
+-- will force trim even on standalone
+Config.ForceTrim = true
+
+-- well.. Do i have to explain what this blacklist?
+Config.BlacklistedURL = {
+    -- I am not responsible for you wanting puppy after watching this video
+    "https://www.youtube.com/watch?v=o-YBDTqX_ZU",
+}
+
 -- esx object share
 Config.ESX_Object = "esx:getSharedObject"
 
@@ -139,28 +148,28 @@ Config.blackListedCategories = {
 -- please dont add more than 6.. if you add more than 6 you need to edit html
 Config.defaultList = {
     {
-        label = "Music 1",
-        url = "",
+        label = "Good life radio",
+        url = "https://www.youtube.com/watch?v=36YnV9STBqc",
     },
     {
-        label = "Music 2",
-        url = "",
+        label = "Lofi hip hop radio",
+        url = "https://www.youtube.com/watch?v=jfKfPfyJRdk",
     },
     {
-        label = "Music 3",
-        url = "",
+        label = "Helios deep radio",
+        url = "https://www.youtube.com/watch?v=AEw7aAIPxMw",
     },
     {
-        label = "Music 4",
-        url = "",
+        label = "90s live radio",
+        url = "https://www.youtube.com/watch?v=mk73cXTBeLc",
     },
     {
-        label = "Music 5",
-        url = "",
+        label = "80s live radio",
+        url = "https://www.youtube.com/watch?v=R6_3OchvW_c",
     },
     {
-        label = "Music 6",
-        url = "",
+        label = "Doom live radio",
+        url = "https://www.youtube.com/watch?v=JEuAYnjtJP0",
     },
 }
 

@@ -31,7 +31,13 @@ function CheckPlayerCar(vehicle)
         local veh = ESX.Game.GetVehicleProperties(vehicle)
         TriggerServerEvent("rcore_radiocar:openUI", veh.plate)
     else
-        TriggerServerEvent("rcore_radiocar:openUI", GetVehicleNumberPlateText(vehicle))
+        local plate = GetVehicleNumberPlateText(vehicle)
+
+        if Config.ForceTrim then
+            plate = Trim(plate)
+        end
+
+        TriggerServerEvent("rcore_radiocar:openUI", plate)
     end
 end
 
@@ -40,7 +46,13 @@ function GetVehiclePlate()
         local spz = ESX.Game.GetVehicleProperties(GetVehiclePedIsIn(PlayerPedId())).plate
         return spz
     else
-        return GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId()))
+        local plate = GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId()))
+
+        if Config.ForceTrim then
+            plate = Trim(plate)
+        end
+
+        return plate
     end
     return "none"
 end
@@ -48,8 +60,29 @@ end
 AddEventHandler("rcore_radiocar:updateMusicInfo", function(data)
     if ESX then
         local spz = ESX.Game.GetVehicleProperties(GetVehiclePedIsIn(PlayerPedId())).plate
-        TriggerServerEvent("rcore_radiocar:updateMusicInfo", data.label, data.url, spz, data.index)
+        TriggerServerEvent("rcore_radiocar:updateMusicInfo", data.label, data.url, spz, data.oldLabel, data.oldURL)
     else
-        TriggerServerEvent("rcore_radiocar:updateMusicInfo", data.label, data.url, GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId())), data.index)
+        local plate = GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId()))
+
+        if Config.ForceTrim then
+            plate = Trim(plate)
+        end
+
+        TriggerServerEvent("rcore_radiocar:updateMusicInfo", data.label, data.url, plate, data.oldLabel, data.oldURL)
+    end
+end)
+
+RegisterNUICallback("removeSong", function(data)
+    if ESX then
+        local spz = ESX.Game.GetVehicleProperties(GetVehiclePedIsIn(PlayerPedId())).plate
+        TriggerServerEvent("rcore_radiocar:removeMusic", spz, data.oldLabel, data.oldURL)
+    else
+        local plate = GetVehicleNumberPlateText(GetVehiclePedIsIn(PlayerPedId()))
+
+        if Config.ForceTrim then
+            plate = Trim(plate)
+        end
+
+        TriggerServerEvent("rcore_radiocar:removeMusic", plate, data.oldLabel, data.oldURL)
     end
 end)

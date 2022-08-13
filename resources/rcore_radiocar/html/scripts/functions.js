@@ -1,18 +1,3 @@
-function getYoutubeUrlId(url)
-{
-    var videoId = "";
-    if( url.indexOf("youtube") !== -1 ){
-        var urlParts = url.split("?v=");
-        videoId = urlParts[1].substring(0,11);
-    }
-
-    if( url.indexOf("youtu.be") !== -1 ){
-        var urlParts = url.replace("//", "").split("/");
-        videoId = urlParts[1].substring(0,11);
-    }
-    return videoId;
-}
-
 function isReady(divId, howler){
     if(howler){
         for (var soundName in soundList)
@@ -29,7 +14,7 @@ function isReady(divId, howler){
 
                 var time = 0;
                 if(sound.getAudioPlayer() != null){time = sound.getAudioPlayer()._duration;}
-                if(sound.isDynamic()) sound.setVolume(0);
+                if(sound.isDynamic()) sound.setVolume(0.0001);
 
                 $.post('https://rcore_radiocar/data_status', JSON.stringify(
                 {
@@ -54,7 +39,7 @@ function isReady(divId, howler){
 
             var time = 0;
             if(sound.getYoutubePlayer() != null){time = sound.getYoutubePlayer().getDuration();}
-			if(sound.isDynamic()) sound.setVolume(0);
+			if(sound.isDynamic()) sound.setVolume(0.0001);
             sound.setLoaded(true);
 
             $.post('https://rcore_radiocar/data_status', JSON.stringify(
@@ -65,6 +50,7 @@ function isReady(divId, howler){
             }));
 
             sound.isYoutubeReady(true);
+            if(!sound.isDynamic()) sound.setVolume(sound.getVolume())
             break;
         }
 	}

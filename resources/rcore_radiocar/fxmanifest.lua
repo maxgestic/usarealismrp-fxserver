@@ -3,6 +3,7 @@ games { 'gta5' }
 
 client_scripts {
     "config.lua",
+    "shared.lua",
     "utils/VIP.lua",
     "utils/client.lua",
     "client/*.lua",
@@ -12,8 +13,9 @@ client_scripts {
 
 server_scripts {
     "@mysql-async/lib/MySQL.lua",
-
     "config.lua",
+    "shared.lua",
+    "server_config.lua",
     "utils/mysql.lua",
     "utils/server.lua",
     "server/*.lua",
@@ -37,6 +39,7 @@ lua54 "yes"
 
 escrow_ignore {
     "config.lua",
+	"server_config.lua",	
     "utils/*.lua",
     "client/exports/*.lua",
     "client/effects/*.lua",
