@@ -90,7 +90,7 @@ Citizen.CreateThread(function()
           TriggerServerEvent("usa:notifyStaff", "ANTICHEAT: Player with ID #" .. GetPlayerServerId(PlayerId()) .. " has modified their weapon damage! It was reset to what it should be.")
         end
       else
-        if GetPlayerWeaponDamageModifier(PlayerId()) ~= 1.0 then -- 1.0 being the default
+        if PlayerId() ~= 0 and GetPlayerWeaponDamageModifier(PlayerId()) ~= 1.0 then -- 1.0 being the default
           SetPlayerWeaponDamageModifier(PlayerId(), 1.0)
           TriggerServerEvent("usa:notifyStaff", "ANTICHEAT: Player with ID #" .. GetPlayerServerId(PlayerId()) .. " has modified their weapon damage! It was reset to what it should be.")
         end
