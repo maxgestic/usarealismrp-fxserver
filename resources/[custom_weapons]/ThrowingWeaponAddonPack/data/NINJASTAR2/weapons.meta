@@ -124,9 +124,9 @@
           <DamageTime value="0.000000" />
           <DamageTimeInVehicle value="0.000000" />
           <DamageTimeInVehicleHeadShot value="0.000000" />
-          <HitLimbsDamageModifier value="1.000000" />
-          <NetworkHitLimbsDamageModifier value="1.000000" />
-          <LightlyArmouredDamageModifier value="1.000000" />
+          <HitLimbsDamageModifier value="0.2500000" />
+          <NetworkHitLimbsDamageModifier value="0.2500000" />
+          <LightlyArmouredDamageModifier value="0.2500000" />
 		  <VehicleDamageModifier value="0.001000" />
           <Force value="0.000000" />
           <ForceHitPed value="65.000000" />
@@ -210,8 +210,8 @@
           <RumbleIntensity value="0.000000" />
           <RumbleIntensityTrigger value="0.000000" />
           <RumbleDamageIntensity value="1.000000" />
-          <NetworkPlayerDamageModifier value="1.000000" />
-          <NetworkPedDamageModifier value="1.000000" />
+          <NetworkPlayerDamageModifier value="0.2500000" />
+          <NetworkPedDamageModifier value="0.2500000" />
           <NetworkHeadShotPlayerDamageModifier value="1.000000" />
           <LockOnRange value="35.000000" />
           <WeaponRange value="40.000000" />
