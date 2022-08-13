@@ -2,6 +2,8 @@ local SAVE_INTERVAL = 1
 
 local lastCheckedTime = 0
 
+local FOOD_EXPIRE_DAYS = 7
+
 RegisterServerEvent("foodwater:save")
 AddEventHandler("foodwater:save", function(person)
     local char = exports["usa-characters"]:GetCharacter(source)
@@ -36,3 +38,30 @@ function GetMinutesFromTime(t)
     local minutes = math.floor(minutesfrom)
 	return minutes
 end
+
+RegisterServerEvent("foodwater:checkItemAge")
+AddEventHandler("foodwater:checkItemAge", function(item)
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local invItem = char.getItemByUUID(item.uuid)
+    if invItem then
+        if not invItem.createdTime then
+            invItem.createdTime = os.time()
+        end 
+        local numDaysSinceCreation = exports.globals:GetHoursFromTime(invItem.createdTime) / 24
+        if numDaysSinceCreation > FOOD_EXPIRE_DAYS then
+            TriggerClientEvent("usa:notify", source, "That has gone bad!", "INFO: That food or drink item has gone bad!")
+        else
+            if invItem.type == "food" then
+                TriggerClientEvent("hungerAndThirst:replenish", source, "hunger", invItem)
+            elseif invItem.type == "drink" then
+                TriggerClientEvent("hungerAndThirst:replenish", source, "drink", invItem)
+            end
+
+        end
+        if invItem.quantity > 1 then -- for backwards compatibility just in case people have stacked food items rn
+            char.removeItemByUUID(invItem.uuid, 1)
+        else 
+            char.removeItemByUUID(invItem.uuid)
+        end
+    end
+end)

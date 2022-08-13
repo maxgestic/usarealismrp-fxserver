@@ -316,8 +316,14 @@ function CreateCharacter(data)
     if not item.uuid then
       item.uuid = exports.globals:generateID()
     end
+    if not item.createdTime then
+      item.createdTime = os.time()
+    end
     if quantity then
       item.quantity = quantity
+    end
+    if item.type and (item.type == "food" or item.type == "drink") then
+      item.notStackable = true
     end
     local firstFreeSlot = nil
      for i = 0, self.inventory.MAX_CAPACITY - 1 do

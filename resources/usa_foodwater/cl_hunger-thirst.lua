@@ -54,14 +54,11 @@ AddEventHandler("hungerAndThirst:replenish", function(type, item)
 		if new_hunger_level <= 100.0 then
 			person.hunger_level = new_hunger_level
 			TriggerEvent("usa:notify", "Consumed: ~y~" .. item.name)
-			TriggerServerEvent("usa:removeItem", item, 1)
 		else
 			local diff = new_hunger_level - 100.0
 			--print("went over by: " .. diff)
 			person.hunger_level = 100.0
 			TriggerEvent("usa:notify", "You are now totally full!")
-			--print("calling usa:removeItem!!")
-			TriggerServerEvent("usa:removeItem", item, 1)
 		end
 		--print("playing food animation!")
 		-- play animation:
@@ -83,13 +80,11 @@ AddEventHandler("hungerAndThirst:replenish", function(type, item)
 		if new_thirst_level <= 100.0 then
 			person.thirst_level = new_thirst_level
 			TriggerEvent("usa:notify", "Consumed: ~y~" .. item.name)
-			TriggerServerEvent("usa:removeItem", item, 1)
 		else
 			local diff = new_thirst_level - 100.0
 			--print("went over by: " .. diff)
 			person.thirst_level = 100.0
 			TriggerEvent("usa:notify", "You are now totally hydrated!")
-			TriggerServerEvent("usa:removeItem", item, 1)
 		end
 		--print("playing drink animation!")
 		-- play animation:

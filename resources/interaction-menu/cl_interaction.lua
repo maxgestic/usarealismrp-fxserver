@@ -1121,14 +1121,16 @@ function interactionMenuUse(index, itemName, wholeItem)
 	elseif wholeItem.type and wholeItem.type == "food" then
 		--print("Player used inventory item of type: food!")
 		--print("item name: " .. wholeItem.name)
-		TriggerEvent("hungerAndThirst:replenish", "hunger", wholeItem)
+		--TriggerEvent("hungerAndThirst:replenish", "hunger", wholeItem)
+		TriggerServerEvent("foodwater:checkItemAge", wholeItem)
 		-------------------
 		-- Drink Item  --
 		-------------------
 	elseif wholeItem.type and wholeItem.type == "drink" then
 		--print("Player used inventory item of type: drink!")
 		--print("item name: " .. wholeItem.name)
-		TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
+		--TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
+		TriggerServerEvent("foodwater:checkItemAge", wholeItem)
 		---------------------------
 		-- Alcoholic Drink Item  --
 		---------------------------
