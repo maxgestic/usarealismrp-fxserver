@@ -35,6 +35,8 @@ NO_TOOLTIP_WEAPONS.add("Brick");
 NO_TOOLTIP_WEAPONS.add("Black Shoe");
 NO_TOOLTIP_WEAPONS.add("Red Shoe");
 NO_TOOLTIP_WEAPONS.add("Blue Shoe");
+NO_TOOLTIP_WEAPONS.add("Ninja Star");
+NO_TOOLTIP_WEAPONS.add("Ninja Star 2");
 
 var itemImages = {
     "Driver's License": "https://i.imgur.com/dy0SpFh.png",

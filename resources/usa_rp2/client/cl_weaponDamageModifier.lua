@@ -1,10 +1,10 @@
-local GLOBAL_WEAPON_DAMAGE_MODIFIER = 0.6
+local DEFAULT_WEAPON_DAMAGE_MODIFIER = 0.6
 local WEAPON_DAMAGE_MODIFIER_INTERVAL = 1000
 
 local whatItShouldBeModifier = nil
 
 local WEAPON_DAMAGE_MODIFIERS = {
-  [`WEAPON_SNOWBALL`] = 0.1,
+  [`WEAPON_SNOWBALL`] = 0.0,
   [`WEAPON_MUSKET`] = 0.7,
   [`WEAPON_SNIPERRIFLE`] = 2.0,
   [`WEAPON_COMBATPISTOL`] = 1.2,
@@ -33,12 +33,31 @@ local WEAPON_DAMAGE_MODIFIERS = {
   [`WEAPON_PUMPSHOTGUN_MK2`] = 0.35,
   [`WEAPON_SAWNOFFSHOTGUN`] = 0.30,
   [`WEAPON_BULLPUPSHOTGUN`] = 0.8,
-  [`WEAPON_NINJASTAR`] = 2.5,
-  [`WEAPON_NINJASTAR2`] = 2.5,
+  [`WEAPON_NINJASTAR`] = 2.0,
+  [`WEAPON_NINJASTAR2`] = 2.0,
   [`WEAPON_THROWINGKNIFE`] = 2.5,
+  [`WEAPON_UNARMED`] = 0.5,
+  [`WEAPON_NIGHTSTICK`] = 0.1,
+  [`WEAPON_BAT`] = 0.3,
+  [`WEAPON_DAGGER`] = 0.5,
+  [`WEAPON_BOTTLE`] = 0.5,
+  [`WEAPON_CROWBAR`] = 0.25,
+  [`WEAPON_FLASHLIGHT`] = 0.2,
+  [`WEAPON_HAMMER`] = 0.3,
+  [`WEAPON_HATCHET`] = 0.4,
+  [`WEAPON_KNUCKLE`] = 0.45,
+  [`WEAPON_KNIFE`] = 0.5,
+  [`WEAPON_MACHETE`] = 0.5,
+  [`WEAPON_SWITCHBLADE`] = 0.6,
+  [`WEAPON_WRENCH`] = 0.25,
+  [`WEAPON_BATTLEAXE`] = 0.4,
+  [`WEAPON_STONE_HATCHET`] = 0.4,
+  [`WEAPON_POOLCUE`] = 0.1,
+  [`WEAPON_KATANAS`] = 0.5,
+  [`WEAPON_SHIV`] = 0.7,
 }
 
--- GLOBAL WEAPON DAMAGE MODIFIER:
+-- WEAPON DAMAGE MODIFIER:
 Citizen.CreateThread(function()
   local lastSelectedWeapon = nil
   local lastCheck = 0
@@ -48,8 +67,8 @@ Citizen.CreateThread(function()
       local currentSelected = GetSelectedPedWeapon(PlayerPedId())
       if not lastSelectedWeapon or lastSelectedWeapon ~= currentSelected then
         lastSelectedWeapon = currentSelected
-        whatItShouldBeModifier = (WEAPON_DAMAGE_MODIFIERS[currentSelected] or GLOBAL_WEAPON_DAMAGE_MODIFIER)
-        SetPlayerWeaponDamageModifier(PlayerId(), whatItShouldBeModifier)
+        whatItShouldBeModifier = (WEAPON_DAMAGE_MODIFIERS[currentSelected] or DEFAULT_WEAPON_DAMAGE_MODIFIER)
+        SetWeaponDamageModifier(currentSelected, whatItShouldBeModifier)
       end
     end
     Wait(1)
@@ -60,13 +79,19 @@ end)
 Citizen.CreateThread(function()
   local lastCheck = 0
   while true do
-    if whatItShouldBeModifier and GetGameTimer() - lastCheck >= WEAPON_DAMAGE_MODIFIER_INTERVAL then
+    if GetGameTimer() - lastCheck >= WEAPON_DAMAGE_MODIFIER_INTERVAL then
       lastCheck = GetGameTimer()
-      local currentGlobalModifier = GetPlayerWeaponDamageModifier(PlayerId())
-      currentGlobalModifier = tonumber(string.format("%.3f", currentGlobalModifier))
-      if currentGlobalModifier ~= whatItShouldBeModifier then
-        SetPlayerWeaponDamageModifier(PlayerId(), whatItShouldBeModifier)
-        if GetSelectedPedWeapon(PlayerPedId()) ~= `WEAPON_UNARMED` then
+      if whatItShouldBeModifier then
+        local currentWeapon = GetSelectedPedWeapon(PlayerPedId())
+        local currentDamageModifier = GetWeaponDamageModifier(currentWeapon)
+        currentDamageModifier = tonumber(string.format("%.3f", currentDamageModifier))
+        if currentDamageModifier ~= whatItShouldBeModifier then
+          SetWeaponDamageModifier(currentWeapon, whatItShouldBeModifier)
+          TriggerServerEvent("usa:notifyStaff", "ANTICHEAT: Player with ID #" .. GetPlayerServerId(PlayerId()) .. " has modified their weapon damage! It was reset to what it should be.")
+        end
+      else
+        if GetPlayerWeaponDamageModifier(PlayerId()) ~= 1.0 then -- 1.0 being the default
+          SetPlayerWeaponDamageModifier(PlayerId(), 1.0)
           TriggerServerEvent("usa:notifyStaff", "ANTICHEAT: Player with ID #" .. GetPlayerServerId(PlayerId()) .. " has modified their weapon damage! It was reset to what it should be.")
         end
       end
