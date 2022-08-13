@@ -373,7 +373,15 @@ BUSINESSES = {
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 7500
-	}
+	},
+	["Hayes Auto (Rockford)"] = {
+		position = {-1428.1103515625, -458.63803100586, 35.90970993042},
+		cameraID = 'store52',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 10000,
+		purchasePercentage = 0.05
+	},
 }
 
 RegisterServerEvent("businesses:load")
