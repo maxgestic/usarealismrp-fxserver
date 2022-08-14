@@ -20,7 +20,7 @@ local markets = {
       --{ name = "AP Pistol", type = "weapon", hash = 0x22D8FE39, price = 20000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 2), objectModel = "w_pi_appistol" },
       { name = "AP Pistol Parts", price = 20000, type = "weaponParts", weight = 15.0, quantity = 1, stock = math.random(0, 2) },
       --{ name = "Sawn-off", type = "weapon", hash = 0x7846A318, price = 30000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 3), objectModel = "w_sg_sawnoff", },
-      { name = "Sawn-off Parts", price = 20000, type = "weaponParts", weight = 30.0, quantity = 1, stock = math.random(0, 3) },
+      { name = "Sawn-off Parts", price = 20000, type = "weaponParts", weight = 20.0, quantity = 1, stock = math.random(0, 3) },
       --{ name = "Micro SMG", type = "weapon", hash = 324215364, price = 35000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 2), objectModel = "w_sb_microsmg"},
       { name = "Micro SMG Parts", price = 25000, type = "weaponParts", weight = 30.0, quantity = 1, stock = math.random(0, 2) },
       --{ name = 'SMG', type = 'weapon', hash = 736523883, price = 45000, legality = 'illegal', quantity = 1, weight = 35, stock = math.random(0, 1), objectModel = "w_sb_smg"},

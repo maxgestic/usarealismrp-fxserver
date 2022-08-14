@@ -198,6 +198,26 @@ Config.recipes = {
             type = "weapons"
         },
         { 
+            name = "Sawn-off",
+            image = "https://i.imgur.com/iJsQmRs.png",
+            requires = {
+                { name = "Sawn-off Parts", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Sawn-off",
+                    hash = GetHashKey("WEAPON_SAWNOFFSHOTGUN"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 20,
+                    objectModel = "w_sg_sawnoffshotgun",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 2,
+            type = "weapons"
+        },
+        { 
             name = "Heavy Shotgun",
             image = "https://i.imgur.com/JRP4gPv.png",
             requires = {
