@@ -357,23 +357,23 @@ function CreateCharacter(data)
 
 -- can pass -1 as quantity to remove item completely
 -- supports passing in an item name as well as an entire item object (which performs extended field matching)
--- this function is kinda messy, note to anyone reading: it is better if we remove items by the removeByUUID function instead of using this...
   rTable.removeItem = function(item, quantity)
 
     quantity = (quantity or 1)
 
     local function decrementQuantity(tempItem)
       local newQuantity = tempItem.quantity - quantity
-      local quantityLeftToRemove = math.abs(quantity - tempItem.quantity)
       if quantity == -1 then
         newQuantity = 0
       end
       if newQuantity <= 0 then
         tempItem = nil
+        quantity = quantity - math.abs(newQuantity)
       else
         tempItem.quantity = newQuantity
+        quantity = 0
       end
-      return tempItem, quantityLeftToRemove
+      return tempItem
     end
     
     while (quantity > 0) do
@@ -386,7 +386,7 @@ function CreateCharacter(data)
               if self.inventory.items[i].type and self.inventory.items[i].type == "weapon" then
                 TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
               end
-              self.inventory.items[i], quantity = decrementQuantity(self.inventory.items[i])
+              self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
               itemFound = true
               break
             end
@@ -395,13 +395,13 @@ function CreateCharacter(data)
               if item.type and item.type == "weapon" then
                 if (item.serialNumber and item.serialNumber == self.inventory.items[i].serialNumber) or (item.uuid and item.uuid == self.inventory.items[i].uuid) then
                   TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
-                  self.inventory.items[i], quantity = decrementQuantity(self.inventory.items[i])
+                  self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
                   itemFound = true
                   break
                 end
               elseif item.type and (item.type == "magazine" or item.type == "ammo") then
                 if item.uuid == self.inventory.items[i].uuid then
-                  self.inventory.items[i], quantity = decrementQuantity(self.inventory.items[i])
+                  self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
                   if self.inventory.items[i] == nil then
                     return -- end if item was removed
                   end
@@ -409,7 +409,7 @@ function CreateCharacter(data)
                   break
                 end
               else
-                self.inventory.items[i], quantity = decrementQuantity(self.inventory.items[i])
+                self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
                 itemFound = true
                 break
               end
@@ -436,9 +436,6 @@ function CreateCharacter(data)
             self.inventory.items[tostring(i)].quantity = 0
           end
           if self.inventory.items[tostring(i)].quantity <= 0 then
-            if self.inventory.items[i].type and self.inventory.items[i].type == "weapon" then
-              TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
-            end
             self.inventory.items[tostring(i)] = nil
           end
           return
