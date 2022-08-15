@@ -5,6 +5,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = {1, 2, 3, 4},
 			hash = GetHashKey("pcvpi")
 		},
+		["p14tesla"] = {
+			rank = 4,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("p14tesla")
+		},
 		["p14charger"] = {
 			rank = 1,
 			allowedLiveries = {1, 2, 3},
@@ -176,6 +181,11 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = {1, 2, 3, 4, 5},
 			hash = GetHashKey("p20explorer")
+		},
+		["p14tesla"] = {
+			rank = 5,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("p14tesla")
 		},
 		["p14charger"] = {
 			rank = 4,

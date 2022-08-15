@@ -15,6 +15,7 @@ local vehicles = {
   { name = "Quad Bike", hash = GetHashKey("blazer") },
   { name = "Golf Cart", hash = GetHashKey("caddy") },
   { name = "2011 Ford CVPI", hash = GetHashKey("pcvpi") },
+  { name = "2014 Tesla Model S", hash = GetHashKey("p14tesla") },
   { name = "2014 Dodge Charger", hash = GetHashKey("p14charger") },
   { name = "2014 Chevorlet Tahoe", hash = GetHashKey("p14tahoe") },
   { name = "2016 Ford Explorer", hash = GetHashKey("p16explorer") },
