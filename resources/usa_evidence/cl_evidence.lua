@@ -154,7 +154,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
 		local playerPed = PlayerPedId()
-		if IsPedShooting(playerPed) and WeaponDropsEvidence(GetSelectedPedWeapon(playerPed))  then
+		if IsPedShooting(playerPed) and not NO_EVIDENCE_WEAPONS[GetSelectedPedWeapon(playerPed)] then
 			local playerCoords = GetEntityCoords(playerPed)
 			local playerWeapon = GetSelectedPedWeapon(playerPed)
 			TriggerServerEvent('evidence:newCasing', playerCoords, playerWeapon)
@@ -645,8 +645,4 @@ function HasEvidenceNamed(name)
 		end
 	end
 	return false
-end
-
-function WeaponDropsEvidence(wep)
-	return NO_EVIDENCE_WEAPONS[wep]
 end
