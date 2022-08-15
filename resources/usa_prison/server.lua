@@ -19,15 +19,16 @@ local WEAPONS = {
     { name = "Police Radio", type = "misc", rank = 1, weight = 5, price = 300 },
 	{ name = "7.62mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
 	{ name = "Empty 7.62mm Mag [10]", type = "magazine", price = 50, weight = 3, receives = "7.62mm", MAX_CAPACITY = 10, currentCapacity = 0 },
-	{ name = "9mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
-	{ name = ".45 Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
+	{ name = "9mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 15 },
+	{ name = ".45 Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 18 },
 	{ name = "Empty .45 Mag [18]", type = "magazine", price = 50, weight = 3, receives = ".45", MAX_CAPACITY = 18, currentCapacity = 0 },
     { name = "Empty 9mm Mag [12]", type = "magazine", price = 50, weight = 3, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0 },
     { name = "Empty 9mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "9mm", MAX_CAPACITY = 30, currentCapacity = 0 },
-	{ name = "5.56mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 20 },
+	{ name = "5.56mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 30 },
     { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0 },
 	{ name = "12 Gauge Shells", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
-	{ name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.25, quantity = 1 }
+	{ name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.25, quantity = 1 },
+    { name = "Flashbang", type = "weapon", hash = GetHashKey("WEAPON_FLASHBANG"), price = 150, weight = 2, rank = 5 }
 }
 
 for i = 1, #WEAPONS do
