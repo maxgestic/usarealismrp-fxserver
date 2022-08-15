@@ -397,6 +397,7 @@ local vehicleShopItems = {
 			{make = "Acura", model = "RSX (2004)", price = 70000, hash = "dc5", storage_capacity = 160.0},
 			--
 			{make = "Audi", model = "A6 (2020)", price = 130000, hash = "a6", storage_capacity = 220.0},
+			{make = "Audi", model = "e-tron GT", price = 140000, hash = "ocnetrongt", storage_capacity = 220.0},
 			{make = "Audi", model = "R8", price = 250000, hash = "r820", storage_capacity = 130.0},
 			{make = "Audi", model = "RS6", price = 170000, hash = "rs6", storage_capacity = 245.0},
 			{make = "Audi", model = "RS6 Avant (2020)", price = 160000, hash = "rs62", storage_capacity = 285.0},
@@ -501,11 +502,14 @@ local vehicleShopItems = {
 			{make = "Lamborghini", model = "Huracan LW", price = 750000, hash = "lwhuracan", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "LP 700R", price = 850000, hash = "lp700r", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Sian", price = 3800000, hash = "rmodsianr", storage_capacity = 130.0},
+			{make = "Lamborghini", model = "Terzo Millennio", price = 2800000, hash = "ocnlamtmc", storage_capacity = 130.0},
 			--
 			{make = "Lexus", model = "LC 500 (2020)", price = 155000, hash = "lc500", storage_capacity = 160.0},
 			{make = "Lexus", model = "LFA (2010)", price = 500000, hash = "lfa", storage_capacity = 120.0},
 			--
 			{make = "Lincoln", model = "Continental (Custom Wheels) (2020)", price = 90000, hash = "cont", storage_capacity = 220.0},
+			--
+			{make = "Lotus", model = "Evija", price = 2200000, hash = "evija", storage_capacity = 140.0},
 			--
 			{make = "Maserati", model = "GranTurismo (2016)", price = 200000, hash = "stradale18", storage_capacity = 160.0},
 			{make = "Maserati", model = "Levante Novitec", price = 150000, hash = "mlnovitec", storage_capacity = 185.0},
@@ -539,6 +543,7 @@ local vehicleShopItems = {
 			{make = "Porsche", model = "911 (1973)", price = 60000, hash = "porrs73", storage_capacity = 165.0},
 			{make = "Porsche", model = "928 GTS (1993)", price = 60000, hash = "928gts", storage_capacity = 160.0},
 			{make = "Porsche", model = "GT3", price = 280000, hash = "pgt3", storage_capacity = 160.0},
+			{make = "Porsche", model = "Taycan", price = 140000, hash = "taycan", storage_capacity = 180.0},
 			--
 			{make = "Rolls Royce", model = "Cullinan", price = 500000, hash = "cullinan", storage_capacity = 230.0},
 			{make = "Rolls Royce", model = "Wraith (2016)", price = 400000, hash = "wraith", storage_capacity = 220.0},
@@ -558,7 +563,9 @@ local vehicleShopItems = {
 			--
 			--{make = "Tesla", model = "Model S", price = 140000, hash = "models", storage_capacity = 170.0},
 			{make = "Tesla", model = "Model S", price = 125000, hash = "teslamodels", storage_capacity = 190.0},
-			{make = "Tesla", model = "Model X", price = 160000, hash = "teslax", storage_capacity = 185.0},
+			{make = "Tesla", model = "Model S (Prior Design)", price = 155000, hash = "teslapd", storage_capacity = 190.0},
+			{make = "Tesla", model = "Model X", price = 160000, hash = "teslax", storage_capacity = 220.0},
+			{make = "Tesla", model = "Roadster", price = 420000, hash = "tesroad20", storage_capacity = 120.0},
 			--
 			{make = "Volkswagon", model = "Golf GTI", price = 90000, hash = "golfgti", storage_capacity = 175.0},
 			{make = "Volkswagon", model = "Golf (MK3)", price = 60000, hash = "mk3", storage_capacity = 200.0},
