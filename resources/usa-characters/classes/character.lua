@@ -364,6 +364,7 @@ function CreateCharacter(data)
 
     local function decrementQuantity(tempItem)
       local newQuantity = tempItem.quantity - quantity
+      local quantityLeftToRemove = math.max(0, quantity - tempItem.quantity)
       if quantity == -1 then
         newQuantity = 0
       end
@@ -372,7 +373,6 @@ function CreateCharacter(data)
       else
         tempItem.quantity = newQuantity
       end
-      local quantityLeftToRemove = math.max(0, quantity - tempItem.quantity)
       return tempItem, quantityLeftToRemove
     end
     
