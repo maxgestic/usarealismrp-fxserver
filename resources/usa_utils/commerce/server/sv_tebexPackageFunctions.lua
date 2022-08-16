@@ -61,14 +61,16 @@ TEBEX_PACKAGE_FUNCTIONS = {
             { name = "5.56mm Bullets", type = "ammo", price = 600, weight = 0.5, quantity = 50, legality = "legal", objectModel = "prop_ld_ammo_pack_03"  },
             { name = "Police Armor", type = "misc", price = 5000, legality = "legal", quantity = 1, weight = 25, objectModel = "prop_bodyarmour_03" },
             { name = "Hand Grenade", type = "weapon", hash = GetHashKey("WEAPON_GRENADE"), weight = 15.0, quantity = 1 },
-            { name = "Brick", type = "weapon", hash = GetHashKey("WEAPON_BRICK"), weight = 15.0, quantity = 5 },
-            { name = "Ninja Star", type = "weapon", hash = GetHashKey("WEAPON_NINJASTAR"), weight = 5.0, quantity = 5 },
-            { name = "Ninja Star 2", type = "weapon", hash = GetHashKey("WEAPON_NINJASTAR2"), weight = 5.0, quantity = 5 },
-            { name = "Rock", type = "weapon", hash = GetHashKey("WEAPON_ROCK"), weight = 5.0, quantity = 5 },
-            { name = "Throwing Knife", type = "weapon", hash = GetHashKey("WEAPON_THROWINGKNIFE"), weight = 8.0, quantity = 5 },
+            { name = "Brick", type = "weapon", hash = GetHashKey("WEAPON_BRICK"), weight = 15.0, quantity = 10 },
+            { name = "Ninja Star", type = "weapon", hash = GetHashKey("WEAPON_NINJASTAR"), weight = 5.0, quantity = 10 },
+            { name = "Ninja Star 2", type = "weapon", hash = GetHashKey("WEAPON_NINJASTAR2"), weight = 5.0, quantity = 10 },
+            { name = "Rock", type = "weapon", hash = GetHashKey("WEAPON_ROCK"), weight = 5.0, quantity = 10 },
+            { name = "Throwing Knife", type = "weapon", hash = GetHashKey("WEAPON_THROWINGKNIFE"), weight = 8.0, quantity = 10 },
             { name = "Black Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOEBLACK"), weight = 8.0, quantity = 5 },
             { name = "Red Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOERED"), weight = 8.0, quantity = 5 },
-            { name = "Blue Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOEBLUE"), weight = 8.0, quantity = 5 }
+            { name = "Blue Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOEBLUE"), weight = 8.0, quantity = 5 },
+            { name = 'Hotwiring Kit', type = 'misc', price = 150, legality = 'illegal', quantity = 10, weight = 10 },
+            { name = 'Lockpick', type = 'misc', price = 150, legality = 'illegal', quantity = 10, weight = 5 }
         }
         local randomItem = itemPool[math.random(#itemPool)]
         char.giveItem(randomItem)
