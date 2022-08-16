@@ -452,6 +452,58 @@ DP.Dances = {
    {
        EmoteLoop = true
    }},
+   ["woowalkinx"] = {"divined@drpack@new", "woowalkinx", "Woo Walk", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["bloodwalk"] = {"divined@drpack@new", "bloodwalk", "Blood Walk", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["cripwalk3"] = {"divined@drpack@new", "cripwalk3", "Crip Walk", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["shootit"] = {"divined@drpack@new", "shootit", "Shoot Dance", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["millyrocks"] = {"divined@drpack@new", "millyrocks", "Milly Rock", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["shmoney"] = {"divined@drpack@new", "shmoney", "Shmoney Dance", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["dougie"] = {"divined@drpack@new", "dougie", "Dougie", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["haiphuthon"] = {"divined@drpack@new", "haiphuthon", "Haiphuthon", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["curvette"] = {"divined@drpack@new", "curvette", "Curvette", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["tokyochall"] = {"divined@drpack@new", "tokyochall", "Tokyo Challenge", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["thotiana"] = {"divined@drpack@new", "thotiana", "Thotiana", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["moodswings"] = {"divined@drpack@new", "moodswings", "Moodswings Dance", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
+   ["whatyouknowboutlove"] = {"divined@drpack@new", "whatyouknowboutlove", "Pop Love", AnimationOptions =
+   {
+       EmoteLoop = true
+   }},
 }
 
 DP.Emotes = {
