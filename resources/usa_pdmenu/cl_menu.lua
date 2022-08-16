@@ -190,13 +190,6 @@ end
 
 function AddCustomization(menu)
 	menuPool:TotalItemsPerPage(10)
-	local engineupgrades = {
-		"None",
-		"EMS Upgrade, Level 1",
-		"EMS Upgrade, Level 2",
-		"EMS Upgrade, Level 3",
-		"EMS Upgrade, Level 4"
-	}
 	SetVehicleModKit(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0)
 	-- liveries
 	local liveries = {}
@@ -230,11 +223,9 @@ function AddCustomization(menu)
 		table.insert(nameColors, k)
 	end
 	local color = UIMenuListItem.New("Color", nameColors)
-	local engines = UIMenuListItem.New("Engine Multiplier", engineupgrades, engineindex)
 	local settint = UIMenuSliderItem.New('Window Tint', tint, tintindex)
 	menu:AddItem(settint)
 	menu:AddItem(color)
-	menu:AddItem(engines)
 	checkExtras(menu)
 	menu.OnSliderChange = function(sender, item, index)
 		if item == setlivery then
@@ -286,22 +277,6 @@ function AddCustomization(menu)
 		x = item:IndexToItem(index)
 		SetVehicleColours(GetVehiclePedIsUsing(GetPlayerPed(-1)), colors[x], colors[x])	
 		ShowNotification('Applied: '..x)
-	end
-	engines.OnListSelected = function(sender, item, index)
-		local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
-		local engine = item:IndexToItem(index)
-		if engine == "EMS Upgrade, Level 1" then
-			SetVehicleMod(vehicle, 11, 0)
-		elseif engine == "EMS Upgrade, Level 2" then
-			SetVehicleMod(vehicle, 11, 1)
-		elseif engine == "EMS Upgrade, Level 3" then
-			SetVehicleMod(vehicle, 11, 2)
-		elseif engine == "EMS Upgrade, Level 4" then
-			SetVehicleMod(vehicle, 11, 3)
-		else
-			SetVehicleMod(vehicle, 11, -1)
-		end
-		ShowNotification('Applied: '.. (engine or "N/A"))
 	end
 end
 
