@@ -364,7 +364,6 @@ function CreateCharacter(data)
 
     local function decrementQuantity(tempItem)
       local newQuantity = tempItem.quantity - quantity
-      local quantityLeftToRemove = math.abs(quantity - tempItem.quantity)
       if quantity == -1 then
         newQuantity = 0
       end
@@ -373,6 +372,7 @@ function CreateCharacter(data)
       else
         tempItem.quantity = newQuantity
       end
+      local quantityLeftToRemove = math.max(0, quantity - tempItem.quantity)
       return tempItem, quantityLeftToRemove
     end
     
@@ -436,7 +436,7 @@ function CreateCharacter(data)
             self.inventory.items[tostring(i)].quantity = 0
           end
           if self.inventory.items[tostring(i)].quantity <= 0 then
-            if self.inventory.items[i].type and self.inventory.items[i].type == "weapon" then
+            if self.inventory.items[tostring(i)].type and self.inventory.items[tostring(i)].type == "weapon" then
               TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
             end
             self.inventory.items[tostring(i)] = nil

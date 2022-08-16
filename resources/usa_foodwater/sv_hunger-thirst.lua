@@ -58,10 +58,6 @@ AddEventHandler("foodwater:checkItemAge", function(item)
             end
 
         end
-        if invItem.quantity > 1 then -- for backwards compatibility just in case people have stacked food items rn
-            char.removeItemByUUID(invItem.uuid, 1)
-        else 
-            char.removeItemByUUID(invItem.uuid)
-        end
+        char.removeItemByUUID(invItem.uuid, 1)
     end
 end)
