@@ -133,7 +133,6 @@ AddEventHandler("dmv:orderCustomPlate", function(oldPlate, newPlate)
 						TriggerClientEvent("usa:notify", src, "~y~Fee:~w~ " .. exports.globals:comma_value(CUSTOM_PLATE_PRICE))
 						-- notify garages to bypass vehicle plate ownership check for a vehicle that was used to drive to the DMV
 						TriggerEvent("garage:notifyOfPlateChange", src, oldPlate, newPlate)
-
 						-- send to discord #dmv-log --
 						local url = GetConvar("dmv-log-webhook", "")
 						local owner_name = c.getFullName()
@@ -155,6 +154,11 @@ AddEventHandler("dmv:orderCustomPlate", function(oldPlate, newPlate)
 								}
 							}
 						}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+						-- update rcore_radiocar plate in DB
+						if exports.rcore_radiocar:HasCarRadio(oldPlate) then
+							exports.rcore_radiocar:RemoveRadioFromCar(oldPlate, function() print("removed old") end)
+							exports.rcore_radiocar:GiveRadioToCar(newPlate, function() print("added new") end)
+						end
 					end)
 				else
 					TriggerClientEvent("usa:notify", src, "Blacklisted phrase found")
