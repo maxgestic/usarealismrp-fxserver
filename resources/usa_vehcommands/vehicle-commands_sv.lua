@@ -87,7 +87,7 @@ local VEHICLE_RANKS = {
 		},
 		["as350"] = {
 			rank = 3,
-			allowedLiveries = {1, 3 },
+			allowedLiveries = {1, 3, 4, 5},
 			hash = 1346171487
 		},
 		["buzzard2"] = {
@@ -259,7 +259,7 @@ local VEHICLE_RANKS = {
 		},
 		["as350"] = {
 			rank = 2,
-			allowedLiveries = {1, 3},
+			allowedLiveries = {1, 3, 4, 5},
 			hash = 1346171487
 		},
 		["buzzard2"] = {
