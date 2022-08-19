@@ -1475,7 +1475,7 @@ function GetMakeModelPlate(plates, cb)
 end
 
 -- TESTING COMMAND --
-TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
+TriggerEvent('es:addGroupCommand', 'giveitem', "owner", function(source, args, char)
 	-- GIVING ITEM
 	local char = exports["usa-characters"]:GetCharacter(source)
 	--local lsd = {name = "LSD Vile", price = 6, type = "drug", quantity = 1, legality = "illegal", weight = 5.0, objectModel = "prop_cs_pour_tube"}
@@ -1522,14 +1522,23 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 	local glockParts = { name = "Glock Parts", type = "weaponParts", weight = 15.0, quantity = 1 }
 	local grenade = { name = "Hand Grenade", type = "weapon", hash = GetHashKey("WEAPON_GRENADE"), weight = 15.0, quantity = 1 }
 	local brick = { name = "Brick", type = "weapon", hash = GetHashKey("WEAPON_BRICK"), weight = 15.0, quantity = 1 }
-	local ninjaStar = { name = "Ninja Star", type = "weapon", hash = GetHashKey("WEAPON_NINJASTAR"), weight = 15.0, quantity = 1 }
+	local ninjaStar = { name = "Ninja Star", type = "weapon", hash = GetHashKey("WEAPON_NINJASTAR"), weight = 15.0, quantity = 10 }
 	local ninjaStar2 = { name = "Ninja Star 2", type = "weapon", hash = GetHashKey("WEAPON_NINJASTAR2"), weight = 15.0, quantity = 1 }
 	local rock = { name = "Rock", type = "weapon", hash = GetHashKey("WEAPON_ROCK"), weight = 15.0, quantity = 1 }
 	local throwingKnife = { name = "Throwing Knife", type = "weapon", hash = GetHashKey("WEAPON_THROWINGKNIFE"), weight = 15.0, quantity = 1 }
 	local blackShoe = { name = "Black Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOEBLACK"), weight = 15.0, quantity = 1 }
 	local customRadio = { name = "Custom Radio", type = "mechanicPart", weight = 15.0, quantity = 1 }
+	local copper = {name = "Copper", type = "misc", price = 125, legality = "legal", quantity = 1, weight = 10.0}
+	local bat = { name = "Bat", type = "weapon", hash = GetHashKey("WEAPON_BAT"), weight = 15.0, quantity = 1 }
 
-	local toGiveItem = blackShoe
+	local toGiveItem = exports.usa_rp2:getItem("Narlee")
+
+	if args[2] then
+		table.remove(args, 1)
+		local itemName = table.concat(args, " ")
+		toGiveItem = exports.usa_rp2:getItem(itemName)
+	end
+
 	toGiveItem.quantity = (toGiveItem.quantity or 1)
 
 	toGiveItem.uuid = exports.globals:generateID()

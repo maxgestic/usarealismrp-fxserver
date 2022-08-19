@@ -99,9 +99,16 @@ AddEventHandler('vns_cs_wheel:give', function(s, reward, securityToken)
 			TriggerClientEvent("usa:notify", s, "You won a car!!", "INFO: " .. "You won a " .. vehicle.make .. " " .. vehicle.model .. "! Congratulations!! Check your garage!!")
 		elseif reward.type == 'item' then
 			print("won item: " .. reward.count .. " " .. reward.name)
-			local item = exports.usa_rp2:getItem(reward.name)
-			item.quantity = reward.count
-			char.giveItem(item)
+			if reward.name == "Trading Card" then
+				-- choose random trading card item to give
+				local tradingCardItems = exports.usa_rp2:getAllItemsByFieldVal("type", "tradingCard")
+				local randomCard = tradingCardItems[math.random(#tradingCardItems)]
+				char.giveItem(randomCard)
+			else
+				local item = exports.usa_rp2:getItem(reward.name)
+				item.quantity = reward.count
+				char.giveItem(item)
+			end
 			TriggerClientEvent("usa:notify", s, "Won: " .. reward.name .. "!", "INFO: " .. "You won " .. reward.name .. "!")
 		elseif reward.type == 'money' then
 			print("won money")
@@ -118,3 +125,5 @@ RegisterServerEvent('vns_cs_wheel:stoproll')
 AddEventHandler('vns_cs_wheel:stoproll', function()
 	isRoll = false
 end)
+
+-- todo: hardcode reward.name to be a trading card so we can test real fast and then move on!!

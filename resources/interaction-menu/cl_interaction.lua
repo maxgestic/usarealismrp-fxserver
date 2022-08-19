@@ -1196,6 +1196,8 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerEvent("mechanic:usedPart", wholeItem)
 	elseif itemName == "Beer Pong Kit" then
 		ExecuteCommand("createbeerpong")
+	elseif wholeItem.type and wholeItem.type == "tradingCard" then
+		TriggerServerEvent("trading-cards:use", wholeItem)
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end

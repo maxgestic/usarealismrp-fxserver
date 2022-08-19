@@ -59,7 +59,7 @@ Config.Prices = {
 	[6]  = {type = 'item', 		name = 'Speaker', 		count = 5, 	sound = 'win', 		probability = {a =  40, b =  60}},	--  2.0 %   6.0 -- 10.000 RP
 	[7]  = {type = 'item', 		name = 'Firework Gun', 		count = 1, 	sound = 'win', 	probability = {a =  60, b =  80}},	--  4.0 %   8.0 -- CLOTHING
 	[8]  = {type = 'money', 	name = 'money', 		count = 10000, 		sound = 'mystery', 	probability = {a =  80, b = 120}},	--  4.0 %  12.0 -- MYSTERY
-	[9]  = {type = 'item', 		name = 'Large Firework', 		count = 10, 	sound = 'chips', 	probability = {a = 120, b = 170}},	--  5.0 %  17.0 -- 20.000 chips
+	[9]  = {type = 'item', 		name = 'Trading Card', 		count = 1, 	sound = 'chips', 	probability = {a = 120, b = 170}},	--  5.0 %  17.0 -- 20.000 chips
 	[10] = {type = 'money', 	name = 'money', 		count = 10000, 	sound = 'win', 		probability = {a = 170, b = 220}},	--  5.0 %  22.0 -- 7.500 RP
 	[11] = {type = 'item',		name = 'Large Firework', 		count = 5, 	sound = 'clothes', 	probability = {a = 220, b = 280}},	--  6.0 %  28.0 -- CLOTHING
 	[12] = {type = 'item', 		name = 'Firework Projectile', 		count = 10, 	sound = 'chips', 	probability = {a = 280, b = 340}},	--  6.0 %  34.0 -- 15.000 chips
