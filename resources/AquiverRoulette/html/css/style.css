@@ -1,0 +1,109 @@
+body {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.roulette-texts {
+  position: absolute;
+  color: gainsboro;
+  text-align: center;
+  top: 9%;
+  font-weight: bold;
+  -webkit-transform: rotate(-1deg);
+          transform: rotate(-1deg);
+}
+
+.roulette-texts .big {
+  font-size: 1.8vw;
+}
+
+.roulette-texts .small {
+  font-size: 2vw;
+  color: lightgreen;
+}
+
+.roulette-panels {
+  position: absolute;
+  left: 1%;
+  top: 35%;
+  max-width: 17vw;
+}
+
+.roulette-panels .panel-header {
+  position: relative;
+  width: 100%;
+  color: gainsboro;
+  font-size: 1.1vw;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: .5vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.roulette-panels .panel-header img {
+  margin-right: .5vw;
+}
+
+.roulette-panels .roulette-main-panel {
+  color: gainsboro;
+  background: rgba(0, 0, 0, 0.65);
+  padding: .25vw;
+  font-size: .9vw;
+  border-radius: .1vw;
+}
+
+.roulette-panels .roulette-main-panel .log-open {
+  position: absolute;
+  right: -1.5vw;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  padding: .25vw;
+  border-radius: .1vw;
+}
+
+.roulette-panels .roulette-main-panel .log-open:hover {
+  color: lightgreen;
+}
+
+.roulette-panels .roulette-main-panel .text {
+  width: 100%;
+  margin-top: 1vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.roulette-panels .roulette-main-panel .text:first-child {
+  margin-top: 0;
+}
+
+.roulette-panels .roulette-main-panel .text img {
+  margin-right: .5vw;
+}
+
+.roulette-panels .roulette-log-panel {
+  color: gainsboro;
+  background: rgba(5, 5, 5, 0.65);
+  margin-top: .5vw;
+  padding: .25vw;
+  border-radius: .1vw;
+  font-size: .75vw;
+  max-height: 17vw;
+  overflow: auto;
+}
+
+.roulette-panels .roulette-log-panel .text {
+  width: 100%;
+  margin: .25vw 0;
+}
+/*# sourceMappingURL=style.css.map */

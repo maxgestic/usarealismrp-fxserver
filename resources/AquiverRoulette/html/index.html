@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <script src="DEP/vue.js"></script>
+    <script src="DEP/jquery.js"></script>
+    <script src="DEP/howler.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="DEP/animate.css">
+    <link rel="stylesheet" href="DEP/defaultstyle.css">
+</head>
+
+<body>
+    <template id="app">
+        <transition enter-active-class="animate__animated animate__fadeIn"
+            leave-active-class="animate__animated animate__fadeOut">
+            <div class="kozeprehuz" v-if="opened">
+                <div class="roulette-texts">
+                    <div class="big">{{ statusmessage }}</div>
+                    <br>
+                    <div class="small">{{ timeLeft }}</div>
+                </div>
+
+                <div class="roulette-panels" v-if="show">
+                    <div class="panel-header"><img style="height: 1.6vw;" src="./img/avlogo_nobg.png" alt=""> Roulette
+                    </div>
+                    <div class="roulette-main-panel">
+                        <div class="text"><img style="height: 1.5vw;" src="./img/chips100.png" alt=""> {{ chipsAmount }}
+                        </div>
+                        <div class="text"><img style="height: 1.5vw;" src="./img/chips.png" alt=""> {{ roundBets }}
+                        </div>
+                        <div class="text"><img style="height: 1.5vw;" src="./img/chips.png" alt=""> {{ betInput }}</div>
+                    </div>
+                    <div v-if="logs.length > 0" class="roulette-log-panel">
+                        <div class="text" v-for="(log, index) in logs">{{ log }}</div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </template>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
