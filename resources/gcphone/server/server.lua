@@ -35,7 +35,7 @@ AddEventHandler("gcPhone:getPhone", function()
 	if phone then
 		TriggerClientEvent("gcPhone:togglePhone", source)
 	else
-		TriggerClientEvent("usa:notify", source, "You have no cell phone!")
+		TriggerClientEvent("usa:notify", source, "You have no cell phone!", "INFO: You need to buy a cell phone from a GENERAL STORE!")
 	end
 end)
 
