@@ -4,6 +4,8 @@
 
 local WITHDRAW_FEE = 50
 local IMPOUND_FEE = 500
+local AUTOMATIC_TOW_SERVICE_FEE = 700
+local AUTOMATIC_TOW_DISTANCE_PER_UNIT_FEE = 1
 
 local recentlyChangedPlates = {}
 
@@ -38,7 +40,7 @@ AddEventHandler("garage:storeKey", function(plate)
 end)
 
 RegisterServerEvent("garage:storeVehicle")
-AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, required_jobs)
+AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, required_jobs, garageCoords)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local isAuthorized = false
 	local usource = source
@@ -64,7 +66,7 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, require
 				numberPlateText = exports.globals:trim(numberPlateText)
 				if numberPlateText == vehicle then -- make sure player owns it
 					TriggerEvent('es:exposeDBFunctions', function(couchdb)
-						couchdb.updateDocument("vehicles", numberPlateText, { stored = true }, function(doc, err, rtext)
+						couchdb.updateDocument("vehicles", numberPlateText, { stored = true, stored_location = garageCoords }, function(doc, err, rtext)
 							TriggerClientEvent("garage:storeVehicle", usource)
 						end)
 					end)
@@ -93,20 +95,37 @@ end)
 
 -- ask to retrieve vehicle from garage --
 RegisterServerEvent("garage:vehicleSelected")
-AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoords)
+AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoords, garageCoords)
 	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local vehicles = char.get("vehicles")
 	local money = char.get("money")
+
+	if vehicle.stored_location then
+		local varType = type(vehicle.stored_location)
+		if varType == "string" then -- means it is stored at a property (will be the name of the property)
+			TriggerClientEvent("usa:notify", usource, "~y~Sorry!~s~ That vehicle is not stored at any of our garages.")
+			return
+		elseif varType == "table" then -- means it is stored at a public garage (will be an object with x,y,z coords)
+			local storedGarageCoords = vector3(vehicle.stored_location.x, vehicle.stored_location.y, vehicle.stored_location.z)
+			local atGarageCoordsVector = vector3(garageCoords.x, garageCoords.y, garageCoords.z)
+			if #(atGarageCoordsVector - storedGarageCoords) > 15 then
+				local automaticTowCost = calculateAutomaticTowCost(storedGarageCoords, atGarageCoordsVector)
+				TriggerClientEvent("garage:toggleModal", usource, vehicle.plate, vehicle.stored_location, automaticTowCost, atGarageCoordsVector)
+				return
+			end
+		end
+	end
+
 	vehicle.upgrades = exports["usa_mechanicjob"]:GetUpgradeObjectsFromIds(vehicle.upgrades)
-	if vehicle.impounded == true and not vehicle.stored_location then
+	if vehicle.impounded == true then
 		if money >= IMPOUND_FEE then
 			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Vehicle retrieved from the impound! Fee: ~y~$"..IMPOUND_FEE..".00")
 			GetVehicleCustomizations(vehicle.plate, function(customizations)
 				vehicle.customizations = customizations
 				TriggerClientEvent("garage:vehicleStored", usource, vehicle)
 				TriggerEvent('es:exposeDBFunctions', function(couchdb)
-					couchdb.updateDocument("vehicles", vehicle.plate, { impounded = false, stored = false }, function()
+					couchdb.updateDocument("vehicles", vehicle.plate, { impounded = false, stored = false, stored_location = "deleteMePlz!" }, function()
 						char.removeMoney(IMPOUND_FEE)
 						if business then
 							exports["usa-businesses"]:GiveBusinessCashPercent(business, IMPOUND_FEE)
@@ -117,7 +136,7 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoor
 		else
 			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Your vehicle is impounded and can be retrieved for ~y~$"..IMPOUND_FEE..".00~s~!")
 		end
-	elseif vehicle.stored == true and not vehicle.stored_location then
+	elseif vehicle.stored == true then
 		local doPay = true
 		if isAtProperty(char, playerCoords) then
 			doPay = false
@@ -130,7 +149,7 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoor
 			vehicle.customizations = customizations
 			TriggerClientEvent("garage:vehicleStored", usource, vehicle)
 			TriggerEvent('es:exposeDBFunctions', function(couchdb)
-				couchdb.updateDocument("vehicles", vehicle.plate, { stored = false }, function()
+				couchdb.updateDocument("vehicles", vehicle.plate, { stored = false, stored_location = "deleteMePlz!" }, function()
 					if doPay then
 						char.removeMoney(WITHDRAW_FEE)
 						TriggerClientEvent("usa:notify", usource, "Vehicle retrieved from garage! Fee: ~y~$" .. WITHDRAW_FEE ..'.00')
@@ -140,8 +159,6 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoor
 				end)
 			end)
 		end)
-	else
-		TriggerClientEvent("usa:notify", usource, "~y~Sorry!~s~ That vehicle is not stored at any of our garages.")
 	end
 end)
 
@@ -164,6 +181,27 @@ AddEventHandler("garage:openMenu", function(required_jobs, _closest_shop)
 		GetVehiclesForMenu(char.get("vehicles"), function(vehs)
 			TriggerClientEvent("garage:openMenuWithVehiclesLoaded", usource, vehs, _closest_shop)
 		end)
+	end
+end)
+
+RegisterServerEvent("garage:automaticTow")
+AddEventHandler("garage:automaticTow", function(vehPlate, garageCoords)
+	local src = source
+	local char = exports["usa-characters"]:GetCharacter(src)
+	-- calculate cost (distance from player to veh stored location)
+	local storedCoords = exports.essentialmode:getDocument("vehicles", vehPlate).stored_location
+	storedCoords = vector3(storedCoords.x, storedCoords.y, storedCoords.z)
+	local cost = calculateAutomaticTowCost(storedCoords, garageCoords)
+	if char.get("bank") >= cost then
+		-- update vehicle stored_location to garageCoords
+		local new = { x = garageCoords.x, y = garageCoords.y, z = garageCoords.z }
+		exports.essentialmode:updateDocument("vehicles", vehPlate, { stored_location = new })
+		-- take money from user
+		char.removeBank(cost)
+		-- notify
+		TriggerClientEvent("usa:notify", src, "Vehicle transfered!", "INFO: Vehicle transfer successful!")
+	else
+		TriggerClientEvent("usa:notify", src, "Not enough money!", "INFO: Not enough money!")
 	end
 end)
 
@@ -231,4 +269,10 @@ function isAtProperty(char, coords)
 		return false
 	end
 	return exports.globals:getCoordDistance({x = gcoords[1], y = gcoords[2], z = gcoords[3]}, coords) < 10.0
+end
+
+function calculateAutomaticTowCost(startCoord, endCoord)
+	local dist = #(startCoord - endCoord)
+	local cost = AUTOMATIC_TOW_SERVICE_FEE + (AUTOMATIC_TOW_DISTANCE_PER_UNIT_FEE * dist)
+	return math.floor(cost)
 end

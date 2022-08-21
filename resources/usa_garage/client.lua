@@ -128,7 +128,7 @@ Citizen.CreateThread(function()
 					local handle = GetVehiclePedIsIn(ped, false)
 					local numberPlateText = GetVehicleNumberPlateText(handle)
 					numberPlateText = exports.globals:trim(numberPlateText)
-					TriggerServerEvent("garage:storeVehicle", handle, numberPlateText, info["jobs"])
+					TriggerServerEvent("garage:storeVehicle", handle, numberPlateText, info["jobs"], info)
 				else
 					closest_shop = info
 					TriggerServerEvent("garage:openMenu", info["jobs"])

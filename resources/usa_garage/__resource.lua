@@ -29,7 +29,7 @@ client_scripts {
     "@NativeUI/UIMenu/UIMenu.lua",
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
-    'menu.lua',
+    'menus/*.lua',
     'client.lua'
 }
 

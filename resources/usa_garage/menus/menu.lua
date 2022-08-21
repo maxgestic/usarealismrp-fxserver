@@ -14,7 +14,7 @@ _menuPool:Add(mainMenu)
 RegisterNetEvent("garage:openMenuWithVehiclesLoaded")
 AddEventHandler("garage:openMenuWithVehiclesLoaded", function(userVehicles, _closest_shop)
 	if _closest_shop then closest_shop = _closest_shop end
-	CreateGarageMenu(mainMenu, userVehicles)
+	CreateGarageMenu(mainMenu, userVehicles, closest_shop)
 	local playerPed = PlayerPedId()
 	while mainMenu:Visible() do
 		Citizen.Wait(0)
@@ -27,7 +27,8 @@ AddEventHandler("garage:openMenuWithVehiclesLoaded", function(userVehicles, _clo
 end)
 -- end custom events --
 
-function CreateGarageMenu(menu, vehicles)
+function CreateGarageMenu(menu, vehicles, garageCoords)
+	local mycoords = GetEntityCoords(PlayerPedId())
 	-- remove any previous versions --
 	mainMenu:Clear()
 	-- Add vehicles to menu --
@@ -40,7 +41,16 @@ function CreateGarageMenu(menu, vehicles)
 		end
 		buttonText = buttonText .. vehicle.model .. " [" .. vehicle.plate .. "]"
 		if vehicle.stored_location then
-			buttonText = buttonText .. " (at " .. vehicle.stored_location .. ")"
+			local varType = type(vehicle.stored_location)
+			if varType == "string" then
+				buttonText = buttonText .. " (stored at " .. vehicle.stored_location .. ")"
+			elseif varType == "table" then
+				if #(mycoords - vector3(vehicle.stored_location.x, vehicle.stored_location.y, vehicle.stored_location.z)) > 15 then
+					buttonText = buttonText .. " (stored at other)"
+				else
+					buttonText = buttonText .. " (~g~Stored~s~)"
+				end
+			end
 		elseif vehicle.impounded == true then
 			buttonText = buttonText .. " (~y~Impounded~s~)"
 		elseif vehicle.stored == false then
@@ -54,12 +64,12 @@ function CreateGarageMenu(menu, vehicles)
 			local business = (exports["usa-businesses"]:GetClosestStore(15) or "")
 			if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= 0 then
 				if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
-					TriggerServerEvent("garage:vehicleSelected", vehicle, business, GetEntityCoords(PlayerPedId()))
+					TriggerServerEvent("garage:vehicleSelected", vehicle, business, GetEntityCoords(PlayerPedId()), garageCoords)
 				else
 					TriggerEvent("usa:notify", "You must be in the driver's seat!")
 				end
 			else
-				TriggerServerEvent("garage:vehicleSelected", vehicle, business, GetEntityCoords(PlayerPedId()))
+				TriggerServerEvent("garage:vehicleSelected", vehicle, business, mycoords, garageCoords)
 			end
 			-- close menu --
 			mainMenu:Visible(not mainMenu:Visible())

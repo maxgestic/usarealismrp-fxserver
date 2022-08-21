@@ -506,5 +506,42 @@ AddEventHandler('es:exposeDBFunctions', function(cb)
 	cb(exposedDB)
 end)
 
--- Why the fuck is this required?
-local theTestObject, jsonPos, jsonErr = json.decode('{"test":"tested"}')
+exports("getDocument", function(db, docID)
+	local retVal = nil
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docID, function(err, rText, headers)
+		-- nil check --
+		if not rText or err == 404 then
+			retVal = false
+		end
+		-- decode json --
+		local data = json.decode(rText)
+		if data and err == 200 then
+			retVal = data
+		else
+			retVal = false
+		end
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+	while retVal == nil do
+		Wait(1)
+	end
+	return retVal
+end)
+
+exports("updateDocument", function(db, docID, updates)
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docID, function(err, rText, headers)
+		if err ~= 404 then
+			local doc = json.decode(rText)
+			for i in pairs(updates) do
+				if updates[i] ~= "deleteMePlz!" then
+					doc[i] = updates[i]
+				else 
+					doc[i] = nil
+				end
+			end
+			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docID, function(err, rText, headers)
+				print("put err: " .. err)
+				print("put rText: " .. rText)
+			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+		end
+	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+end)
