@@ -56,7 +56,7 @@ Config.Prices = {
 	[3]  = {type = 'item', 		name = 'Vape',	 		count = 3, 		sound = 'clothes', 	probability = {a =   5, b =  10}},	--  0.5 %   1.0 -- CLOTHING
 	[4]  = {type = 'item', 		name = 'Speaker', 		count = 3, 	sound = 'chips', 	probability = {a =  10, b =  20}},	--  1.0 %   2.0 -- 25.000 chips
 	[5]  = {type = 'money', 	name = 'money', 		count = 30000, 	sound = 'cash', 	probability = {a =  20, b =  40}},	--  2.0 %   4.0 -- 40.000 $
-	[6]  = {type = 'item', 		name = 'Speaker', 		count = 5, 	sound = 'win', 		probability = {a =  40, b =  60}},	--  2.0 %   6.0 -- 10.000 RP
+	[6]  = {type = 'item', 		name = 'Speaker', 		count = 1, 	sound = 'win', 		probability = {a =  40, b =  60}},	--  2.0 %   6.0 -- 10.000 RP
 	[7]  = {type = 'item', 		name = 'Firework Gun', 		count = 1, 	sound = 'win', 	probability = {a =  60, b =  80}},	--  4.0 %   8.0 -- CLOTHING
 	[8]  = {type = 'money', 	name = 'money', 		count = 10000, 		sound = 'mystery', 	probability = {a =  80, b = 120}},	--  4.0 %  12.0 -- MYSTERY
 	[9]  = {type = 'item', 		name = 'Trading Card', 		count = 1, 	sound = 'chips', 	probability = {a = 120, b = 170}},	--  5.0 %  17.0 -- 20.000 chips
