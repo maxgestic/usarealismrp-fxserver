@@ -1306,6 +1306,14 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- disable auto lock when using controllers
+Citizen.CreateThread(function()
+	while true do
+	  Citizen.Wait(100)
+	  SetPlayerTargetingMode(3)
+	end
+  end)
+
 -- getting drunk / high effect
 function intoxicate(playScenario, clipset, intensity)
 	local ped = GetPlayerPed(-1)
