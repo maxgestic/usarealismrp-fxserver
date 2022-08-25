@@ -301,6 +301,7 @@ var itemImages = {
     "Blue Shoe": "https://i.imgur.com/Y095wVA.png",
     "Red Shoe": "https://i.imgur.com/SG1z8y3.png",
     "Throwing Knife": "https://i.imgur.com/1AS5hrt.png",
+    // begin card images
     "Narlee": "https://i.imgur.com/KrPw4gk.png",
     "Red Eyes B. Dragon": "https://i.imgur.com/UWCQHC3.jpeg",
     "Dark Magician": "https://i.imgur.com/1XmmhfW.png",
@@ -443,6 +444,7 @@ var itemImages = {
     ".45 Mag [16]": "https://i.imgur.com/YqtNNv6.png",
     ".45 Mag [18]": "https://i.imgur.com/YqtNNv6.png",
     ".45 Mag [30]": "https://i.imgur.com/1mT0fNP.png",
+    "12 Gauge Shells Mag [6]": "https://i.imgur.com/ZrYGbgZ.png",
     "Pistol Extended Mag": "https://i.imgur.com/3m72QvM.png",
     "SNS Pistol Extended Mag": "https://i.imgur.com/1mT0fNP.png",
     "Heavy Pistol Extended Mag": "https://i.imgur.com/1mT0fNP.png",
