@@ -1,5 +1,5 @@
 local DISCORD_NAME = "USARRP • Discord Logs"
-local DISCORD_IMAGE = "https://i.imgur.com/cQ9dnpo.png" -- default is FiveM logo
+local DISCORD_IMAGE = "https://i.imgur.com/3ynbItb.jpeg" -- default is FiveM logo
 
 AddEventHandler('erp_adminmenu:discord', function(name, message, color, webhook) sendToDiscord(name, message, color, webhook) end)
 
