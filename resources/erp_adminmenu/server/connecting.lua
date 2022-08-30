@@ -96,7 +96,7 @@ RegisterNetEvent('playerJoining', function()
     end
     
     local message = "Player: **"..GetPlayerName(source).."** (**"..source.."**)\nSteam: **"..steamid.."**".."\nFiveM: **"..fivem.."**\nLicense: **"..license.."**\nDiscord: **"..discord.."**\nIP: **||"..ip.."||**"
-    sendToDiscord('Player Connecting', message, "2676322", GetConvar("discordWebhook", ""))
+    --sendToDiscord('Player Connecting', message, "2676322", GetConvar("discordWebhook", ""))
 end)
 
 AddEventHandler('playerDropped', function(reason)
@@ -122,5 +122,5 @@ AddEventHandler('playerDropped', function(reason)
     end
 
     local message = "Player: **"..GetPlayerName(source).."** (**"..source.."**)\nReason: **"..reason.."**\nSteam: **"..steamid.."**".."\nFiveM: **"..fivem.."**\nLicense: **"..license.."**\nDiscord: **"..discord.."**\nIP: **||"..ip.."||**"
-    sendToDiscord('Player Leaving', message, "15730953", GetConvar("discordWebhook", ""))
+    --sendToDiscord('Player Leaving', message, "15730953", GetConvar("discordWebhook", ""))
 end)
