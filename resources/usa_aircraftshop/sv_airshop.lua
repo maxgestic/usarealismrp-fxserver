@@ -4,7 +4,8 @@ local ITEMS = {
         ["Frogger"] = { name = "Frogger", hash = "frogger", price = 75000},
         ["Supervolito"] = { name = "Supervolito", hash = "supervolito", price = 75000},
         ["Swift"] = { name = "Swift", hash = "swift", price = 85000},
-        ["Swift 2"] = { name = "Swift 2", hash = "swift2", price = 90000}
+        ["Swift 2"] = { name = "Swift 2", hash = "swift2", price = 90000},
+        ["Buckingham"] = { name = "Conada", hash = "conada", price = 110000}
     },
     planes = {
         ["Cuban 800"] = { name = "Cuban 800", hash = "cuban800", price = 70000},
