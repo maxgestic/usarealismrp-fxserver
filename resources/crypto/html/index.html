@@ -1,0 +1,276 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+            integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+            crossorigin="anonymous"
+        />
+
+        <link rel="stylesheet" type="text/css" href="./dep/defaultstyle.css" />
+        <link rel="stylesheet" type="text/css" href="./css/cryptomarket.css" />
+        <link rel="stylesheet" type="text/css" href="./dep/animate.css" />
+
+        <script src="./dep/chart.js"></script>
+        <script src="./dep/vue_chart.js"></script>
+
+        <script src="./dep/lodash-set.js"></script>
+        <script src="./dep/jquery.js"></script>
+        <script src="./dep/howler.js"></script>
+        <script src="./dep/vue.js"></script>
+        <script src="./dep/vue-tooltip.js"></script>
+    </head>
+
+    <body>
+        <template id="cryptomarket">
+            <transition
+                enter-active-class="animate__animated animate__fadeIn animate__faster"
+                leave-active-class="animate__animated animate__fadeOut animate__faster"
+            >
+                <div v-if="opened" class="kozeprehuz">
+                    <div class="cryptomarket-parent">
+                        <div class="cryptomarket-header">
+                            {{ _U('crypto_header') }}
+                            <i style="position: absolute; right: 4%" @click="opened = false" class="fas fa-times"></i>
+                        </div>
+                        <div class="cryptomarket-menu">
+                            <div
+                                @mouseenter="hoverEffekt"
+                                @click="page = 1; selected = null"
+                                :class="page == 1 ? 'crypto-menu-entry active' : 'crypto-menu-entry'"
+                            >
+                                {{ _U('page_homepage') }}
+                            </div>
+                            <div @mouseenter="hoverEffekt" @click="page = 3;" :class="page == 3 ? 'crypto-menu-entry active' : 'crypto-menu-entry'">
+                                {{ _U('page_my_account')}}
+                            </div>
+                            <div @mouseenter="hoverEffekt" @click="page = 4;" :class="page == 4 ? 'crypto-menu-entry active' : 'crypto-menu-entry'">
+                                {{ _U('page_send_crypto') }}
+                            </div>
+                            <div class="crypomarket-my-wallet">
+                                <div class="crypto-usd-icon"></div>
+                                {{ cryptoBalance }}
+                            </div>
+                        </div>
+
+                        <div v-if="page == 4" class="cryptomarket-payments-parent">
+                            <div class="cryptomarket-payments-text">{{ _U('your_wallethash') }} <b>{{ playerWalletHash }}</b></div>
+                            <div class="cryptomarket-payments-header">{{ _U('send_crypto_header') }}</div>
+                            <div class="cryptomarket-account-block">
+                                <select v-model="paymentSelected">
+                                    <option v-for="(a,index) in cryptos" v-bind:value="a.asset_id">{{a.name}} ({{ a.asset_id }})</option>
+                                </select>
+                                <div v-if="paymentSelected" class="cryptomarket-account-header">
+                                    You have <b>{{ getPlayerCryptoAmount }}</b> {{ paymentSelected }}.
+                                </div>
+                                <input
+                                    @input="searchWallet"
+                                    placeholder="Target ID / walletHash"
+                                    v-model="form.target"
+                                    class="cryptomarket-account-input"
+                                    type="text"
+                                />
+                                <input placeholder="Amount" v-model="form.send" class="cryptomarket-account-input" type="number" />
+                                <div v-if="targetWalletHash" class="cryptomarket-account-text">
+                                    {{ _U('target_wallethash') }}
+                                    <br />
+                                    <b>{{targetWalletHash}}</b>
+                                </div>
+                                <div v-if="paymentSelected" @click="sendCryptoToTarget" class="cryptomarket-account-button">Send crypto</div>
+                            </div>
+                            <div class="cryptomarket-payments-header">{{ _U('recent_payments') }}</div>
+                            <table class="payments-table">
+                                <tr>
+                                    <th style="width: 40%">from</th>
+                                    <th>to</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                </tr>
+                                <tr v-for="(a,index) in getPlayerPayments">
+                                    <td v-tooltip="a.fromWallet">{{a.fromWallet}}</td>
+                                    <td v-tooltip="a.toWallet">{{a.toWallet}}</td>
+                                    <td>{{a.date}}</td>
+                                    <td>{{a.amount}} {{a.crypto}}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div v-if="page == 3" class="cryptomarket-account-parent">
+                            <div class="cryptomarket-account-header">{{ _U('account_balance') }}</div>
+                            <div class="cryptomarket-account-block">
+                                <div class="cryptomarket-account-header">Bank Account <b>Balance</b></div>
+                                <div class="cryptomarket-account-text">You have <b>${{ bankBalance }}</b> in your bank account.</div>
+                                <input v-model="form.deposit" class="cryptomarket-account-input" type="number" />
+                                <div @click="depositCrypto" class="cryptomarket-account-button">{{ _U('deposit') }}</div>
+                            </div>
+                            <div class="cryptomarket-account-block">
+                                <div class="cryptomarket-account-header">Crypto <b>Balance</b></div>
+                                <div class="cryptomarket-account-text">You have <b>${{ cryptoBalance }}</b> in your cryptomarket account.</div>
+                                <input v-model="form.withdraw" class="cryptomarket-account-input" type="number" />
+                                <div @click="withdrawCrypto" class="cryptomarket-account-button">{{ _U('withdraw') }}</div>
+                            </div>
+                            <div class="cryptomarket-account-header">Portfolio</div>
+                            <div class="cryptomarket-mycrypto-entry" v-for="(a,index) in PlayerOwnedCryptos">
+                                <div :style="{ 'backgroundImage': 'url(img/' + a.asset_id + '.png)'  }" class="crypto-icon"></div>
+                                <div class="crypto-name">{{ a.asset_id }}</div>
+                                <div v-tooltip="a.amount" class="crypto-amount">{{ a.amount }}</div>
+                            </div>
+                        </div>
+
+                        <div class="cryptomarket-selected-parent" v-if="page == 2 && getSelected">
+                            <div class="cryptomarket-selected-transactions">
+                                <div class="transactions-header">{{ _U('latest_transactions') }}</div>
+                                <table class="transactions-table">
+                                    <tr>
+                                        <th>Action</th>
+                                        <th style="width: 40%">Wallet hash</th>
+                                        <th>Time</th>
+                                        <th>Amount</th>
+                                        <th>Amount (USD)</th>
+                                    </tr>
+                                    <tr v-for="(a,index) in getCryptoTransactions">
+                                        <td>{{a.type}}</td>
+                                        <td v-tooltip="a.walletHash">{{a.walletHash}}</td>
+                                        <td>{{a.date}}</td>
+                                        <td>{{a.amount}} {{a.crypto}}</td>
+                                        <td>${{a.price}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="cryptomarket-selected-left">
+                                <div class="cryptomarket-selected-price">
+                                    USD <b>${{ getSelected.price }}</b> <i>{{ getSelected.change_7d.toFixed(2) }}%</i>
+                                </div>
+                                <line-chart :chartdata="getChartData" class="cryptomarket-data-chart"></line-chart>
+                            </div>
+                            <div class="cryptomarket-selected-right">
+                                <div class="cryptomarket-right-block">
+                                    <div class="cryptomarket-right-header">Buy <b>{{ getSelected.name }}</b></div>
+                                    <input v-model="form.buy" class="cryptomarket-right-input" type="number" />
+                                    <div class="cryptomarket-right-text">
+                                        Buying {{ form.buy }} {{ getSelected.name }} for
+                                        <b>${{ formatMoney(form.buy * getSelected.price, 3) }}</b>
+                                    </div>
+                                    <div @click="buyCrypto" class="cryptomarket-right-button">{{ _U('buy') }}</div>
+                                </div>
+                                <div class="cryptomarket-right-block">
+                                    <div class="cryptomarket-right-header">Sell <b>{{ getSelected.name }}</b></div>
+                                    <div class="cryptomarket-right-text">
+                                        You currently have <b>{{ ownedCryptos[getSelected.asset_id] }}</b> {{ getSelected.name }}
+                                    </div>
+                                    <input v-model="form.sell" class="cryptomarket-right-input" type="number" />
+                                    <div class="cryptomarket-right-text">
+                                        Selling {{ form.sell }} {{ getSelected.name }} for
+                                        <b>${{ formatMoney( (form.sell * getSelected.price) * ( (100 - feeAmount)/100), 3) }}</b>
+                                    </div>
+                                    <div class="cryptomarket-right-text">
+                                        <i v-tooltip="`(${feeAmount}% currency exchange rate)`" class="fas fa-info-circle"></i> Fee: ${{ formatMoney((form.sell
+                                        * getSelected.price) * (feeAmount / 100), 3) }}
+                                    </div>
+                                    <div @click="sellCrypto" class="cryptomarket-right-button">{{ _U('sell') }}</div>
+                                </div>
+                            </div>
+                            <div class="cryptomarket-selected-name">
+                                <img style="width: 2.5vw; margin-right: 0.25vw" :src="`img/${getSelected.asset_id}.png`" alt="" /> {{ getSelected.name }}
+                                <i v-tooltip="getSelected.description" v-if="getSelected.description" style="font-size: 1.5vw" class="fas fa-info-circle"></i>
+                            </div>
+                        </div>
+
+                        <div class="cryptomarket-homepage-parent" v-if="page == 1">
+                            <div class="cryptomarket-doboz-small">
+                                <div class="crypto-small-header"><i class="fas fa-fire"></i> {{ _U('top_gainers') }}</div>
+                                <div class="crypto-small-child">
+                                    <div class="crypto-small-entry" v-for="(a,index) in topGainers">
+                                        <div class="crypto-entry-name">
+                                            <img style="width: 1.1vw; margin-right: 0.25vw" :src="`img/${a.asset_id}.png`" alt="" />
+                                            <b>{{ a.name }}</b>
+                                            <div class="crypto-smallname">{{ a.asset_id }}</div>
+                                        </div>
+                                        <div :class="a.change_7d > 0 ? 'crypto-entry-inc green' : 'crypto-entry-inc red'">
+                                            <i :class="a.change_7d > 0 ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                                            {{ a.change_7d.toFixed(2) }}%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cryptomarket-doboz-small">
+                                <div class="crypto-small-header"><i class="fas fa-dollar-sign"></i> {{ _U('top_volumes') }}</div>
+                                <div class="crypto-small-child">
+                                    <div class="crypto-small-entry" v-for="(a,index) in topVolumes">
+                                        <div class="crypto-entry-name">
+                                            <img style="width: 1.1vw; margin-right: 0.25vw" :src="`img/${a.asset_id}.png`" alt="" />
+                                            <b>{{ a.name }}</b>
+                                            <div class="crypto-smallname">{{ a.asset_id }}</div>
+                                        </div>
+                                        <div :class="a.change_7d > 0 ? 'crypto-entry-inc green' : 'crypto-entry-inc red'">
+                                            <i :class="a.change_7d > 0 ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                                            ${{ a.price }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cryptomarket-doboz-small">
+                                <div class="crypto-small-header"><i class="fas fa-dollar-sign"></i> {{ _U('top_markets') }}</div>
+                                <div class="crypto-small-child">
+                                    <div class="crypto-small-entry" v-for="(a,index) in topMarkets">
+                                        <div class="crypto-entry-name">
+                                            <img style="width: 1.1vw; margin-right: 0.25vw" :src="`img/${a.asset_id}.png`" alt="" />
+                                            <b>{{ a.name }}</b>
+                                            <div class="crypto-smallname">{{ a.asset_id }}</div>
+                                        </div>
+                                        <div :class="a.change_7d > 0 ? 'crypto-entry-inc green' : 'crypto-entry-inc red'">
+                                            <i :class="a.change_7d > 0 ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                                            ${{ marketCaps[a.asset_id] }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cryptomarket-table">
+                                <table style="height: 0">
+                                    <tr class="unhover">
+                                        <th class="unhover">#</th>
+                                        <th @click="changeSort('name')" style="text-align: left; padding-right: 10vw">
+                                            Name <i :class="gotSortingIcon('name')"></i>
+                                        </th>
+                                        <th @click="changeSort('price')">Price <i :class="gotSortingIcon('price')"></i></th>
+                                        <th @click="changeSort('change')">Change (7days) % <i :class="gotSortingIcon('change')"></i></th>
+                                        <th @click="changeSort('marketcap')">
+                                            Market Cap <i :class="gotSortingIcon('marketcap')"></i>
+                                            <i
+                                                v-tooltip="`
+                                    The total market value of a cryptocurrency's circulating supply.<br>
+                                    It is analogous to the free-float capitalization in the stock market.<br><br>
+                                    Market Cap = Current Price x Circulating Supply.
+                                    `"
+                                                style="font-size: 0.8vw; color: grey"
+                                                class="fas fa-info-circle"
+                                            ></i>
+                                        </th>
+                                        <th @click="changeSort('owned')">Owned <i :class="gotSortingIcon('owned')"></i></th>
+                                    </tr>
+                                    <tr @mouseenter="hoverEffekt" @click="changeSelected(index)" v-for="(a,index) in getCryptos">
+                                        <td><img style="width: 1.1vw" :src="`img/${a.asset_id}.png`" alt="" /></td>
+                                        <td style="text-align: left">
+                                            <b>{{ a.name }}</b>
+                                            <i style="font-style: normal; color: grey; font-size: 0.75vw">{{ a. asset_id }}</i>
+                                        </td>
+                                        <td style="font-size: 0.8vw; padding: 0 1.5vw">${{ a.price }}</td>
+                                        <td style="font-size: 0.8vw">{{ a.change_7d.toFixed(2) }}%</td>
+                                        <td style="font-size: 0.8vw">${{ marketCaps[a.asset_id] }}</td>
+                                        <td style="font-size: 0.8vw">{{ getPlayerOwnedCrypto(a.asset_id) }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </template>
+
+        <script src="./js/translations.js"></script>
+        <script src="./js/html_cryptomarket.js"></script>
+    </body>
+</html>
