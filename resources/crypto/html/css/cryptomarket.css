@@ -1,0 +1,904 @@
+.tooltip {
+  display: block !important;
+  z-index: 10000;
+}
+
+.tooltip .tooltip-inner {
+  background: #161616;
+  color: white;
+  border-radius: 0.15vw;
+  padding: 0.25vw 0.7vw;
+  font-size: 0.75vw;
+  text-align: center;
+  max-width: 10vw;
+  border: 0.1vw solid rgba(0, 0, 0, 0.15);
+  word-break: break-all;
+}
+
+.tooltip[aria-hidden="true"] {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.tooltip[aria-hidden="false"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+.cryptomarket-parent {
+  position: absolute;
+  width: 65%;
+  height: 75%;
+  background: #141414;
+  font-family: majestic !important;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.cryptomarket-parent .cryptomarket-menu {
+  position: relative;
+  width: 100%;
+  height: 3vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: gainsboro;
+  border-bottom: 0.1vw solid grey;
+}
+
+.cryptomarket-parent .cryptomarket-menu .crypomarket-my-wallet {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  right: 3%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-size: 0.925vw;
+}
+
+.cryptomarket-parent .cryptomarket-menu .crypomarket-my-wallet .crypto-usd-icon {
+  height: 1.25vw;
+  width: 1.25vw;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("https://s2.coinmarketcap.com/static/cloud/img/fiat-flags/USD.svg");
+  margin: 0 0.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-menu .crypto-menu-entry {
+  position: relative;
+  font-size: 0.95vw;
+  font-variant: small-caps;
+  padding: 0.1vw 1vw;
+  -webkit-transition: ease();
+  transition: ease();
+  -webkit-transition-duration: 0.1s;
+          transition-duration: 0.1s;
+  border-bottom: 0.05vw solid transparent;
+}
+
+.cryptomarket-parent .cryptomarket-menu .crypto-menu-entry.active {
+  border-bottom: 0.05vw solid #7d84c3;
+}
+
+.cryptomarket-parent .cryptomarket-menu .crypto-menu-entry:not(.active):hover {
+  color: #b0becc;
+  border-bottom: 0.05vw solid white;
+}
+
+.cryptomarket-parent .cryptomarket-header {
+  position: relative;
+  width: 100%;
+  height: 8%;
+  background: #366a9b;
+  font-size: 1.8vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-indent: 1vw;
+  font-variant: small-caps;
+  font-weight: bold;
+  color: white;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent {
+  position: relative;
+  width: 100%;
+  max-height: 77%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  overflow: auto;
+  padding: 1vw 0;
+  color: gainsboro;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-payments-text {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9vw;
+  color: gainsboro;
+  text-shadow: none;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .payments-table {
+  text-align: left;
+  text-shadow: none;
+  font-family: majestic;
+  border: 0.1vw solid rgba(128, 128, 128, 0.25);
+  border-radius: 0.25vw;
+  position: relative;
+  width: 80%;
+  table-layout: fixed;
+  margin-top: 1vw;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .payments-table th {
+  color: #b4b4b4;
+  font-size: 0.75vw;
+  border-bottom: 0.1vw solid #2d7292;
+  padding: 0.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .payments-table tr {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .payments-table tr:nth-child(even) {
+  background: rgba(63, 63, 63, 0.35);
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .payments-table td {
+  color: #969696;
+  font-size: 0.8vw;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.25vw 0.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-payments-header {
+  position: relative;
+  font-size: 2vw;
+  width: 90%;
+  font-variant: small-caps;
+  margin-top: 1.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-payments-header:first-child {
+  margin-top: 0;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block {
+  position: relative;
+  border: 0.1vw solid rgba(128, 128, 128, 0.25);
+  border-radius: 0.5vw;
+  padding: 0.5vw;
+  margin-top: 0.5vw;
+  margin-left: 0.25vw;
+  margin-right: 0.25vw;
+  width: 40%;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block select {
+  background-color: transparent;
+  border: 0.1vw solid rgba(128, 128, 128, 0.25);
+  border-radius: 0.25vw;
+  width: 100%;
+  height: 3vw;
+  color: gainsboro;
+  font-size: 1.5vw;
+  font-family: majestic;
+  margin-bottom: 1vw;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block select option {
+  background-color: #191919;
+  color: gainsboro;
+  font-size: 0.9vw;
+  font-family: majestic;
+  border-radius: 0.25vw;
+  outline: 0;
+  -webkit-transition: ease();
+  transition: ease();
+  -webkit-transition-duration: 0.45s;
+          transition-duration: 0.45s;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block select option:hover {
+  background-color: #00aeff;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block select:focus {
+  outline: 0;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block:first-child {
+  margin-top: 0;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block .cryptomarket-account-header {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 1vw;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block .cryptomarket-account-input {
+  position: relative;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  outline: 0;
+  border: 0;
+  color: gainsboro;
+  font-family: majestic;
+  font-size: 2vw;
+  text-align: center;
+  border-radius: 0.25vw;
+  margin: 0.5vw 0;
+  padding: 0.55vw 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block .cryptomarket-account-input::-webkit-inner-spin-button, .cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block .cryptomarket-account-input::-webkit-outer-spin-button {
+  color: red;
+  -webkit-appearance: none;
+          appearance: none;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block .cryptomarket-account-text {
+  position: relative;
+  width: 100%;
+  font-size: 0.85vw;
+  text-align: center;
+  word-break: break-all;
+  margin: 1.25vw 0;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block .cryptomarket-account-button {
+  position: relative;
+  width: 100%;
+  height: 2vw;
+  background: #153b58;
+  font-size: 1.15vw;
+  font-variant: small-caps;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0.25vw 0;
+  border-radius: 0.15vw;
+  -webkit-transition: ease();
+  transition: ease();
+  -webkit-transition-duration: 0.1s;
+          transition-duration: 0.1s;
+}
+
+.cryptomarket-parent .cryptomarket-payments-parent .cryptomarket-account-block .cryptomarket-account-button:hover {
+  background: #2972aa;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent {
+  position: relative;
+  width: 100%;
+  max-height: 77%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  overflow: auto;
+  padding: 1vw 0;
+  color: gainsboro;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-mycrypto-entry {
+  position: relative;
+  width: 11vw;
+  height: 4vw;
+  border: 0.15vw dotted #626262;
+  border-radius: 0.5vw;
+  margin: 0.5vw;
+  padding: 0.6vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-mycrypto-entry .crypto-amount {
+  position: absolute;
+  font-size: 1.3vw;
+  left: 40%;
+  bottom: 20%;
+  max-width: 50%;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 0.1vw 0.5vw;
+  border-radius: 0.25vw;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-mycrypto-entry .crypto-name {
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  max-width: 50%;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 0.9vw;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 0.1vw 0.5vw;
+  border-radius: 0.25vw;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-mycrypto-entry .crypto-icon {
+  position: absolute;
+  left: 5%;
+  height: 3.5vw;
+  width: 3.5vw;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-block {
+  position: relative;
+  border: 0.1vw solid rgba(128, 128, 128, 0.25);
+  border-radius: 0.5vw;
+  padding: 0.5vw;
+  margin-top: 0.5vw;
+  margin-left: 0.25vw;
+  margin-right: 0.25vw;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-block:first-child {
+  margin-top: 0;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-block .cryptomarket-account-header {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 1vw;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-block .cryptomarket-account-input {
+  position: relative;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  outline: 0;
+  border: 0;
+  color: gainsboro;
+  font-family: majestic;
+  font-size: 2.5vw;
+  text-align: center;
+  border-radius: 0.25vw;
+  margin: 0.5vw 0;
+  padding: 0.55vw 0;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-block .cryptomarket-account-input::-webkit-inner-spin-button, .cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-block .cryptomarket-account-input::-webkit-outer-spin-button {
+  color: red;
+  -webkit-appearance: none;
+          appearance: none;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-block .cryptomarket-account-text {
+  position: relative;
+  width: 100%;
+  font-size: 0.85vw;
+  text-align: center;
+  margin: 0.25vw 0 0.7vw 0;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-block .cryptomarket-account-button {
+  position: relative;
+  width: 100%;
+  height: 2vw;
+  background: #153b58;
+  font-size: 1.15vw;
+  font-variant: small-caps;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0.25vw 0;
+  border-radius: 0.15vw;
+  -webkit-transition: ease();
+  transition: ease();
+  -webkit-transition-duration: 0.1s;
+          transition-duration: 0.1s;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-block .cryptomarket-account-button:hover {
+  background: #2972aa;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-header {
+  position: relative;
+  font-size: 2vw;
+  width: 90%;
+  font-variant: small-caps;
+  margin-top: 1.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent .cryptomarket-account-header:first-child {
+  margin-top: 0;
+}
+
+.cryptomarket-parent .cryptomarket-account-parent::-webkit-scrollbar-thumb {
+  background-color: #00aeff !important;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent {
+  position: relative;
+  width: 100%;
+  height: 77%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  overflow: auto;
+  padding: 1vw 0;
+  color: gainsboro;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent::-webkit-scrollbar-thumb {
+  background-color: #00aeff !important;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-transactions {
+  position: absolute;
+  top: 100%;
+  left: 3%;
+  width: 90%;
+  max-height: 30%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-transactions .transactions-header {
+  position: relative;
+  top: 10%;
+  font-size: 2vw;
+  width: 100%;
+  font-variant: small-caps;
+  margin-bottom: 1.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-transactions .transactions-table {
+  text-align: left;
+  text-shadow: none;
+  font-family: majestic;
+  border: 0.1vw solid rgba(128, 128, 128, 0.25);
+  border-radius: 0.25vw;
+  position: relative;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-transactions .transactions-table th {
+  color: #b4b4b4;
+  font-size: 0.75vw;
+  border-bottom: 0.1vw solid #2d7292;
+  padding: 0.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-transactions .transactions-table tr {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-transactions .transactions-table tr:nth-child(even) {
+  background: rgba(63, 63, 63, 0.35);
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-transactions .transactions-table td {
+  color: #969696;
+  font-size: 0.8vw;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0.25vw 0.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-left {
+  position: absolute;
+  left: 3%;
+  top: 20%;
+  height: 75%;
+  width: 65%;
+  border: 0.1vw solid rgba(128, 128, 128, 0.25);
+  border-radius: 0.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-left .cryptomarket-selected-price {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  color: gainsboro;
+  font-size: 1.6vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-left .cryptomarket-selected-price b {
+  font-size: 2.5vw;
+  margin: 0 0.55vw;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-left .cryptomarket-selected-price i {
+  font-style: normal;
+  font-size: 1vw;
+  margin: 0 0.25vw;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-left .cryptomarket-data-chart {
+  position: relative;
+  width: 90%;
+  height: 75%;
+  border-radius: 0.25vw;
+  top: 20%;
+  left: 4%;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right {
+  position: absolute;
+  right: 3%;
+  top: 10%;
+  height: 85%;
+  width: 25%;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right .cryptomarket-right-block {
+  position: relative;
+  border: 0.1vw solid rgba(128, 128, 128, 0.25);
+  border-radius: 0.5vw;
+  padding: 0.5vw;
+  margin-top: 0.5vw;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right .cryptomarket-right-block:first-child {
+  margin-top: 0;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right .cryptomarket-right-block .cryptomarket-right-header {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 1vw;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right .cryptomarket-right-block .cryptomarket-right-input {
+  position: relative;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  outline: 0;
+  border: 0;
+  color: gainsboro;
+  font-family: majestic;
+  font-size: 2.5vw;
+  text-align: center;
+  border-radius: 0.25vw;
+  margin: 0.5vw 0;
+  padding: 0.55vw 0;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right .cryptomarket-right-block .cryptomarket-right-input::-webkit-inner-spin-button, .cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right .cryptomarket-right-block .cryptomarket-right-input::-webkit-outer-spin-button {
+  color: red;
+  -webkit-appearance: none;
+          appearance: none;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right .cryptomarket-right-block .cryptomarket-right-text {
+  position: relative;
+  width: 100%;
+  font-size: 0.85vw;
+  text-align: center;
+  margin: 0.25vw 0 0.7vw 0;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right .cryptomarket-right-block .cryptomarket-right-button {
+  position: relative;
+  width: 100%;
+  height: 2vw;
+  background: #153b58;
+  font-size: 1.15vw;
+  font-variant: small-caps;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0.25vw 0;
+  border-radius: 0.15vw;
+  -webkit-transition: ease();
+  transition: ease();
+  -webkit-transition-duration: 0.1s;
+          transition-duration: 0.1s;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-right .cryptomarket-right-block .cryptomarket-right-button:hover {
+  background: #2972aa;
+}
+
+.cryptomarket-parent .cryptomarket-selected-parent .cryptomarket-selected-name {
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  font-size: 3vw;
+  font-variant: small-caps;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent {
+  position: relative;
+  width: 100%;
+  height: 77.5%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  overflow: auto;
+  padding: 1vw 0;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent::-webkit-scrollbar-thumb {
+  background-color: #00aeff !important;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-table {
+  position: relative;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-table table {
+  color: gainsboro;
+  text-align: center;
+  height: 100%;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-table table .crypto-table-image {
+  position: relative;
+  width: 1vw;
+  height: 1vw;
+  background: red;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-table table th {
+  font-size: 1vw;
+  font-variant: small-caps;
+  border-bottom: 0.1vw solid #2d7292;
+  padding: 0 1vw;
+  font-weight: normal;
+  -webkit-transition: ease();
+  transition: ease();
+  -webkit-transition-duration: 0.1s;
+          transition-duration: 0.1s;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-table table th:not(.unhover):hover {
+  background: #2d72a6;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-table table tr {
+  -webkit-transition: ease();
+  transition: ease();
+  -webkit-transition-duration: 0.1s;
+          transition-duration: 0.1s;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-table table tr:nth-child(even) {
+  background: rgba(63, 63, 63, 0.35);
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-table table tr:not(.unhover):hover {
+  -webkit-box-shadow: 0vw 0.2vw 0.1vw rgba(0, 0, 0, 0.35);
+          box-shadow: 0vw 0.2vw 0.1vw rgba(0, 0, 0, 0.35);
+  background: #153b58;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-table table td {
+  font-size: 0.95vw;
+  padding: 0.5vw 0.3vw;
+  vertical-align: middle;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-doboz-small {
+  position: relative;
+  width: 18vw;
+  height: 8vw;
+  background: #2d7292;
+  border-radius: 0.5vw;
+  margin: 1.5vw 0.85vw;
+  padding: 0.6vw;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-doboz-small .crypto-small-child {
+  position: relative;
+  margin-top: 0.5vw;
+  height: 80%;
+  overflow: auto;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-doboz-small .crypto-small-child .crypto-small-entry {
+  position: relative;
+  color: gainsboro;
+  background: rgba(0, 0, 0, 0.2);
+  margin: 0.15vw;
+  border-radius: 0.2vw;
+  font-size: 0.9vw;
+  padding: 0.25vw;
+  height: 1.1vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-doboz-small .crypto-small-child .crypto-small-entry .crypto-entry-name {
+  position: absolute;
+  left: 3%;
+  width: 65%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-doboz-small .crypto-small-child .crypto-small-entry .crypto-entry-name .crypto-smallname {
+  margin-left: 0.25vw;
+  color: #aaaaaa;
+  font-style: normal;
+  font-size: 0.7vw;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-doboz-small .crypto-small-child .crypto-small-entry .crypto-entry-inc {
+  position: absolute;
+  right: 5%;
+  font-size: 0.7vw;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-doboz-small .crypto-small-child .crypto-small-entry .crypto-entry-inc.green {
+  color: lightgreen;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-doboz-small .crypto-small-child .crypto-small-entry .crypto-entry-inc.red {
+  color: red;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-doboz-small .crypto-small-header {
+  position: relative;
+  font-size: 1vw;
+  color: gainsboro;
+  font-variant: small-caps;
+  font-weight: bold;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-button {
+  position: absolute;
+  color: gainsboro;
+  background: #0064ff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-button.buy {
+  bottom: 5%;
+  right: 30%;
+  padding: 0.25vw 2.5vw;
+  font-size: 2.35vw;
+}
+
+.cryptomarket-parent .cryptomarket-homepage-parent .cryptomarket-button.sell {
+  bottom: 5%;
+  left: 30%;
+  padding: 0.25vw 2.5vw;
+  font-size: 2.35vw;
+}
+/*# sourceMappingURL=cryptomarket.css.map */

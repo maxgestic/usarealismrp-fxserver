@@ -1,0 +1,18 @@
+exports('avcrypto_getBank', function(source)
+    source = tonumber(source)
+    local char = exports["usa-characters"]:GetCharacter(source)
+    return char.get("bank")
+end)
+
+exports('avcrypto_setBank', function(source, amount)
+    print("setting bank to amount: " .. amount)
+    source = tonumber(source)
+    amount = tonumber(amount)
+    local char = exports["usa-characters"]:GetCharacter(source)
+    return char.set("bank", math.abs(amount))
+end)
+
+exports('avcrypto_notification', function(source, message)
+    source = tonumber(source)
+    TriggerClientEvent("usa:notify", source, message, "INFO: " .. message)
+end)
