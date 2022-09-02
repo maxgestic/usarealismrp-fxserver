@@ -186,7 +186,7 @@ local function AddMod(mod,parent,header,name,info,stock)
 			local btn = m:addPurchase("Stock")
 			btn.modtype = mod
 			btn.mod = -1
-			btn.liveryIndex = -1
+			btn.liveryIndex = 0
 			for i = 1, GetVehicleLiveryCount(veh) do
 				btn = m:addPurchase("Livery " .. i, LSC_Config.prices.livery.price)
 				btn.modtype = 48
@@ -198,7 +198,7 @@ local function AddMod(mod,parent,header,name,info,stock)
 			local btn = m:addPurchase("Stock")
 			btn.modtype = mod
 			btn.mod = -1
-			btn.liveryIndex = -1
+			btn.liveryIndex = 0
 			local numModsForMod48 = GetNumVehicleMods(veh, 48)
 			if numModsForMod48 > 0 then
 				for i = 1, numModsForMod48 do
