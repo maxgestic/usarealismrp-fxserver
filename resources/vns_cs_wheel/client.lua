@@ -244,6 +244,9 @@ AddEventHandler("vns_cs_wheel:startroll", function(s, index, p)
 		SetEntityVisible(_arrow1, t, 0)
 		if i == 5 then
 			if s == GetPlayerServerId(PlayerId()) then
+				while securityToken == nil do
+					Wait(1)
+				end
 				TriggerServerEvent('vns_cs_wheel:give', s, p, securityToken)
 			end
 		end

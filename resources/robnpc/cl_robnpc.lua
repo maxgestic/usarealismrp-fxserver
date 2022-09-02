@@ -85,6 +85,9 @@ Citizen.CreateThread(function()
                         if canceled then
                             canceled = false
                         else
+                            while securityToken == nil do
+                                Wait(1)
+                            end
                             TriggerServerEvent("Mugging:GiveReward", securityToken)
                         end    
                     end
