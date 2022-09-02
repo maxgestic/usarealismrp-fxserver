@@ -1,0 +1,240 @@
+$background-gradient: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(10, 10, 10, 0.8) 100%);
+$greywhite: rgb(220, 220, 220);
+$textshadow: 0.1vw 0.1vw 0.1vw black;
+$upgrade-box-size: 4vw;
+
+.farmpanel-main {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.farm-pages-parent {
+    position: absolute;
+    top: 3%;
+    display: flex;
+
+    .farm-page-entry {
+        position: relative;
+        font-size: 1.3vw;
+        color: $greywhite;
+        padding: 0.35vw 2vw;
+        background: rgb(55, 55, 55);
+        font-variant: small-caps;
+        transition: ease();
+        transition-duration: 0.1s;
+
+        &:first-child {
+            border-top-left-radius: 0.25vw;
+            border-bottom-left-radius: 0.25vw;
+            border-left: 0.25vw solid orange;
+        }
+
+        &:last-child {
+            border-top-right-radius: 0.25vw;
+            border-bottom-right-radius: 0.25vw;
+            border-right: 0.25vw solid orange;
+        }
+
+        &:hover,
+        &.active {
+            background-color: rgb(75, 75, 75);
+            font-weight: bold;
+        }
+    }
+}
+
+.maximum-animals-amount {
+    position:absolute;
+    bottom: 20%;
+    text-align: center;
+    font-size: 1vw;
+    color: $greywhite;
+}
+
+.farm-upgrades-parent {
+    position: absolute;
+    bottom: 10%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .upgrade-entry {
+        position: relative;
+        width: $upgrade-box-size;
+        height: $upgrade-box-size;
+        background-color: rgba(40, 40, 40, 0.95);
+        margin: 0 0.3vw;
+        border-radius: 0.15vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: ease();
+        transition-duration: 0.1s;
+
+        .upgrade-text {
+            position: absolute;
+            bottom: -1vw;
+            font-size: 0.75vw;
+            color: $greywhite;
+            opacity: 0;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .upgrade-already {
+            position: absolute;
+            bottom: 5%;
+            left: 5%;
+            font-size: 0.65vw;
+            color: grey;
+        }
+
+        .img {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        &:not(.active) {
+            &:hover {
+                background-color: rgba(172, 136, 17, 0.5);
+
+                .upgrade-text {
+                    opacity: 1;
+                    animation: zoomIn 0.5s ease;
+                }
+            }
+        }
+
+        &.active {
+            .upgrade-text {
+                opacity: 1;
+            }
+
+            background-color: rgba(255, 255, 0, 0.5);
+        }
+    }
+}
+
+.farm-upgrade-information-parent {
+    position: absolute;
+    right: 3%;
+    bottom: 5%;
+    background-color: rgba(20, 20, 20, 0.85);
+    width: 14%;
+    color: $greywhite;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.25vw;
+
+    .header {
+        position: relative;
+        width: 100%;
+        font-size: 1.3vw;
+        font-weight: bold;
+        padding: 0.25vw 0;
+        border-bottom: 0.1vw solid grey;
+        display: flex;
+        align-items: center;
+
+        i {
+            margin-left: 0.5vw;
+            margin-right: 0.7vw;
+        }
+    }
+
+    .text {
+        position: relative;
+        width: 90%;
+        margin: 0.5vw;
+        white-space: pre-line;
+
+        &.big {
+            font-size: 1.1vw;
+        }
+        &.small {
+            font-size: 0.8vw;
+        }
+        &.center {
+            text-align: center;
+        }
+    }
+
+    .button {
+        width: 100%;
+        font-size: 1.55vw;
+        font-weight: bold;
+        color: $greywhite;
+        font-variant: small-caps;
+        transition: ease();
+        transition-duration: 0.1s;
+        text-align: center;
+        padding: 0.1vw 0;
+
+        &:hover {
+            background-color: orange;
+            color: black;
+            border-bottom-left-radius: inherit;
+            border-bottom-right-radius: inherit;
+        }
+    }
+}
+
+.farm-arrows-parent {
+    position: absolute;
+    bottom: 25%;
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .selected-list-index-arrows {
+        position: absolute;
+        color: $greywhite;
+        top: -3vw;
+        font-size: 1vw;
+        font-weight: bold;
+    }
+
+    .text {
+        position: absolute;
+        font-size: 1.65vw;
+        color: $greywhite;
+        font-weight: bold;
+        width: 75%;
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .arrow {
+        position: absolute;
+        font-size: 3vw;
+        color: $greywhite;
+        transition: ease();
+        transition-duration: 0.1s;
+
+        &:hover {
+            color: lightgreen;
+            animation: pulse 1s ease infinite;
+        }
+
+        &.left {
+            left: 0;
+        }
+        &.right {
+            right: 0;
+        }
+    }
+}

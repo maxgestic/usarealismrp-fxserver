@@ -1,0 +1,4 @@
+files/nui
+files/*.js
+
+node_modules

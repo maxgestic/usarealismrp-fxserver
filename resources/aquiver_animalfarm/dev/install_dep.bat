@@ -1,0 +1,1 @@
+start cmd.exe /k "cd ../source-files/server-client && npm install && cd ../nui && npm install && cd ../shared && npm install"

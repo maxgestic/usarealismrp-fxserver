@@ -1,0 +1,40 @@
+@font-face {
+    font-family: 'majestic';
+    src: url(../assets/fonts/ProximaNova.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'ubuntu';
+    src: url(../assets/fonts/UbuntuR.ttf) format('woff');
+}
+
+body {
+    // background-image: url('https://i.imgur.com/zm5KEI6.png');
+    // background-color: grey;
+    font-family: ubuntu;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: hidden;
+}
+
+button,
+input {
+    font-family: ubuntu !important;
+}
+
+::-webkit-scrollbar {
+    width: 0.35vw;
+    border-radius: 1vw;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #474747;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 1vw;
+    background: rgba(0, 0, 0, 0.4);
+}
