@@ -180,9 +180,9 @@ export class CryptoPlayer {
 export class PlayerManager {
     static Players: Record<number | string, CryptoPlayer> = {};
 
-    static playerJoining(source: number | string) {
+    static async playerJoining(source: number | string) {
         if (!Methods.PlayerExist(source)) return;
-        const identifier = Methods.getIdentifier(source);
+        const identifier = await Methods.getIdentifier(source);
         if (!identifier) return;
 
         Database.query(`SELECT * FROM cryptoplayers WHERE identifier = '${identifier}'`, (err, rows, fields) => {
@@ -230,8 +230,8 @@ export class PlayerManager {
     }
 }
 
-onNet('playerJoining', () => {
-    PlayerManager.playerJoining(global.source);
+onNet('character:loaded', (char) => {
+    PlayerManager.playerJoining(char.get("source"));
 });
 onNet('playerDropped', () => {
     PlayerManager.playerDropped(global.source);

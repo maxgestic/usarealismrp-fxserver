@@ -18,16 +18,14 @@ export const Methods = new (class _ {
         const regexExp = /^[a-f0-9]{64}$/gi;
         return regexExp.test(str);
     }
-    getIdentifier(source: any) {
+    async getIdentifier(source: any) {
         if (!this.PlayerExist(source)) return;
-        const identifiers = GetNumPlayerIdentifiers(source);
-
-        for (let i = 0; i < identifiers; i++) {
-            const id = GetPlayerIdentifier(source, i);
-            if (id.includes('license:')) {
-                return id;
-            }
+        let char = global.exports["usa-characters"].GetCharacter(source)
+        while (!char) {
+            char = global.exports["usa-characters"].GetCharacter(source)
+            await this.Wait(1000);
         }
+        return char.get("_id")
     }
     PlayerExist(source: any) {
         if (!source) return false;
