@@ -81,14 +81,13 @@ Citizen.CreateThread( function()
 		local playerPed = PlayerPedId()
 		if GetPedParachuteState(playerPed) == -1 then
 			if DoesEntityExist(playerPed) and not IsEntityDead(playerPed) and not IsPedInAnyVehicle(playerPed, true) and not playingAnim then
-				DisableControlAction( 0, 20, true ) -- INPUT_MULTIPLAYER_INFO (Z)
 				if not IsPauseMenuActive() then
 					loadAnimDict( "reaction@intimidation@cop@unarmed" )
-					if IsDisabledControlJustReleased(0, 20) then -- INPUT_MULTIPLAYER_INFO (Z)
+					if IsControlJustReleased(0, 20) then -- INPUT_MULTIPLAYER_INFO (Z)
 						ClearPedTasks(playerPed)
 						SetCurrentPedWeapon(playerPed, GetHashKey("WEAPON_UNARMED"), true)
 					else
-						if IsDisabledControlJustPressed(0, 20) then -- INPUT_MULTIPLAYER_INFO (Z)
+						if IsControlJustPressed(0, 20) then -- INPUT_MULTIPLAYER_INFO (Z)
 							SetCurrentPedWeapon(playerPed, GetHashKey("WEAPON_UNARMED"), true)
 							TaskPlayAnim(playerPed, "reaction@intimidation@cop@unarmed", "intro", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
 						end
