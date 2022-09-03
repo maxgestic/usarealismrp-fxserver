@@ -13,7 +13,7 @@ local CLOTHING_STORE_LOCATIONS = {
 	{x = -82.16, y = -809.99, z = 243.38, noblip = true},
 	{x = -454.08, y = 282.46, z = 83.06, noblip = true}, -- Comedy Club
 	{x = -524.64996337891, y = -597.74438476563, z = 41.430221557617}, -- Upper Mall Store
-	{x = -566.6748046875, y = -586.27526855469, z = 34.681793212891}, -- Lower Mall Store
+	{x = -566.6748046875, y = -586.27526855469, z = 34.681793212891, noblip = true}, -- Lower Mall Store
 	{x = -161.46296691895, y = -296.46438598633, z = 39.733383178711}, -- Las Lagunas (Ponsonbys)
 	{x = 122.68245697021, y = -218.48484802246, z = 54.557693481445}, -- Hawick (Suburban)
 	{x = -1193.4808349609, y = -774.20666503906, z = 17.327322006226}, -- Prosperity Street (Suburban)
