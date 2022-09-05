@@ -344,10 +344,10 @@ local VEHICLE_RANKS = {
 		}
 	},
 	["ems"] = {
-		["ambulance"] = {
+		["fordambo"] = {
 			rank = 1,
-			allowedLiveries = { 1, 2, 3, 4 },
-			hash = 1171614426
+			allowedLiveries = { 1, 2},
+			hash = GetHashKey("fordambo")
 		},
 		["p20explorer"] = {
 			rank = 3,
@@ -379,6 +379,16 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1 },
 			hash = 745926877
 		},
+		["ec145"] = {
+			rank = 1,
+			allowedLiveries = { 1, 2 },
+			hash = GetHashKey("ec145med")
+		},
+		["fd412"] = {
+			rank = 1,
+			allowedLiveries = { 1, 2 },
+			hash = GetHashKey("safr412")
+		},
 		--["lguard2"] = 1,
 		["blazer2"] = {
 			rank = 1,
@@ -404,6 +414,11 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = { 2 },
 			hash = 1799416425
+		},
+		["largeboat"] = {
+			rank = 1,
+			allowedLiveries = {1, 2},
+			hash = GetHashKey("largeboat")
 		},
 		["bostonwhale"] = {
 			rank = 1,
