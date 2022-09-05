@@ -481,6 +481,7 @@ var itemImages = {
     "Shiv": "https://i.imgur.com/65LrH5e.png",
     "Beer Pong Kit": "https://i.imgur.com/fSU0gRd.png",
     "Custom Radio": "https://i.imgur.com/yOD7u9F.png",
+    "Orange": "https://i.imgur.com/oDRWnr0.png",
 }
 
 var menuItems = [{

@@ -1,0 +1,58 @@
+<!--  
+-- ██████╗░██╗░░░██╗██████╗░███████╗██╗░░░██╗███████╗░██████╗████████╗███╗░░██╗██╗██╗░░██╗
+-- ██╔══██╗██║░░░██║██╔══██╗██╔════╝██║░░░██║██╔════╝██╔════╝╚══██╔══╝████╗░██║██║██║░██╔╝
+-- ██████╦╝██║░░░██║██████╔╝█████╗░░╚██╗░██╔╝█████╗░░╚█████╗░░░░██║░░░██╔██╗██║██║█████═╝░
+-- ██╔══██╗██║░░░██║██╔══██╗██╔══╝░░░╚████╔╝░██╔══╝░░░╚═══██╗░░░██║░░░██║╚████║██║██╔═██╗░
+-- ██████╦╝╚██████╔╝██║░░██║███████╗░░╚██╔╝░░███████╗██████╔╝░░░██║░░░██║░╚███║██║██║░╚██╗
+-- ╚═════╝░░╚═════╝░╚═╝░░╚═╝╚══════╝░░░╚═╝░░░╚══════╝╚═════╝░░░░╚═╝░░░╚═╝░░╚══╝╚═╝╚═╝░░╚═╝ -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Burevestnik 👨‍💻 https://github.com/Burevestnikk 👾 Discord: Burevestnik#4495</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+		<script type="text/javascript" src="https://cfx-nui-my-resource/production.js" async></script>
+		<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="fonts/font/stylesheet.css" rel="stylesheet" type="text/css" />
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700" rel="stylesheet">
+		<script src="./js/library/vue.js"></script>
+	</head>
+
+	<body>
+		<div class="orangejob_lib" v-if="active">
+			<img src="./img/palma.png" class="palma">
+			<!--<img src="./img/obl.png" class="obl">!-->
+			<img src="./img/obl.png" class="otr">
+			<img src="./img/obr.png" class="obr">
+			<div class="allblocks">
+				<div class="nameb">
+					<div class="work">ORANGE FACTORY</div>
+					<div class="wsub">THE ORANGE PICKER</div>
+					<div class="wdesc">Walk around the orange field and collect oranges complete the tasks that will appear on your screen</div>
+				</div>
+				<div class="jobs">
+					<div class="block">
+						<div class="name">Buy oranges</div>
+						<div class="desc">At the factory you can buy freshly picked oranges from the local fields</div>
+						<div class="treb1">You will get 1 orange</div>
+						<div class="treb1">Purchase of 1 orange: {{buy}}$</div>
+						<div @click="btnbuy()" class="start">BUY ORANGES</div>
+					</div>
+					<div class="block">
+						<div class="name">Sell oranges</div>
+						<div class="desc">The field is not far from here, where you can pick oranges and sell them at the factory</div>
+						<div class="treb1">You will lose 1 orange</div>
+						<div class="treb1">Sale of 1 orange: {{sale}}$</div>
+						<div @click="btnsell()" class="start2">SELL ORANGES</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="./js/index.js"></script>
+		<script src="./js/library/jquery-3.2.1.min.js"></script>
+	</body>
+</html>

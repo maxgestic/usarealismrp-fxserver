@@ -149,7 +149,9 @@ local ITEMS = {
     { name = "Richard_2", type = "tradingCard", src = { front = 'Richard_2.png', back = 'usarrp-trading-card-background.png' }, price = 300, weight = 1.0, quantity = 1, notStackable = true, objectModel = "p_ld_id_card_002" },
     { name = "TJ", type = "tradingCard", src = { front = 'TJ.png', back = 'usarrp-trading-card-background.png' }, price = 300, weight = 1.0, quantity = 1, notStackable = true, objectModel = "p_ld_id_card_002" },
     { name = "Tony_2", type = "tradingCard", src = { front = 'Tony_2.png', back = 'usarrp-trading-card-background.png' }, price = 300, weight = 1.0, quantity = 1, notStackable = true, objectModel = "p_ld_id_card_002" },
+    { name = "Orange", type = "misc", price = 5, legality = "legal", quantity = 5, weight = 2 },
 }
+
 
 for i = 1, #ITEMS do
     if ITEMS[i].type and ITEMS[i].type == "weapon" then
