@@ -532,7 +532,7 @@ local vehicleShopItems = {
 			{make = "Maserati", model = "Levante Novitec", price = 150000, hash = "mlnovitec", storage_capacity = 185.0},
 			--
 			{make = "Mazda", model = "Miata", price = 40000, hash = "na6", storage_capacity = 160.0},
-			{make = "Mazda", model = "RX-7", price = 80000, hash = "rx7rb", storage_capacity = 150.0},
+			{make = "Mazda", model = "RX-7 (DRIFT)", price = 80000, hash = "rx7rb", storage_capacity = 150.0},
 			--
 			{make = "Mclaren", model = "600LT", price = 500000, hash = "600lt", storage_capacity = 145.0},
 			--
