@@ -150,6 +150,7 @@ local ITEMS = {
     { name = "Richard_2", type = "tradingCard", src = { front = 'Richard_2.png', back = 'usarrp-trading-card-background.png' }, price = 300, weight = 1.0, quantity = 1, notStackable = true, objectModel = "p_ld_id_card_002" },
     { name = "TJ", type = "tradingCard", src = { front = 'TJ.png', back = 'usarrp-trading-card-background.png' }, price = 300, weight = 1.0, quantity = 1, notStackable = true, objectModel = "p_ld_id_card_002" },
     { name = "Tony_2", type = "tradingCard", src = { front = 'Tony_2.png', back = 'usarrp-trading-card-background.png' }, price = 300, weight = 1.0, quantity = 1, notStackable = true, objectModel = "p_ld_id_card_002" },
+    { name = "Thermite", legality = "illegal", quantity = 2, type = "misc", weight = 20 },
 }
 
 
