@@ -41,37 +41,30 @@ local GUARDS = {
 	{
 		model = `s_m_m_security_01`,
 		weapon = `WEAPON_HEAVYPISTOL`,
-		pos = vector3(240.79179382324, 225.0001373291, 106.28687286377),
-		heading = 164.0
-	},
-	{
-		model = `s_m_m_security_01`,
-		weapon = `WEAPON_HEAVYPISTOL`,
-		pos = vector3(263.79647827148, 220.09181213379, 101.68327331543),
-		heading = 338.0
-	},
-	{
-		model = `s_m_m_security_01`,
-		weapon = `WEAPON_HEAVYPISTOL`,
-		pos = vector3(257.37475585938, 227.73597717285, 101.68325805664),
-		heading = 157.0
-	},
-	{
-		model = `s_m_m_security_01`,
-		weapon = `WEAPON_HEAVYPISTOL`,
-		pos = vector3(259.59222412109, 217.7239074707, 106.28652954102),
+		pos = vector3(257.84271240234, 205.50750732422, 110.28303527832),
 		heading = 79.0
 	},
 	{
 		model = `s_m_m_security_01`,
 		weapon = `WEAPON_HEAVYPISTOL`,
-		pos = vector3(237.16539001465, 217.62754821777, 110.08293609619),
+		pos = vector3(236.15869140625, 213.71444702148, 110.2829208374),
+		heading = 79.0
+	},
+	{
+		model = `s_m_m_security_01`,
+		weapon = `WEAPON_HEAVYPISTOL`,
+		pos = vector3(265.85189819336, 219.23295593262, 110.28303527832),
+		heading = 79.0
+	},
+	{
+		model = `s_m_m_security_01`,
+		weapon = `WEAPON_HEAVYPISTOL`,
+		pos = vector3(267.16900634766, 218.59368896484, 110.28303527832),
 		heading = 294.0
 	},
 }
 
 local isInsideBank = false
-local guardsMadeAggressive = false
 
 local hackPasses = 0
 local hackAttempts = 0
@@ -545,6 +538,14 @@ AddEventHandler('bank:makeGuardsAggressive', function()
 	makeGuardsAggressive(true)
 end)
 
+RegisterNetEvent('bank:spawnGuards')
+AddEventHandler('bank:spawnGuards', function(alsoMakeAggressive)
+	spawnGuards()
+	if alsoMakeAggressive then
+		TriggerServerEvent("bank:makeGuardsAggressiveForAll")
+	end
+end)
+
 local Pacific = PolyZone:Create({
     vector2(232.71, 211.31),
     vector2(229.84, 218.54),
@@ -560,33 +561,6 @@ local Pacific = PolyZone:Create({
 
 Pacific:onPointInOut(PolyZone.getPlayerPosition, function(isPointInside, point)
     if isPointInside then
-        local guardAlreadySpawned = TriggerServerCallback {
-			eventName = "bank:spawnGuardIfNotSpawned",
-			args = {}
-		}
-		if not guardAlreadySpawned then
-			for i = 1, #GUARDS do
-				local guard = GUARDS[i]
-				RequestModel(guard.model)
-				while not HasModelLoaded(guard.model) do
-					Wait(1)
-				end
-				local ped = CreatePed(4, guard.model, guard.pos.x, guard.pos.y, guard.pos.z, guard.heading, true, true)
-				NetworkRegisterEntityAsNetworked(ped)
-				SetNetworkIdCanMigrate(NetworkGetNetworkIdFromEntity(ped), true)
-				SetNetworkIdExistsOnAllMachines(NetworkGetNetworkIdFromEntity(ped), true)
-				SetPedCanSwitchWeapon(ped, true)
-				SetPedArmour(ped, 100)
-				SetPedAccuracy(ped, math.random(70,90))
-				SetEntityInvincible(ped, false)
-				SetEntityVisible(ped, true)
-				SetEntityAsMissionEntity(ped)
-				GiveWeaponToPed(ped, guard.weapon, 255, false, false)
-				SetPedDropsWeaponsWhenDead(ped, false)
-				SetPedFleeAttributes(ped, 0, false)	
-				SetPedRelationshipGroupHash(ped, GetHashKey("bankSecurity"))
-			end
-		end
 		TriggerServerEvent("bank:getSafeData")
 		isInsideBank = true
     else
@@ -661,50 +635,55 @@ AddEventHandler('bank:swapCartModel', function(cartData)
 	CreateModelSwap(cartData.x, cartData.y, cartData.z, 0.5, `hei_prop_hei_cash_trolly_01`, `prop_gold_trolly`, true)
 end)
 
--- make security guards aggressive when armed:
-Citizen.CreateThread(function()
-	local madeAggressive = false
-	while true do
-		if isInsideBank then
-			local me = PlayerPedId()
-			if IsPedArmed(me, (4 | 2 | 1)) and not GetCurrentPedWeapon(me) ~= `WEAPON_UNARMED` then
-				if not madeAggressive then
-					madeAggressive = true
-					makeGuardsAggressive(true)
-				end
-			else
-				madeAggressive = false
-			end
-		else
-			madeAggressive = false
-		end
-		Wait(100)
-	end
-end)
-
 function makeGuardsAggressive(toggle)
 	if toggle then
-		local guardModel = GetHashKey("s_m_m_security_01")
-		local p = PlayerPedId()
-		local mycoords = GetEntityCoords(p)
-		SetPedRelationshipGroupHash(p, GetHashKey("PLAYER"))
-		AddRelationshipGroup('bankSecurity')
-		SetRelationshipBetweenGroups(0, GetHashKey("bankSecurity"), GetHashKey("bankSecurity"))
-		SetRelationshipBetweenGroups(5, GetHashKey("bankSecurity"), GetHashKey("PLAYER"))
-		SetRelationshipBetweenGroups(5, GetHashKey("PLAYER"), GetHashKey("bankSecurity"))
-		local MAX_DIST = 100
-		for ped in exports.globals:EnumeratePeds() do
-			local pedModel = GetEntityModel(ped)
-			if pedModel == guardModel then
-				local dist = Vdist(GetEntityCoords(ped), mycoords)
-				if dist < MAX_DIST then
-					SetPedRelationshipGroupHash(ped, GetHashKey("bankSecurity"))
+		if isInsideBank then
+			local guardModel = GetHashKey("s_m_m_security_01")
+			local p = PlayerPedId()
+			local mycoords = GetEntityCoords(p)
+			SetPedRelationshipGroupHash(p, GetHashKey("PLAYER"))
+			AddRelationshipGroup('bankSecurity')
+			SetRelationshipBetweenGroups(0, GetHashKey("bankSecurity"), GetHashKey("bankSecurity"))
+			SetRelationshipBetweenGroups(5, GetHashKey("bankSecurity"), GetHashKey("PLAYER"))
+			SetRelationshipBetweenGroups(5, GetHashKey("PLAYER"), GetHashKey("bankSecurity"))
+			local MAX_DIST = 100
+			for ped in exports.globals:EnumeratePeds() do
+				local pedModel = GetEntityModel(ped)
+				if pedModel == guardModel then
+					local dist = Vdist(GetEntityCoords(ped), mycoords)
+					if dist < MAX_DIST then
+						SetPedRelationshipGroupHash(ped, GetHashKey("bankSecurity"))
+					end
 				end
 			end
 		end
 	else
 		SetRelationshipBetweenGroups(0, GetHashKey("bankSecurity"), GetHashKey("PLAYER"))
 		SetRelationshipBetweenGroups(0, GetHashKey("PLAYER"), GetHashKey("bankSecurity"))
+	end
+end
+
+function spawnGuards()
+	for i = 1, #GUARDS do
+		local guard = GUARDS[i]
+		RequestModel(guard.model)
+		while not HasModelLoaded(guard.model) do
+			Wait(1)
+		end
+		local ped = CreatePed(4, guard.model, guard.pos.x, guard.pos.y, guard.pos.z, guard.heading, true, true)
+		NetworkRegisterEntityAsNetworked(ped)
+		SetNetworkIdCanMigrate(NetworkGetNetworkIdFromEntity(ped), true)
+		SetNetworkIdExistsOnAllMachines(NetworkGetNetworkIdFromEntity(ped), true)
+		SetPedCanSwitchWeapon(ped, true)
+		SetPedArmour(ped, 100)
+		SetPedAccuracy(ped, math.random(70,90))
+		SetEntityInvincible(ped, false)
+		SetEntityVisible(ped, true)
+		SetEntityAsMissionEntity(ped)
+		GiveWeaponToPed(ped, guard.weapon, 255, false, false)
+		SetPedDropsWeaponsWhenDead(ped, false)
+		SetPedFleeAttributes(ped, 0, false)	
+		SetPedRelationshipGroupHash(ped, GetHashKey("bankSecurity"))
 	end
 end
 

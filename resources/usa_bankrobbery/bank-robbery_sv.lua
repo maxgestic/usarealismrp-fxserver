@@ -30,9 +30,9 @@ local safes = {
 
 local alarmedTriggered = false
 
-local hasGuardSpawned = false
-
 local hasDoorBeenThermited = false
+
+local guardsSpawned = false
 
 RegisterServerEvent("bank:beginRobbery")
 AddEventHandler("bank:beginRobbery", function(bank)
@@ -140,11 +140,9 @@ function resetBankHeist()
 	bankRobbable = true
 	alarmedTriggered = false
 	TriggerClientEvent('bank:resetVault', -1)
-	if hasDoorBeenThermited then
-		hasGuardSpawned = false
-	end
 	exports.usa_doormanager:toggleDoorLockByName("Pacific Standard Bank", true)
 	hasDoorBeenThermited = false
+	guardsSpawned = false
 end
 
 function addAnimInfoToDoorObj(door)
@@ -185,7 +183,6 @@ RegisterServerEvent("bank:useThermite")
 AddEventHandler("bank:useThermite", function()
 	local nearestDoor = exports.usa_doormanager:getNearestDoor(source, 2.0)
 	if nearestDoor.name:find("Pacific Standard Bank / ") and nearestDoor.locked and isOnSameZPlaneAsDoor(nearestDoor, source) then
-		TriggerClientEvent("bank:makeGuardsAggressive", -1)
 		nearestDoor = addAnimInfoToDoorObj(nearestDoor)
 		local success = TriggerClientCallback {
 			source = source,
@@ -200,6 +197,10 @@ AddEventHandler("bank:useThermite", function()
 				alarmedTriggered = true
 				TriggerClientEvent("bank:toggleAlarm", -1, true)
 				TriggerEvent("911:call", 252.0, 228.0, 102.0, "Armed Robbery (Pacific Standard Bank)", "Bank Robbery")
+				if not guardsSpawned then
+					guardsSpawned = true
+					TriggerClientEvent("bank:spawnGuards", source, true)
+				end
 			end
 			hasDoorBeenThermited = true
 		end
@@ -215,18 +216,6 @@ RegisterServerEvent("bank:toggleAlarm")
 AddEventHandler("bank:toggleAlarm", function(doPlay)
 	TriggerClientEvent("bank:toggleAlarm", -1, doPlay)
 end)
-
-RegisterServerCallback {
-	eventName = "bank:spawnGuardIfNotSpawned",
-	eventCallback = function()
-		if not hasGuardSpawned then
-			hasGuardSpawned = true
-			return false
-		else
-			return true
-		end
-	end
-}
 
 RegisterServerEvent("bank:getCashCartData")
 AddEventHandler("bank:getCashCartData", function()
@@ -327,3 +316,8 @@ RegisterServerCallback {
 		return retVal
 	end
 }
+
+RegisterServerEvent("bank:makeGuardsAggressiveForAll")
+AddEventHandler("bank:makeGuardsAggressiveForAll", function()
+	TriggerClientEvent("bank:makeGuardsAggressive", -1)
+end)
