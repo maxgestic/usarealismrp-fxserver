@@ -177,7 +177,7 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 	local totalPrice = BASE_CHECKIN_PRICE
 	for bone, injuries in pairs(playerInjuries) do
 		for injury, data in pairs(playerInjuries[bone]) do
-			if injuries[injury].dropEvidence == 1.0 then
+			if SuspiciousWound(injuries[injury].string) then
 				TriggerEvent('911:SuspiciousHospitalInjuries', char.getFullName(), x, y, z)
 			end
 			totalPrice = totalPrice + injuries[injury].treatmentPrice
@@ -370,4 +370,20 @@ end, {
 
 function PlayerName(source)
 	return GetPlayerName(source)..'['..GetPlayerIdentifier(source)..']'
+end
+
+function SuspiciousWound(woundType)
+	local susWounds = {
+		["High-speed Projectile"] = true,
+		["Concentrated Blunt Object"] = true,
+		["Large Blunt Object"] = true,
+		["Large Sharp Object"] = true,
+		["Concentrated Heat"] = true,
+		["Knife Puncture"] = true,
+		["Sharp Glass"] = true,
+		["Explosion"] = true,
+		["Gasoline Residue"] = true,
+		["Molotov Residu"] = true
+	}
+	return susWounds[woundType]
 end
