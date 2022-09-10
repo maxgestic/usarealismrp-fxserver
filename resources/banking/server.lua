@@ -59,7 +59,7 @@ AddEventHandler('bank:transfer', function(targetID, amount)
 			TriggerClientEvent("usa:notify", source, "Transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ complete!")
 			TriggerClientEvent("usa:notify", targetID, "A transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ has been transferred to your account!")
 			-- Write to Admin log
-			TriggerEvent("chat:sendToLogFile", source, "Player has transfered $" .. exports["globals"]:comma_value(amount) .. " to [ID:"..targetID.." / " ..GetPlayerIdentifiers(source)[1].."].")
+			TriggerEvent("chat:sendToLogFile", source, "Player has transfered $" .. exports["globals"]:comma_value(amount) .. " to [ID:"..targetID.." / " ..GetPlayerIdentifiers(targetID)[1].."].")
 		else
 			TriggerClientEvent("usa:notify", source, "Error processing transfer request. Try again later.")
 		end

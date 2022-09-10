@@ -10,65 +10,35 @@ local VEHICLE_RANKS = {
 			allowedLiveries = {1, 2, 3},
 			hash = GetHashKey("p14tesla")
 		},
-		["p14charger"] = {
+		["p16tau"] = {
 			rank = 1,
 			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p14charger")
+			hash = GetHashKey("p16tau")
 		},
-		["p18charger"] = {
-			rank = 1,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p18charger")
-		},
-		["p18taurus"] = {
-			rank = 1,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p18taurus")
-		},
-		["p16explorer"] = {
-			rank = 2,
-			allowedLiveries = { 1, 2, 3},
-			hash = GetHashKey("p16explorer")
-		},
-		["p20explorer"] = {
+		["p20exp"] = {
 			rank = 2,
 			allowedLiveries = {1, 2, 3, 4, 5},
-			hash = GetHashKey("p20explorer")
+			hash = GetHashKey("p20exp")
 		},
-		["p14tahoe"] = {
+		["p21tah"] = {
 			rank = 4,
 			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p14tahoe")
+			hash = GetHashKey("p21tah")
 		},
-		["p20tahoe"] = {
+		["p21dur"] = {
 			rank = 4,
 			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p20tahoe")
-		},
-		["p21tahoe"] = {
-			rank = 4,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p21tahoe")
-		},
-		["p21durango"] = {
-			rank = 4,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p21durango")
+			hash = GetHashKey("p21dur")
 		},
 		["sotruck"] = {
 			rank = 5,
 			allowedLiveries = {1, 2, 3},
 			hash = GetHashKey("sotruck")
 		},
-		["p18f250"] = {
+		["p18xl"] = {
 			rank = 5,
 			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p18f250")
-		},
-		["p22sierra"] = {
-			rank = 6,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p22sierra")
+			hash = GetHashKey("p18xl")
 		},
 		["1200RT"] = {
 			rank = 2,
@@ -144,6 +114,11 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = {1, 2, 3},
 			hash = GetHashKey("bostonwhale")
+		},
+		["pboat"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("pboat")
 		},
 		["fbi2"] = {
 			rank = 4,
@@ -172,78 +147,53 @@ local VEHICLE_RANKS = {
 		}
 	},
 	["corrections"] = {
+		["p4x4"] = {
+			rank = 1,
+			allowedLiveries = {1, 2},
+			hash = GetHashKey("p4x4")
+		},
 		["pcvpi"] = {
 			rank = 1,
 			allowedLiveries = {1, 2, 3, 4},
 			hash = GetHashKey("pcvpi")
 		},
-		["p20explorer"] = {
-			rank = 1,
-			allowedLiveries = {1, 2, 3, 4, 5},
-			hash = GetHashKey("p20explorer")
-		},
 		["p14tesla"] = {
-			rank = 5,
+			rank = 4,
 			allowedLiveries = {1, 2, 3},
 			hash = GetHashKey("p14tesla")
 		},
-		["p14charger"] = {
+		["p16tau"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("p16tau")
+		},
+		["p20exp"] = {
+			rank = 2,
+			allowedLiveries = {1, 2, 3, 4, 5},
+			hash = GetHashKey("p20exp")
+		},
+		["p21tah"] = {
 			rank = 4,
 			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p14charger")
+			hash = GetHashKey("p21tah")
 		},
-		["p18taurus"] = {
+		["p21dur"] = {
 			rank = 4,
 			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p18taurus")
-		},
-		["p16explorer"] = {
-			rank = 4,
-			allowedLiveries = { 1, 2, 3},
-			hash = GetHashKey("p16explorer")
-		},
-		["p21durango"] = {
-			rank = 4,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p21durango")
-		},
-		["p14tahoe"] = {
-			rank = 4,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p14tahoe")
-		},
-		["p20tahoe"] = {
-			rank = 6,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p20tahoe")
-		},
-		["p21tahoe"] = {
-			rank = 7,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p21tahoe")
-		},
-		["p18charger"] = {
-			rank = 5,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p18charger")
+			hash = GetHashKey("p21dur")
 		},
 		["sotruck"] = {
 			rank = 5,
 			allowedLiveries = {1, 2, 3},
 			hash = GetHashKey("sotruck")
 		},
-		["p18f250"] = {
-			rank = 6,
+		["p18xl"] = {
+			rank = 5,
 			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p18f250")
-		},
-		["p22sierra"] = {
-			rank = 6,
-			allowedLiveries = {1, 2, 3},
-			hash = GetHashKey("p22sierra")
+			hash = GetHashKey("p18xl")
 		},
 		["1200RT"] = {
-			rank = 5,
+			rank = 2,
 			allowedLiveries = { 1 },
 			hash = GetHashKey("1200RT")
 		},
@@ -253,22 +203,22 @@ local VEHICLE_RANKS = {
 			hash = GetHashKey("policebikerb")
 		},
 		["polmav"] = {
-			rank = 2,
+			rank = 3,
 			allowedLiveries = { 1 },
 			hash = 353883353
 		},
 		["as350"] = {
-			rank = 2,
+			rank = 3,
 			allowedLiveries = {1, 3, 4, 5},
 			hash = 1346171487
 		},
 		["buzzard2"] = {
-			rank = 5,
+			rank = 3,
 			allowedLiveries = { 1 },
 			hash = 745926877
 		},
 		["c3swathawk"] = {
-			rank = 7,
+			rank = 3,
 			allowedLiveries = { 1, 2, 3 },
 			hash = -218549024
 		},
@@ -278,12 +228,12 @@ local VEHICLE_RANKS = {
 			hash = 1077822991
 		},
 		["npolchal"] = {
-			rank = 5,
+			rank = 2,
 			allowedLiveries = { 1, 2, 3 },
 			hash = 1949729657
 		},
 		["npolstang"] = {
-			rank = 5,
+			rank = 3,
 			allowedLiveries = { 1, 2, 3 },
 			hash = -1336796853
 		},
@@ -308,7 +258,7 @@ local VEHICLE_RANKS = {
 			hash = 1766503135
 		},
 		["dinghy"] = {
-			rank = 4,
+			rank = 3,
 			allowedLiveries = { 1 },
 			hash = 1033245328
 		},
@@ -317,6 +267,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = {1, 2, 3},
 			hash = GetHashKey("bostonwhale")
 		},
+		["pboat"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("pboat")
+		},
 		["fbi2"] = {
 			rank = 4,
 			allowedLiveries = { 1 },
@@ -324,7 +279,7 @@ local VEHICLE_RANKS = {
 		},
 		["bearcatrb"] = {
 			rank = 3,
-			allowedLiveries = { 1, 2, 3},
+			allowedLiveries = {1, 2, 3},
 			hash = -500937862
 		},
 		["14suvrb"] = {
@@ -342,42 +297,37 @@ local VEHICLE_RANKS = {
 			allowedLiveries = {1},
 			hash = GetHashKey("14suvrb")
 		}
-	},
-	["ems"] = {
+	    },
+	    ["ems"] = {
 		["fordambo"] = {
 			rank = 1,
 			allowedLiveries = { 1, 2},
 			hash = GetHashKey("fordambo")
 		},
-		["p20explorer"] = {
-			rank = 3,
-			allowedLiveries = {1, 2, 3, 4, 5},
-			hash = GetHashKey("p20explorer")
-		},
-		["p21tahoe"] = {
+		["p21tah"] = {
 			rank = 3,
 			allowedLiveries = {1, 2, 3, 4},
-			hash = GetHashKey("p21tahoe")
+			hash = GetHashKey("p21tah")
 		},
-		["firetruk"] = {
+		["pierce1"] = {
 			rank = 1,
 			allowedLiveries = { 1 },
-			hash = 1938952078
+			hash = GetHashKey("pierce1")
 		},
 		["polmav"] = {
 			rank = 1,
 			allowedLiveries = { 3 },
-			hash = 353883353
+			hash = GetHashKey("polmav")
 		},
 		["as350"] = {
 			rank = 1,
 			allowedLiveries = { 2 },
-			hash = 1346171487
+			hash = GetHashKey("as350")
 		},
 		["buzzard2"] = {
 			rank = 1,
 			allowedLiveries = { 1 },
-			hash = 745926877
+			hash = GetHashKey("buzzard2")
 		},
 		["ec145"] = {
 			rank = 1,
