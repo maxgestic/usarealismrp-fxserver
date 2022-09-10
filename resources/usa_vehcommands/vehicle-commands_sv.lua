@@ -359,10 +359,10 @@ local VEHICLE_RANKS = {
 			allowedLiveries = {1, 2, 3, 4},
 			hash = GetHashKey("p21tahoe")
 		},
-		["firetruk"] = {
+		["pierce1"] = {
 			rank = 1,
 			allowedLiveries = { 1 },
-			hash = 1938952078
+			hash = GetHashKey("pierce1")
 		},
 		["polmav"] = {
 			rank = 1,
