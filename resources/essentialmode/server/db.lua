@@ -471,7 +471,12 @@ function exposedDB.updateDocument(db, documentID, updates, callback, createDocIf
 				end
 			end
 			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
-				callback(doc, err, rText)
+				if err ~= 409 then
+					callback(doc, err, rText)
+				else
+					print("retrying document update due to conflict (409)")
+					exposedDB.updateDocument(db, documentID, updates, callback, createDocIfNotExist)
+				end 
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 		else
 			if createDocIfNotExist then
