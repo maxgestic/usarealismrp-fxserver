@@ -482,6 +482,9 @@ var itemImages = {
     "Beer Pong Kit": "https://i.imgur.com/fSU0gRd.png",
     "Custom Radio": "https://i.imgur.com/yOD7u9F.png",
     "Orange": "https://i.imgur.com/oDRWnr0.png",
+    "Hacking Device": "https://i.imgur.com/aR4KqCI.png",
+    "GPS Removal Device": "https://i.imgur.com/k9wRbRx.png",
+    "Tablet": "https://i.imgur.com/Ig7jl1m.png",
 }
 
 var menuItems = [{

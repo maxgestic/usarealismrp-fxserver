@@ -77,7 +77,9 @@ local markets = {
       { name = "Empty .45 Mag [30]", type = "magazine", price = 150, weight = 5, receives = ".45", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_pi_heavypistol_mag2" },
       { name = "Empty 7.62mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "7.62mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
       { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 150, weight = 5, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0, objectModel = "w_ar_carbinerifle_mag1" },
-      { name = "Katana", hash = GetHashKey("WEAPON_KATANAS"), type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(4,8), objectModel = "w_me_katana_lr"}
+      { name = "Katana", hash = GetHashKey("WEAPON_KATANAS"), type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(4,8), objectModel = "w_me_katana_lr"},
+      { name = "Hacking Device", type = 'misc', price = 12500, legality = "illegal", weight = 5, quantity = 1, stock = math.random(4,10), objectModel = "bkr_prop_fakeid_tablet_01a"},
+      { name = "GPS Removal Device", type = 'misc', price = 8500, legality = "illegal", weight = 5, quantity = 1, stock = math.random(4,10), objectModel = "bkr_prop_fakeid_tablet_01a"},
     },
     ['pedHash'] = 'mp_m_g_vagfun_01'
   },

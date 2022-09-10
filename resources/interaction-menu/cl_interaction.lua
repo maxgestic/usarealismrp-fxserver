@@ -957,6 +957,13 @@ function interactionMenuUse(index, itemName, wholeItem)
 	elseif string.find(itemName, "Repair Kit") then
 		TriggerEvent("mechanic:repairJobCheck")
 	elseif string.find(itemName, "Hotwiring Kit") then
+		local ped = GetPlayerPed(-1)
+		local targetVehicle = GetVehiclePedIsUsing(ped, false)
+		local boostingInfo = Entity(targetVehicle).state.boostingData
+		if boostingInfo ~= nil and boostingInfo.advancedSystem then
+			TriggerEvent("usa:notify", 'You need a ~r~professional system~w~ to turn this vehicle on!')
+			return 
+		end
 		TriggerEvent("veh:hotwireVehicle")
 	elseif string.find(itemName, "Body Armor") then
 		if not busy then
@@ -1018,6 +1025,12 @@ function interactionMenuUse(index, itemName, wholeItem)
 			busy = false
 		end
 	elseif string.find(itemName, "Lockpick") then
+		local targetVehicle = getVehicleInFrontOfUser()
+		local boostingInfo = Entity(targetVehicle).state.boostingData
+		if boostingInfo ~= nil and boostingInfo.advancedSystem then
+			TriggerEvent("usa:notify", 'You need a ~r~professional system~w~ to access this vehicle!')
+			return false
+		end
 		local playerPed = GetPlayerPed(-1)
 		local veh = getVehicleInsideOrInFrontOfUser()
 		if veh ~= 0 and GetEntityType(veh) == 2 then
@@ -1198,6 +1211,12 @@ function interactionMenuUse(index, itemName, wholeItem)
 		ExecuteCommand("createbeerpong")
 	elseif wholeItem.type and wholeItem.type == "tradingCard" then
 		TriggerServerEvent("trading-cards:use", wholeItem)
+	elseif itemName == "Hacking Device" then
+		TriggerEvent("rahe-boosting:client:hackingDeviceUsed")
+	elseif itemName == "GPS Removal Device" then
+		TriggerEvent("rahe-boosting:client:gpsHackingDeviceUsed")
+	elseif itemName == "Tablet" then
+		TriggerEvent("rahe-boosting:client:openTablet")
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
@@ -1936,4 +1955,12 @@ function isMeleeWeapon(wepHash)
         [`WEAPON_SHIV`] = true
     }
     return (MELEE_WEPS[wepHash] or false)
+end
+
+function getVehicleInFrontOfUser()
+	local playerped = GetPlayerPed(-1)
+	local coordA = GetEntityCoords(playerped, 1)
+	local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
+	local targetVehicle = getVehicleInDirection(coordA, coordB)
+	return targetVehicle
 end

@@ -228,6 +228,12 @@ end)
 
 RegisterNetEvent('veh:slimjimVehInFrontPolice')
 AddEventHandler('veh:slimjimVehInFrontPolice', function()
+  local targetVehicle = getVehicleInFrontOfUser()
+  local boostingInfo = Entity(targetVehicle).state.boostingData
+  if boostingInfo ~= nil and boostingInfo.advancedSystem then
+    TriggerEvent("usa:notify", 'You need a ~r~professional system~w~ to access this vehicle!')
+    return 
+  end
   local playerPed = PlayerPedId()
   local veh = getVehicleInFrontOfUser()
   if veh ~= 0 and GetEntityType(veh) == 2 and GetVehicleClass(veh) ~= 21 and GetVehicleClass(veh) ~= 16 and GetVehicleClass(veh) ~= 15 and GetVehicleClass(veh) ~= 14 and GetVehicleClass(veh) ~= 13  and not IsPedCuffed(PlayerPedId()) then
@@ -276,6 +282,13 @@ end)
 
 RegisterNetEvent('veh:hotwireVehPolice')
 AddEventHandler('veh:hotwireVehPolice', function()
+    local ped = GetPlayerPed(-1)
+		local targetVehicle = GetVehiclePedIsUsing(ped, false)
+		local boostingInfo = Entity(targetVehicle).state.boostingData
+		if boostingInfo ~= nil and boostingInfo.advancedSystem then
+			TriggerEvent("usa:notify", 'You need a ~r~professional system~w~ to turn this vehicle on!')
+			return 
+		end
   local playerPed = PlayerPedId()
   if veh and GetPedInVehicleSeat(veh, -1) == playerPed then
     if not hasKeys and DoesEntityExist(playerPed) and not IsEntityDead(playerPed) and not IsPedCuffed(PlayerPedId()) then
