@@ -28,7 +28,7 @@ function getPlayerIdentifier(playerId)
         return -1
     else
         local char = exports["usa-characters"]:GetCharacter(playerId)
-        return char.get("_id")
+        return (char.get("_id") or nil)
     end
 end
 
