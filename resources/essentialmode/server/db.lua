@@ -550,3 +550,33 @@ exports("updateDocument", function(db, docID, updates)
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end)
+
+exports("getDocumentsByRows", function(db, rowsAndValues)
+	local retVal = nil
+	local qu = {selector = rowsAndValues}
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
+		if not rText then
+			print("db.getDocumentByRows DEBUG: error code = " .. (err or "No error code"))
+			retVal = false
+			return
+		end
+		local response = json.decode(rText)
+		if response then
+			if response.docs then
+				if #response.docs > 0 then
+					retVal = response.docs
+				else
+					retVal = false
+				end
+			else
+				retVal = false
+			end
+		else
+			retVal = false
+		end
+	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+	while retVal == nil do
+		Wait(1)
+	end
+	return retVal
+end)
