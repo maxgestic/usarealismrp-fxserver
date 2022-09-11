@@ -1,4 +1,4 @@
-cache/
+/cache/
 resources/essentialmode/sv_es-DB-config.lua
 resources/scrambler-events.json
 resources/nw_bahamaMama
