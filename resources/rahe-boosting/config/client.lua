@@ -56,7 +56,7 @@ clConfig = {
     createDropOffMarker = false,
 
     -- If a floating marker should be created at the store.
-    createStoreMarker = true,
+    createStoreMarker = false,
 
     -- The color of the area from which the player has to find the boosting vehicle. Values found at https://docs.fivem.net/docs/game-references/blips/.
     pickUpAreaColor = 1,
@@ -86,5 +86,5 @@ clConfig = {
     storeUiIcon = 'basket-shopping',
 
     -- The location where you can pick up your store orders from.
-    orderLocation = vector3(126.97422790527, -3008.7512207031, 10.703436851501)
+    orderLocation = vector3(152.69528198242, -3011.0795898438, 10.70342540741)
 }
