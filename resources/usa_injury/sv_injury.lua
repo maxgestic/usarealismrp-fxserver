@@ -175,10 +175,13 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 	local char = exports["usa-characters"]:GetCharacter(usource)
 	local userBank = char.get('bank')
 	local totalPrice = BASE_CHECKIN_PRICE
+	local copsCalled = false
+	local isPolice = IsPlayerCop(usource)
 	for bone, injuries in pairs(playerInjuries) do
 		for injury, data in pairs(playerInjuries[bone]) do
-			if SuspiciousWound(injuries[injury].string) then
+			if SuspiciousWound(injuries[injury].string) and not copsCalled and not isPolice then
 				TriggerEvent('911:SuspiciousHospitalInjuries', char.getFullName(), x, y, z)
+				copsCalled = true
 			end
 			totalPrice = totalPrice + injuries[injury].treatmentPrice
 			if injuries[injury].string == "High-speed Projectile" then 
@@ -386,4 +389,13 @@ function SuspiciousWound(woundType)
 		["Molotov Residu"] = true
 	}
 	return susWounds[woundType]
+end
+
+function IsPlayerCop(src)
+	local char = exports["usa-characters"]:GetCharacter(src)
+	if char.get("job") == "sheriff" or char.get("job") == "corrections" then
+		return true
+	else
+		return false
+	end
 end
