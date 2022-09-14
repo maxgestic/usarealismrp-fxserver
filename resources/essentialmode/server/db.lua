@@ -479,7 +479,10 @@ function exposedDB.updateDocument(db, documentID, updates, callback, createDocIf
 				elseif currentCallCount <= 5 then
 					print("retrying document update due to conflict (409), attempt #" .. currentCallCount)
 					exposedDB.updateDocument(db, documentID, updates, callback, createDocIfNotExist, currentCallCount + 1)
-				end 
+				else
+					print("failed to update document in db: " .. db)
+					callback(doc, err, rText)
+				end
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 		else
 			if createDocIfNotExist then
