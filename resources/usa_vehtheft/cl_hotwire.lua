@@ -195,18 +195,16 @@ AddEventHandler('veh:hotwireVehicle', function(callback, circles)
         local circles = math.random(4,8)
         local success = exports['usa_vehtheft']:StartHotwire(circles, seconds, success)
         if success then
-          if math.random() < 0.80 then
-            TriggerEvent('usa:notify', 'The hotwiring kit was ~g~successful~s~!')
-            hasKeys = true
-            playerHotwiredVehicles[GetVehicleNumberPlateText(veh)] = true
-            SetVehicleEngineOn(veh, true, false, false)
-            Citizen.CreateThread(function()
-              local timeToWait = math.random((5 * 60000), (20 * 60000))
-              Citizen.Wait(timeToWait)
-              TriggerServerEvent('mdt:addTempVehicle', GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), 'Unknown', exports.globals:trim(GetVehicleNumberPlateText(veh)), true)
-              print('flagging as stolen!')
-            end)
-          end
+          TriggerEvent('usa:notify', 'The hotwiring kit was ~g~successful~s~!')
+          hasKeys = true
+          playerHotwiredVehicles[GetVehicleNumberPlateText(veh)] = true
+          SetVehicleEngineOn(veh, true, false, false)
+          Citizen.CreateThread(function()
+            local timeToWait = math.random((5 * 60000), (20 * 60000))
+            Citizen.Wait(timeToWait)
+            TriggerServerEvent('mdt:addTempVehicle', GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), 'Unknown', exports.globals:trim(GetVehicleNumberPlateText(veh)), true)
+            print('flagging as stolen!')
+          end)
         else
           TriggerEvent('usa:notify', 'The hotwiring kit was ~y~unsuccessful~s~!')
         end
