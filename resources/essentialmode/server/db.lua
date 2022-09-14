@@ -459,7 +459,10 @@ function exposedDB.getDocumentByRow(db, row, value, callback)
 	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
-function exposedDB.updateDocument(db, documentID, updates, callback, createDocIfNotExist)
+function exposedDB.updateDocument(db, documentID, updates, callback, createDocIfNotExist, currentCallCount)
+	if not currentCallCount then
+		currentCallCount = 1
+	end
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
 		if err ~= 404 then
 			local doc = json.decode(rText)
@@ -473,9 +476,9 @@ function exposedDB.updateDocument(db, documentID, updates, callback, createDocIf
 			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
 				if err ~= 409 then
 					callback(doc, err, rText)
-				else
-					print("retrying document update due to conflict (409)")
-					exposedDB.updateDocument(db, documentID, updates, callback, createDocIfNotExist)
+				elseif currentCallCount <= 5 then
+					print("retrying document update due to conflict (409), attempt #" .. currentCallCount)
+					exposedDB.updateDocument(db, documentID, updates, callback, createDocIfNotExist, currentCallCount + 1)
 				end 
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 		else
