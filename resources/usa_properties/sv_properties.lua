@@ -464,6 +464,9 @@ local burglarySearchItems = {
 	{ name = "Black Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOEBLACK"), weight = 8.0, quantity = 1 },
 	{ name = "Red Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOERED"), weight = 8.0, quantity = 1 },
 	{ name = "Blue Shoe", type = "weapon", hash = GetHashKey("WEAPON_THROWINGSHOEBLUE"), weight = 8.0, quantity = 1 },
+}
+
+local tradingCards = {
 	{ name = "Filet", type = "tradingCard", src = { front = 'usarrp-filet.png', back = 'usarrp-trading-card-background.png' }, price = 300, weight = 1.0, quantity = 1, notStackable = true, objectModel = "p_ld_id_card_002" },
     { name = "Queen", type = "tradingCard", src = { front = 'usarrp-queen.png', back = 'usarrp-trading-card-background.png' }, price = 300, weight = 1.0, quantity = 1, notStackable = true, objectModel = "p_ld_id_card_002" },
     { name = "Emma", type = "tradingCard", src = { front = 'usarrp-emma.png', back = 'usarrp-trading-card-background.png' }, price = 300, weight = 1.0, quantity = 1, notStackable = true, objectModel = "p_ld_id_card_002" },
@@ -1461,7 +1464,12 @@ AddEventHandler('properties:searchCabinetBurglary', function(index)
 			local char_money = char.get('money')
 			if math.random() > 0.4 then
 				if math.random() > 0.3 then
-					local item_found = burglarySearchItems[math.random(1, #burglarySearchItems)]
+					local item_found
+					if math.random() > 0.1 then	
+						item_found = burglarySearchItems[math.random(1, #burglarySearchItems)]
+					else 
+						item_found = tradingCards[math.random(1, #tradingCards)]
+					end
 					if char.canHoldItem(item_found) then
 						TriggerClientEvent('usa:notify', source, 'You have found '..item_found.name..'.')
 						print('PROPERTIES: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has found item['..item_found.name..'] in house burglary!')
