@@ -1,9 +1,14 @@
 function spawnBoostVehicle(vehicleToSpawn, isTuned, licensePlate, advancedSystem, npcs, npcCoords, doorsLocked, advancedLock, class, cid, x, y, z, h)
     local modelHash = GetHashKey(vehicleToSpawn) -- Use compile-time hashes to get the hash of this model
-    requestModel(modelHash)
+    RequestModel(modelHash)
+    while not HasModelLoaded(modelHash) do
+        -- print("VEHICLE LOADING, PLEASE WAIT") -- debug
+		Wait(1)
+	end
 
     local vehicle = CreateVehicle(modelHash, x, y, z, h, true, true)
     while not DoesEntityExist(vehicle) do
+        -- print("VEHICLE DOESN'T EXIST - CHECKING AGAIN") -- debug
         Wait(1)
     end
 
@@ -22,10 +27,13 @@ function spawnBoostVehicle(vehicleToSpawn, isTuned, licensePlate, advancedSystem
     if doorsLocked then
         SetVehicleDoorsLocked(vehicle, 2)
     end
+    -- print("Boost Car Spawned") -- debug
 end
 
 function deleteBoostingVehicle(vehicleId)
     if DoesEntityExist(vehicleId) then
         DeleteEntity(vehicleId)
+        -- print("VEHICLE DETECTED - NOW DELETE") -- debug
     end
+    -- print("VEHICLE DELETED") -- debug
 end
