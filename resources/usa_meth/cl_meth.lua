@@ -43,11 +43,11 @@ Citizen.CreateThread(function()
         DrawText3D(COOK_COORDS.x, COOK_COORDS.y, COOK_COORDS.z, 5, '[E] - Cook Meth | [Hold E] - Hint')
         DrawText3D(PACKAGE_COORDS.x, PACKAGE_COORDS.y, PACKAGE_COORDS.z, 5, '[E] - Package Meth')
         if IsControlJustPressed(0, INPUT_KEY) then
-            if GetDistanceBetweenCoords(playerCoords, 996.90, -3200.701, -36.39, true) < 0.7 then
-                DoorTransition(playerPed, 138.18, 2295.25, 94.09, 78.12)
-            elseif GetDistanceBetweenCoords(playerCoords, 138.18, 2295.25, 94.09, true) < 0.7 then
-                DoorTransition(playerPed, 996.90, -3200.701, -36.39, 270.0)
-            elseif GetDistanceBetweenCoords(playerCoords, BUY_PSEUDOPHEDRINE_COORDS.x, BUY_PSEUDOPHEDRINE_COORDS.y, BUY_PSEUDOPHEDRINE_COORDS.z, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase supplies
+            -- if GetDistanceBetweenCoords(playerCoords, 996.90, -3200.701, -36.39, true) < 0.7 then
+            --     DoorTransition(playerPed, 138.18, 2295.25, 94.09, 78.12)
+            -- elseif GetDistanceBetweenCoords(playerCoords, 138.18, 2295.25, 94.09, true) < 0.7 then
+            --     DoorTransition(playerPed, 996.90, -3200.701, -36.39, 270.0)
+            if GetDistanceBetweenCoords(playerCoords, BUY_PSEUDOPHEDRINE_COORDS.x, BUY_PSEUDOPHEDRINE_COORDS.y, BUY_PSEUDOPHEDRINE_COORDS.z, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase supplies
                 Wait(500)
                 if not IsControlPressed(0, INPUT_KEY) then
                   TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduce)
