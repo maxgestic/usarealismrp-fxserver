@@ -165,27 +165,35 @@ end)
 
 -- Create Store Ped
 Citizen.CreateThread(function()
-    local spawn = 0
-	while spawn == 0 do
+    local createdJobPed
+    while true do
 		local playerCoords = GetEntityCoords(PlayerPedId(), false)
-        local ped = {x = 128.85234069824, y = -3008.5986328125, z = 10.70343875885, heading = -230.0}
-        if Vdist(ped.x, ped.y, ped.z, playerCoords.x, playerCoords.y, playerCoords.z) < 50 then
-            local hash = -984709238
-            RequestModel(hash)
-            while not HasModelLoaded(hash) do
+        local ped = {x = 152.02969360352, y = -3013.6166992188, z = 10.703437805176, heading = 37.9}
+        if Vdist(ped.x, ped.y, ped.z, playerCoords.x, playerCoords.y, playerCoords.z) < 100 then
+            if not createdJobPed then
+                local hash = -984709238
                 RequestModel(hash)
-                Wait(0)
+                while not HasModelLoaded(hash) do
+                    RequestModel(hash)
+                    Wait(0)
+                end
+                local ped = CreatePed(4, hash, ped.x, ped.y, ped.z, ped.heading, false, true)
+                SetEntityCanBeDamaged(ped,false)
+                FreezeEntityPosition(ped, true)
+                SetPedCanRagdollFromPlayerImpact(ped,false)
+                TaskSetBlockingOfNonTemporaryEvents(ped,true)
+                SetPedFleeAttributes(ped,0,0)
+                SetPedCombatAttributes(ped,17,1)
+                SetPedRandomComponentVariation(ped, true)
+                TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true)
+                createdJobPed = ped
             end
-            local ped = CreatePed(4, hash, ped.x, ped.y, ped.z, ped.heading, false, true)
-            SetEntityCanBeDamaged(ped,false)
-            SetPedCanRagdollFromPlayerImpact(ped,false)
-            TaskSetBlockingOfNonTemporaryEvents(ped,true)
-            SetPedFleeAttributes(ped,0,0)
-            SetPedCombatAttributes(ped,17,1)
-            SetPedRandomComponentVariation(ped, true)
-            TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true)
+        else 
+            if createdJobPed then 
+                DeletePed(createdJobPed)
+                createdJobPed = nil
+            end
         end
-        spawn = spawn + 1
 		Wait(1)
 	end
 end)
