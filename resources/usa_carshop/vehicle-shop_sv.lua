@@ -463,6 +463,7 @@ local vehicleShopItems = {
 			--
 			{make = "Dodge", model = "Charger (2016)", price = 120000, hash = "16charger", storage_capacity = 160.0},
 			{make = "Dodge", model = "Challenger", price = 120000, hash = "16challenger", storage_capacity = 130.0},
+			{make = "Dodge", model = "Hellephant Durango", price = 190000, hash = "hellephantdurango", storage_capacity = 260.0},
 			{make = "Dodge", model = "Ram Donk (2019)", price = 160000, hash = "19ramdonk", storage_capacity = 300.0},
 			{make = "Dodge", model = "Ram SRT-10", price = 140000, hash = "ramsrt10", storage_capacity = 400.0},
 			{make = "Dodge", model = "Ram TRX", price = 190000, hash = "dodgetrx", storage_capacity = 400.0},
@@ -485,11 +486,14 @@ local vehicleShopItems = {
             		{make = "Ford", model = "F-450 Platinum (2021)", price = 170000, hash = "f450plat", storage_capacity = 400.0},
 			{make = "Ford", model = "F-450 (2020)", price = 155000, hash = "20f450", storage_capacity = 300.0},
 			{make = "Ford", model = "F-350 (2020)", price = 160000, hash = "f350d", storage_capacity = 300.0},
+			{make = "Ford", model = "Focus RS (2009)", price = 65000, hash = "09fordRS", storage_capacity = 140.0},
+			{make = "Ford", model = "Focus RS (2017)", price = 75000, hash = "17fordRS", storage_capacity = 140.0},
 			{make = "Ford", model = "Galaxie", price = 62000, hash = "galaxie", storage_capacity = 160.0},
 			{make = "Ford", model = "GT500 (1967)", price = 130000, hash = "67GT500", storage_capacity = 140.0},
 			--{make = "Ford", model = "Hula Girl (1932)", price = 60000, hash = "ford32hulagirl", storage_capacity = 160.0}, -- Model messed up, doesn't drive right
 			{make = "Ford", model = "Mach-E", price = 92000, hash = "mache", storage_capacity = 240.0},
 			{make = "Ford", model = "Mustang", price = 100000, hash = "mgt", storage_capacity = 150.0},
+			{make = "Ford", model = "Mustang Boss Widebody (1970)", price = 130000, hash = "rr70bosswide", storage_capacity = 150.0},
 			{make = "Ford", model = "Raptor Pandem", price = 250000, hash = "razerpandemraptor", storage_capacity = 300.0},
 			{make = "Ford", model = "V-8 Coupé (1932)", price = 70000, hash = "fordc32", storage_capacity = 160.0},
             		{make = "Ford", model = "V-8 Coupé 2 (1932)", price = 80000, hash = "fordc32h", storage_capacity = 160.0},
@@ -498,12 +502,16 @@ local vehicleShopItems = {
 			{make = "GMC", model = "Denali (2018)", price = 90000, hash = "denali18", storage_capacity = 300.0},
         		{make = "GMC", model = "Sierra 3500HD (2020)", price = 150000, hash = "GODz3500HDWELDER", storage_capacity = 300.0},
 			{make = "GMC", model = "Sierra (2006)", price = 80000, hash = "polar06seirra", storage_capacity = 280.0},
+			{make = "GMC", model = "Sierra AT4", price = 110000, hash = "gmcat4", storage_capacity = 300.0},
 			--
 			{make = "Harley Davidson", model = "FLHXS (2018)", price = 70000, hash = "flhxs_streetglide_special18", storage_capacity = 95.0},
 			{make = "Harley Davidson", model = "Road King", price = 55000, hash = "na25", storage_capacity = 70.0},
 			--
+			{make = "Honda", model = "Accord (2020)", price = 75000, hash = "accord20", storage_capacity = 160.0},
 			{make = "Honda", model = "Civic Type-R (2001)", price = 60000, hash = "ep3", storage_capacity = 190.0},
             		{make = "Honda", model = "Civic Type-R (2018)", price = 90000, hash = "FK8", storage_capacity = 190.0},
+			--
+			{make = "Infiniti", model = "G35", price = 50000, hash = "infinitig35", storage_capacity = 130.0},
 			--
 			{make = "Italdesign", model = "GTR50", price = 2000000, hash = "rmodgtr50", storage_capacity = 130.0},
 			--
@@ -523,6 +531,7 @@ local vehicleShopItems = {
 			--
 			{make = "Lexus", model = "LC 500 (2020)", price = 155000, hash = "lc500", storage_capacity = 160.0},
 			{make = "Lexus", model = "LFA (2010)", price = 500000, hash = "lfa", storage_capacity = 120.0},
+			{make = "Lexus", model = "IS300", price = 60000, hash = "is300", storage_capacity = 180.0},
 			--
 			{make = "Lincoln", model = "Continental (Custom Wheels) (2020)", price = 90000, hash = "cont", storage_capacity = 220.0},
 			--
@@ -573,6 +582,7 @@ local vehicleShopItems = {
 			{make = "Sur Ron", model = "Lightbee Pxx (2022)", price = 11000, hash = "22Surron", storage_capacity = 40.0},
 			--
 			{make = "Toyota", model = "4Runner", price = 70000, hash = "4runner", storage_capacity = 280.0},
+			{make = "Toyota", model = "Camry", price = 65000, hash = "camry18", storage_capacity = 160.0},
 			{make = "Toyota", model = "Chaser (DRIFT)", price = 75000, hash = "razerchaser", storage_capacity = 160.0},
 			{make = "Toyota", model = "Sprinter Trueno GT Apex (AE86) (1985) (DRIFT)", price = 78000, hash = "ae86", storage_capacity = 160.0},
 			{make = "Toyota", model = "Supra Mk4", price = 100000, hash = "supra2", storage_capacity = 150.0},
