@@ -51,6 +51,7 @@ Citizen.CreateThread(function()
     while true do
         if nearbyDumpster and IsControlJustReleased(0, Config.SearchKey) then
             if not hasBeenSearched(nearbyDumpster) then
+                FreezeEntityPosition(PlayerPedId(), true)
                 markAsSearched(nearbyDumpster)
                 exports.globals:notify("Searching Dumpster")
                 exports.globals:playAnimation("amb@prop_human_bum_bin@base", "base", 1500, 49, "Searching!")
@@ -59,6 +60,7 @@ Citizen.CreateThread(function()
                     Wait(1)
                 end
                 TriggerServerEvent("usa_dumpsters:server:giveDumpsterReward", securityToken)
+                FreezeEntityPosition(PlayerPedId(), false)
             else
                 exports.globals:notify("Already searched")
             end
