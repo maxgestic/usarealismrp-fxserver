@@ -24,3 +24,12 @@ Config.DumpsterSearchItems = {
 	{ name = 'Hotwiring Kit', type = 'misc', price = 250, legality = 'illegal', quantity = 1, weight = 10 },
 	{ name = 'Lockpick', type = 'misc', price = 150, legality = 'illegal', quantity = 10, weight = 5 },
 }
+
+Config.dumpsterObjects = {
+	218085040,
+	666561306,
+	-58485588,
+	-206690185,
+	1511880420,
+	682791951
+}

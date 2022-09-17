@@ -1,8 +1,3 @@
-RegisterServerEvent('usa_dumpsters:server:startDumpsterTimer')
-AddEventHandler('usa_dumpsters:server:startDumpsterTimer', function(dumpster)
-    startTimer(source, dumpster)
-end)
-
 RegisterServerEvent('usa_dumpsters:server:giveDumpsterReward')
 AddEventHandler('usa_dumpsters:server:giveDumpsterReward', function(securityToken)
     if not exports['salty_tokenizer']:secureServerEvent(GetCurrentResourceName(), source, securityToken) then
@@ -24,15 +19,3 @@ AddEventHandler('usa_dumpsters:server:giveDumpsterReward', function(securityToke
         TriggerClientEvent('usa:notify', source, "You found nothing of interest")
     end
 end)
-
-function startTimer(id, object)
-    local timer = Config.WaitTime * 60 * 1000
-
-    while timer > 0 do
-        Wait(1000)
-        timer = timer - 1000
-        if timer <= 0 then
-            TriggerClientEvent('usa_dumpsters:client:removeDumpster', id, object)
-        end
-    end
-end

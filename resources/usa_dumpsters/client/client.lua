@@ -1,13 +1,5 @@
-local searched = {3423423424}
-local canSearch = true
-local dumpsters = {218085040, 666561306, -58485588, -206690185, 1511880420, 682791951}
-local idle = 0
-local dumpPos
-local nearDumpster = false
-local maxDistance = 2.5
-local listening = false
---local dumpster
-local currentCoords = nil
+local searchedDumpsters = {}
+local nearbyDumpster = nil
 
 function DrawText3D(x, y, z, text)
     SetTextScale(0.35, 0.35)
@@ -24,80 +16,88 @@ function DrawText3D(x, y, z, text)
     ClearDrawOrigin()
 end
 
+-- nearby dumpster finder
 Citizen.CreateThread(function()
-    local dist = 0
     while true do
-        Wait(0)
-        local ped = PlayerPedId()
-        local pos = GetEntityCoords(ped)
-        local playerCoords, awayFromGarbage = GetEntityCoords(PlayerPedId()), true
-        if not nearDumpster then
-            for i = 1, #dumpsters do
-                local distance
-                dumpster = GetClosestObjectOfType(pos.x, pos.y, pos.z, 1.0, dumpsters[i], false, false, false)
-                if dumpster ~= 0 then
-                    dumpster = dumpster 
-                end
-                dumpPos = GetEntityCoords(dumpster)
-                local distance = #(pos - dumpPos)
-                if distance < maxDistance then
-                    currentCoords = dumpPos
-                end
-                if distance < maxDistance then
-                    awayFromGarbage = false
-                    nearDumpster = true
-                    if not listening then
-                        dumpsterKeyPressed()
-                    end
-                end
+        local mycoords = GetEntityCoords(PlayerPedId())
+        for i = 1, #Config.dumpsterObjects do
+            local dumpsterHandle = GetClosestObjectOfType(mycoords.x, mycoords.y, mycoords.z, 1.0, Config.dumpsterObjects[i], false, false, false)
+            if dumpsterHandle ~= 0 then
+                nearbyDumpster = {
+                    handle = dumpsterHandle,
+                    coords = GetEntityCoords(dumpsterHandle)
+                }
+                break
+            else
+                nearbyDumpster = nil
             end
         end
-        if currentCoords ~= nil and #(currentCoords - playerCoords) > maxDistance then
-            nearDumpster = false
-            listening = false
-        end
-        if awayFromGarbage then
-            Citizen.Wait(1000)
-        end
+        Wait(300)
     end
 end)
 
-function dumpsterKeyPressed()
-    listening = true
-    Citizen.CreateThread(function()
-        while listening do
-            local dumpsterFound = false
-            Citizen.Wait(0)
-            DrawText3D(currentCoords.x, currentCoords.y, currentCoords.z + 1.0, '[E] - Search Dumpster')
-            if IsControlJustReleased(0, Config.SearchKey) then
-                for i = 1, #searched do
-                    if searched[i] == dumpster then
-                        dumpsterFound = true
-                    end
-                    if i == #searched and dumpsterFound then
-                        exports.globals:notify("Dumpster already searched!")
-                    elseif i == #searched and not dumpsterFound then
-                        exports.globals:notify("Searching Dumpster")
-                        exports.globals:playAnimation("amb@prop_human_bum_bin@base", "base", 1500, 49, "Searching!")
-                        Wait(1500)
-                        while securityToken == nil do
-                            Wait(1)
-                        end
-                        TriggerServerEvent("usa_dumpsters:server:giveDumpsterReward", securityToken)
-                        TriggerServerEvent('usa_dumpsters:server:startDumpsterTimer', dumpster)
-                        table.insert(searched, dumpster)
-                    end
-                end
+-- 3d text
+Citizen.CreateThread(function()
+    while true do
+        if nearbyDumpster then
+            DrawText3D(nearbyDumpster.coords.x, nearbyDumpster.coords.y, nearbyDumpster.coords.z + 1.0, '[E] - Search Dumpster') 
+        end
+        Wait(1)
+    end
+end)
+
+-- keypress listener 
+Citizen.CreateThread(function()
+    while true do
+        if nearbyDumpster and IsControlJustReleased(0, Config.SearchKey) then
+            if not hasBeenSearched(nearbyDumpster) then
+                markAsSearched(nearbyDumpster)
+                exports.globals:notify("Searching Dumpster")
+                exports.globals:playAnimation("amb@prop_human_bum_bin@base", "base", 1500, 49, "Searching!")
+                Wait(1500)
+                --while securityToken == nil do
+                    Wait(1)
+                --end
+                TriggerServerEvent("usa_dumpsters:server:giveDumpsterReward", securityToken)
+            else
+                exports.globals:notify("Already searched")
             end
         end
-    end)
+        Wait(1)
+    end
+end)
+
+-- dumpster search cooldowns
+Citizen.CreateThread(function()
+    while true do
+        for i = #searchedDumpsters, 1, -1 do
+            if GetGameTimer() - searchedDumpsters[i].searchTime >= Config.WaitTime * 60 * 1000 then
+                table.remove(searchedDumpsters, i)
+            end
+        end
+        Wait(1)
+    end
+end)
+
+function hasBeenSearched(dumpster)
+    for i = 1, #searchedDumpsters do
+        -- object handle the same ?
+        if searchedDumpsters[i].handle == dumpster.handle then
+            return true
+        end
+        -- coords the same? for the case where the handle is changed (like despawning/respawning bins)
+        local distBetween = #(dumpster.coords - searchedDumpsters[i].coords)
+        if distBetween <= 1.0 then
+            return true
+        end
+    end 
+    return false
 end
 
-RegisterNetEvent('usa_dumpsters:client:removeDumpster')
-AddEventHandler('usa_dumpsters:client:removeDumpster', function(object)
-    for i = #searched, 1, -1 do
-        if searched[i] == object then
-            table.remove(searched, i)
-        end
-    end
-end)
+function markAsSearched(dumpster)
+    table.insert(searchedDumpsters, {
+        coords = dumpster.coords,
+        handle = dumpster.handle,
+        searchTime = GetGameTimer()
+    })
+end
