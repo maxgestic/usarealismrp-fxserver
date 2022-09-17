@@ -55,9 +55,9 @@ Citizen.CreateThread(function()
                 exports.globals:notify("Searching Dumpster")
                 exports.globals:playAnimation("amb@prop_human_bum_bin@base", "base", 1500, 49, "Searching!")
                 Wait(1500)
-                --while securityToken == nil do
+                while securityToken == nil do
                     Wait(1)
-                --end
+                end
                 TriggerServerEvent("usa_dumpsters:server:giveDumpsterReward", securityToken)
             else
                 exports.globals:notify("Already searched")
