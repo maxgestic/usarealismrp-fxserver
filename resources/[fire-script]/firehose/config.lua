@@ -10,8 +10,12 @@ Config.UseESX = false
 Config.UseQBUS = false
 
 --Required Job To Use The FireHose
-Config.JobName = "fire"
+Config.JobName = "firefighter"
 
 --Standalone identifier whitelist
 --Set UseWhitelist To True To Use The Whitelist
-Config.UseWhitelist = true
+Config.UseWhitelist = false
+Config.Identifiers = {
+    "steam:11000012430xfa",
+    "license:1123d12313"
+}

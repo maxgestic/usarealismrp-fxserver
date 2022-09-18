@@ -1,4 +1,8 @@
+ESX = nil
+QBCore = nil
+
 local IsFireFighter = false
+
 local FireBlips = {}
 
 if Config.UseESX then
@@ -29,11 +33,11 @@ if Config.UseESX then
         end
     end)
 elseif Config.UseQBUS then
-    RegisterNetEvent('FireScript:')
-    AddEventHandler('usa_rp:playerLoaded', function()
-        local char = exports["usa-characters"]:GetCharacter(source)
-        local job = char.get("job")
-        if job == "fire" or job == "ems" then
+    QBCore = exports['qb-core']:GetCoreObject()
+    RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
+    AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+        local PlayerJob = QBCore.Functions.GetPlayerData().job
+        if PlayerJob.name == Config.JobName then
             IsFireFighter = true
         else
             IsFireFighter = false
@@ -73,10 +77,15 @@ AddEventHandler('FireScript:FireStarted', function(id, position, sendMessage)
         end
 
         if Config.FireWarnings.Message.Enabled and sendMessage then
-            local x, y, z = table.unpack(mycoords)
-            local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-            local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-            TriggerServerEvent("911:UncontrolledFire", x, y, z, lastStreetNAME)
+            local street, road = GetStreetNameAtCoord(position.x, position.y, position.z)
+            local streetName = GetStreetNameFromHashKey(street)
+            local roadName = GetStreetNameFromHashKey(road)
+
+            if roadName ~= "" then
+                SendWarningMessage("Fire Started", "Location | " .. streetName .. " - " .. roadName)
+            else
+                SendWarningMessage("Fire Started", "Location | " .. streetName)
+            end
         end
     end
 end)
@@ -88,23 +97,42 @@ AddEventHandler('FireScript:FireStopped', function(id, position)
             DeleteFireBlip(id)
 
             if Config.FireWarnings.Message.Enabled then
-                local x, y, z = table.unpack(mycoords)
-                local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-                local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-                TriggerServerEvent("911:UncontrolledFire", x, y, z, lastStreetNAME)
+                local street, road = GetStreetNameAtCoord(position.x, position.y, position.z)
+                local streetName = GetStreetNameFromHashKey(street)
+                local roadName = GetStreetNameFromHashKey(road)
+
+                if roadName ~= "" then
+                    SendOkayMessage("Fire Stopped", "Location | " .. streetName .. " - " .. roadName)
+                else
+                    SendOkayMessage("Fire Stopped", "Location | " .. streetName)
+                end
             end
         else--All Fires Are Stopped
             for id, data in ipairs(FireBlips) do
                 DeleteFireBlip(id)
             end
             if Config.FireWarnings.Message.Enabled then
-                TriggerEvent('usa:notify', 'Fire Stopped, All Locations')
+                SendOkayMessage("Fire Stopped", "All Locations")
             end
         end
     end
 end)
 
 --[[Functions]]--
+function SendWarningMessage(title, msg) 
+	TriggerEvent('chat:addMessage', {
+		template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(255, 61, 61, 0.25); border-radius: 3px;">{0} <br> {1}</div>',
+        args = { title, msg }
+	})
+end
+
+function SendOkayMessage(title, msg) 
+	TriggerEvent('chat:addMessage', {
+		template = '<div style="padding: 0.5vw; margin: 0.5vw; background-color: rgba(61, 255, 113, 0.25); border-radius: 3px;">{0} <br> {1}</div>',
+        args = { title, msg }
+	})
+end
+
 function CreateMapPing(targetCoords, data)
     if data.Enabled then
         CreateThread(function()
@@ -153,3 +181,26 @@ function DeleteFireBlip(id)
         FireBlips[id] = nil
     end
 end
+
+--[[Add Command Suggestions]]--
+TriggerEvent("chat:addSuggestion", "/startfire", "Starts a fire at your location",
+{
+    { name = "Flames", help = "The number of flames" },
+    { name="Spread", help="The fire spread in metres" },
+    { name="Type", help="The fire type" },
+})
+
+TriggerEvent("chat:addSuggestion", "/setfireaop", "Sets the random fires area of patrol",
+{
+    { name = "AOP", help = "The area of patrol" },
+})
+
+TriggerEvent("chat:addSuggestion", "/stopfire", "Stops a specific fire or nearby ones", {
+    { name = "id", help = "A Specific Fire ID"}
+})
+
+TriggerEvent("chat:addSuggestion", "/enablerandomfires", "Enables/Disables Random Fires", {
+    { name = "Enable", help = "Random Fires Enabled? (true or false)"}
+})
+TriggerEvent("chat:addSuggestion", "/stopallfires", "Stops all the fires")
+TriggerEvent("chat:addSuggestion", "/getfires", "Gets all the fires data")

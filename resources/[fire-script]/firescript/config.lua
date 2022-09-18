@@ -7,6 +7,15 @@ Config.MaxFlames = 20
 --Max Spread That Can Be Created Via Command
 Config.MaxSpread = 20
 
+--Discord Webhooks
+Config.Discord = {
+    UseWebHooks = true,
+    WEB_HOOK = "https://discord.com/api/webhooks/ YOUR WEBHOOK SHOULD BE HERE",
+    STEAM_API = "",
+    WEB_IMAGE = "https://cdn.discordapp.com/attachments/786356643491086368/939538836629893160/logo.png",
+    BOT_NAME = "Toxic FireScript Logger",
+}
+
 --If you dont use esx nor use qbus set UseESX to false and UseQBUS to false
 --You can then use the job identifier whitelist as standalone
 
@@ -17,10 +26,14 @@ Config.UseESX = false
 Config.UseQBUS = false
 
 --Required Job To Use The FireHose
-Config.JobName = "fire"
+Config.JobName = "firefighter"
 
 --This is a whitelist for the firefighers (Standalone Only)
-Config.UseFireJobWhitelist = true
+Config.UseFireJobWhitelist = false
+Config.FireJobIdentifiers = {
+    "steam:11000012430xfa",
+    "license:1123d12313"
+}
 
 --Identifier Admin whitelist
 --Set UseWhitelist To True To Use The Whitelist (Standalone Only)
@@ -150,10 +163,10 @@ Config.FireTypes = {
 --Fire timeout is to set the fire off if it hasn't been taken out
 Config.RandomFires = {
     Enabled = true,
-    AOP = "SW",--Current AOP
-    Delay = 3600,--In Seconds (30 Minutes)
+    AOP = "LS",--Current AOP
+    Delay = 1800,--In Seconds (30 Minutes)
     Locations = {
-        ["SW"] = {--Lossantos Is The AOP
+        ["LS"] = {--Lossantos Is The AOP
             [1] = {
                 position = vector3(122.14, -223.04, 54.56),--Clothes shop
                 location = "Clothes Shop",
@@ -186,7 +199,9 @@ Config.RandomFires = {
                 type = "bonfire",
                 timeout = 300--In Seconds
             },
-            [5] = {
+        },
+        ["SA"] = {--Sandy Is The AOP
+            [1] = {
                 position = vector3(1963.77, 3744.05, 32.34),--24/7
                 location = "24/7",
                 flames = 10,
@@ -194,7 +209,9 @@ Config.RandomFires = {
                 type = "normal2",
                 timeout = 300--In Seconds
             },
-            [6] = {
+        },
+        ["PB"] = {--Paleto Bay Is The AOP
+            [1] = {
                 position = vector3(-92.22, 6415.5, 31.47),--Gas Station
                 location = "Gas Station",
                 flames = 20,

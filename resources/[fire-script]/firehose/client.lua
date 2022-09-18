@@ -1,3 +1,6 @@
+ESX = nil
+QBCore = nil
+
 if Config.UseESX then
 	Citizen.CreateThread(function()
 		while not ESX do
@@ -43,7 +46,7 @@ elseif Config.UseQBUS then
         end
     end)
 
-    --[[RegisterNetEvent('QBCore:Client:OnJobUpdate')
+    RegisterNetEvent('QBCore:Client:OnJobUpdate')
     AddEventHandler('QBCore:Client:OnJobUpdate', function(job)
         local PlayerJob = job
         if PlayerJob.name == Config.JobName then
@@ -53,7 +56,7 @@ elseif Config.UseQBUS then
             --Remove The FireHose Perms
             TriggerEvent('fhose:canUseNozzles', false)
         end
-    end)--]]
+    end)
 else
     --Gives The Player FireHose Perms
     if Config.UseWhitelist then
@@ -63,18 +66,11 @@ else
     end
 end
 
-RegisterNetEvent('fhose:RequestPermissions')
-AddEventHandler('fhose:RequestPermissions', function(allowed)
-    if allowed then
-        TriggerEvent('fhose:canUseNozzles', true)
-    end
-end)
-
 AddEventHandler('fhose:onPumpBreak', function()
-    TriggerEvent('usa:notify', '~r~You Broke The Fire Hose!')
+    ShowNotification("~r~You Broke The Fire Hose!")
 end)
 
---[[AddEventHandler('fhose:requestEquipPump', function()
+AddEventHandler('fhose:requestEquipPump', function()
     if Config.UseESX then
         --You can do checks here for inventory or other stuff
         TriggerEvent("fhose:equipPump")
@@ -84,7 +80,7 @@ end)
 	else 
         TriggerEvent("fhose:equipPump")
     end
-end)--]]
+end)
 
 AddEventHandler('fhose:playSplashParticle', function(pdict, pname, posx, posy, posz, heading)
 	Citizen.CreateThread(function()
@@ -94,3 +90,9 @@ AddEventHandler('fhose:playSplashParticle', function(pdict, pname, posx, posy, p
         StopParticleFxLooped(pfx, 0)
     end)
 end)
+
+function ShowNotification(msg)
+	SetNotificationTextEntry('STRING')
+	AddTextComponentString(msg)
+	DrawNotification(0,1)
+end

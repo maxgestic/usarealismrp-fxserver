@@ -1,4 +1,5 @@
 local LastRandomID = 0
+
 local CurrentRandomFireID = 0
 
 Citizen.CreateThread(function()
