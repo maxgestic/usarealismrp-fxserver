@@ -21,30 +21,26 @@
 				</div>
 
 				<!-- Main menu -->
-				<div class="container center" v-if="currentPage === 'Home'">
-				<ul class="menu limit-width top-margin-no-sides">
-						<li v-if="targetVehiclePlate !== null" @click="showVehicleActions()" class="menu-item">
-							<label>Vehicle Actions</label>
-						</li>
-					<li v-for="(item, index) in menuItems" @click="onClick(item)" class="menu-item">
-							<label>{{ item.name }}</label>
-						</li>
-						<li @click="closeMenu()" class="menu-item">
-							<label>Close</label>
-						</li>
-				</ul>
+				<div class="w3-display-container w3-display-middle" v-if="currentPage === 'Home'">
+					<div v-if="targetVehiclePlate !== null" @click="showVehicleActions()" class="menu-item-vertical">
+						<p>Vehicle Actions</p>
+					</div>
+					<div v-for="(item, index) in menuItems" @click="onClick(item)" class="menu-item-vertical">
+						<p>{{ item.name }}</p>
+					</div>
+					<div @click="closeMenu()" class="menu-item-vertical">
+						<p>Close</p>
+					</div>
 				</div>
 
 				<!-- Submenus -->
-				<div class="container center" v-if="currentPage !== 'Home' && currentPage !== 'Inventory'">
-					<ul class="menu submenu">
-						<li class="menu-item" v-for="(item, index) in currentSubmenuItems" @click="onSubmenuItemClick(item)">
-							<label>{{ item.name }}</label>
-						</li>
-						<li class="menu-item" @click="back()">
-							<label>Back</label>
-						</li>
-					</ul>
+				<div class="w3-display-container w3-display-middle" v-if="currentPage !== 'Home' && currentPage !== 'Inventory'">
+					<div class="menu-item w3-center" v-for="(item, index) in currentSubmenuItems" @click="onSubmenuItemClick(item)">
+						<p>{{ item.name }}</p>
+					</div>
+					<div class="menu-item" @click="back()">
+						<p>Back</p>
+					</div>
 				</div>
 
 				<!-- Inventory Context Menu -->

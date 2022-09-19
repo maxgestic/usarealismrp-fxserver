@@ -71,37 +71,31 @@ ul.menu label {
 	text-align: center;
 }
 
-ul.menu label {
+#submenu-item-container {
+	max-width: 75%;
+	margin: 0;
+}
+
+.menu label {
   /* background-color: rgba(0,0,0,.5); */
 	background-color: rgba(0,0,0,.5);
 }
 
-ul.menu-item {
-	font-weight: bolder;
+.menu-item-vertical {
+	display: block;
 }
 
-/* Sub menus */
-ul.submenu {
-	-moz-column-count: 6;
-	-moz-column-gap: 10px;
-	-webkit-column-count: 6;
-	-webkit-column-gap: 10px;
-	column-count: 6;
-	column-gap: 10px;
-	line-height: 1.5;
-	/* margin-top: 6em; */
+.menu-item {
+	display: inline-block;
 }
 
-ul.submenu li {
-	display: inline;
-}
-
-ul.submenu label:hover {
-	background-color: rgba(0,0,0,0.4);
-}
-
-ul.submenu li label {
-	padding: 0.5em !important;
+.menu-item p, .menu-item-vertical p {
+	padding: 0.9em;
+	background-color: #28272B;
+	margin: 0.3em;
+	color: white;
+	opacity: 0.95;
+	text-align: center;
 }
 
 /* Inventory */
