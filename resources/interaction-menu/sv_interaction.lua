@@ -334,3 +334,14 @@ function DroppedActionMessage(source, name)
 		--exports["globals"]:sendLocalActionMessage(source, msg)
 	end
 end
+
+RegisterServerEvent("interaction:InvLoadHotkey")
+AddEventHandler("interaction:InvLoadHotkey", function(plate)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local inventory = char.get("inventory")
+	-- print(plate)
+	TriggerClientEvent("interaction:openGUIAndSendNUIData", source, {
+		type = "hotkeyLoadInv",
+		target_vehicle_plate = plate
+	})
+end)

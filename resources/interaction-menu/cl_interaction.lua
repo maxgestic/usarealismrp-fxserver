@@ -384,6 +384,15 @@ RegisterNUICallback('loadVehicleInventory', function(data, cb)
 	TriggerServerEvent("interaction:loadVehicleInventory", data.plate)
 end)
 
+RegisterCommand('openInventory', function()
+	local hitHandleVehicle, distance = getVehicleInsideOrInFrontOfUser()
+	local target_veh_plate = GetVehicleNumberPlateText(hitHandleVehicle)
+	local target_veh_plate = exports.globals:trim(target_veh_plate)
+	TriggerServerEvent("interaction:InvLoadHotkey", target_veh_plate)
+end)
+
+RegisterKeyMapping('openInventory', 'Open Inventory', 'keyboard', 'i')
+
 -- this is called when the player clicks "retrieve" in the interaction menu on a vehicle inventory item
 RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 	DisableGui()

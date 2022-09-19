@@ -1219,6 +1219,17 @@ $(function() {
             interactionMenu.nearestPlayer = nearest;
         } else if (event.data.type == "showSelectedItemPreview") {
             interactionMenu.selectedItemPreview.show(event.data.itemName, event.data.ammoCount);
+        } else if (event.data.type == "hotkeyLoadInv"){
+            $.post('http://interaction-menu/loadInventory', JSON.stringify({}));
+            /* Toggle veh inv */
+            if (event.data.target_vehicle_plate) {
+                interactionMenu.targetVehiclePlate = event.data.target_vehicle_plate
+                $.post("http://interaction-menu/loadVehicleInventory", JSON.stringify({
+                    plate: event.data.target_vehicle_plate
+                }));
+            }
+            /* Set page */
+            interactionMenu.currentPage = "Inventory";
         }
     });
     /* Close Menu */
