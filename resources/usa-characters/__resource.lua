@@ -5,7 +5,6 @@ client_scripts {
 }
 
 server_scripts {
-  '@mysql-async/lib/MySQL.lua',
   'classes/character.lua',
   'sv_characters.lua'
 }

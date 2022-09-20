@@ -15,8 +15,6 @@ local isCarried = false
 
 local lastKillerID = nil
 
-local emscalled = false
-
 AddEventHandler('death:allowRespawn', function()
 	allowRespawn = true
 end)
@@ -127,27 +125,7 @@ Citizen.CreateThread(function()
 				TriggerServerEvent('InteractSound_SV:PlayOnSource', 'demo', 0.5)
 				playsound = false
 			end
-
-			if not emscalled then
-				local emswaitPeriod = diedTime + (60*1000)
-				if (GetGameTimer() < emswaitPeriod) then
-					local seconds = math.ceil((emswaitPeriod - GetGameTimer()) / 1000)
-					local minutes = math.floor((seconds / 60))
-					DrawTxt(0.932, 1.35, 1.0, 1.0, 0.50, 'Local will call 911 in ~g~'.. SecondsToMinuteClock(seconds) .. ' ~s~minutes', 255, 255, 255, 255)
-				else
-					DrawTxt(0.948, 1.35, 1.0, 1.0, 0.50, 'Press ~g~R ~s~ for a local to call 911', 255, 255, 255, 255)
-					local isInPoliceCustody = IsPedCuffed(ped) and not exports.usa_rp2:areHandsTied()
-					if IsControlPressed(0, 140) and not isInPoliceCustody then -- R
-						emscalled = true
-						local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-			            local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-			            local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-			            TriggerServerEvent('911:PlayerCall', x, y, z, lastStreetNAME, "Local 911 Call about an unconscious person! Dispatch medical ASAP!")
-					end
-				end
-			end
-
-			DrawTxt(0.817, 1.25, 1.0, 1.0, 0.50, 'Incapacitated, wait for medical attention or respawn (After 1 minute a local will call 911 for you)!', 255, 255, 255, 255)
+			DrawTxt(0.897, 1.25, 1.0, 1.0, 0.50, 'Incapacitated, call for medical attention or respawn!', 255, 255, 255, 255)
 			if GetEntitySpeed(ped) < 0.05 and not IsEntityInAir(ped) and not IsEntityInWater(ped) and not IsPedInAnyVehicle(ped) then
 				if freeze then
 					heading = GetEntityHeading(ped)
@@ -208,7 +186,6 @@ Citizen.CreateThread(function()
 	  			diedTime = nil
 			end
 		else
-			emscalled = false
 	  		allowRespawn = false
 	  		allowRevive = false
 	  		diedTime = nil
