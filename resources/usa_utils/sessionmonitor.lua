@@ -61,6 +61,8 @@ AddEventHandler('es:playerLoaded', function(source, user)
 end)
 
 AddEventHandler("playerDropped", function(reason)
+    TriggerEvent("high_callback:drop", source)
+
     print("player drop reason: " .. (reason or "NULL"))
     reason = reason:lower()
     if reason:find("game crashed") or reason:find("timed out") then

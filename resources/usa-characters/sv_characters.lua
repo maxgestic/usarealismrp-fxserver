@@ -151,6 +151,57 @@ function CreateNewCharacter(src, data, cb)
 end
 
 function InitializeCharacter(src, characterID)
+    -- print(src)
+    -- print(characterID)
+    MySQL.ready(function ()
+      MySQL.Async.fetchAll('SELECT * FROM users WHERE ownerIdentifier = @id', { ['@id'] = characterID }, function(result)
+        if (json.encode(result) == "[]") then
+          TriggerEvent("es:exposeDBFunctions", function(db)
+            db.getAllDocumentsFromDbLimit("phone-contacts", 1000000, function(records)
+              local contactTable = {}
+              for i,v in ipairs(records) do
+                -- print(v.ownerIdentifier)
+                -- print(v.number)
+                -- print(v.display)
+                if v.ownerIdentifier == characterID then
+                  MySQL.ready(function ()
+                    -- print("adding record")
+                    MySQL.Async.execute('INSERT INTO phone_contacts (owner, number, name) VALUES (@id, @number, @name);',{ ['@id'] = v.ownerIdentifier, ['@number'] = v.number, ['@name'] = v.display}, function(affectedRows)
+                      -- print(affectedRows)
+                    end)
+                  end)
+                end
+              end
+            end)
+          end)
+          TriggerEvent("es:exposeDBFunctions", function(db) 
+            local phoneNumber = nil
+            db.getDocumentById("phone-users", characterID, function(doc)
+              if doc ~= false then
+                print(doc.number)
+                phoneNumber = doc.number
+              end
+              print("adding record")
+              print(json.encode(result))
+              if phoneNumber then
+                MySQL.Async.execute('INSERT INTO users (ownerIdentifier, phone) VALUES (@id, @phoneNumber);',{ ['@id'] = characterID, ['@phoneNumber'] = phoneNumber}, function(affectedRows)
+                  print(affectedRows)
+                  TriggerEvent("high_callback:load", src)
+                end)
+              else
+                MySQL.Async.execute('INSERT INTO users (ownerIdentifier) VALUES (@id);',{ ['@id'] = characterID }, function(affectedRows)
+                  print(affectedRows)
+                  TriggerEvent("high_callback:load", src)
+                end)
+              end  
+            end) 
+          end)
+        else
+          print("already there")
+          TriggerEvent("high_callback:load", src)
+        end
+      end)
+    end)
     TriggerEvent('es:exposeDBFunctions', function(db)
         db.getDocument("characters", characterID, function(charData)
             charData.source = src
@@ -228,6 +279,9 @@ function SetCharacterField(src, field, val)
     return
   end
   CHARACTERS[src].set(field, val)
+  if field == "job" then
+    TriggerEvent("high_callback:setJob", src)
+  end
 end
 
 Citizen.CreateThread(function()

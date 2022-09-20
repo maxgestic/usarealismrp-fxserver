@@ -158,6 +158,7 @@ AddEventHandler("character:swap--check-distance", function()
 	for i = 1, #swap_locations do
 		local location = swap_locations[i]
 		if GetDistanceBetweenCoords(location.x, location.y, location.z, mycoords) < 8 then
+			TriggerServerEvent("high_callback:drop", GetPlayerServerId(PlayerId()))
 			TriggerEvent("Radio.Set", false, {})
 			TriggerEvent("hotkeys:setCurrentSlotPassive", nil)
 			TriggerEvent("gcPhone:twitter_Logout")
