@@ -1,3 +1,5 @@
+local RELOAD_TIME_MS = 2000
+
 local FIREMODE_SELECTOR_KEY = 319 -- should be synced with Config.SelectorKey
 
 local FULL_AUTO_WEPS = {
@@ -47,7 +49,7 @@ AddEventHandler("ammo:reloadMag", function(data)
             ammoCountToUse = data
         end
         -- play reload animation --
-        playAnimation("cover@weapon@machinegun@combat_mg_str", "low_reload_left", 2000, 48, "Reloading")
+        playAnimation("cover@weapon@machinegun@combat_mg_str", "low_reload_left", RELOAD_TIME_MS, 48, "Reloading")
         -- set / remove extended mag if applicable --
         if type(data) == "table" then
             if data.magComponent then
@@ -183,9 +185,13 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+    local lastPressTime = GetGameTimer()
 	while true do
         if IsDisabledControlJustPressed(1, 45) then -- 45 = R
-            TriggerServerEvent("ammo:checkForMagazine")
+            if GetGameTimer() - lastPressTime >= RELOAD_TIME_MS then
+                lastPressTime = GetGameTimer()
+                TriggerServerEvent("ammo:checkForMagazine")
+            end
         end
         Wait(1)
     end
