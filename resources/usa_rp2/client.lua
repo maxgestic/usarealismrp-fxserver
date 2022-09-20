@@ -940,6 +940,14 @@ Citizen.CreateThread(function()
     end
 end)
 
+-- Credit to Savage for code
+Citizen.CreateThread(function()
+  while true do
+      DistantCopCarSirens(false)
+      Citizen.Wait(400)
+  end
+end)
+
 -- Gets a vehicle in a certain direction
 -- Credit to Konijima
 function GetVehicleInDirection( coordFrom, coordTo, distance, ped )
