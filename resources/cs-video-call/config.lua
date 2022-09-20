@@ -3,7 +3,7 @@ config = {
     ['updatesCheck'] = true,
 
     -- The phone hook to use, relevant files must be placed inside "hooks" folder.
-    ['phoneHook'] = 'gcphone',
+    ['phoneHook'] = 'high-phone',
 
     -- The control key to swap between enabled and disabled video call. (https://docs.fivem.net/docs/game-references/controls/)
     -- Set this to nil if you do not want to enable this key (the button will still be clickable in the UI if your phone supports it).
