@@ -1,7 +1,5 @@
 local FIREMODE_SELECTOR_KEY = 319 -- should be synced with Config.SelectorKey
 
-local ranOutOfAmmo = false
-
 local FULL_AUTO_WEPS = {
     "WEAPON_MINISMG",
     "WEAPON_SMG",
@@ -69,14 +67,7 @@ AddEventHandler("ammo:reloadMag", function(data)
         if isFullAuto(currentWeaponHash) then
             SetPedAmmo(myped, currentWeaponHash, ammoCountToUse + 1) -- give pseudo ammo so we don't auto store weapon
         end
-        -- reset state var
-        ranOutOfAmmo = false
     end
-end)
-
-RegisterNetEvent("ammo:setRanOutOfAmmo")
-AddEventHandler("ammo:setRanOutOfAmmo", function(status)
-	ranOutOfAmmo = status
 end)
 
 -- save ammo after shooting
@@ -88,9 +79,6 @@ Citizen.CreateThread(function()
             if not IsPedShooting(myped) then
                 local w = GetSelectedPedWeapon(myped)
                 local b1, wa = GetAmmoInClip(myped, w)
-                if ranOutOfAmmo then
-                    wa = 0
-                end
                 TriggerServerEvent("ammo:save", wa)
             end
         end
@@ -112,53 +100,12 @@ Citizen.CreateThread(function()
             Wait(1)
         end
         if wasJustArmed then
-            if ranOutOfAmmo then
-                wa = 0
-            end
             TriggerServerEvent("ammo:weaponStored", wa)
-            ranOutOfAmmo = false
             wasJustArmed = false
             TriggerEvent("Weapons:Client:resetAlreadyTriggeredOutOfAmmo")
         end
         Wait(1)
     end
-end)
-
--- disable shooting when out of ammo loop (since inferno-weapons resource puts a single bullet in the gun to prevent it from being auto stored by GTA when running out of ammo)
-Citizen.CreateThread(function()
-	while true do
-		while ranOutOfAmmo do
-            local p = PlayerPedId()
-
-			-- disable firing
-            local w = GetSelectedPedWeapon(p)
-
-            if w == `WEAPON_UNARMED` then
-                ranOutOfAmmo = false
-                break
-            end
-
-            local b1, wa = GetAmmoInClip(p, w)
-
-            if not (wa == 2 and isFullAuto(w)) then
-                DisablePlayerFiring(PlayerId(), true)
-            end
-
-			-- Disable fire mode selector key
-			DisableControlAction(0, FIREMODE_SELECTOR_KEY, true)
-
-			-- Disable reload and pistol whip
-			DisableControlAction(0, 45, true)
-			DisableControlAction(0, 140, true)
-			DisableControlAction(0, 141, true)
-			DisableControlAction(0, 142, true)
-			DisableControlAction(0, 257, true)
-			DisableControlAction(0, 263, true)
-			DisableControlAction(0, 264, true)
-			Wait(0)
-		end
-        Wait(0)
-	end
 end)
 
 -- remove weapon if holding right click to withdraw it when in a vehicle
@@ -229,3 +176,17 @@ function playAnimation(dict, name, duration, flag, timerBarText)
         TriggerEvent("interaction:setBusy", false)
     end)
 end
+
+Citizen.CreateThread(function()
+	SetWeaponsNoAutoreload(true)
+	SetWeaponsNoAutoswap(true)
+end)
+
+Citizen.CreateThread(function()
+	while true do
+        if IsDisabledControlJustPressed(1, 45) then -- 45 = R
+            TriggerServerEvent("ammo:checkForMagazine")
+        end
+        Wait(1)
+    end
+end)
