@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `phone_tweets` (
   `views` int(11) NOT NULL DEFAULT 0,
   `likes` int(11) NOT NULL DEFAULT 0,
   `time` bigint(20) DEFAULT NULL,
-  `likers` longtext,
+  `likers` longtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
