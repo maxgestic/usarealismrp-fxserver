@@ -1,6 +1,6 @@
 local taserModel = GetHashKey("WEAPON_STUNGUN")
 
-local taserCartridgeUsed = false
+local taserCartridgeUsed = true
 
 RegisterNetEvent("usa-taser:enable")
 AddEventHandler("usa-taser:enable", function(status)

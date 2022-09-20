@@ -94,7 +94,6 @@ local THROWABLES = {
 	["Molotov"] = true,
 	["Flare"] = true,
 	["Tear Gas"] = true,
-	["Stun Gun"] = true,
 	["Sticky Bomb"] = true,
 	["Flashbang"] = true,
 	["Hand Grenade"] = true,
