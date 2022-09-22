@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Michroma&display=swap');
+
+.container {
+  font-family: 'Share Tech Mono', monospace;
+  display: block;
+  position: absolute;
+  padding: 5px;
+  min-height: 70px;
+  background-color: rgba(0, 0, 0, 0.55);
+  border-radius: 5px;
+
+}
+
+#main {
+  text-transform: uppercase;
+  width: 400px;
+  height: 5px;
+  text-shadow: 2px 2px 2px #00000094;
+  color: rgb(255, 255, 255);
+  padding: 0;
+  float:right;
+  padding:2px;
+  margin: 3px;
+}
+
+body {
+  color: #fff;
+  overflow: hidden;
+  height:100%;
+  width:100%;
+}
