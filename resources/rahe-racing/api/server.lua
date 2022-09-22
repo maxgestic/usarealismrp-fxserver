@@ -126,7 +126,7 @@ supportedVehicles = {
     { name = "Annis LE7B", model = "lE7B", class = "S" },
     { name = "Overflod Tyrant", model = "tyrant", class = "S" },
     { name = "Overflod Zeno", model = "zeno", class = "S" },
-    { name = "Pegassi Tezeract", model = "tezeract", class = "S" },
+    { name = "Pegassi Tezeract", model = "tezeract", class = "E" }, -- ELECTRIC
     { name = "Grotti Visione", model = "visione", class = "S" },
     { name = "Pegassi Zorrusso", model = "zorrusso", class = "S" },
     { name = "Dewbauchee Vagner", model = "vagner", class = "S" },
@@ -177,12 +177,12 @@ supportedVehicles = {
     { name = "Ferrari F40", model = "rmodf40", class = "S" },
     { name = "Italdesign Nissan GTR-50", model = "rmodgtr50", class = "S" },
     { name = "Lamborghini Sian", model = "rmodsianr", class = "S" },
-    { name = "BMW I8", model = "I8", class = "S" },
+    { name = "BMW I8", model = "I8", class = "E" }, -- ELECTRIC
     { name = "Porsche 911 Turbo S", model = "pts21", class = "S" },
     { name = "Porsche GT3", model = "pgt3", class = "S" },
     { name = "2020 Tesla Roadster", model = "tesroad20", class = "S" },
-    { name = "Lamborghini Terzo Millennio", model = "ocnlamtmc", class = "S" },
-    { name = "Lotus Evija", model = "evija", class = "S" },
+    { name = "Lamborghini Terzo Millennio", model = "ocnlamtmc", class = "E" }, -- ELECTRIC
+    { name = "Lotus Evija", model = "evija", class = "E" }, -- ELECTRIC
     -- A Class:**
     { name = "Sultan RS", model = "sultanrs", class = "A" },
     { name = "Annis Elegy Retro", model = "elegy", class = "A" },
@@ -230,7 +230,7 @@ supportedVehicles = {
     { name = "Enus Paragon", model = "paragon", class = "A" },
     { name = "Enus Windsor", model = "windsor", class = "A" },
     { name = "Grotti Brioso R/A", model = "brioso", class = "A" },
-    { name = "Coil Voltic", model = "voltic", class = "A" },
+    { name = "Coil Voltic", model = "voltic", class = "E" }, -- ELECTRIC
     { name = "Vapid Dominator", model = "dominator", class = "A" },
     { name = "Vapid Dominator GTX", model = "dominator3", class = "A" },
     { name = "Vapid Dominator ASP", model = "dominator7", class = "A" },
@@ -286,15 +286,15 @@ supportedVehicles = {
     { name = "Toyota Supra Mk4", model = "supra2", class = "A" },
     { name = "Nissan Skyline (R34)", model = "skyline", class = "A" },
     { name = "2016 Maserati GranTurismo", model = "stradale18", class = "A" },
-    { name = "Tesla Model S Prior Design", model = "teslapd", class = "A" },
-    { name = "Tesla Model S", model = "models", class = "A" },
-    { name = "Tesla Model S", model = "teslamodels", class = "A" },
-    { name = "Tesla Model X", model = "teslax", class = "A" },
+    { name = "Tesla Model S Prior Design", model = "teslapd", class = "E" }, -- ELECTRIC
+    { name = "Tesla Model S", model = "models", class = "E" }, -- ELECTRIC
+    { name = "Tesla Model S", model = "teslamodels", class = "E" }, -- ELECTRIC
+    { name = "Tesla Model X", model = "teslax", class = "E" }, -- ELECTRIC
     { name = "Bentley Bacalar", model = "rmodbacalar", class = "A" },
     { name = "Aston Martin DBS", model = "rmodmartin", class = "A" },
     { name = "Ford Raptor Pandem", model = "razerpandemraptor", class = "A" },
     { name = "Chrysler 300 SRT8", model = "300srt8", class = "A" },
-    { name = "Porsche Taycan", model = "taycan", class = "A" },
+    { name = "Porsche Taycan", model = "taycan", class = "E" }, -- ELECTRIC
     -- B Class:**
     { name = "Bravado Gauntlet Hellfire", model = "gauntlet4", class = "B" },
     { name = "Declasse Hotring Sabre", model = "hotring", class = "B" },
@@ -346,11 +346,11 @@ supportedVehicles = {
     { name = "Lampadati Felon", model = "felon", class = "B" },
     { name = "Lampadati Cinquemila", model = "cinquemila", class = "B" },
     { name = "Pfister Astron", model = "astron", class = "B" },
-    { name = "Obey I-Wagen", model = "iwagen", class = "B" },
-    { name = "Coil Raiden", model = "raiden", class = "B" },
-    { name = "Pfister Neon", model = "neon", class = "B" },
-    { name = "Coil Cyclone", model = "cyclone", class = "B" },
-    { name = "Cheval Surge", model = "surge", class = "B" },
+    { name = "Obey I-Wagen", model = "iwagen", class = "E" }, -- ELECTRIC
+    { name = "Coil Raiden", model = "raiden", class = "E" }, -- ELECTRIC
+    { name = "Pfister Neon", model = "neon", class = "E" }, -- ELECTRIC
+    { name = "Coil Cyclone", model = "cyclone", class = "E" }, -- ELECTRIC
+    { name = "Cheval Surge", model = "surge", class = "E" }, -- ELECTRIC
     { name = "Ubermacht Rebla", model = "rebla", class = "B" },
     { name = "Gallivanter Baller LE", model = "baller3", class = "B" },
     { name = "Gallivanter Baller ST", model = "baller7", class = "B" },
@@ -431,7 +431,7 @@ supportedVehicles = {
     { name = "BMW E30", model = "alpinae30", class = "B" },
     { name = "BMW E34", model = "e34", class = "B" },
     { name = "2016 BMW X5", model = "x5m2016", class = "B" },
-    { name = "2020 BMW i4", model = "ocni422spe", class = "B" },
+    { name = "2020 BMW i4", model = "ocni422spe", class = "E" }, -- ELECTRIC
     { name = "BMW Z3", model = "z3", class = "B" },
     { name = "Subaru BRZ", model = "brz13", class = "B" },
     { name = "Chevrolet C-10 Stepside Custom", model = "c10custom", class = "B" },
@@ -481,8 +481,8 @@ supportedVehicles = {
     { name = "Dodge Ram TRX", model = "dodgetrx", class = "B" },
     { name = "Ford F100 Slammed", model = "slammedf100", class = "B" },
     { name = "Dababy Car", model = "dababy", class = "B" },
-    { name = "Ford Mach E", model = "mache", class = "B" },
-    { name = "Audi e-tron GT", model = "ocnetrongt", class = "B" },
+    { name = "Ford Mach E", model = "mache", class = "E" }, -- ELECTRIC
+    { name = "Audi e-tron GT", model = "ocnetrongt", class = "E" }, -- ELECTRIC
     { name = "2018 Harley Davidson FLHXS", model = "flhxs_streetglide_special18", class = "B" },
     { name = "Harley Davidson Road King", model = "na25", class = "B" },
     { name = "2022 Sur Ron Lightbee Pxx", model = "22Surron", class = "B" },
@@ -602,8 +602,8 @@ supportedVehicles = {
     { name = "Brute Camper", model = "camper", class = "D" },
     { name = "Declasse Burrito", model = "burrito3", class = "D" },
     { name = "Canis Kalahari", model = "kalahari", class = "D" },
-    { name = "Karin Dilettante", model = "dilettante", class = "D" },
-    { name = "Karin Dilettante Patrol", model = "dilettante2", class = "D" },
+    { name = "Karin Dilettante", model = "dilettante", class = "E" }, -- ELECTRIC
+    { name = "Karin Dilettante Patrol", model = "dilettante2", class = "E" }, -- ELECTRIC
     { name = "Nagasaki Blazer", model = "blazer", class = "D" },
     { name = "Nagasaki Lifeguard", model = "blazer2", class = "D" },
     { name = "Canis Bodhi", model = "bodhi2", class = "D" },
