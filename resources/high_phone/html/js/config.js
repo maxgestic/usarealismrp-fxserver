@@ -96,10 +96,15 @@ Config.Backgrounds = [
     {light: "https://i.imgur.com/4UGj1bn.jpg", dark: "https://i.imgur.com/D0hmRFn.jpg"},
     {light: "https://i.imgur.com/6qrvClJ.jpg", dark: "https://i.imgur.com/efkOcHw.jpg"},
     {light: "https://i.imgur.com/Zoi3eqH.jpg", dark: "https://i.imgur.com/alel8lS.jpg"},
-    {light: "https://i.imgur.com/gv4mK4f.jpg", dark: "https://i.imgur.com/jAvHMiY.jpg"}
+    {light: "https://i.imgur.com/gv4mK4f.jpg", dark: "https://i.imgur.com/jAvHMiY.jpg"},
+    {light: "media/USARRP.png", dark: "media/USARRP.png"},
+    {light: "media/BCSO.png", dark: "media/BCSO.png"},
+    {light: "media/SASP.png", dark: "media/SASP.png"},
+    {light: "media/EMS.png", dark: "media/EMS.png"},
+    {light: "media/Pillbox.png", dark: "media/Pillbox.png"}
 ]
-Config.DefaultBackground = "media/bg.png" // Either link or directory of the background
-Config.DefaultLockbackground = "media/bg.png" // Either link or directory of the background
+Config.DefaultBackground = "media/USARRP.png" // Either link or directory of the background
+Config.DefaultLockbackground = "media/USARRP.png" // Either link or directory of the background
 Config.ImageUploadingType = "Imgur" // Set to "DiscordWebhooks" if you want to use discord's webhook image uploading.
 Config.ImageUploading = { // Do not change index names, only the values.
     Imgur: {
