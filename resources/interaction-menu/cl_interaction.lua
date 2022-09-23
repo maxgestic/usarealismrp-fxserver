@@ -1113,7 +1113,6 @@ function interactionMenuUse(index, itemName, wholeItem)
 						SetVehicleNeedsToBeHotwired(veh, true)
 					end
 					TriggerEvent("usa:notify", "Lockpick was ~y~successful~s~!")
-					TriggerServerEvent("usa:removeItem", wholeItem, 1)
 				else
 					TriggerEvent("usa:notify", "Lockpick has ~y~broken~s~!")
 					TriggerServerEvent("usa:removeItem", wholeItem, 1)
