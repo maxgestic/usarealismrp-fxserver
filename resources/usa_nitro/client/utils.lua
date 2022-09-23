@@ -11,7 +11,20 @@ local ELECTRIC_VEHICLES = {
   [GetHashKey('RAIDEN')] = true,
   [GetHashKey('SURGE')] = true,
   [GetHashKey('VOLTIC')] = true,
-  [GetHashKey('TEZERACT')] = true
+  [GetHashKey('TEZERACT')] = true,
+  [GetHashKey('I8')] = true,
+  [GetHashKey('tesroad20')] = true,
+  [GetHashKey('ocnlamtmc')] = true,
+  [GetHashKey('evija')] = true,
+  [GetHashKey('teslapd')] = true,
+  [GetHashKey('models')] = true,
+  [GetHashKey('teslamodels')] = true,
+  [GetHashKey('teslax')] = true,
+  [GetHashKey('taycan')] = true,
+  [GetHashKey('iwagen_USA')] = true,
+  [GetHashKey('ocni422spe')] = true,
+  [GetHashKey('mache')] = true,
+  [GetHashKey('ocnetrongt')] = true
 }
 
 -- TODO: Replace with `FLAG_IS_ELECTRIC` from vehicles.meta:
