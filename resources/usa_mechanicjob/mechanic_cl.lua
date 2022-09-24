@@ -227,7 +227,29 @@ locations = {
 		show_blip = {
 			disable_blip = false
 		}
-	}
+	},
+	["Vespucci PD"] = {
+		duty = {
+			x = -1058.3012695313, 
+			y = -840.30407714844, 
+			z = 4.2009510993958
+		},
+		impound = {
+			x = -1049.2827148438, 
+			y = -863.85809326172, 
+			z = 3.5
+		},
+		truck_spawn = {
+			x = -1051.6624755859, 
+			y = -847.31860351563, 
+			z = 4.8675470352173,
+			heading = 217.0
+		},
+		ped = nil,
+		show_blip = {
+			disable_blip = false
+		}
+	},
 }
 	
 -- S P A W N  J O B  P E D S
