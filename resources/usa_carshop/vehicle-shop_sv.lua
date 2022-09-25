@@ -411,6 +411,7 @@ local vehicleShopItems = {
 			{make = "Obey", model = "Omnis e-GT", price = 100000, hash = "omnisegt", storage_capacity = 135.0},
 		},
 		["Custom"] = {
+			{make = "Acura", model = "NSX (Aimgain)", price = 350000, hash = "aimgainnsx", storage_capacity = 120.0},
 			{make = "Acura", model = "RSX (2004)", price = 70000, hash = "dc5", storage_capacity = 160.0},
 			--
 			{make = "Audi", model = "A6 (2020)", price = 130000, hash = "a6", storage_capacity = 220.0},
@@ -429,6 +430,8 @@ local vehicleShopItems = {
 			{make = "BMW", model = "i4 (2020)", price = 80000, hash = "ocni422spe", storage_capacity = 190.0},
 			{make = "BMW", model = "M8", price = 340000, hash = "bmwm8", storage_capacity = 180.0},
 			--
+			{make = "Bugatti", model = "Bolide", price = 5000000, hash = "bolide", storage_capacity = 90.0},
+			{make = "Bugatti", model = "Chiron", price = 4100000, hash = "chiron", storage_capacity = 120.0},
 			{make = "Bugatti", model = "Veyron Super Sport (2011)", price = 3900000, hash = "supersport", storage_capacity = 120.0},
 			--
 			{make = "Can Am", model = "Maverick (2018)", price = 70000, hash = "can", storage_capacity = 100.0},
@@ -469,6 +472,9 @@ local vehicleShopItems = {
 			{make = "Dodge", model = "Ram TRX", price = 190000, hash = "dodgetrx", storage_capacity = 400.0},
 			{make = "Dodge", model = "Viper (1999)", price = 250000, hash = "99viper", storage_capacity = 170.0},
 			--
+			{make = "Ducati", model = "Panigale", price = 90000, hash = "panigale", storage_capacity = 20.0},
+			--
+			{make = "Ferrari", model = "458 LW", price = 950000, hash = "lw458s", storage_capacity = 130.0},
 			{make = "Ferrari", model = "California (1957)", price = 600000, hash = "cali57", storage_capacity = 150.0},
 			{make = "Ferrari", model = "F8 Tributo", price = 850000, hash = "f8t", storage_capacity = 130.0},
 			{make = "Ferrari", model = "F12", price = 850000, hash = "rmodf12tdf", storage_capacity = 130.0},
@@ -518,13 +524,20 @@ local vehicleShopItems = {
 			{make = "Jeep", model = "Gladiator", price = 70000, hash = "jeepg", storage_capacity = 280.0},
 			{make = "Jeep", model = "SRT8", price = 100000, hash = "srt8", storage_capacity = 185.0},
 			--
+			{make = "Kawasaki", model = "H2R (NOT ROAD LEGAL)", price = 200000, hash = "ninjah2", storage_capacity = 20.0},
+			{make = "Kawasaki", model = "Z1000", price = 70000, hash = "z1000", storage_capacity = 20.0},
+			--
 			{make = "Koenigsegg", model = "Agera RS (2017)", price = 3700000, hash = "agerars", storage_capacity = 120.0},
 			{make = "Koenigsegg", model = "Jesko", price = 4500000, hash = "rmodjesko", storage_capacity = 130.0},
 			--
 			{make = "Land Rover", model = "Range Rover Vogue Mansory (2020)", price = 240000, hash = "mansrr", storage_capacity = 280.0},
 			--
 			{make = "Lamborghini", model = "Diablo GTR (1999)", price = 975000, hash = "500gtrlam", storage_capacity = 120.0},
+			{make = "Lamborghini", model = "Gallardo LW", price = 450000, hash = "GallardoLW", storage_capacity = 130.0},
+			{make = "Lamborghini", model = "Huracan Evo 2 (2022) (NOT ROAD LEGAL)", price = 2800000, hash = "evo2", storage_capacity = 90.0},
 			{make = "Lamborghini", model = "Huracan LW", price = 750000, hash = "lwhuracan", storage_capacity = 130.0},
+			{make = "Lamborghini", model = "Murcielago LP-670", price = 450000, hash = "lp670", storage_capacity = 130.0},
+			{make = "Lamborghini", model = "Murcielago LP-670 LW", price = 450000, hash = "lwlp670", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "LP 700R", price = 850000, hash = "lp700r", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Sian", price = 3800000, hash = "rmodsianr", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Terzo Millennio", price = 2800000, hash = "ocnlamtmc", storage_capacity = 130.0},
@@ -544,6 +557,7 @@ local vehicleShopItems = {
 			{make = "Mazda", model = "RX-7 (DRIFT)", price = 80000, hash = "rx7rb", storage_capacity = 150.0},
 			--
 			{make = "Mclaren", model = "600LT", price = 500000, hash = "600lt", storage_capacity = 145.0},
+			{make = "Mclaren", model = "Elva", price = 2300000, hash = "elva", storage_capacity = 145.0},
 			--
 			{make = "Mercedes-Benz", model = "300 SL", price = 700000, hash = "mb300sl", storage_capacity = 165.0},
 			{make = "Mercedes-Benz", model = "C63 AMG", price = 175000, hash = "C63AMG", storage_capacity = 175.0},
@@ -568,6 +582,7 @@ local vehicleShopItems = {
 			{make = "Porsche", model = "911 Turbo S", price = 280000, hash = "pts21", storage_capacity = 160.0},
 			{make = "Porsche", model = "911 (1973)", price = 60000, hash = "porrs73", storage_capacity = 165.0},
 			{make = "Porsche", model = "928 GTS (1993)", price = 60000, hash = "928gts", storage_capacity = 160.0},
+			{make = "Porsche", model = "GT1", price = 3850000, hash = "gt1", storage_capacity = 130.0},
 			{make = "Porsche", model = "GT3", price = 280000, hash = "pgt3", storage_capacity = 160.0},
 			{make = "Porsche", model = "Taycan", price = 140000, hash = "taycan", storage_capacity = 180.0},
 			--
@@ -603,6 +618,8 @@ local vehicleShopItems = {
 			{make = "Volkswagon", model = "Type 2 (1966)", price = 50000, hash = "type266", storage_capacity = 165.0},
 			--
 			{make = "Weeny", model = "Tamworth", price = 28000, hash = "tamworth", storage_capacity = 120.0},
+			--
+			{make = "Yamaha", model = "R1", price = 85000, hash = "yamahar1", storage_capacity = 20.0},
 			--
 		}
 	}
