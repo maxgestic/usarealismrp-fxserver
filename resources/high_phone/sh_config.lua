@@ -39,12 +39,10 @@ if not IS_SERVER then
 
     RegisterNetEvent('high_callback:serverCallback')
     AddEventHandler('high_callback:serverCallback', function(requestId, ...)
+        print("serverCallback start")
+        print(requestId)
         CServerCallbacks[requestId](...)
         CServerCallbacks[requestId] = nil
-    end)
-
-    RegisterNetEvent("high_phone:updateDarkchat", function()
-      print("done update")
     end)
 
     Citizen.CreateThread(function()
@@ -59,6 +57,11 @@ end
 
 if IS_SERVER then
     ServerCallbacks = {}
+
+    RegisterServerEvent("high_phone:printServer")
+    AddEventHandler("high_phone:printServer", function(arg)
+        print(arg)
+    end)
 
     TriggerServerCallback = function(name, requestId, source, cb, ...)
         if ServerCallbacks[name] ~= nil then
@@ -98,6 +101,10 @@ Config.FrameworkFunctions = {
     -- Client-side trigger callback
     triggerCallback = function(name, cb, ...)
         CServerCallbacks[CurrentRequestId] = cb
+
+        print("triggerCallback start")
+        print(name)
+        print(CurrentRequestId)
 
         TriggerServerEvent('high_callback:triggerServerCallback', name, CurrentRequestId, ...)
 
@@ -269,10 +276,8 @@ Config.CustomCallbacks = {
     end,
     -- Darkchat app
     ["sendDarkMessage"] = function(data)
-        print("test")
         TriggerServerEvent("high_phone:sendDarkMessage", data.id, data.content, data.attachments, data.time) -- data.time is for accurate saving of time of the messages.
         Wait(1000)
-        print("1st update")
         TriggerServerEvent("high_phone:sendUpdatesDark")
     end,
     -- Phone app
