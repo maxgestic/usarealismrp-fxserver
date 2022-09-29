@@ -28,6 +28,12 @@ SecurityCamConfig.Locations = {
             {label = "Main Gate Entrance Cam 2", x = 1817.8, y = 2581.1, z = 59.9, r = {x = -45.0, y = 0.0, z = 60.0}}, 
             {label = "Receptionist Entrance", x = 1845.9899902344, y = 2579.78125, z = 49.0, r = {x = -30.0, y = 0.0, z = 318.0}},
             {label = "Cafeteria Ext", x = 1792.5628662109, y = 2548.4223632813, z = 49.0, r = {x = -30.0, y = 0.0, z = 318.0}},
+
+        }
+    },
+    {
+        camBox = {label = "Bolingbroke Penitentiary Cell Block", id = 'prisoncb'},
+        cameras = {
             -- Cell Block
             {label = "Lower Cell Block", x = 1777.5905761719, y = 2487.2336425781, z = 48.14, r = {x = -30.0, y = 0.0, z = 85.0}},
             {label = "Lower Cell Block 2", x = 1770.7250976563, y = 2499.2023925781, z = 48.14, r = {x = -30.0, y = 0.0, z = 152.0}},
@@ -37,6 +43,12 @@ SecurityCamConfig.Locations = {
             {label = "Upper Cell Block 3", x = 1748.6000976563, y = 2486.3684082031, z = 51.14, r = {x = -30.0, y = 0.0, z = 264.0}},
             {label = "Recreational Center",x = 1748.1362304688, y = 2469.8210449219, z = 47.80, r = {x = -30.0, y = 0.0, z = 334.0}},
             {label = "Gym", x = 1740.875, y = 2482.1071777344, z = 48.14, r = {x = -40.0, y = 0.0, z = 266.0}},
+
+        }
+    },
+    {
+        camBox = {label = "Bolingbroke Penitentiary Medical Ward ", id = 'prisonw'},
+        cameras = {
             -- Medical Ward
             {label = "Medical Ward Entrance 1", x = 1772.1832275391, y = 2567.4692382813, z = 47.75, r = {x = -28.0, y = 0.0, z = 65.0}}, 
             {label = "Medical Ward Entrance 2", x = 1767.9697265625, y = 2574.1293945313, z = 47.75, r = {x = -28.0, y = 0.0, z = 158.0}},
@@ -45,6 +57,11 @@ SecurityCamConfig.Locations = {
             {label = "Medical Ward Surgery", x = 1767.7001953125, y = 2582.1340332031, z = 47.75, r = {x = -40.0, y = 0.0, z = 329.0}},
             {label = "Medical Ward Medical Room cam1", x = 1768.0932617188, y = 2590.1574707031, z = 47.75, r = {x = -30.0, y = 0.0, z = 43.0}},
             {label = "Medical Ward Medical Room cam2", x = 1765.3934326172, y = 2599.5427246094, z = 47.75, r = {x = -30.0, y = 0.0, z = 224.0}},
+        }
+    },
+    {
+        camBox = {label = "Bolingbroke Penitentiary Recepitionist Area ", id = 'prisonr'},
+        cameras = {
             -- Recepitionist Area
             {label = "Recepition Lobby", x = 1844.6666259766, y = 2585.3400878906, z = 48.14, r = {x = -30.0, y = 0.0, z = 61.0}},
             {label = "Recepition Lobby cam2",x = 1844.5198974609, y = 2591.4206542969, z = 48.14, r = {x = -25.0, y = 0.0, z = 147.0}},
@@ -53,12 +70,22 @@ SecurityCamConfig.Locations = {
             {label = "Recepition Processing", x = 1838.056640625, y = 2596.0402832031, z = 48.14, r = {x = -45.0, y = 0.0, z = 129.0}},
             {label = "Recepition Visitation", x = 1827.4921875, y = 2591.5583496094, z = 48.14, r = {x = -30.0, y = 0.0, z = 206.0}},
             {label = "Recepition Hallway", x = 1830.6329345703, y = 2595.9274902344, z = 48.14, r = {x = -30.0, y = 0.0, z = 114.0}},
+        }
+    },
+    {
+        camBox = {label = "Bolingbroke Penitentiary Cafeteria ", id = 'prisonc'},
+        cameras = {
             -- Cafeteria
             {label = "Cafeteria Cam1", x = 1790.5042724609, y = 2546.0795898438, z = 47.75, r = {x = -25.0, y = 0.0, z = 37.0}}, 
             {label = "Cafeteria Cam2", x = 1790.4088134766, y = 2557.9733886719, z = 47.75, r = {x = -25.0, y = 0.0, z = 116.0}},
             {label = "Cafeteria Cam3", x = 1777.5377197266, y = 2546.4201660156, z = 47.75, r = {x = -25.0, y = 0.0, z = 314.0}}, 
             {label = "Cafeteria Cam4", x = 1783.6435546875, y = 2560.8171386719, z = 47.75, r = {x = -35.0, y = 0.0, z = 51.0}}, 
             {label = "Cafeteria Cam5", x = 1777.4647216797, y = 2560.775390625, z = 47.75, r = {x = -35.0, y = 0.0, z = 289.0}},
+        }
+    },
+    {
+        camBox = {label = "Bolingbroke Penitentiary Yards", id = 'prisony'},
+        cameras = {
             -- Yards
             {label = "Yard 1", x = 1627.2, y = 2565.6,  z = 54.6, r = {x = -20.0, y = 0.0, z = 200.0}},
             {label = "Yard 2", x = 1629.2, y = 2489.7, z = 54.6, r = {x = -20.0, y = 0.0, z = -35.0}},
