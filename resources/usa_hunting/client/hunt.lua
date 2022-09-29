@@ -6,6 +6,11 @@ local MAX_HINT_TEXT_DIST = 5
 local BUTCHER_ANIMATION_TIME_SECONDS = 30
 local HUNTING_COOK_MEAT_TIME_SECONDS = 10
 
+local BLACKLISTED_LOCATION_DIST_THRESH = 75
+local BLACKLISTED_LOCATIONS = {
+    vector3(2002.7836914063, 4821.0322265625, 3.4738917350769)
+}
+
 local KEYS = {
     E = 38
 }
@@ -40,30 +45,32 @@ Citizen.CreateThread(function()
         if IsControlJustPressed(0, KEYS.E) then
             local myped = PlayerPedId()
             local playerCoords = GetEntityCoords(myped)
-            local isInVeh = IsPedInAnyVehicle(myped, true)
-            for otherPed in exports.globals:EnumeratePeds() do
-                if not isBlacklistedModel(GetEntityModel(otherPed)) then
-                    local pedCoords = GetEntityCoords(otherPed)
-                    local distBetweenPedAndAnimal = Vdist(pedCoords, playerCoords)
-                    if DoesEntityExist(otherPed) and IsPedDeadOrDying(otherPed) then
-                        if distBetweenPedAndAnimal <= 1.5 and otherPed ~= myped and not IsPedHuman(otherPed) and not isInVeh then
-                            SetEntityAsMissionEntity(otherPed)
-                            local beginTime = GetGameTimer()
-                            exports.globals:loadAnimDict("amb@medic@standing@kneel@idle_a")
-                            while GetGameTimer() - beginTime < BUTCHER_ANIMATION_TIME_SECONDS * 1000 do
-                                if not IsEntityPlayingAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 3) then
-                                    TaskPlayAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 8.0, 1.0, -1, 11, 1.0, false, false, false)
-                                end
-                                exports.globals:DrawTimerBar(beginTime, BUTCHER_ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'Skinning & Butchering')
-                                Wait(1)
-                            end
-                            ClearPedTasks(myped)
-                            if DoesEntityExist(otherPed) then
-                                while securityToken == nil do
+            if not isAtBlacklistedLocation(playerCoords) then
+                local isInVeh = IsPedInAnyVehicle(myped, true)
+                for otherPed in exports.globals:EnumeratePeds() do
+                    if not isBlacklistedModel(GetEntityModel(otherPed)) then
+                        local pedCoords = GetEntityCoords(otherPed)
+                        local distBetweenPedAndAnimal = Vdist(pedCoords, playerCoords)
+                        if DoesEntityExist(otherPed) and IsPedDeadOrDying(otherPed) then
+                            if distBetweenPedAndAnimal <= 1.5 and otherPed ~= myped and not IsPedHuman(otherPed) and not isInVeh then
+                                SetEntityAsMissionEntity(otherPed)
+                                local beginTime = GetGameTimer()
+                                exports.globals:loadAnimDict("amb@medic@standing@kneel@idle_a")
+                                while GetGameTimer() - beginTime < BUTCHER_ANIMATION_TIME_SECONDS * 1000 do
+                                    if not IsEntityPlayingAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 3) then
+                                        TaskPlayAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+                                    end
+                                    exports.globals:DrawTimerBar(beginTime, BUTCHER_ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'Skinning & Butchering')
                                     Wait(1)
                                 end
-                                TriggerServerEvent('hunting:skinforfurandmeat', securityToken)
-                                DeleteEntity(otherPed)
+                                ClearPedTasks(myped)
+                                if DoesEntityExist(otherPed) then
+                                    while securityToken == nil do
+                                        Wait(1)
+                                    end
+                                    TriggerServerEvent('hunting:skinforfurandmeat', securityToken)
+                                    DeleteEntity(otherPed)
+                                end
                             end
                         end
                     end
@@ -106,7 +113,6 @@ AddEventHandler('hunting:cookMeat', function()
 end)
 
 
-
 function isBlacklistedModel(model)
     local BLACK_LISTED_MODELS = {}
     BLACK_LISTED_MODELS[-1788665315] = true -- rottweiler
@@ -135,4 +141,13 @@ function getClosestCampfireInRange(coords, range)
             end
         end
     end
+end
+
+function isAtBlacklistedLocation(coords)
+    for i = 1, #BLACKLISTED_LOCATIONS do
+        if #(coords - BLACKLISTED_LOCATIONS[i]) <= BLACKLISTED_LOCATION_DIST_THRESH then
+            return true
+        end
+    end
+    return false
 end
