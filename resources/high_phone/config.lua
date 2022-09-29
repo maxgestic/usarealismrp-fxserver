@@ -34,7 +34,7 @@ Config.SyncedFlashlightDistance = 30 -- How near will flashlights get synced?
 Config.SyncedFlashlightUpdateFrequency = 50 -- in ms, how often will other player's flashlight locations will be synced.
 Config.SyncedFlashlight = true -- set to false if you don't want to sync flashlights for all players nearby!
 
-Config.SyncedSounds = true -- Will other players near you hear your phone notifications/incoming call sounds?
+Config.SyncedSounds = false -- Will other players near you hear your phone notifications/incoming call sounds?
 Config.SyncedSoundDistance = 10 -- How near another player you have to be to hear their phone sounds?
 Config.UseHigh3D = false -- Use resource high_3dsounds? If false, will automatically use xSound. For best experience use Highrider-3DSounds
 Config.High3DName = "high_3dsounds" -- Your high_3dsounds folder/resource name. Change only if using Highrider-3DSounds.
