@@ -2,6 +2,7 @@ local train = nil
 local trainSpeed = 0.0
 local isDriver = false
 local isPassanger = false
+local passangerTrain = nil
 
 function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)
     SetTextFont(6)
@@ -16,10 +17,40 @@ function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)
     DrawText(x - width/2, y - height/2 + 0.005)
 end
 
+function alert(msg)
+	SetTextComponentFormat("STRING")
+	AddTextComponentString(msg)
+	DisplayHelpTextFromStringLabel(0,0,1,-1)
+end
+
+function EnumerateEntities(initFunc, moveFunc, disposeFunc)
+	return coroutine.wrap(function()
+		local iter, id = initFunc()
+		if not id or id == 0 then
+			disposeFunc(iter)
+			return
+		end
+		local enum = {handle = iter, destructor = disposeFunc}
+		setmetatable(enum, entityEnumerator)
+		local next = true
+		repeat
+		coroutine.yield(id)
+		next, id = moveFunc(iter)
+		until not next
+		enum.destructor, enum.handle = nil, nil
+		disposeFunc(iter)
+	end)
+end
+
+function EnumerateVehicles()
+	return EnumerateEntities(FindFirstVehicle, FindNextVehicle, EndFindVehicle)
+end
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if IsPedInAnyTrain(GetPlayerPed(-1)) and isDriver then 
+			DisableControlAction(0, 75, true)
 			if IsControlPressed(0, 71) and trainSpeed < 27.495 then
 				trainSpeed = trainSpeed + 0.1
 			elseif IsControlPressed(0, 72) and trainSpeed > -7 then 
@@ -33,12 +64,80 @@ Citizen.CreateThread(function()
 				 	trainSpeed = trainSpeed + 2.0
 				 end
 			end
-			SetTrainCruiseSpeed(train, trainSpeed)
 			local playerVeh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+			SetTrainCruiseSpeed(playerVeh, trainSpeed)
 			DrawTxt(0.663, 1.418, 1.0, 1.0, 0.55, math.floor(GetEntitySpeed(playerVeh)*2.2, 0) .. '', 255, 255, 255, 255)
 			DrawTxt(0.684, 1.425, 1.0, 1.0, 0.35, 'mph', 255, 255, 255, 255)
+			if IsDisabledControlJustReleased(0, 75) and GetEntitySpeed(playerVeh) == 0 then
+				DoScreenFadeOut(500)
+				Citizen.Wait(1000)
+				isDriver = false
+				TaskLeaveVehicle(GetPlayerPed(-1), playerVeh, 16)
+				Citizen.Wait(1500)
+				DoScreenFadeIn(500)
+			end
+		end
+		if isPassanger then
+			if IsDisabledControlJustReleased(0, 75) then
+				local trainNetID = NetworkGetNetworkIdFromEntity(passangerTrain)
+				TriggerServerEvent("usa_trains:seat", trainNetID, GetPlayerPed(-1))
+			end
 		end
 	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		for vehicle in EnumerateVehicles() do
+			if (GetEntityModel(vehicle) == GetHashKey("streakcoaster") or GetEntityModel(vehicle) == GetHashKey("metrotrain")) and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then 
+				alert("~b~Enter Train as Driver ~INPUT_CONTEXT~")
+				if IsControlJustPressed(1, 51) then
+					DoScreenFadeOut(500)
+					Citizen.Wait(750)
+					SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
+					isDriver = true
+					Citizen.Wait(500)
+					DoScreenFadeIn(500)
+	            end
+	        elseif GetEntityModel(vehicle) == GetHashKey("streakcoasterc") and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and not isPassanger then 
+	        	alert("~b~Enter Train as Passanger ~INPUT_CONTEXT~")
+				if IsControlJustPressed(1, 51) then
+					local trainNetID = NetworkGetNetworkIdFromEntity(vehicle)
+					TriggerServerEvent("usa_trains:seat", trainNetID, GetPlayerPed(-1))
+					-- DoScreenFadeOut(500)
+					-- Citizen.Wait(750)
+	            end
+			end
+		end
+	end
+end)
+
+RegisterNetEvent("usa_trains:seat_player")
+AddEventHandler("usa_trains:seat_player", function(seat, trainID)
+	local trainent = NetworkGetEntityFromNetworkId(trainID)
+	print(trainent)
+	print("seating")
+	local dict = "amb@prop_human_seat_chair_mp@male@generic@base"
+	while not HasAnimDictLoaded(dict) do
+		RequestAnimDict(dict)
+		Citizen.Wait(1)
+	end
+	passangerTrain = trainent
+	AttachEntityToEntity(GetPlayerPed(-1), trainent, 0, seat.x, seat.y, seat.z, 0, 0, 0, true, false, false, false, 2, true)
+	TaskPlayAnim(GetPlayerPed(-1), dict, "base", 8.0, 8.0, -1, 69, 1, false, false, false)
+	isPassanger = true
+	-- Citizen.Wait(500)
+	-- DoScreenFadeIn(500)
+end)
+
+RegisterNetEvent("usa_trains:unseat_player")
+AddEventHandler("usa_trains:unseat_player", function()
+	isPassanger = false
+	DetachEntity(PlayerPedId(), true, false)
+	local coords = GetOffsetFromEntityInWorldCoords(passangerTrain, -2.0, 0.0, -0.5)
+	SetEntityCoords(PlayerPedId(), coords.x,coords.y,coords.z)
+	passangerTrain = nil
 end)
 
 RegisterCommand("delTrain", function()
@@ -50,7 +149,7 @@ end, false)
 RegisterCommand("spawnTrain", function(source, args, rawCommand)
 	print(args[1])
 	if not train then
-		local train_models = {"freight", "freightcar", "freightcar2", "freightcont1", "freightcont2", "freightgrain", "metrotrain", "tankercar"}
+		local train_models = {"freight", "freightcar", "freightcar2", "freightcont1", "freightcont2", "freightgrain", "metrotrain", "tankercar", "streakcoaster", "streakcoastercab", "streakcoasterc"}
 
 		for i,v in ipairs(train_models) do
 			local hash = GetHashKey(v)
@@ -62,10 +161,25 @@ RegisterCommand("spawnTrain", function(source, args, rawCommand)
 			end
 		end
 
-
-		train = CreateMissionTrain(tonumber(args[1]), 670.2056, -685.7708, 25.15311, true)
+		local coords = vector3(GetEntityCoords(GetPlayerPed(-1)))
+		train = CreateMissionTrain(tonumber(args[1]), coords.x, coords.y, coords.z, true)
+		local trainNetID = NetworkGetNetworkIdFromEntity(GetTrainCarriage(train, 1))
+		print(trainNetID)
+		TriggerServerEvent("usa_trains:createTrain", trainNetID)
+		SetTrainsForceDoorsOpen(false)
 		SetTrainSpeed(train,0)
 		SetTrainCruiseSpeed(train,0)
 		SetEntityAsMissionEntity(train, true, false)
 	end
+end, false)
+
+RegisterCommand("tpTrain", function()
+	StartPlayerTeleport(PlayerId(), 670.2056, -685.7708, 25.15311, 0.0, false, true, true)
+end, false)
+
+local doors = false
+RegisterCommand("doors", function()
+	doors = not doors
+	print(doors)
+	SetTrainsForceDoorsOpen(doors)
 end, false)
