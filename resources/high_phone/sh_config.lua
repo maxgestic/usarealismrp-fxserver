@@ -80,12 +80,6 @@ if IS_SERVER then
         end, ...)
     end)
 
-    RegisterServerEvent("high_phone:sendUpdatesDark")
-    AddEventHandler("high_phone:sendUpdatesDark", function(id, content, attachments, time)
-        print("sending updates")
-        TriggerClientEvent("high_phone:updateDarkchat", -1)
-    end)
-
     RegisterServerEvent("high_phone:checkForPhone")
     AddEventHandler("high_phone:checkForPhone", function()
         local char = exports["usa-characters"]:GetCharacter(source)
@@ -218,23 +212,24 @@ Config.FrameworkFunctions = {
 
     -- Server-side get player data by identifier
     getPlayerByIdentifier = function(ident)
-        -- print("getbyIdent")
+        -- print("\ngetbyIdent")
         -- print(ident)
+        local player = nil
         TriggerEvent("es:getPlayers", function(players)
-            -- print(table.unpack(players))
-            for i,v in ipairs(players) do
-                -- print(i)
+            for i,v in pairs(players) do
                 local s = v.get("source")
-                local player = Config.FrameworkFunctions.getPlayer(s)
-                -- print(player.identifier)
-                if player.identifier == ident then 
-                    -- print(player.source)
-                    return player
+                local p = Config.FrameworkFunctions.getPlayer(s)
+                -- print("checking identifier " .. p.identifier)
+                if p.identifier == ident then 
+                    -- print("it matches")
+                    player = p
+                    break
                 end
             end
-            -- print("nah")
-            return nil
         end)
+        -- print("player return:")
+        -- print(player)
+        return player
     end
 }
 
@@ -277,8 +272,6 @@ Config.CustomCallbacks = {
     -- Darkchat app
     ["sendDarkMessage"] = function(data)
         TriggerServerEvent("high_phone:sendDarkMessage", data.id, data.content, data.attachments, data.time) -- data.time is for accurate saving of time of the messages.
-        Wait(1000)
-        TriggerServerEvent("high_phone:sendUpdatesDark")
     end,
     -- Phone app
     ["callNumber"] = function(data, cb)

@@ -21,6 +21,7 @@ scramble.log
 start2.bat
 setup.sh
 hypnonema.db
+*\.yarn.installed
 
 node_modules
 !resources/salty_tokenizer/node_modules
