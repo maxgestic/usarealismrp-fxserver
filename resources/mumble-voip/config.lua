@@ -7,6 +7,7 @@ mumbleConfig = {
 		{1.0, "Whisper"}, -- Whisper speech distance in gta distance units
 		{3.0, "Normal"}, -- Normal speech distance in gta distance units
 		{10.0, "Shouting"}, -- Shout speech distance in gta distance units
+		{0.1, "Downed (Mute)"},
 	},
 	speakerRange = 1.5, -- Speaker distance in gta distance units (how close you need to be to another player to hear other players on the radio or phone)
 	callSpeakerEnabled = false, -- Allow players to hear all talking participants of a phone call if standing next to someone that is on the phone

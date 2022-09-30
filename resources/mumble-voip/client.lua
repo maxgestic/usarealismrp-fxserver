@@ -13,6 +13,7 @@ local voiceTarget = 2
 local vehicleTargets = {}
 local wasPlayerInVehicle = false
 local radioVolume = 1.0
+local disabledVoice = false
 
 -- RADIO FX SETUP --
 local RADIO_FX_SUBMIX_ID = CreateAudioSubmix("Radio")
@@ -308,21 +309,23 @@ function MuteVehiclePassengers(playerData)
 end
 
 function SetTalkingRange(src, modeIndex)
-	local playerData = voiceData[src]
-	local voiceMode = playerData.mode
-				
-	local newMode = modeIndex
+	if not disabledVoice then 
+		local playerData = voiceData[src]
+		local voiceMode = playerData.mode
+					
+		local newMode = modeIndex
 
-	if newMode > #mumbleConfig.voiceModes then
-		voiceMode = 1
-	else
-		voiceMode = newMode
+		if newMode > (#mumbleConfig.voiceModes - 1) then
+			voiceMode = 1
+		else
+			voiceMode = newMode
+		end
+		
+		NetworkSetTalkerProximity(mumbleConfig.voiceModes[voiceMode][1] + 0.0)
+
+		SetVoiceData("mode", voiceMode)
+		playerData.mode = voiceMode
 	end
-	
-	NetworkSetTalkerProximity(mumbleConfig.voiceModes[voiceMode][1] + 0.0)
-
-	SetVoiceData("mode", voiceMode)
-	playerData.mode = voiceMode
 end
 
 -- Events
@@ -754,6 +757,22 @@ AddEventHandler("mumble:SyncVoiceData", function(voice, radio, call)
 	callData = call
 end)
 
+RegisterNetEvent("mumble:setDead")
+AddEventHandler("mumble:setDead", function(dead_bool)
+	local playerData = voiceData[playerServerId]
+	if dead_bool then 
+		disabledVoice = true
+		NetworkSetTalkerProximity(mumbleConfig.voiceModes[4][1] + 0.0)
+		SetVoiceData("mode", 4)
+		playerData.mode = 4
+	else
+		disabledVoice = false
+		NetworkSetTalkerProximity(mumbleConfig.voiceModes[2][1] + 0.0)
+		SetVoiceData("mode", 2)
+		playerData.mode = 2
+	end
+end)
+
 RegisterNetEvent("mumble:RemoveVoiceData") -- Used to remove redundant data when a player disconnects
 AddEventHandler("mumble:RemoveVoiceData", function(player)
 	if voiceData[player] then
@@ -852,20 +871,24 @@ Citizen.CreateThread(function()
 				end
 
 				if not secondaryPressed then
-					local voiceMode = playerData.mode
-				
-					local newMode = voiceMode + 1
-				
-					if newMode > #mumbleConfig.voiceModes then
-						voiceMode = 1
-					else
-						voiceMode = newMode
-					end
+					if not disabledVoice then 
+						local voiceMode = playerData.mode
 					
-					NetworkSetTalkerProximity(mumbleConfig.voiceModes[voiceMode][1] + 0.0)
+						local newMode = voiceMode + 1
+					
+						if newMode > (#mumbleConfig.voiceModes - 1) then
+							voiceMode = 1
+						else
+							voiceMode = newMode
+						end
 
-					SetVoiceData("mode", voiceMode)
-					playerData.mode = voiceMode
+						print(mumbleConfig.voiceModes[voiceMode][1])
+						
+						NetworkSetTalkerProximity(mumbleConfig.voiceModes[voiceMode][1] + 0.0)
+
+						SetVoiceData("mode", voiceMode)
+						playerData.mode = voiceMode
+					end
 				end
 			end
 
@@ -959,6 +982,10 @@ Citizen.CreateThread(function()
 				playerRadioActive = playerData.radioActive or false
 				playerCall = playerData.call or 0
 				playerCallSpeaker = playerData.callSpeaker or false
+			end
+
+			if disabledVoice then 
+				playerTalking = false
 			end
 
 			-- Update UI

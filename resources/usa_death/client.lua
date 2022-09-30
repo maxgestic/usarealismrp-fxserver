@@ -97,6 +97,7 @@ Citizen.CreateThread(function()
 	local playsound = false
 	local freeze = true
 	local triggerDeadEvents = false
+	local wasDead = false
 
 	local respawnCount = 0
 	local spawnPoints = {
@@ -113,6 +114,10 @@ Citizen.CreateThread(function()
 		local ped = GetPlayerPed(-1)
 
 		if (IsEntityDead(ped)) then
+                        if not wasDead then
+			  wasDead = true
+			  TriggerEvent("mumble:setDead", true)
+                        end
 			if triggerDeadEvents then
 				triggerDeadEvents = false
 				TriggerEvent('death:createLog', ped)
@@ -208,6 +213,10 @@ Citizen.CreateThread(function()
 	  			diedTime = nil
 			end
 		else
+			if wasDead then 
+				wasDead = false
+				TriggerEvent("mumble:setDead", false)
+			end
 			emscalled = false
 	  		allowRespawn = false
 	  		allowRevive = false
