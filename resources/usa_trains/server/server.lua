@@ -36,7 +36,6 @@ AddEventHandler("usa_trains:moveseat", function(train, ped)
 			for k,w in pairs(v.seats) do
 				if w.taken == ped then
 					currentseat = w.number
-					print("found player in seat " .. currentseat)
 					break
 				end
 			end
@@ -45,16 +44,12 @@ AddEventHandler("usa_trains:moveseat", function(train, ped)
 				if counter == 33 then
 					counter = 1
 				end
-				print("checking next seat " .. counter)
 				if v.seats["seat"..counter].taken == nil then
-					print("seat is free")
-					print(counter .. " and " .. currentseat)
 					v.seats["seat"..counter].taken = ped
 					v.seats["seat"..currentseat].taken = nil
 					TriggerClientEvent("usa_trains:moveseat_player", source, {x = v.seats["seat"..counter].x, y = v.seats["seat"..counter].y, z = v.seats["seat"..counter].z, rotation = v.seats["seat"..counter].rotate}, train)
 					break
 				else
-					print("seat is taken, testing next seat")
 					counter = counter + 1
 				end
 			end
