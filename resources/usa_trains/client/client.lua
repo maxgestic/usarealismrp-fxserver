@@ -69,11 +69,11 @@ Citizen.CreateThread(function()
 				trainSpeed = trainSpeed - 0.1
 			elseif IsControlPressed(0, 22) then
 				if trainSpeed > 5.0 then
-					trainSpeed = trainSpeed - 2.0
+					trainSpeed = trainSpeed - 1.0
 				elseif trainSpeed < 5.0 and trainSpeed > -5.0 then
 					trainSpeed = 0
 				elseif trainSpeed < -5.0 then
-				 	trainSpeed = trainSpeed + 2.0
+				 	trainSpeed = trainSpeed + 1.0
 				 end
 			end
 			local playerVeh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
