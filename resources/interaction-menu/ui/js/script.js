@@ -37,6 +37,7 @@ NO_TOOLTIP_WEAPONS.add("Red Shoe");
 NO_TOOLTIP_WEAPONS.add("Blue Shoe");
 NO_TOOLTIP_WEAPONS.add("Ninja Star");
 NO_TOOLTIP_WEAPONS.add("Ninja Star 2");
+NO_TOOLTIP_WEAPONS.add("Megaphone");
 
 var itemImages = {
     "Driver's License": "https://i.imgur.com/dy0SpFh.png",
@@ -486,6 +487,7 @@ var itemImages = {
     "GPS Removal Device": "https://i.imgur.com/k9wRbRx.png",
     "Tablet": "https://i.imgur.com/Ig7jl1m.png",
     "Racing Dongle": "https://i.imgur.com/zM8Qc4r.png",
+    "Megaphone": "https://i.imgur.com/C4ksHnA.png",
     "Crumpled Paper": "https://i.imgur.com/DpUUSZ8.png",
     "Bank Laptop": "https://i.imgur.com/5gefEBK.png",
 }
