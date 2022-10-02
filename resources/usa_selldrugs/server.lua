@@ -58,6 +58,13 @@ AddEventHandler('sellDrugs:completeSale', function()
 			char.giveMoney((reward + bonus))
 			print('SELLDRUGS: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has sold item['..drug_item.name..'] with quantity['..quantity..'] with reward['..reward..'] with bonus['..bonus..']!')
 			TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. drug_item.name .. " ~s~for $" .. reward + bonus..'.00~s~.')
+			local chance = math.random()
+			if chance <= 0.20 then
+				TriggerClientEvent("usa:notify",source, "Found something thrown away that you might like.")
+				local item = {name = "Crumpled Paper", type = "misc", quantity = 1, legality = "legal", notStackable = true, weight = 1, objectModel = "prop_paper_ball"}
+				char.giveItem(item)
+			end
+			-- print("CHANCE WAS"..chance)
 			return
 		else
 			if debug then print("nothing to sell!!") end

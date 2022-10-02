@@ -1227,6 +1227,11 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerEvent("rahe-boosting:client:openTablet")
 	elseif itemName == "Racing Dongle" then
 		TriggerEvent("rahe-racing:client:openTablet")
+	elseif itemName == "Crumpled Paper" then
+		TriggerEvent("core_rob_truck:hint")
+		TriggerServerEvent("usa:removeItem", itemName, 1)
+	elseif itemName == "Bank Laptop" then
+		TriggerEvent("usa:notify", "Device not connected to a terminal.")
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end

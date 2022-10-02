@@ -168,7 +168,7 @@ Citizen.CreateThread(function()
     local createdJobPed
     while true do
 		local playerCoords = GetEntityCoords(PlayerPedId(), false)
-        local ped = {x = 152.02969360352, y = -3013.6166992188, z = 10.703437805176, heading = 37.9}
+        local ped = {x = 152.02969360352, y = -3013.6166992188, z = 9.703437805176, heading = 37.9}
         if Vdist(ped.x, ped.y, ped.z, playerCoords.x, playerCoords.y, playerCoords.z) < 100 then
             if not createdJobPed then
                 local hash = -984709238

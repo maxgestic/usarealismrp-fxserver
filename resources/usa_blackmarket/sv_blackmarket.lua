@@ -37,6 +37,7 @@ local markets = {
       { name = "Ninja Star Kit", price = 200, type = "weaponParts", weight = 5.0, quantity = 1, stock = math.random(1, 10) },
       { name = "Ninja Star 2 Kit", price = 200, type = "weaponParts", weight = 5.0, quantity = 1, stock = math.random(1, 10) },
       { name = "Throwing Knife", price = 300, type = "weapon", hash = GetHashKey("WEAPON_THROWINGKNIFE"), weight = 8.0, quantity = 1, stock = math.random(1, 10) },
+      { name = "Bank Laptop", type = "misc",  quantity = 1,  legality = "legal", notStackable = true,  weight = 10, stock = math.random(1,2), price = tonumber(tostring(math.random(6, 10)) .. "000"), objectModel = "imp_prop_impexp_tablet" },
     },
     ["pedHash"] = -48477765
   },
@@ -58,7 +59,9 @@ local markets = {
       { name = "Empty 12 Gauge Shells Mag [6]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = "12 Gauge Shells", MAX_CAPACITY = 6, currentCapacity = 0 },
       { name = "Empty .45 Mag [6]", type = "magazine", legality = "legal", price = 100, weight = 5, receives = ".45", MAX_CAPACITY = 6, currentCapacity = 0, objectModel = "w_pi_combatpistol_mag1" },
       { name = "Empty 9mm Mag [12]", type = "magazine", legality = "legal", price = 70, weight = 5, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0, objectModel = "w_pi_combatpistol_mag1" },
-      { name = "Katana", hash = GetHashKey("WEAPON_KATANAS"), type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(1,4), objectModel = "w_me_katana_lr"}
+      { name = "Katana", hash = GetHashKey("WEAPON_KATANAS"), type = "weapon", legality = "illegal", price = 650, weight = 10, quantity = 1, stock = math.random(1,4), objectModel = "w_me_katana_lr"},
+      { name = "Bank Laptop", type = "misc",  quantity = 1,  legality = "legal", notStackable = true,  weight = 10, stock = math.random(2,4), price = tonumber(tostring(math.random(8, 12)) .. "000"), objectModel = "imp_prop_impexp_tablet" },
+
     },
     ["pedHash"] = -1773333796
   },

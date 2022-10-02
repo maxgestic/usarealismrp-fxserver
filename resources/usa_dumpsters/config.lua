@@ -22,7 +22,8 @@ Config.DumpsterSearchItems = {
 	{ name = 'Lockpick', type = 'misc', price = 150, legality = 'illegal', quantity = 10, weight = 5 },
 	{ name = "Large Firework", type = "misc", price = 2000, legality = "illegal", quantity = 1, weight = 25, objectModel = "ind_prop_firework_03" },
 	{ name = "Aluminum Powder", legality = "legal", quantity = 1, type = "misc", weight = 4.0 },
-	{ name = "Iron Oxide", legality = "legal", quantity = 5, type = "misc", weight = 8 }
+	{ name = "Iron Oxide", legality = "legal", quantity = 5, type = "misc", weight = 8 },
+	{ name = "Crumpled Paper", type = "misc", quantity = 1, legality = "legal", notStackable = true, weight = 1, objectModel = "prop_paper_ball" }
 }
 
 Config.dumpsterObjects = {

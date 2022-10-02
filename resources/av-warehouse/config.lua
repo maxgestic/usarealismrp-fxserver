@@ -249,6 +249,7 @@ Config.Rewards = {
 			[4] = { name = "Black Shoe", type = "weapon", hash = `WEAPON_THROWINGSHOEBLACK`, quantity = 3, weight = 8 },
 			[5] = { name = "Red Shoe", type = "weapon", hash = `WEAPON_THROWINGSHOERED`, quantity = 3, weight = 8 },
 			[6] = { name = "Blue Shoe", type = "weapon", hash = `WEAPON_THROWINGSHOEBLUE`, quantity = 3, weight = 8 },
+			[7] = { name = "Bank Laptop", type = "misc",  quantity = 1,  legality = "legal", notStackable = true,  weight = 10,  objectModel = "imp_prop_impexp_tablet" }
 		}
 	},
 }

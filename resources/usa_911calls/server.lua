@@ -187,6 +187,10 @@ RegisterServerEvent('911:MuggingNPC')
 RegisterServerEvent('911:Shoplifting')
 RegisterServerEvent('911:JewelleryRobbery')
 RegisterServerEvent('911:UncontrolledFire')
+RegisterServerEvent('911:BankTruck')
+RegisterServerEvent('911:TruckAtRisk')
+RegisterServerEvent('911:SuspiciousPerson')
+
 
 local DISPATCH_DELAY_PERIOD_SECONDS = 60
 
@@ -375,6 +379,23 @@ AddEventHandler('911:SuspiciousWeaponBuying', function(x, y, z, street, buyerNam
     Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Suspicious Person')
 end)
 
+AddEventHandler('911:TruckAtRisk', function(x, y, z)
+    if not recentCalls["Vehicle Lockpicking"] then
+        recentCalls["Vehicle Lockpicking"] = true
+        local time = math.random(20000, 30000)
+        Citizen.Wait(time)
+        local string = '^*Counter Intelligence: ^1^*|^r ^*Dispatch Info:^r Fleeca reports possible bank truck heist caused by a cyber attack. Possible bank truck locations: [^5Pillbox Hill Area^r], [^5Downtown Vinewood Area^r], [^5N.O.O.S.E.^r]'
+        Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Counter Intelligence')
+    end
+end)
+
+AddEventHandler('911:SuspiciousPerson', function(x, y, z)
+    local time = math.random(5000, 10000)
+    Citizen.Wait(time)
+    local string = '^*Suspicious Person: ^1^*|^r ^*Dispatch Info:^r Caller reports a person conducting suspicious or criminal activities. Investigate the area.'
+    Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Suspicious Person')
+end)
+
 AddEventHandler('911:HotwiringVehicle', function(x, y, z, street, vehicle, plate, isMale, primaryColor, secondaryColor)
 	if not recentCalls["Hotwiring"] then
         recentCalls["Hotwiring"] = true
@@ -475,6 +496,14 @@ AddEventHandler('911:Burglary', function(x, y, z, street, isMale)
         local string = '^*Burglary:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
         Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Burglary')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^burglary^r at ^3'..street..'^r, expose those theives! Don\'t get too much attention!', x, y, z, 'Burglary')
+    end
+end)
+
+AddEventHandler('911:BankTruck', function(x, y, z)
+    if not recentCalls["Bank Truck"] then
+        recentCalls["Bank Truck"] = true
+        local string = '^*Armored Truck Alarm^r: Attack on a armored money truck in progress.'
+        Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Bank Truck')
     end
 end)
 

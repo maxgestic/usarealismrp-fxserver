@@ -255,6 +255,18 @@ svConfig = {
             receiveItemIds = {
                 [1] = 'Racing Dongle'
             }
+        },
+        ['laptop'] = {
+            cashRequired = 5750,
+            cryptoRequired = 30,
+            availablePerRestart = 15,
+            isSoldOut = false,
+            title = "Bank Laptop",
+            description = "Time for a world of hacker man himself.",
+            iconFile = 'laptop.png',
+            receiveItemIds = {
+                [1] = 'Laptop'
+            }
         }
     }
 }

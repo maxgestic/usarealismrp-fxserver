@@ -100,6 +100,13 @@ function giveItem(playerId, itemId, amount)
             item.legality = "legal"
             item.weight = 1
             item.objectModel = "hei_prop_hst_usb_drive"
+        elseif itemId == "Bank Laptop" then
+            item.type = "misc"
+            item.quantity = 1
+            item.legality = "legal"
+            item.notStackable = true
+            item.weight = 10
+            item.objectModel = "imp_prop_impexp_tablet"
         end
         char.giveItem(item)
         TriggerClientEvent("usa:notify", "You have picked up your item!")

@@ -486,6 +486,8 @@ var itemImages = {
     "GPS Removal Device": "https://i.imgur.com/k9wRbRx.png",
     "Tablet": "https://i.imgur.com/Ig7jl1m.png",
     "Racing Dongle": "https://i.imgur.com/zM8Qc4r.png",
+    "Crumpled Paper": "https://i.imgur.com/DpUUSZ8.png",
+    "Bank Laptop": "https://i.imgur.com/5gefEBK.png",
 }
 
 var menuItems = [{
