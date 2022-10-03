@@ -490,6 +490,7 @@ var itemImages = {
     "Megaphone": "https://i.imgur.com/C4ksHnA.png",
     "Crumpled Paper": "https://i.imgur.com/DpUUSZ8.png",
     "Bank Laptop": "https://i.imgur.com/5gefEBK.png",
+    "Metal Scraps": "https://i.imgur.com/08oQInE.png",
 }
 
 var menuItems = [{
