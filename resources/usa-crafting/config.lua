@@ -415,7 +415,8 @@ Config.recipes = {
             name = "Hand Grenade",
             image = "https://static.wikia.nocookie.net/gtawiki/images/5/52/Grenade-GTAV.png/revision/latest?cb=20190809090848",
             requires = {
-                { name = "Hand Grenade Parts", quantity = 1 }
+                { name = "Metal Scraps", quantity = 2 },
+                { name = "Black Powder", quantity = 3 }
             },
             produces = {
                 {
