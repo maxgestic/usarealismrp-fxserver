@@ -193,12 +193,18 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 	local totalPrice = BASE_CHECKIN_PRICE
 	local copsCalled = false
 	local isPolice = IsPlayerCop(usource)
+	local chance = math.random()
 	for bone, injuries in pairs(playerInjuries) do
 		for injury, data in pairs(playerInjuries[bone]) do
-			if SuspiciousWound(injuries[injury].string) and not copsCalled and not isPolice then
-				TriggerEvent('911:SuspiciousHospitalInjuries', char.getFullName(), x, y, z)
-				copsCalled = true
+			if chance < 0.45 then
+				local name
+				if SuspiciousWound(injuries[injury].string) and not copsCalled and not isPolice then
+					if chance > 0.25 then name = char.getFullName() else name = "Unidentified Individual" end
+					TriggerEvent('911:SuspiciousHospitalInjuries', name, x, y, z)
+					copsCalled = true
+				end
 			end
+			-- print(chance) -- DEBUG
 			totalPrice = totalPrice + injuries[injury].treatmentPrice
 			if injuries[injury].string == "High-speed Projectile" then 
 				treatmentTimeMinutes = treatmentTimeMinutes + 3
