@@ -113,7 +113,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		for vehicle in EnumerateVehicles() do
-			if (GetEntityModel(vehicle) == GetHashKey("streakcoaster") or GetEntityModel(vehicle) == GetHashKey("metrotrain")) and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then 
+			if GetEntityModel(vehicle) == GetHashKey("streakcoaster") and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then 
 				alert("~b~Enter Train as Driver ~INPUT_CONTEXT~")
 				if IsControlJustPressed(1, 51) then
 					DoScreenFadeOut(500)
@@ -128,6 +128,16 @@ Citizen.CreateThread(function()
 				if IsControlJustPressed(1, 51) then
 					local trainNetID = NetworkGetNetworkIdFromEntity(vehicle)
 					TriggerServerEvent("usa_trains:seat", trainNetID, GetPlayerPed(-1))
+	            end
+	        elseif GetEntityModel(vehicle == GetHashKey("metro")) and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), -1) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then
+	        	alert("~b~Enter Metro as Driver ~INPUT_CONTEXT~")
+				if IsControlJustPressed(1, 51) then
+					DoScreenFadeOut(500)
+					Citizen.Wait(750)
+					SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
+					isDriver = true
+					Citizen.Wait(500)
+					DoScreenFadeIn(500)
 	            end
 			end
 		end
@@ -210,7 +220,7 @@ RegisterCommand("spawnTrain", function(source, args, rawCommand)
 		SetEntityAsMissionEntity(train, true, false)
 		SetNetworkIdCanMigrate(NetworkGetNetworkIdFromEntity(train), false)
 		NetworkDisableProximityMigration(NetworkGetNetworkIdFromEntity(train))
-		TriggerServerEvent("usa_trains:createTrain", trainNetID)
+		TriggerServerEvent("usa_trains:createTrain", trainNetID, source)
 		SetTrainSpeed(train,0)
 		SetTrainCruiseSpeed(train,0)
 		SetEntityAsMissionEntity(train, true, false)
@@ -223,6 +233,23 @@ end, false)
 
 local doors = false
 RegisterCommand("doors", function()
+	TriggerServerEvent("usa_trains:toggleDoors", trainNID, doors)
 	doors = not doors
-	SetTrainsForceDoorsOpen(doors)
 end, false)
+
+RegisterNetEvent("usa_trains:toggleDoorsC")
+AddEventHandler("usa_trains:toggleDoorsC", function(trainID, open)
+	local lTrain = NetworkGetEntityFromNetworkId(trainID)
+	local doorCount = GetTrainDoorCount(lTrain)
+	for doorIndex = 0, doorCount - 1 do
+		if open then
+			SetTrainDoorOpenRatio(lTrain, doorIndex, 0.0)
+		else
+			SetTrainDoorOpenRatio(lTrain, doorIndex, 1.0)
+		end
+	end
+	for doorIndex = 0, doorCount - 1 do
+	    local ratio = GetTrainDoorOpenRatio(lTrain, doorIndex)
+	    print("Door " .. tostring(doorIndex) .. " is open by a ratio of " .. tostring(ratio))
+	end
+end)

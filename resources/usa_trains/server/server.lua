@@ -60,8 +60,9 @@ AddEventHandler("usa_trains:moveseat", function(train, ped)
 end)
 
 RegisterServerEvent("usa_trains:createTrain")
-AddEventHandler("usa_trains:createTrain", function(train)
+AddEventHandler("usa_trains:createTrain", function(train, driver)
 	local object = {
+		driver = driver,
 		netID = train,
 		seats = {
 			seat1 = {taken = nil, x = 1.0, y = 1.5, z = -0.65, rotate = 0.0, number = 1},
@@ -100,4 +101,9 @@ AddEventHandler("usa_trains:createTrain", function(train)
 	}
 
 	table.insert(trains, object)
+end)
+
+RegisterServerEvent("usa_trains:toggleDoors")
+AddEventHandler("usa_trains:toggleDoors", function(train, open)
+	TriggerClientEvent("usa_trains:toggleDoorsC", -1, train, open)
 end)
