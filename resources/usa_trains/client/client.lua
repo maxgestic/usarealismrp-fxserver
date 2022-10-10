@@ -4,6 +4,44 @@ local trainSpeed = 0.0
 local isDriver = false
 local isPassanger = false
 local passangerTrain = nil
+local doors = false
+SetTrainsForceDoorsOpen(false)
+local lastDoorToggle = GetGameTimer()
+local trainstations = {
+	[1] = {coords = vector3(-1042.2565, -2745.7266, 15.9190)},
+	[2] = {coords = vector3(-946.0543, -2340.5015, 6.5338)},
+	[3] = {coords = vector3(-540.6730, -1282.5905, 33.4663)},
+	[4] = {coords = vector3(271.1004, -1204.2211, 38.9169)},
+	[5] = {coords = vector3(-246.2736, -330.3786, 31.9112)},
+	[6] = {coords = vector3(-824.7607, -112.1072, 31.0874)},
+	[7] = {coords = vector3(-1363.5077, -524.0391, 29.8416)},
+	[8] = {coords = vector3(-490.6987, -695.5313, 35.5731)},
+	[9] = {coords = vector3(-220.9811, -1036.7648, 34.3784)},
+	[10] = {coords = vector3(112.1726, -1723.6456, 33.1850)},
+}
+
+Citizen.CreateThread(function()
+	for i,v in ipairs(trainstations) do
+		local blip = AddBlipForCoord(v.coords)
+		SetBlipHiddenOnLegend(blip, true)
+		SetBlipSprite(blip, 9)
+		SetBlipDisplay(blip, 8)
+		SetBlipScale(blip, 0.08)
+		SetBlipColour(blip, 0)
+		SetBlipAlpha(blip, 200)
+		SetBlipAsShortRange(blip, true)
+		EndTextCommandSetBlipName(blip)
+		local blip = AddBlipForCoord(v.coords)
+		SetBlipSprite(blip, 124)
+		SetBlipDisplay(blip, 4)
+		SetBlipScale(blip, 0.35)
+		SetBlipColour(blip, 61)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString('Metro Station')
+		EndTextCommandSetBlipName(blip)
+	end
+end)
 
 function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)
     SetTextFont(6)
@@ -61,13 +99,28 @@ end
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		if IsPedInAnyTrain(GetPlayerPed(-1)) and isDriver then 
+		if IsPedInAnyTrain(GetPlayerPed(-1)) and isDriver then
+			if GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1), false)) == GetHashKey("metrotrain") then
+				if (GetEntitySpeed(train) == 0) then
+					alert("~b~Horn ~INPUT_VEH_HORN~\n~b~Open/Close Doors ~INPUT_DETONATE~\n~b~Leave Train ~INPUT_ENTER~")
+				else
+					alert("~b~Horn ~INPUT_VEH_HORN~")
+				end
+			else
+				if (GetEntitySpeed(train) == 0) then
+					alert("~b~Horn ~INPUT_VEH_HORN~\n~b~Leave Train ~INPUT_ENTER~")
+				else
+					alert("~b~Horn ~INPUT_VEH_HORN~")
+				end
+			end
 			DisableControlAction(0, 75, true)
-			if IsControlPressed(0, 71) and trainSpeed < 27.495 then
+			if IsControlPressed(0, 71) and trainSpeed < 27.495 and not doors then
 				trainSpeed = trainSpeed + 0.1
-			elseif IsControlPressed(0, 72) and trainSpeed > -7 then 
+			elseif IsControlPressed(0, 72) and trainSpeed > -7 and not doors and GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1), false)) ~= GetHashKey("metrotrain") then 
 				trainSpeed = trainSpeed - 0.1
-			elseif IsControlPressed(0, 22) then
+			elseif IsControlPressed(0, 72) and trainSpeed > 0 and not doors and GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1), false)) == GetHashKey("metrotrain") then 
+				trainSpeed = trainSpeed - 0.1
+			elseif IsControlPressed(0, 22) and not doors then
 				if trainSpeed > 5.0 then
 					trainSpeed = trainSpeed - 1.0
 				elseif trainSpeed < 5.0 and trainSpeed > -5.0 then
@@ -75,6 +128,8 @@ Citizen.CreateThread(function()
 				elseif trainSpeed < -5.0 then
 				 	trainSpeed = trainSpeed + 1.0
 				 end
+			elseif IsControlJustReleased(0, 47) and GetEntitySpeed(train) == 0 then
+				toggleDoors()
 			end
 			local playerVeh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 			SetTrainCruiseSpeed(playerVeh, trainSpeed)
@@ -129,7 +184,7 @@ Citizen.CreateThread(function()
 					local trainNetID = NetworkGetNetworkIdFromEntity(vehicle)
 					TriggerServerEvent("usa_trains:seat", trainNetID, GetPlayerPed(-1))
 	            end
-	        elseif GetEntityModel(vehicle == GetHashKey("metro")) and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), -1) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then
+	        elseif GetEntityModel(vehicle == GetHashKey("metrotrain")) and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), -1) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then
 	        	alert("~b~Enter Metro as Driver ~INPUT_CONTEXT~")
 				if IsControlJustPressed(1, 51) then
 					DoScreenFadeOut(500)
@@ -217,6 +272,7 @@ RegisterCommand("spawnTrain", function(source, args, rawCommand)
 		train = CreateMissionTrain(tonumber(args[1]), coords.x, coords.y, coords.z, true)
 		trainNID = NetworkGetNetworkIdFromEntity(train)
 		local trainNetID = NetworkGetNetworkIdFromEntity(GetTrainCarriage(train, 1))
+		doors = false
 		SetEntityAsMissionEntity(train, true, false)
 		SetNetworkIdCanMigrate(NetworkGetNetworkIdFromEntity(train), false)
 		NetworkDisableProximityMigration(NetworkGetNetworkIdFromEntity(train))
@@ -231,25 +287,43 @@ RegisterCommand("tpTrain", function()
 	StartPlayerTeleport(PlayerId(), 670.2056, -685.7708, 25.15311, 0.0, false, true, true)
 end, false)
 
-local doors = false
+
 RegisterCommand("doors", function()
-	TriggerServerEvent("usa_trains:toggleDoors", trainNID, doors)
-	doors = not doors
+	toggleDoors()
 end, false)
+
+function toggleDoors()
+	if GetGameTimer() - lastDoorToggle > 500 then
+		lastDoorToggle = GetGameTimer()
+		TriggerServerEvent("usa_trains:toggleDoors", trainNID, doors)
+		doors = not doors
+	end
+end
 
 RegisterNetEvent("usa_trains:toggleDoorsC")
 AddEventHandler("usa_trains:toggleDoorsC", function(trainID, open)
 	local lTrain = NetworkGetEntityFromNetworkId(trainID)
 	local doorCount = GetTrainDoorCount(lTrain)
+	local carrige = GetTrainCarriage(lTrain, 1)
 	for doorIndex = 0, doorCount - 1 do
 		if open then
-			SetTrainDoorOpenRatio(lTrain, doorIndex, 0.0)
+			Citizen.CreateThread(function ()
+				for i=9,0,-1 do
+					local doorRatio = i/10
+					SetTrainDoorOpenRatio(lTrain, doorIndex, doorRatio)
+					SetTrainDoorOpenRatio(carrige, doorIndex, doorRatio)
+					Wait(10)
+				end
+			end)
 		else
-			SetTrainDoorOpenRatio(lTrain, doorIndex, 1.0)
+			Citizen.CreateThread(function ()
+				for i=1,10 do
+					local doorRatio = i/10
+					SetTrainDoorOpenRatio(lTrain, doorIndex, doorRatio)
+					SetTrainDoorOpenRatio(carrige, doorIndex, doorRatio)
+					Wait(10)
+				end
+			end)
 		end
-	end
-	for doorIndex = 0, doorCount - 1 do
-	    local ratio = GetTrainDoorOpenRatio(lTrain, doorIndex)
-	    print("Door " .. tostring(doorIndex) .. " is open by a ratio of " .. tostring(ratio))
 	end
 end)
