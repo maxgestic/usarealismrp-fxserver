@@ -80,12 +80,18 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1000)
 		if isDriver then
-			if Vdist2(GetEntityCoords(train), trainFlipPointNorth) < 10 or Vdist2(GetEntityCoords(train), metroFlipPointNorth) < 10 then
-				print("switching to southbound")
-				currentTrack = "south"
-			elseif Vdist2(GetEntityCoords(train), trainFlipPointSouth) < 10 or Vdist2(GetEntityCoords(train), metroFlipPointSouth) < 10 then
-				print("switching to northbound")
-				currentTrack = "north"
+			if currentTrack == "north" then
+				if (Vdist2(GetEntityCoords(train), trainFlipPointNorth) < 1000 or Vdist2(GetEntityCoords(train), metroFlipPointNorth) < 1000) then
+					print("switching to southbound")
+					currentTrack = "south"
+					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
+				end
+			elseif currentTrack == "south" then
+				if (Vdist2(GetEntityCoords(train), trainFlipPointSouth) < 1000 or Vdist2(GetEntityCoords(train), metroFlipPointSouth) < 1000) then
+					print("switching to northbound")
+					currentTrack = "north"
+					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
+				end
 			end
 		end
 	end
@@ -175,7 +181,7 @@ Citizen.CreateThread(function()
 					trainSpeed = 0
 				elseif trainSpeed < -5.0 then
 				 	trainSpeed = trainSpeed + 1.0
-				 end
+				end
 			elseif IsControlJustReleased(0, 47) and GetEntitySpeed(train) == 0 then
 				toggleDoors()
 			end
@@ -328,17 +334,13 @@ RegisterCommand("spawnTrain", function(source, args, rawCommand)
 		SetTrainSpeed(train,0)
 		SetTrainCruiseSpeed(train,0)
 		SetEntityAsMissionEntity(train, true, false)
-		currentTrack = "north"
+		currentTrack = "south"
+		TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
 	end
 end, false)
 
 RegisterCommand("tpTrain", function()
 	StartPlayerTeleport(PlayerId(), 670.2056, -685.7708, 25.15311, 0.0, false, true, true)
-end, false)
-
-
-RegisterCommand("doors", function()
-	toggleDoors()
 end, false)
 
 function toggleDoors()
@@ -354,13 +356,13 @@ AddEventHandler("usa_trains:toggleDoorsC", function(trainID, open)
 	local lTrain = NetworkGetEntityFromNetworkId(trainID)
 	local doorCount = GetTrainDoorCount(lTrain)
 	local carrige = GetTrainCarriage(lTrain, 1)
-	for doorIndex = 0, doorCount - 1 do
+	for doorIndex = 0, 2, 2 do
 		if open then
 			Citizen.CreateThread(function ()
 				for i=9,0,-1 do
 					local doorRatio = i/10
 					SetTrainDoorOpenRatio(lTrain, doorIndex, doorRatio)
-					SetTrainDoorOpenRatio(carrige, doorIndex, doorRatio)
+					SetTrainDoorOpenRatio(carrige, doorIndex + 1, doorRatio)
 					Wait(10)
 				end
 			end)
@@ -369,10 +371,33 @@ AddEventHandler("usa_trains:toggleDoorsC", function(trainID, open)
 				for i=1,10 do
 					local doorRatio = i/10
 					SetTrainDoorOpenRatio(lTrain, doorIndex, doorRatio)
-					SetTrainDoorOpenRatio(carrige, doorIndex, doorRatio)
+					SetTrainDoorOpenRatio(carrige, doorIndex + 1, doorRatio)
 					Wait(10)
 				end
 			end)
+		end
+	end
+end)
+
+local breaking = false
+RegisterNetEvent("usa_trains:checkDistances")
+AddEventHandler("usa_trains:checkDistances", function(trainNetworkID, trainType, trainTable)
+	for i,v in ipairs(trainTable) do
+		if trainNetworkID ~= v.id and trainType == v.type then
+			if Vdist2(GetEntityCoords(NetworkGetEntityFromNetworkId(trainNetworkID)), GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))) < 80000.0 and not breaking then
+				breaking = true
+				while trainSpeed ~= 0.0 do
+					print(trainSpeed)
+					if trainSpeed > 0.2 then
+						trainSpeed = trainSpeed - 0.1
+					elseif trainSpeed < -0.2 then
+						trainSpeed = trainSpeed + 0.1
+					else
+						trainSpeed = 0
+					end
+				end
+				breaking = false
+			end
 		end
 	end
 end)

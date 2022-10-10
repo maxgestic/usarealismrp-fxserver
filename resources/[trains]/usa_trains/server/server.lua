@@ -1,4 +1,6 @@
 local trains = {}
+local northboundTrains = {}
+local southboundTrains = {}
 
 RegisterServerEvent("usa_trains:seat")
 AddEventHandler("usa_trains:seat", function(train, ped)
@@ -106,4 +108,44 @@ end)
 RegisterServerEvent("usa_trains:toggleDoors")
 AddEventHandler("usa_trains:toggleDoors", function(train, open)
 	TriggerClientEvent("usa_trains:toggleDoorsC", -1, train, open)
+end)
+
+RegisterServerEvent("usa_trains:setTrainTrack")
+AddEventHandler("usa_trains:setTrainTrack", function(trainNetID, direction, type)
+	local owner = source
+	if direction == "north" then
+		for i,v in ipairs(southboundTrains) do
+			if v.id == trainNetID then
+				table.remove(southboundTrains, i)
+				break
+			end
+		end
+		table.insert(northboundTrains, {id = trainNetID, type = type, owner = owner})
+	elseif direction == "south" then
+		for i,v in ipairs(northboundTrains) do
+			if v.id == trainNetID then
+				table.remove(northboundTrains, i)
+				break
+			end
+		end
+		table.insert(southboundTrains, {id = trainNetID, type = type, owner = owner})
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		for i,v in ipairs(southboundTrains) do
+			TriggerClientEvent("usa_trains:checkDistances", v.owner, v.id, v.type, southboundTrains)
+		end
+		Citizen.Wait(2000)
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		for i,v in ipairs(northboundTrains) do
+			TriggerClientEvent("usa_trains:checkDistances", v.owner, v.id, v.type, northboundTrains)
+		end
+		Citizen.Wait(2000)
+	end
 end)
