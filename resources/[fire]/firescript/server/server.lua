@@ -257,7 +257,7 @@ AddEventHandler('FireScript:FireStarted', function(id)
 		end
 	end
 	local road_street = ""
-	if AllFires[id]["road"] ~= "" then
+	if AllFires[id]["road"] and AllFires[id]["road"] ~= "" then
 		road_street = AllFires[id]["street"] .. " | " .. AllFires[id]["road"]
 	else
 		road_street = AllFires[id]["street"]
