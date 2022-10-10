@@ -7,7 +7,7 @@ local passangerTrain = nil
 local doors = false
 SetTrainsForceDoorsOpen(false)
 local lastDoorToggle = GetGameTimer()
-local trainstations = {
+local metrostations = {
 	[1] = {coords = vector3(-1042.2565, -2745.7266, 15.9190)},
 	[2] = {coords = vector3(-946.0543, -2340.5015, 6.5338)},
 	[3] = {coords = vector3(-540.6730, -1282.5905, 33.4663)},
@@ -19,27 +19,75 @@ local trainstations = {
 	[9] = {coords = vector3(-220.9811, -1036.7648, 34.3784)},
 	[10] = {coords = vector3(112.1726, -1723.6456, 33.1850)},
 }
+local trainstations = {
+	[1] = {coords = vector3(655.3147, -1215.3457, 27.1136)},
+	[2] = {coords = vector3(2325.4028, 2676.2734, 48.2334)},
+	[3] = {coords = vector3(1768.6127, 3491.1086, 42.0864)},
+	[4] = {coords = vector3(-235.7802, 6037.5923, 37.3782)},
+	[5] = {coords = vector3(2886.9177, 4850.3159, 66.7778)},
+	[6] = {coords = vector3(2616.0828, 1679.5931, 29.3498)},
+	[7] = {coords = vector3(674.3034, -966.7263, 26.5136)},
+}
+local cargostations = {
+	[1] = {coords = vector3(2201.1565, 1362.0720, 85.5326)},
+	[2] = {coords = vector3(3026.0645, 4255.8647, 64.0981)},
+}
+
+local trainFlipPointSouth = vector3(396.0495, -2617.6992, 13.3674)
+local trainFlipPointNorth = vector3(1382.2756, 6416.7627, 33.3126)
+
+local metroFlipPointSouth = vector3(-1232.5068, -2885.6240, -8.9238)
+local metroFlipPointNorth = vector3(553.0604, -1984.6080, 17.1745)
+
+local currentTrack = nil
+
 
 Citizen.CreateThread(function()
+	for i,v in ipairs(metrostations) do
+		-- local blip = AddBlipForCoord(v.coords)
+		-- SetBlipHiddenOnLegend(blip, true)
+		-- SetBlipSprite(blip, 9)
+		-- SetBlipDisplay(blip, 8)
+		-- SetBlipScale(blip, 0.08)
+		-- SetBlipColour(blip, 0)
+		-- SetBlipAlpha(blip, 200)
+		-- SetBlipAsShortRange(blip, true)
+		-- EndTextCommandSetBlipName(blip)
+		local blip = AddBlipForCoord(v.coords)
+		SetBlipSprite(blip, 607)
+		SetBlipDisplay(blip, 4)
+		SetBlipScale(blip, 0.5)
+		SetBlipColour(blip, 1)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString('Metro Station')
+		EndTextCommandSetBlipName(blip)
+	end
 	for i,v in ipairs(trainstations) do
 		local blip = AddBlipForCoord(v.coords)
-		SetBlipHiddenOnLegend(blip, true)
-		SetBlipSprite(blip, 9)
-		SetBlipDisplay(blip, 8)
-		SetBlipScale(blip, 0.08)
-		SetBlipColour(blip, 0)
-		SetBlipAlpha(blip, 200)
-		SetBlipAsShortRange(blip, true)
-		EndTextCommandSetBlipName(blip)
-		local blip = AddBlipForCoord(v.coords)
-		SetBlipSprite(blip, 124)
+		SetBlipSprite(blip, 473)
 		SetBlipDisplay(blip, 4)
 		SetBlipScale(blip, 0.35)
 		SetBlipColour(blip, 61)
 		SetBlipAsShortRange(blip, true)
 		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString('Metro Station')
+		AddTextComponentString('Train Station')
 		EndTextCommandSetBlipName(blip)
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(1000)
+		if isDriver then
+			if Vdist2(GetEntityCoords(train), trainFlipPointNorth) < 10 or Vdist2(GetEntityCoords(train), metroFlipPointNorth) < 10 then
+				print("switching to southbound")
+				currentTrack = "south"
+			elseif Vdist2(GetEntityCoords(train), trainFlipPointSouth) < 10 or Vdist2(GetEntityCoords(train), metroFlipPointSouth) < 10 then
+				print("switching to northbound")
+				currentTrack = "north"
+			end
+		end
 	end
 end)
 
@@ -280,6 +328,7 @@ RegisterCommand("spawnTrain", function(source, args, rawCommand)
 		SetTrainSpeed(train,0)
 		SetTrainCruiseSpeed(train,0)
 		SetEntityAsMissionEntity(train, true, false)
+		currentTrack = "north"
 	end
 end, false)
 
