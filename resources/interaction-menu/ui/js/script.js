@@ -430,6 +430,7 @@ var itemImages = {
     "Richard_2": "https://i.imgur.com/WdvNYiF.png",
     "TJ": "https://i.imgur.com/v7CaiIj.png",
     "Tony_2": "https://i.imgur.com/P9maiLH.png",
+    "Manual Conversion Kit": "https://i.ibb.co/drjLyk0/a.png",
     // begin ammo
     "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
     "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",

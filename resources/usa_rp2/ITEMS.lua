@@ -1,4 +1,5 @@
 local ITEMS = {
+    { name = "Manual Conversion Kit", type = "misc", price = 2000, legality = "legal", quantity = 5, weight = 15, objectModel = "ind_prop_firework_03" },
     { name = "Large Firework", type = "misc", price = 2000, legality = "legal", quantity = 5, weight = 15, objectModel = "ind_prop_firework_03" },
     { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 5000, legality = "legal", quantity = 1, weight = 35, objectModel = "w_lr_firework" },
     { name = "Firework Projectile", legality = "legal", type = "ammo", price = 400, weight = 15, quantity = 1 },

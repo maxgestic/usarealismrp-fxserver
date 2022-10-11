@@ -92,5 +92,13 @@ UPGRADES = {
         postInstall = function(vehPlate)
             exports.rcore_radiocar:GiveRadioToCar(vehPlate, function() print("added radio to car") end)
         end
+    },
+    ["manual-conversion-kit"] = {
+        id = "manual-conversion-kit",
+        displayName = "Manual Conversion Kit",
+        requiresItem = "Manual Conversion Kit",
+        postInstall = function(vehPlate)
+            print("car converted to manual!")
+        end
     }
 }
