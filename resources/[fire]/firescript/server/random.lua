@@ -7,7 +7,7 @@ Citizen.CreateThread(function()
         Wait(Config.RandomFires.Delay * 1000)
         local EMSonline = exports["usa-characters"]:GetNumCharactersWithJob("ems")
         local random = math.random(1, 3)
-        if Config.RandomFires.Enabled and EMSonline > 2 and random == 1 then
+        if Config.RandomFires.Enabled and EMSonline >= 2 and random == 1 then
             local fires = Config.RandomFires.Locations[Config.RandomFires.AOP]
             if(fires and #fires > 0) then
                 
@@ -41,7 +41,14 @@ Citizen.CreateThread(function()
 
                 TriggerEvent("FireScript:FireStarted", CurrentFireID)
                 CurrentRandomFireID = CurrentFireID
-                Wait(fireData.timeout * 1000) --Check If Its Taken out
+
+                local firstTime = GetGameTimer()
+                while GetGameTimer() - firstTime < fireData.timeout * 1000 do
+                    if not AllFires[CurrentRandomFireID] then
+                        break
+                    end
+                    Wait(1000)
+                end
 
                 if AllFires[CurrentRandomFireID] then --Fire not taken out, take it out manually
                     StopFire(CurrentRandomFireID)

@@ -251,18 +251,20 @@ AddEventHandler('FireScript:FireStarted', function(id)
 		if CurrentWebhook then
 			CurrentWebhook.SendEmbedAsync(Config.Discord.BOT_NAME, "Fire Started" .. " [" .. id .. "]", "Creator: " .. AllFires[id].creator .. "\nLocation: " .. AllFires[id]["street"] .. " | " .. AllFires[id]["road"], "10038562")
 		end
+		local road_street = ""
+		if AllFires[id]["road"] and AllFires[id]["road"] ~= "" then
+			road_street = AllFires[id]["street"] .. " | " .. AllFires[id]["road"]
+		else
+			road_street = AllFires[id]["street"]
+		end
+    	TriggerEvent("911:UncontrolledFire", AllFires[id]["position"].x, AllFires[id]["position"].y, AllFires[id]["position"].z, road_street)
+
 	else--Random Fire
 		if CurrentWebhook then
 			CurrentWebhook.SendEmbedAsync(Config.Discord.BOT_NAME, "Random Fire Started [" .. id .. "]", "Location: " .. AllFires[id]["location"], "10038562")
 		end
+		TriggerEvent("911:UncontrolledFire", AllFires[id]["position"].x, AllFires[id]["position"].y, AllFires[id]["position"].z, AllFires[id]["location"])
 	end
-	local road_street = ""
-	if AllFires[id]["road"] and AllFires[id]["road"] ~= "" then
-		road_street = AllFires[id]["street"] .. " | " .. AllFires[id]["road"]
-	else
-		road_street = AllFires[id]["street"]
-	end
-    TriggerEvent("911:UncontrolledFire", AllFires[id]["position"].x, AllFires[id]["position"].y, AllFires[id]["position"].z, road_street)
 	TriggerClientEvent("FireScript:FireStarted", -1, id, AllFires[id]["position"], true)
 end)
 
