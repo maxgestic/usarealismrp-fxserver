@@ -396,7 +396,7 @@ local vehicleShopItems = {
 			{make = "Brute", model = "Tour Bus", price = 40000, hash = 1941029835, storage_capacity = 180.0},
 			{make = "Coach", model = "RV", price = 140000, hash = "coachrv", storage_capacity = 500.0},
 			{make = "Voodoo", model = "Caddy S", price = 20000, hash = "voodoo_caddys", storage_capacity = 60.0},
-			{make = "Progen", model = "Proff (NOT ROAD LEGAL), price = 250000, hash = "proff", storage_capacity = 60.0},
+			{make = "Progen", model = "Proff (NOT ROAD LEGAL)", price = 250000, hash = "proff", storage_capacity = 60.0},
 			{make = "Trailer", model = "Open", price = 30000, hash = "cotrailer", storage_capacity = 300.0},
         		{make = "Trailer", model = "Closed", price = 80000, hash = "ctrailer", storage_capacity = 400.0},
 			{make = "Trailer", model = "Car Hauler (Gooseneck)", price = 60000, hash = "godzhauler", storage_capacity = 400.0},
