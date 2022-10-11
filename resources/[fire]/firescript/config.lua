@@ -145,7 +145,7 @@ Config.RandomFires = {
                 flames = 20,
                 spread = 15,
                 type = "normal",
-                timeout = 300--In Seconds
+                timeout = 1800--In Seconds
             },
             [2] = {
                 position = vector3(-41.45, -1097.81, 26.42),--Dealership
@@ -153,7 +153,7 @@ Config.RandomFires = {
                 flames = 20,
                 spread = 15,
                 type = "electrical",
-                timeout = 300--In Seconds
+                timeout = 1800--In Seconds
             },
             [3] = {
                 position = vector3(265.09, -1259.29, 29.14),--Gas Station
@@ -161,7 +161,7 @@ Config.RandomFires = {
                 flames = 20,
                 spread = 15,
                 type = "chemical",
-                timeout = 300--In Seconds
+                timeout = 1800--In Seconds
             },
             [4] = {
                 position = vector3(855.61, -285.82, 65.52),--Skate Park
@@ -169,7 +169,7 @@ Config.RandomFires = {
                 flames = 20,
                 spread = 20,
                 type = "bonfire",
-                timeout = 300--In Seconds
+                timeout = 1800--In Seconds
             },
             [5] = {
                 position = vector3(1963.77, 3744.05, 32.34),--24/7
@@ -177,7 +177,7 @@ Config.RandomFires = {
                 flames = 10,
                 spread = 5,
                 type = "normal2",
-                timeout = 300--In Seconds
+                timeout = 1800--In Seconds
             },
             [6] = {
                 position = vector3(-92.22, 6415.5, 31.47),--Gas Station
@@ -185,7 +185,7 @@ Config.RandomFires = {
                 flames = 20,
                 spread = 10,
                 type = "normal2",
-                timeout = 300--In Seconds
+                timeout = 1800--In Seconds
             },
             [7] = {
                 position = vector3(1516.6372, -2132.9355, 76.5944),-- Oil Field Warehouse 1
@@ -193,7 +193,7 @@ Config.RandomFires = {
                 flames = 30,
                 spread = 50,
                 type = "chemical",
-                timeout = 300--In Seconds
+                timeout = 1800--In Seconds
             },
             [8] = {
                 position = vector3(456.7436, -706.7481, 27.3591),-- Market near bus depot
@@ -201,7 +201,7 @@ Config.RandomFires = {
                 flames = 30,
                 spread = 50,
                 type = "normal",
-                timeout = 300--In Seconds
+                timeout = 1800--In Seconds
             },
         },
     }
