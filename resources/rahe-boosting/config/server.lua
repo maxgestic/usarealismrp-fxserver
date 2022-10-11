@@ -561,6 +561,9 @@ supportedVehicles = {
     { name = "Dodge Ram TRX", model = "dodgetrx", class = "B" },
     { name = "Ford F100 Slammed", model = "slammedf100", class = "B" },
     { name = "Dababy Car", model = "dababy", class = "B" },
+    { name = "Ford F100 Trophy", model = "f100trophy", class = "B" },
+    { name = "Audi RSQ8 Mansory", model = "rsq8m", class = "B" },
+    { name = "Progen Proff", model = "proff", class = "B" },
     -- C CLASS
     { name = "Dinka Blista Compact", model = "blista2", class = "C" },
     { name = "Karin Asterope", model = "asterope", class = "C" },
@@ -614,6 +617,7 @@ supportedVehicles = {
     { name = "1963 Volkswagon Type 2", model = "type263", class = "C" },
     { name = "1966 Volkswagon Type 2", model = "type266", class = "C" },
     { name = "2000 Ford F350 Dually", model = "00f350d", class = "C" },
+    { name = "Hummer H2", model = "H2", class = "C" },
     -- D CLASS
     { name = "Bravado Youga Classic 4x4", model = "youga3", class = "D" },
     { name = "Bravado Youga Custom", model = "youga4", class = "D" },
@@ -651,4 +655,7 @@ supportedVehicles = {
     { name = "Zirconium Journey", model = "journey", class = "D" },
     { name = "Bravado Youga Classic", model = "youga2", class = "D" },
     { name = "BF Weevil", model = "weevil", class = "D" },
+    -- Custom D Class
+    { name = "1932 Ford V-8 Coupé", model = "fordc32", class = "D" },
+    { name = "1980 Ford Bronco", model = "80bronco", class = "D" },
 }

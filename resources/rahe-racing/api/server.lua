@@ -505,6 +505,9 @@ supportedVehicles = {
     { name = "Dodge Ram TRX", model = "dodgetrx", class = "B" },
     { name = "Ford F100 Slammed", model = "slammedf100", class = "B" },
     { name = "Dababy Car", model = "dababy", class = "B" },
+    { name = "Ford F100 Trophy", model = "f100trophy", class = "B" },
+    { name = "Audi RSQ8 Mansory", model = "rsq8m", class = "B" },
+    { name = "Progen Proff", model = "proff", class = "B" },
     { name = "Ford Mach E", model = "mache", class = "E" }, -- ELECTRIC
     { name = "Audi e-tron GT", model = "ocnetrongt", class = "E" }, -- ELECTRIC
     { name = "2018 Harley Davidson FLHXS", model = "flhxs_streetglide_special18", class = "B" },
@@ -607,6 +610,7 @@ supportedVehicles = {
     { name = "1963 Volkswagon Type 2", model = "type263", class = "C" },
     { name = "1966 Volkswagon Type 2", model = "type266", class = "C" },
     { name = "2000 Ford F350 Dually", model = "00f350d", class = "C" },
+    { name = "Hummer H2", model = "H2", class = "C" },
     -- D Class:**
     { name = "Bravado Youga Classic 4x4", model = "youga3", class = "D" },
     { name = "Bravado Youga Custom", model = "youga4", class = "D" },
@@ -659,6 +663,7 @@ supportedVehicles = {
     { name = "Vapid Hustler", model = "hustler", class = "D" },
     -- CUSTOM- D Class:
     { name = "1932 Ford V-8 Coupé", model = "fordc32", class = "D" },
+    { name = "1980 Ford Bronco", model = "80bronco", class = "D" },
 }
 
 RegisterServerCallback {
