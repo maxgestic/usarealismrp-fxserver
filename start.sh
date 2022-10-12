@@ -34,4 +34,4 @@ mv CitizenFX.log CitizenFX.log.2
 > /var/www/html/log.txt
 
 # run server
-tmux new -d -s fxserver "bash $pathToServerFiles/run.sh +exec server.cfg +set onesync on > CitizenFX.log"
+tmux new -d -s fxserver "bash $pathToServerFiles/run.sh +set onesync on > CitizenFX.log"
