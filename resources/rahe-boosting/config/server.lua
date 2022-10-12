@@ -491,7 +491,6 @@ supportedVehicles = {
     { name = "Gallivanter Baller ST", model = "baller7", class = "B" },
     { name = "Benefactor Dubsta Mandem", model = "dubsta2", class = "B" },
     { name = "Benefactor Dubsta", model = "dubsta", class = "B" },
-    { name = "Declasse Merryweather Granger", model = "mwgranger", class = "B" },
     { name = "Bravado Gresley", model = "gresley", class = "B" },
     { name = "Enus Huntley S", model = "huntley", class = "B" },
     { name = "Obey Rocoto", model = "rocoto", class = "B" },
