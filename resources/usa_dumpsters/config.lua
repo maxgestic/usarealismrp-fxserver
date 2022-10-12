@@ -25,7 +25,8 @@ Config.DumpsterSearchItems = {
 	{ name = "Iron Oxide", legality = "legal", quantity = 5, type = "misc", weight = 8 },
 	{ name = "Crumpled Paper", type = "misc", quantity = 1, legality = "legal", notStackable = true, weight = 1, objectModel = "prop_paper_ball" },
 	{ name = "Black Powder", legality = "legal", quantity = 1, type = "misc", weight = 4 },
-	{ name = "Metal Scraps", legality = "legal", quantity = 1, type = "misc", weight = 8 }
+	{ name = "Metal Scraps", legality = "legal", quantity = 1, type = "misc", weight = 8 },
+	{ name = "Metal Pipe", legality = "legal", quantity = 1, type = "misc", weight = 8 }
 }
 
 Config.dumpsterObjects = {

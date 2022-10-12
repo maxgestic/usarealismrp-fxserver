@@ -432,6 +432,27 @@ Config.recipes = {
             requiredCraftingLevel = 4,
             type = "weapons"
         },
+        { 
+            name = "Mace",
+            image = "https://i.imgur.com/EJoWdJ8.png",
+            requires = {
+                { name = "Metal Scraps", quantity = 1 },
+                { name = "Metal Pipe", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Mace",
+                    hash = GetHashKey("WEAPON_MAZE"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 15,
+                    objectModel = "w_me_bat",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "weapons"
+        },
     }
 }
 

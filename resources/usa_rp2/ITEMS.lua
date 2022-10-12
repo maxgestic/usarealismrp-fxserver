@@ -2,6 +2,7 @@ local ITEMS = {
     { name = "Manual Conversion Kit", type = "mechanicPart", price = 2000, legality = "legal", quantity = 5, weight = 15},
     { name = "Large Firework", type = "misc", price = 2000, legality = "legal", quantity = 5, weight = 15, objectModel = "ind_prop_firework_03" },
     { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 5000, legality = "legal", quantity = 1, weight = 35, objectModel = "w_lr_firework" },
+    { name = "Mace", type = "weapon", hash = GetHashKey("WEAPON_MAZE"), price = 5000, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_byard_pipe_01" },
     { name = "Firework Projectile", legality = "legal", type = "ammo", price = 400, weight = 15, quantity = 1 },
     { name = "Vape", price = 400, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "ba_prop_battle_vape_01", blockedInPrison = true},
     { name = "Speaker", price = 5000, legality = "legal", quantity = 1, type = "misc", weight = 20, objectModel = "sm_prop_smug_speaker" },

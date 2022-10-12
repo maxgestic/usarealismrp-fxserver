@@ -431,6 +431,8 @@ var itemImages = {
     "TJ": "https://i.imgur.com/v7CaiIj.png",
     "Tony_2": "https://i.imgur.com/P9maiLH.png",
     "Manual Conversion Kit": "https://i.ibb.co/drjLyk0/a.png",
+    "Metal Pipe": "https://i.imgur.com/d6UlDM5.jpeg",
+    "Mace": "https://i.imgur.com/EJoWdJ8.png",
     // begin ammo
     "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
     "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",
