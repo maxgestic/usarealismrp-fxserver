@@ -111,3 +111,5 @@ end
 function StopCancellableProgressBar()
     IsProgressbarDisplayed = false
 end
+
+exports("CancellableProgress", CancellableProgress)

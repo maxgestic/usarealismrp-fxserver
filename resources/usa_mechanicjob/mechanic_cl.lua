@@ -564,10 +564,14 @@ AddEventHandler("mechanic:tryInstall", function(upgrade, rank)
 		local veh = MechanicHelper.getClosestVehicle(5)
 			if veh then
 				exports.globals:notify("Installing " .. upgrade.displayName .. " upgrade!")
-				MechanicHelper.installUpgrade(veh, upgrade, function()
-					local plate = GetVehicleNumberPlateText(veh)
-					plate = exports.globals:trim(plate)
-					TriggerServerEvent("mechanic:installedUpgrade", plate, VehToNet(veh), rank)
+				MechanicHelper.installUpgrade(veh, upgrade, function(success)
+					if success then
+						local plate = GetVehicleNumberPlateText(veh)
+						plate = exports.globals:trim(plate)
+						TriggerServerEvent("mechanic:installedUpgrade", plate, VehToNet(veh), rank)
+					else
+						exports.globals:notify("Install failed!", "INFO: Install failed")
+					end
 				end)
 			else
 				exports.globals:notify("No vehicle found!")

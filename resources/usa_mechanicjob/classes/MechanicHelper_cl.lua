@@ -53,31 +53,32 @@ MechanicHelper.repairVehicle = function(veh, repairCount, cb)
     if beforeRepairHealth < 800 then
         SetVehicleDoorOpen(veh, 4, false, false)
         local me = PlayerPedId()
-        local beginTime = GetGameTimer()
-        while GetGameTimer() - beginTime < MechanicHelper.REPAIR_TIME do
-            exports.globals:DrawTimerBar(beginTime, MechanicHelper.REPAIR_TIME, 1.42, 1.475, 'REPAIRING')
-            if not IsEntityPlayingAnim(me, MechanicHelper.animations.repair.dict, MechanicHelper.animations.repair.name, 3) then
-                RequestAnimDict(MechanicHelper.animations.repair.dict)
-                TaskPlayAnim(me, MechanicHelper.animations.repair.dict, MechanicHelper.animations.repair.name, 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
+        exports["usa-crafting"]:CancellableProgress(
+        MechanicHelper.REPAIR_TIME, 
+        MechanicHelper.animations.repair.dict, 
+        MechanicHelper.animations.repair.name,
+        15,
+        function() -- finished
+            local failChance = 0.5 - (0.005 * repairCount) -- larger successful repair count = smaller fail chance
+            if math.random() > failChance then
+                if not IsVehicleDriveable(veh, true) then -- damaged and red
+                    SetVehicleUndriveable(veh, false)
+                    SetVehicleEngineHealth(veh, 500.0)
+                else -- damaged but not red, so prob orange
+                    SetVehicleEngineHealth(veh, 800.0)
+                end
+                FixAllTires(veh)
+                success = true
             end
-            Wait(1)
+            Wait(500)
+            SetVehicleDoorShut(veh, 4, false)
+            cb(true)
+        end,
+        function() -- cancel
+            cb(false)
         end
-        local failChance = 0.5 - (0.005 * repairCount) -- larger successful repair count = smaller fail chance
-        if math.random() > failChance then
-            if not IsVehicleDriveable(veh, true) then -- damaged and red
-                SetVehicleUndriveable(veh, false)
-                SetVehicleEngineHealth(veh, 500.0)
-            else -- damaged but not red, so prob orange
-                SetVehicleEngineHealth(veh, 800.0)
-            end
-            FixAllTires(veh)
-            success = true
-        end
-        ClearPedTasks(me)
-        Wait(500)
-        SetVehicleDoorShut(veh, 4, false)
+    )
     end
-    cb(success)
 end
 
 MechanicHelper.installUpgrade = function(veh, upgrade, cb)
@@ -85,22 +86,25 @@ MechanicHelper.installUpgrade = function(veh, upgrade, cb)
     SetVehicleDoorOpen(veh, 4, false, false)
     local me = PlayerPedId()
     local beginTime = GetGameTimer()
-    while GetGameTimer() - beginTime < MechanicHelper.UPGRADE_INSTALL_TIME do
-        exports.globals:DrawTimerBar(beginTime, MechanicHelper.UPGRADE_INSTALL_TIME, 1.42, 1.475, 'INSTALLING')
-        if not IsEntityPlayingAnim(me, MechanicHelper.animations.repair.dict, MechanicHelper.animations.repair.name, 3) then
-            RequestAnimDict(MechanicHelper.animations.repair.dict)
-            TaskPlayAnim(me, MechanicHelper.animations.repair.dict, MechanicHelper.animations.repair.name, 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
+    exports["usa-crafting"]:CancellableProgress(
+        MechanicHelper.UPGRADE_INSTALL_TIME, 
+        MechanicHelper.animations.repair.dict, 
+        MechanicHelper.animations.repair.name,
+        15,
+        function() -- finished
+            if MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id] then
+                MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount) -- call appropriate native
+            end
+            Wait(500)
+            SetVehicleDoorShut(veh, 4, false)
+            cb(true)
+            TriggerEvent("interaction:setBusy", false)
+        end,
+        function() -- cancel
+            cb(false)
+            TriggerEvent("interaction:setBusy", false)
         end
-        Wait(1)
-    end
-    if MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id] then
-        MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount) -- call appropriate native
-    end
-    ClearPedTasks(me)
-    cb()
-    Wait(500)
-    SetVehicleDoorShut(veh, 4, false)
-    TriggerEvent("interaction:setBusy", false)
+    )
 end
 
 MechanicHelper.installUpgradeNoAnim = function(veh, upgrade)
