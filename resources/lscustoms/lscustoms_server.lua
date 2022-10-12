@@ -109,6 +109,7 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 		local char = exports["usa-characters"]:GetCharacter(source)
 		local job = char.get("job")
 		local charMoney = char.get("money")
+		local charBank = char.get("bank")
 		button.price = math.abs(button.price) -- prevent mem hack to gain money
 		--[[
 		if mname ~= 'main' then
@@ -157,7 +158,15 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 				if business then
 					exports["usa-businesses"]:GiveBusinessCashPercent(business, discountedPrice)
 				end
+			elseif discountedPrice <= charBank then
+				TriggerClientEvent("usa:notify", source, "Not enough cash, taking from bank!")
+				char.removeBank(discountedPrice) -- half off for LEO/EMS
+				TriggerClientEvent("LSC:buttonSelected", source, name, button, true)
+				if business then
+					exports["usa-businesses"]:GiveBusinessCashPercent(business, button.price)
+				end
 			else
+				TriggerClientEvent("usa:notify", source, "Not enough cash or money in bank!")
 				TriggerClientEvent("LSC:buttonSelected", source, name, button, false)
 			end
 		else 
@@ -167,8 +176,15 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 				if business then
 					exports["usa-businesses"]:GiveBusinessCashPercent(business, button.price)
 				end
-			else 
-				TriggerClientEvent("usa:notify", source, "Not enough money!")
+			elseif button.price <= charBank then
+				TriggerClientEvent("usa:notify", source, "Not enough cash, taking from bank!")
+				char.removeBank(button.price) -- -- full price
+				TriggerClientEvent("LSC:buttonSelected", source, name, button, true)
+				if business then
+					exports["usa-businesses"]:GiveBusinessCashPercent(business, button.price)
+				end
+			else
+				TriggerClientEvent("usa:notify", source, "Not enough cash or money in bank!")
 				TriggerClientEvent("LSC:buttonSelected", source, name, button, false)
 			end
 		end
