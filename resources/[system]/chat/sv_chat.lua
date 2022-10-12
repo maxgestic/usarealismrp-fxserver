@@ -7,10 +7,14 @@ RegisterServerEvent('_chat:messageEntered')
 RegisterServerEvent('chat:clear')
 RegisterServerEvent('__cfx_internal:commandFallback')
 
+local CUSTOM_LOG_ENABLED = false
+
 local LOG_FILE_NAME = "/var/www/html/log.txt"
 
--- open and clear new log file --
-os.remove(LOG_FILE_NAME)
+if CUSTOM_LOG_ENABLED then
+	-- open and clear new log file --
+	os.remove(LOG_FILE_NAME)
+end
 
 local LOG_FILE
 
@@ -43,14 +47,16 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 			end
 		end
 
-		---------------------------------
-		-- write to admin log LOG_FILE --
-		---------------------------------
-		LOG_FILE = io.open(LOG_FILE_NAME, "a")
-		io.output(LOG_FILE)
-		io.write(name .. " [" .. GetPlayerName(source) .. " / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
-		if type(LOG_FILE) == "userdata" then -- userdata == FILE*
-			io.close(LOG_FILE)
+		if CUSTOM_LOG_ENABLED then
+			---------------------------------
+			-- write to admin log LOG_FILE --
+			---------------------------------
+			LOG_FILE = io.open(LOG_FILE_NAME, "a")
+			io.output(LOG_FILE)
+			io.write(name .. " [" .. GetPlayerName(source) .. " / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
+			if type(LOG_FILE) == "userdata" then -- userdata == FILE*
+				io.close(LOG_FILE)
+			end
 		end
 
 	TriggerEvent('chatMessageLocation', source, name, message, location)
@@ -79,10 +85,12 @@ end)
 -- test this
 RegisterServerEvent("chat:sendToLogFile")
 AddEventHandler("chat:sendToLogFile", function(source, message)
-	LOG_FILE = io.open(LOG_FILE_NAME, "a")
-	io.output(LOG_FILE)
-	io.write("[" .. GetPlayerName(source) .. " (#" .. source .. ") / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
-	if type(LOG_FILE) == "userdata" then -- userdata == FILE*
-		io.close(LOG_FILE)
+	if CUSTOM_LOG_ENABLED then
+		LOG_FILE = io.open(LOG_FILE_NAME, "a")
+		io.output(LOG_FILE)
+		io.write("[" .. GetPlayerName(source) .. " (#" .. source .. ") / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
+		if type(LOG_FILE) == "userdata" then -- userdata == FILE*
+			io.close(LOG_FILE)
+		end
 	end
 end)

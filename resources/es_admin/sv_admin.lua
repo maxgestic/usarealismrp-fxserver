@@ -1606,3 +1606,15 @@ function printStaffList(fromRCON, src)
 		end
 	end)
 end
+
+TriggerEvent('es:addGroupCommand', 'tx', 'mod', function(source, args, char)
+	TriggerClientEvent("tx:open", source)
+end, {
+	help = "Open the txAdmin staff menu!"
+})
+
+TriggerEvent('es:addGroupCommand', 'amenu', 'mod', function(source, args, char)
+	TriggerClientEvent("tx:open", source)
+end, {
+	help = "Open the txAdmin staff menu!"
+})

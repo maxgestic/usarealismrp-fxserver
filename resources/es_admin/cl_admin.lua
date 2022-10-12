@@ -336,3 +336,8 @@ end)
 	bkr_prop_weed_lrg_01a
 	bkr_prop_weed_lrg_01b
 ]]
+
+RegisterNetEvent("tx:open")
+AddEventHandler("tx:open", function()
+	ExecuteCommand("tx")
+end)
