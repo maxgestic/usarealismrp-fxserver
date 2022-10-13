@@ -1,6 +1,9 @@
 local trains = {}
 local northboundTrains = {}
 local southboundTrains = {}
+local trainTable = {}
+local updateInterval = 1
+local metroPasses = {}
 
 RegisterServerEvent("usa_trains:seat")
 AddEventHandler("usa_trains:seat", function(train, ped)
@@ -58,15 +61,16 @@ AddEventHandler("usa_trains:moveseat", function(train, ped)
 			TriggerClientEvent("usa_trains:no_seats", source)
 		end
 	end
-
 end)
 
 RegisterServerEvent("usa_trains:createTrain")
-AddEventHandler("usa_trains:createTrain", function(train, carrige)
+AddEventHandler("usa_trains:createTrain", function(train, carrige, type)
 	local object = {
+		name = type,
 		driver = source,
 		trainNetID = train,
 		carrigeNetID = carrige,
+		coords = vector3(GetEntityCoords(NetworkGetEntityFromNetworkId(train))),
 		seats = {
 			seat1 = {taken = nil, x = 1.0, y = 1.5, z = -0.65, rotate = 0.0, number = 1},
 			seat2 = {taken = nil, x = -1.0, y = 1.5, z = -0.65, rotate = 0.0, number = 2},
@@ -104,10 +108,13 @@ AddEventHandler("usa_trains:createTrain", function(train, carrige)
 	}
 
 	table.insert(trains, object)
+
+	TriggerClientEvent("usa_trains:syncCreateTrain", -1, train, carrige)
 end)
 
 RegisterServerEvent("usa_trains:deleteTrainServer")
 AddEventHandler("usa_trains:deleteTrainServer", function(id)
+	local carrigeID = nil
 	for i,v in ipairs(southboundTrains) do
 		if v.id == id then
 			table.remove(southboundTrains, i)
@@ -120,9 +127,12 @@ AddEventHandler("usa_trains:deleteTrainServer", function(id)
 	end
 	for i,v in ipairs(trains) do
 		if v.trainNetID == id then
+			carrigeID = v.carrigeNetID
 			table.remove(trains, i)
 		end
 	end
+
+	TriggerClientEvent("usa_trains:syncDeleteTrain", -1, id, carrigeID)
 end)
 
 RegisterServerEvent("usa_trains:toggleDoors")
@@ -163,6 +173,7 @@ AddEventHandler("usa_trains:checkTrainDriver", function(id)
 	end
 end)
 
+-- check distances
 Citizen.CreateThread(function()
 	while true do
 		for i,v in ipairs(southboundTrains) do
@@ -171,7 +182,6 @@ Citizen.CreateThread(function()
 		Citizen.Wait(2000)
 	end
 end)
-
 Citizen.CreateThread(function()
 	while true do
 		for i,v in ipairs(northboundTrains) do
@@ -179,4 +189,64 @@ Citizen.CreateThread(function()
 		end
 		Citizen.Wait(2000)
 	end
+end)
+
+Citizen.CreateThread(function()
+	local lastUpdateTime = os.time()
+	while true do
+		if os.difftime(os.time(), lastUpdateTime) >= updateInterval then
+			for i, data in pairs(trains) do
+				trains[i].coords = vector3(GetEntityCoords(NetworkGetEntityFromNetworkId(data.trainNetID)))
+			end
+			TriggerClientEvent("usa_trains:updateAll", -1, trains)
+			lastUpdateTime = os.time()
+		end
+		Wait(500)
+	end
+end)
+
+RegisterServerEvent("usa_trains:buyTicket")
+AddEventHandler("usa_trains:buyTicket", function(ticket_type)
+	local source = source
+	if ticket_type == "metro" then
+		local char = exports["usa-characters"]:GetCharacter(source)
+		if char.get("money") > 50 then
+			char.removeMoney(50)
+			TriggerClientEvent("usa_trains:issueTicket", source, ticket_type, true)
+			TriggerEvent("usa:notify", source, "You have bought a metro daypass for $50")
+			local charid = char.get("_id")
+			table.insert(metroPasses, charid)
+		else
+			TriggerClientEvent("usa:notify", source, "You do not have enough money for a Day Pass ($50)")
+		end
+	end
+end)
+
+RegisterServerEvent("usa_trains:passengerNoTicket")
+AddEventHandler("usa_trains:passengerNoTicket", function(player_coords)
+	local distances = {}
+	for i,v in ipairs(trains) do
+		local train_coords = v.coords
+		local d = #(player_coords - train_coords)
+		table.insert(distances, {driver = v.driver, distance = d})
+	end
+	local min = math.huge
+	local result = nil
+	for i = 1, #distances  do
+		if distances[i].distance < min and min then
+			min = distances[i].distance
+			result = distances[i].driver
+		end
+	end
+	TriggerClientEvent("usa:notify", result, "Head's Up: There is a passenger on your train without a Ticket!")
+end)
+
+AddEventHandler("character:loaded", function(char)
+	local hasMetroPass = false
+	for i,v in ipairs(metroPasses) do
+		if v == char.get("_id") then
+			hasMetroPass = true
+		end
+	end
+	TriggerClientEvent("usa_trains:issueTicket", char.get("source"), "metro", hasMetroPass)
 end)
