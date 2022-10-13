@@ -76,13 +76,20 @@ Citizen.CreateThread(function()
 	end
 end)
 
+local inTrain = false
+
+RegisterNetEvent("usa_hud:setTrain")
+AddEventHandler("usa_hud:setTrain", function(bool)
+	inTrain = bool
+end)
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1)
 		local playerPed = PlayerPedId()
 		local playerVeh = GetVehiclePedIsIn(playerPed, false)
 		if hud.enabled then
-			if playerVeh ~= 0 and GetVehicleClass(playerVeh) ~= 13 and GetVehicleClass(playerVeh) ~= 21 then
+			if playerVeh ~= 0 and GetVehicleClass(playerVeh) ~= 13 and GetVehicleClass(playerVeh) ~= 21 and not inTrain then
 				local streets = hud.street1
 				if hud.street2 and hud.street2 ~= "" then
 					streets = streets .. " & " .. hud.street2
@@ -104,6 +111,8 @@ Citizen.CreateThread(function()
 				else
 					DrawTxt(0.663, 1.455, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)
 				end
+				DisplayRadar(true)
+			elseif inTrain then
 				DisplayRadar(true)
 			else -- on foot
 				DisplayRadar(false)
