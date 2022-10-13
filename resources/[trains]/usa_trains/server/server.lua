@@ -6,7 +6,7 @@ RegisterServerEvent("usa_trains:seat")
 AddEventHandler("usa_trains:seat", function(train, ped)
 	local deseat = false
 	for i,v in ipairs(trains) do
-		if (v.netID == train) then
+		if (v.carrigeNetID == train) then
 			for k,w in pairs(v.seats) do
 				if (w.taken == ped) then
 					TriggerClientEvent("usa_trains:unseat_player", source)
@@ -33,7 +33,7 @@ end)
 RegisterServerEvent("usa_trains:moveseat")
 AddEventHandler("usa_trains:moveseat", function(train, ped)
 	for i,v in ipairs(trains) do
-		if (v.netID == train) then
+		if (v.carrigeNetID == train) then
 			local currentseat = 0
 			for k,w in pairs(v.seats) do
 				if w.taken == ped then
@@ -62,10 +62,11 @@ AddEventHandler("usa_trains:moveseat", function(train, ped)
 end)
 
 RegisterServerEvent("usa_trains:createTrain")
-AddEventHandler("usa_trains:createTrain", function(train, driver)
+AddEventHandler("usa_trains:createTrain", function(train, carrige)
 	local object = {
-		driver = driver,
-		netID = train,
+		driver = source,
+		trainNetID = train,
+		carrigeNetID = carrige,
 		seats = {
 			seat1 = {taken = nil, x = 1.0, y = 1.5, z = -0.65, rotate = 0.0, number = 1},
 			seat2 = {taken = nil, x = -1.0, y = 1.5, z = -0.65, rotate = 0.0, number = 2},
@@ -105,6 +106,25 @@ AddEventHandler("usa_trains:createTrain", function(train, driver)
 	table.insert(trains, object)
 end)
 
+RegisterServerEvent("usa_trains:deleteTrainServer")
+AddEventHandler("usa_trains:deleteTrainServer", function(id)
+	for i,v in ipairs(southboundTrains) do
+		if v.id == id then
+			table.remove(southboundTrains, i)
+		end
+	end
+	for i,v in ipairs(northboundTrains) do
+		if v.id == id then
+			table.remove(northboundTrains, i)
+		end
+	end
+	for i,v in ipairs(trains) do
+		if v.trainNetID == id then
+			table.remove(trains, i)
+		end
+	end
+end)
+
 RegisterServerEvent("usa_trains:toggleDoors")
 AddEventHandler("usa_trains:toggleDoors", function(train, open)
 	TriggerClientEvent("usa_trains:toggleDoorsC", -1, train, open)
@@ -129,6 +149,17 @@ AddEventHandler("usa_trains:setTrainTrack", function(trainNetID, direction, type
 			end
 		end
 		table.insert(southboundTrains, {id = trainNetID, type = type, owner = owner})
+	end
+end)
+
+RegisterServerEvent("usa_trains:checkTrainDriver")
+AddEventHandler("usa_trains:checkTrainDriver", function(id)
+	local source = source
+	for i,v in ipairs(trains) do
+		if v.trainNetID == id then
+			local isDriver = (v.driver == source)
+			TriggerClientEvent("usa_trains:checkTrainDriverCB", source, id, isDriver)
+		end
 	end
 end)
 

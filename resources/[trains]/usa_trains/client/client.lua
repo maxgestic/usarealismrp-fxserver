@@ -41,18 +41,11 @@ local metroFlipPointNorth = vector3(553.0604, -1984.6080, 17.1745)
 
 local currentTrack = nil
 
+local hasTrainTicket = false
+
 
 Citizen.CreateThread(function()
 	for i,v in ipairs(metrostations) do
-		-- local blip = AddBlipForCoord(v.coords)
-		-- SetBlipHiddenOnLegend(blip, true)
-		-- SetBlipSprite(blip, 9)
-		-- SetBlipDisplay(blip, 8)
-		-- SetBlipScale(blip, 0.08)
-		-- SetBlipColour(blip, 0)
-		-- SetBlipAlpha(blip, 200)
-		-- SetBlipAsShortRange(blip, true)
-		-- EndTextCommandSetBlipName(blip)
 		local blip = AddBlipForCoord(v.coords)
 		SetBlipSprite(blip, 607)
 		SetBlipDisplay(blip, 4)
@@ -225,12 +218,8 @@ Citizen.CreateThread(function()
 			if GetEntityModel(vehicle) == GetHashKey("streakcoaster") and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then 
 				alert("~b~Enter Train as Driver ~INPUT_CONTEXT~")
 				if IsControlJustPressed(1, 51) then
-					DoScreenFadeOut(500)
-					Citizen.Wait(750)
-					SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
-					isDriver = true
-					Citizen.Wait(500)
-					DoScreenFadeIn(500)
+					local id = NetworkGetNetworkIdFromEntity(vehicle)
+					TriggerServerEvent("usa_trains:checkTrainDriver", id)
 	            end
 	        elseif GetEntityModel(vehicle) == GetHashKey("streakcoasterc") and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and not isPassanger then 
 	        	alert("~b~Enter Train as Passanger ~INPUT_CONTEXT~")
@@ -241,15 +230,59 @@ Citizen.CreateThread(function()
 	        elseif GetEntityModel(vehicle == GetHashKey("metrotrain")) and (Vdist2(GetEntityCoords(GetPlayerPed(-1)), GetEntityCoords(vehicle)) < 25) and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), -1) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then
 	        	alert("~b~Enter Metro as Driver ~INPUT_CONTEXT~")
 				if IsControlJustPressed(1, 51) then
-					DoScreenFadeOut(500)
-					Citizen.Wait(750)
-					SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
-					isDriver = true
-					Citizen.Wait(500)
-					DoScreenFadeIn(500)
+					local id = NetworkGetNetworkIdFromEntity(vehicle)
+					TriggerServerEvent("usa_trains:checkTrainDriver", id)
 	            end
 			end
 		end
+	end
+end)
+
+Citizen.CreateThread(function()
+local globals = exports.globals
+	while true do
+		Citizen.Wait(0)
+		for object in globals:EnumerateObjects() do
+			local model = GetEntityModel(object)
+			if model == GetHashKey("prop_train_ticket_02") and Vdist2(GetEntityCoords(object), GetEntityCoords(PlayerPedId())) < 5.0 then
+				alert("~b~Buy Train Ticket ~INPUT_ENTER~")
+				if IsControlPressed(0, 75) then
+					if not hasTrainTicket then
+						hasTrainTicket = true
+						print(hasTrainTicket)
+						Wait(100)
+					else
+						TriggerEvent("usa:notify", "You already have a train ticket")
+					end
+				end
+			end
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		if IsPedInAnyTrain(GetPlayerPed(-1)) and GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1), false)) == 0 and not isDriver and not isPassanger then
+			if not hasTrainTicket then
+				alert("You do not have a train ticket, leave the train!")
+			end
+		end
+	end
+end)
+
+RegisterNetEvent("usa_trains:checkTrainDriverCB")
+AddEventHandler("usa_trains:checkTrainDriverCB", function (netID, bool)
+	if bool then
+		local vehicle = NetworkGetEntityFromNetworkId(netID)
+		DoScreenFadeOut(500)
+		Citizen.Wait(750)
+		SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
+		isDriver = true
+		Citizen.Wait(500)
+		DoScreenFadeIn(500)
+	else
+		TriggerEvent("usa:notify", "This train is not issued to you!")
 	end
 end)
 
@@ -302,6 +335,7 @@ RegisterCommand("delTrain", function()
 	local dtrain = NetworkGetEntityFromNetworkId(trainNID)
 	takeOwn(dtrain)
 	if (NetworkGetEntityOwner(dtrain) == 128) then
+		TriggerServerEvent("usa_trains:deleteTrainServer", trainNID)
 		DeleteMissionTrain(dtrain)
 		train = nil
 		trainNID= nil
@@ -309,10 +343,16 @@ RegisterCommand("delTrain", function()
 	end
 end, false)
 
-RegisterCommand("spawnTrain", function(source, args, rawCommand)
+function spawnTrain(type)
 	if not train then
-		local train_models = {"freight", "freightcar", "freightcar2", "freightcont1", "freightcont2", "freightgrain", "metrotrain", "tankercar", "streakcoaster", "streakcoastercab", "streakcoasterc"}
-
+		local train_models = {}
+		if type == 25 then
+			train_models = {"metrotrain"}
+		elseif type == 0 then
+			train_models = {"streakcoaster", "streakcoasterc"}
+		else
+			train_models = {"freight", "freightcar", "freightcar2", "freightcont1", "freightcont2", "freightgrain", "metrotrain", "tankercar", "streakcoaster", "streakcoastercab", "streakcoasterc"}
+		end
 		for i,v in ipairs(train_models) do
 			local hash = GetHashKey(v)
 			RequestModel(v)
@@ -321,26 +361,24 @@ RegisterCommand("spawnTrain", function(source, args, rawCommand)
 				Citizen.Wait(0)
 			end
 		end
-
-		local coords = vector3(GetEntityCoords(GetPlayerPed(-1)))
-		train = CreateMissionTrain(tonumber(args[1]), coords.x, coords.y, coords.z, true)
+		train = CreateMissionTrain(tonumber(type), -900.0752, -2343.4150, -12.6036, true)
 		trainNID = NetworkGetNetworkIdFromEntity(train)
-		local trainNetID = NetworkGetNetworkIdFromEntity(GetTrainCarriage(train, 1))
+		local carrigeNID = NetworkGetNetworkIdFromEntity(GetTrainCarriage(train, 1))
 		doors = false
 		SetEntityAsMissionEntity(train, true, false)
 		SetNetworkIdCanMigrate(NetworkGetNetworkIdFromEntity(train), false)
 		NetworkDisableProximityMigration(NetworkGetNetworkIdFromEntity(train))
-		TriggerServerEvent("usa_trains:createTrain", trainNetID, source)
+		TriggerServerEvent("usa_trains:createTrain", trainNID, carrigeNID)
 		SetTrainSpeed(train,0)
 		SetTrainCruiseSpeed(train,0)
 		SetEntityAsMissionEntity(train, true, false)
-		currentTrack = "south"
+		currentTrack = "north"
 		TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
 	end
-end, false)
+end
 
-RegisterCommand("tpTrain", function()
-	StartPlayerTeleport(PlayerId(), 670.2056, -685.7708, 25.15311, 0.0, false, true, true)
+RegisterCommand("spawnMetro", function()
+	spawnTrain(25)
 end, false)
 
 function toggleDoors()
