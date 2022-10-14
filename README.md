@@ -72,6 +72,7 @@ USARRP
 		- ``..\server\FXServer.exe +exec server.cfg +set onesync on`` from the ``usarealismrp-fxserver`` folder
 	* Linux:
 		- ``bash ~/USARRP/server/run.sh +exec server.cfg +set onesync on`` from the `usarealismrp-fxserver` folder
+	* If you want to use txAdmin just omit the `+exec server.cfg` argument and it should provide instructions in the console.
 
 **DB Notes**
 1)  Must create following couch db views in a ``vehicleFilters`` design doc in a ``vehicles`` db:  
