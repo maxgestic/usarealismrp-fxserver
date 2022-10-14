@@ -142,7 +142,8 @@ end)
 AddEventHandler('rahe-boosting:client:importantBoostStarted', function(location, vehicleId, vehicleClass)
     local streetName, crossing = GetStreetNameAtCoord(location.x, location.y, location.z)
     streetName = GetStreetNameFromHashKey(streetName)
-    TriggerServerEvent('911:call', location.x, location.y, location.z, "^3Grand Theft Auto^0: OnStar Services reports GPS tampering on vehicle. Vehicle is a [^3"..vehicleClass.."^0] Class. Spotted near ["..streetName.."]")
+    local licenseplate = GetVehicleNumberPlateText(vehicleId)
+    TriggerServerEvent('911:VehicleBoosting', location.x, location.y, location.z, streetName, licenseplate, vehicleClass)
 end)
 
 -- The event which will be triggered when the players fails a GPS hack.
@@ -153,7 +154,7 @@ AddEventHandler('rahe-boosting:client:failedGpsHack', function()
     local streetName, crossing = GetStreetNameAtCoord(playerCoords.x, playerCoords.y, playerCoords.z)
     streetName = GetStreetNameFromHashKey(streetName)
 
-    TriggerServerEvent('911:call', playerCoords.x, playerCoords.y, playerCoords.z, "^3Grand Theft Auto^0: OnStar reports failed GPS tampering near ["..streetName.."]")
+    TriggerServerEvent('911:call', playerCoords.x, playerCoords.y, playerCoords.z, "^*Vehicle Boosting in Progress:^r OnStar reports failed GPS tampering near ["..streetName.."]")
 end)
 
 -- The event which will be triggered when the players successfully completes one GPS hack.

@@ -190,6 +190,7 @@ RegisterServerEvent('911:UncontrolledFire')
 RegisterServerEvent('911:BankTruck')
 RegisterServerEvent('911:TruckAtRisk')
 RegisterServerEvent('911:SuspiciousPerson')
+RegisterServerEvent('911:VehicleBoosting')
 
 
 local DISPATCH_DELAY_PERIOD_SECONDS = 60
@@ -505,6 +506,11 @@ AddEventHandler('911:BankTruck', function(x, y, z)
         local string = '^*Armored Truck Alarm^r: Attack on a armored money truck in progress.'
         Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Bank Truck')
     end
+end)
+
+AddEventHandler('911:VehicleBoosting', function(x, y, z, street, plate, vehclass)
+    local string = '^*Vehicle Boosting in Progress:^r '..street..' ^1^*|^r ^*Vehicle Class:^r ['..vehclass..'] ^1^*|^r ^*Plate:^r '..plate..' ^1^*'
+    Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Vehicle Boosting')
 end)
 
 RegisterServerEvent('carjack:playHandsUpOnAll')
