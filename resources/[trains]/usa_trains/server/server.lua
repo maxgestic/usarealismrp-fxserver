@@ -4,6 +4,7 @@ local southboundTrains = {}
 local trainTable = {}
 local updateInterval = 1
 local metroPasses = {}
+local trainTickets = {}
 
 RegisterServerEvent("usa_trains:seat")
 AddEventHandler("usa_trains:seat", function(train, ped)
@@ -210,14 +211,25 @@ AddEventHandler("usa_trains:buyTicket", function(ticket_type)
 	local source = source
 	if ticket_type == "metro" then
 		local char = exports["usa-characters"]:GetCharacter(source)
-		if char.get("money") > 50 then
+		if char.get("money") >= 50 then
 			char.removeMoney(50)
 			TriggerClientEvent("usa_trains:issueTicket", source, ticket_type, true)
-			TriggerEvent("usa:notify", source, "You have bought a metro daypass for $50")
+			TriggerClientEvent("usa:notify", source, "You have bought a metro daypass for $50")
 			local charid = char.get("_id")
 			table.insert(metroPasses, charid)
 		else
 			TriggerClientEvent("usa:notify", source, "You do not have enough money for a Day Pass ($50)")
+		end
+	elseif ticket_type == "train" then
+		local char = exports["usa-characters"]:GetCharacter(source)
+		if char.get("money") >= 100 then
+			char.removeMoney(100)
+			TriggerClientEvent("usa_trains:issueTicket", source, ticket_type, true)
+			TriggerClientEvent("usa:notify", source, "You have bought a train day ticket for $100")
+			local charid = char.get("_id")
+			table.insert(trainTickets, charid)
+		else
+			TriggerClientEvent("usa:notify", source, "You do not have enough money for a Day Ticket ($100)")
 		end
 	end
 end)
@@ -243,10 +255,17 @@ end)
 
 AddEventHandler("character:loaded", function(char)
 	local hasMetroPass = false
+	local hasTrainTicket = false
 	for i,v in ipairs(metroPasses) do
 		if v == char.get("_id") then
 			hasMetroPass = true
 		end
 	end
+	for i,v in ipairs(trainTickets) do
+		if v == char.get("_id") then
+			hasTrainTicket = true
+		end
+	end
 	TriggerClientEvent("usa_trains:issueTicket", char.get("source"), "metro", hasMetroPass)
+	TriggerClientEvent("usa_trains:issueTicket", char.get("source"), "train", hasTrainTicket)
 end)

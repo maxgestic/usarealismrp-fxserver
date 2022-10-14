@@ -47,21 +47,33 @@ local metroFlipPointNorth = vector3(553.0604, -1984.6080, 17.1745)
 local currentTrack = nil
 
 local hasMetroTicket = false
+local hasTrainTicket = false
 
 local serverTrainNIDs = {}
 
-local metroTicketMachines = {
-	[1] = {coords = vector3(-906.2183, -2319.8718, -3.5077)},
-	[2] = {coords = vector3(-905.8086, -2318.5776, -3.5077)},
-	[3] = {coords = vector3(-905.3441, -2317.2703, -3.5077)},
-	[4] = {coords = vector3(-904.8586, -2315.9211, -3.5077)},
-	[5] = {coords = vector3(-908.4088, -2350.0613, -3.4678)},
-	[6] = {coords = vector3(-908.6968, -2351.4019, -3.5075)},
-	[7] = {coords = vector3(-909.1623, -2352.7751, -3.5075)},
-	[8] = {coords = vector3(-909.7504, -2354.1548, -3.5075)},
-	-- [] = {coords = vector3()},
-}
+local openCoords = nil
 
+_menuPool = NativeUI.CreatePool()
+ticketMenu = NativeUI.CreateMenu("LS Transit", "~b~Ticket Machine", 0 --[[X COORD]], 320 --[[Y COORD]])
+buyMetroTicket = NativeUI.CreateItem("Metro Day Pass", "Purchase a daypass for the metro system for $50")
+buyMetroTicket.Activated = function(parentmenu, selected)
+	if not hasMetroTicket then
+    	TriggerServerEvent("usa_trains:buyTicket", "metro")
+    else
+    	TriggerEvent("usa:notify", "You already have a daypass for today!")
+    end
+end
+buyTrainTicket = NativeUI.CreateItem("Train Day Ticket", "Purchase a Train Day Ticket for $100")
+buyTrainTicket.Activated = function(parentmenu, selected)
+	if not hasTrainTicket then
+    	TriggerServerEvent("usa_trains:buyTicket", "train")
+    else
+    	TriggerEvent("usa:notify", "You already have a train day ticket for today!")
+    end
+end
+_menuPool:Add(ticketMenu)
+ticketMenu:AddItem(buyMetroTicket)
+ticketMenu:AddItem(buyTrainTicket)
 
 Citizen.CreateThread(function()
 	for i,v in ipairs(metrostations) do
@@ -237,22 +249,41 @@ Citizen.CreateThread(function() -- train enter prompts
 	end 
 end)
 
+function isNearTicketMachine()
+	local ticketMachineModels = {
+		'prop_train_ticket_02',
+		'prop_train_ticket_02_tu'
+	}
+
+	local plyCoords = GetEntityCoords(PlayerPedId())
+	for i = 1, #ticketMachineModels do
+		local obj = GetClosestObjectOfType(plyCoords.x, plyCoords.y, plyCoords.z, 0.7, GetHashKey(ticketMachineModels[i]), false, false, false)
+		if DoesEntityExist(obj) then
+			return true
+		end
+	end
+end
+
 Citizen.CreateThread(function() -- ticket machines
 	while true do
 		Citizen.Wait(0)
-		for i,v in ipairs(metroTicketMachines) do
-			if #(v.coords - GetEntityCoords(PlayerPedId())) < 1.0 then
-				alert("~b~Buy Day Metro Pass ~INPUT_ENTER~")
-				if IsControlPressed(0, 75) then
-					if not hasMetroTicket then
-						TriggerServerEvent("usa_trains:buyTicket", "metro")
-						Wait(100)
-					else
-						TriggerEvent("usa:notify", "You already have a Day Metro pass for today")
-					end
-				end
-			end
+
+		_menuPool:MouseControlsEnabled(false)
+		_menuPool:ControlDisablingEnabled(false)
+		_menuPool:ProcessMenus()
+
+        if IsControlJustPressed(1, 51) and isNearTicketMachine() then
+        	--open ticket menu
+        	ticketMenu:Visible(true)
+        	openCoords = GetEntityCoords(PlayerPedId())
 		end
+
+		if _menuPool:IsAnyMenuOpen() then -- close when far away
+            if #(GetEntityCoords(PlayerPedId()) - openCoords) > 0.7 then
+                openCoords = nil
+                _menuPool:CloseAllMenus()
+            end
+        end
 	end
 end)
 
@@ -291,6 +322,8 @@ RegisterNetEvent("usa_trains:issueTicket")
 AddEventHandler("usa_trains:issueTicket", function(type, bool)
 	if type == "metro" then
 		hasMetroTicket = bool
+	elseif type == "train" then
+		hasTrainTicket = bool
 	end
 end)
 
@@ -527,5 +560,42 @@ AddEventHandler("usa_trains:updateAll", function(Ttable)
 	if showingBlips then
 		RemoveTrainBlips()
 		RefreshTrainBlips(Ttable)
+	end
+end)
+
+Citizen.CreateThread(function()
+	local platforms = {
+		[1] = vector3(-1084.5409, -2719.6482, -7.4101),
+		[2] = vector3(-883.6993, -2315.2178, -11.7328),
+		[3] = vector3(-540.7547, -1282.7534, 29.4656),
+		[4] = vector3(263.8945, -1204.2205, 42.4809),
+		[5] = vector3(-292.9330, -332.3137, 10.0631),
+		[6] = vector3(-815.2302, -135.4008, 19.9070),
+		[7] = vector3(-1353.9834, -464.0378, 15.0453),
+		[8] = vector3(-502.5693, -674.7533, 11.8090),
+		[9] = vector3(-214.0222, -1035.3766, 32.0866),
+		[10] = vector3(115.4997, -1725.8308, 32.2810),
+	}
+	while true do
+		Citizen.Wait(1000)
+		local found = false
+		for i,v in ipairs(platforms) do
+			if (i >= 9 or i == 3 or i == 4) then
+				if #(GetEntityCoords(PlayerPedId()) - v) < 30 and GetEntityCoords(PlayerPedId()).z - v.z < 13 then
+					found = true
+				end
+			else
+				if #(GetEntityCoords(PlayerPedId()) - v) < 50 and GetEntityCoords(PlayerPedId()).z - v.z < 13 then
+					found = true
+				end
+			end
+		end
+
+		if found == true and not showingBlips then
+			TriggerEvent("usa_trains:toggleTrainBlips", true)
+		elseif found == false and showingBlips then
+			TriggerEvent("usa_trains:toggleTrainBlips", false)
+		end
+
 	end
 end)
