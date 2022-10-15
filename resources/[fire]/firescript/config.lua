@@ -259,6 +259,78 @@ Config.RandomFires = {
                 type = "chemical",
                 timeout = 1800--In Seconds
             },
+            [16] = {
+                position = vector3(-1282.7576904297, -1117.6591796875, 7.1229777336121),-- Magellan Ave Barber Shop
+                location = "Barber Shop",
+                flames = 5,
+                spread = 5,
+                type = "normal",
+                timeout = 1800--In Seconds
+            },
+            [17] = {
+                position = vector3(-1154.1593017578, -1426.3848876953, 4.9544644355774),-- Aguja St / Magellan Ave Tattoo Shop
+                location = "Tattoo Shop",
+                flames = 5,
+                spread = 5,
+                type = "normal2",
+                timeout = 1800--In Seconds
+            },
+            [18] = {
+                position = vector3(1137.71875, -981.96752929688, 46.41580581665),-- El Rancho Blvd Market
+                location = "Market",
+                flames = 5,
+                spread = 5,
+                type = "normal2",
+                timeout = 1800--In Seconds
+            },
+            [19] = {
+                position = vector3(119.16149902344, -1287.7004394531, 28.26739692688),-- Vanilla Unicorn
+                location = "Vanilla Unicorn",
+                flames = 25,
+                spread = 20,
+                type = "electrical",
+                timeout = 1800--In Seconds
+            },
+            [20] = {
+                position = vector3(-1223.8106689453, -906.42492675781, 12.326354980469),-- San Andreas Ave Market (By Burger Shot)
+                location = "Market",
+                flames = 10,
+                spread = 5,
+                type = "normal2",
+                timeout = 1800--In Seconds
+            },
+            [21] = {
+                position = vector3(424.15344238281, -802.36499023438, 29.491140365601),-- Sinner Street Clothes Shop (By MRPD)
+                location = "Clothes Shop",
+                flames = 10,
+                spread = 8,
+                type = "electrical",
+                timeout = 1800--In Seconds
+            },
+            [22] = {
+                position = vector3(-813.43200683594, -183.6900177002, 37.568893432617),-- Mad Wayne Thunder Drive Barber Shop
+                location = "Barber Shop",
+                flames = 5,
+                spread = 5,
+                type = "electrical",
+                timeout = 1800--In Seconds
+            },
+            [23] = {
+                position = vector3(-1189.3211669922, -888.55059814453, 13.803347587585),-- Burger Shot
+                location = "Burger Shot",
+                flames = 15,
+                spread = 10,
+                type = "electrical",
+                timeout = 1800--In Seconds
+            },
+            [24] = {
+                position = vector3(284.23443603516, -587.33441162109, 43.378082275391),-- Pillbox Hospital
+                location = "Pillbox Hospital",
+                flames = 15,
+                spread = 10,
+                type = "normal",
+                timeout = 1800--In Seconds
+            },
         },
     }
 }
