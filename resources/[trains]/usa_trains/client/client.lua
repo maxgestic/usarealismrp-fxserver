@@ -53,6 +53,10 @@ local serverTrainNIDs = {}
 
 local openCoords = nil
 
+local metroClockIn = vector3(-917.5182, -2341.0186, -3.5075)
+
+local isHelpShowing = false
+
 _menuPool = NativeUI.CreatePool()
 ticketMenu = NativeUI.CreateMenu("LS Transit", "~b~Ticket Machine", 0 --[[X COORD]], 320 --[[Y COORD]])
 buyMetroTicket = NativeUI.CreateItem("Metro Day Pass", "Purchase a daypass for the metro system for $50")
@@ -75,7 +79,7 @@ _menuPool:Add(ticketMenu)
 ticketMenu:AddItem(buyMetroTicket)
 ticketMenu:AddItem(buyTrainTicket)
 
-Citizen.CreateThread(function()
+Citizen.CreateThread(function() -- Add Blips for stations
 	for i,v in ipairs(metrostations) do
 		local blip = AddBlipForCoord(v.coords)
 		SetBlipSprite(blip, 607)
@@ -100,7 +104,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
-Citizen.CreateThread(function()
+Citizen.CreateThread(function() -- Track switch checking
 	while true do
 		Citizen.Wait(1000)
 		if isDriver then
@@ -133,6 +137,20 @@ function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)
     SetTextEntry("STRING")
     AddTextComponentString(text)
     DrawText(x - width/2, y - height/2 + 0.005)
+end
+
+function DrawText3D(x, y, z, text)
+    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+    SetTextScale(0.35, 0.35)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextColour(255, 255, 255, 215)
+    SetTextEntry("STRING")
+    SetTextCentre(1)
+    AddTextComponentString(text)
+    DrawText(_x,_y)
+    local factor = (string.len(text)) / 470
+    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 end
 
 function takeOwn(object)
@@ -318,6 +336,116 @@ Citizen.CreateThread(function() -- ticket checking
 	end
 end)
 
+Citizen.CreateThread(function() -- Metro Clock In
+	while true do
+		Citizen.Wait(0)
+		if #(GetEntityCoords(PlayerPedId()) - metroClockIn) < 4 then
+			if isMetroJob then
+				DrawText3D(metroClockIn.x, metroClockIn.y, metroClockIn.z + 0.5, "[E] - Clock Off Duty (~r~ Metro~s~)")
+				DrawText3D(metroClockIn.x, metroClockIn.y, metroClockIn.z, "[F] - Summon Train (~r~ Metro~s~)")
+				if IsControlJustReleased(1, 51) then
+					if #(GetEntityCoords(PlayerPedId()) - metroClockIn) < 1 then
+						TriggerServerEvent("usa_trains:metroJobToggle", false)
+					else
+						TriggerEvent("usa:notify", "You are too far away please come closer!")
+					end
+				elseif IsControlJustPressed(0, 75) then
+					TriggerEvent("usa:notify", "Your Train has been set ready for you at the Northbound Platform!")
+					spawnTrain(25)
+				end
+			else
+				DrawText3D(metroClockIn.x, metroClockIn.y, metroClockIn.z + 0.5, "[E] - Clock On Duty (~r~ Metro~s~)")
+				if IsControlJustReleased(1, 51) then
+					if #(GetEntityCoords(PlayerPedId()) - metroClockIn) < 1 then
+						TriggerServerEvent("usa_trains:metroJobToggle", true)
+					else
+						TriggerEvent("usa:notify", "You are too far away please come closer!")
+					end
+				end
+			end
+		end
+	end
+end)
+
+Citizen.CreateThread(function() -- Train Blips
+	local platforms = {
+		[1] = vector3(-1084.5409, -2719.6482, -7.4101),
+		[2] = vector3(-883.6993, -2315.2178, -11.7328),
+		[3] = vector3(-540.7547, -1282.7534, 29.4656),
+		[4] = vector3(263.8945, -1204.2205, 42.4809),
+		[5] = vector3(-292.9330, -332.3137, 10.0631),
+		[6] = vector3(-815.2302, -135.4008, 19.9070),
+		[7] = vector3(-1353.9834, -464.0378, 15.0453),
+		[8] = vector3(-502.5693, -674.7533, 11.8090),
+		[9] = vector3(-214.0222, -1035.3766, 32.0866),
+		[10] = vector3(115.4997, -1725.8308, 32.2810),
+	}
+	while true do
+		Citizen.Wait(1000)
+		local found = false
+
+		if not isMetroJob then
+			for i,v in ipairs(platforms) do
+				if (i >= 9 or i == 3 or i == 4) then
+					if #(GetEntityCoords(PlayerPedId()) - v) < 30 and GetEntityCoords(PlayerPedId()).z - v.z < 13 then
+						found = true
+					end
+				else
+					if #(GetEntityCoords(PlayerPedId()) - v) < 50 and GetEntityCoords(PlayerPedId()).z - v.z < 13 then
+						found = true
+					end
+				end
+			end
+		else
+			found = true
+		end
+
+		if found == true and not showingBlips then
+			TriggerEvent("usa_trains:toggleTrainBlips", true)
+		elseif found == false and showingBlips then
+			TriggerEvent("usa_trains:toggleTrainBlips", false)
+		end
+
+	end
+end)
+
+RegisterNetEvent("usa_trains:setJob")
+AddEventHandler("usa_trains:setJob", function(job)
+	if job == "metroDriver" then
+		isTrainJob = false
+		isMetroJob = true
+		if train then
+			TriggerEvent("usa_trains:delTrain")
+		end
+		if not isHelpShowing then
+			isHelpShowing = true
+			TriggerEvent("chatMessage", "", {}, "Welcome to the LS Transit Family!")
+			Citizen.Wait(3000)
+			TriggerEvent("chatMessage", "", {}, "You have started working as one of our Metro Operators!")
+			Citizen.Wait(3000)
+			TriggerEvent("chatMessage", "", {}, "Your job is to drive the metro around the city and make sure its citizens are able to get where they need to go!")
+			Citizen.Wait(3000)
+			TriggerEvent("chatMessage", "", {}, "The controls for the train will be shown to you when you get inside of it!")
+			Citizen.Wait(3000)
+			TriggerEvent("chatMessage", "", {}, "Make sure to drive safly and stop at every station for at least 30 seconds!")
+			Citizen.Wait(3000)
+			isHelpShowing = false
+		end
+	elseif job == "trainDrive" then
+		isMetroJob = false
+		isTrainJob = true
+		if train then
+			TriggerEvent("usa_trains:delTrain")
+		end
+	else
+		isMetroJob = false
+		isTrainJob = false
+		if train then
+			TriggerEvent("usa_trains:delTrain")
+		end
+	end
+end)
+
 RegisterNetEvent("usa_trains:issueTicket")
 AddEventHandler("usa_trains:issueTicket", function(type, bool)
 	if type == "metro" then
@@ -388,7 +516,8 @@ AddEventHandler("usa_trains:no_seats", function()
 	DoScreenFadeIn(500)
 end)
 
-RegisterCommand("delTrain", function()
+RegisterNetEvent("usa_trains:delTrain")
+AddEventHandler("usa_trains:delTrain", function()
 	local dtrain = NetworkGetEntityFromNetworkId(trainNID)
 	takeOwn(dtrain)
 	if (NetworkGetEntityOwner(dtrain) == 128) then
@@ -400,7 +529,8 @@ RegisterCommand("delTrain", function()
 	end
 end, false)
 
-function spawnTrain(type)
+RegisterNetEvent("usa_trains:spawnTrain")
+AddEventHandler("usa_trains:spawnTrain",function(type)
 	if not train then
 		local train_models = {}
 		local train_type = "Train"
@@ -434,11 +564,14 @@ function spawnTrain(type)
 		currentTrack = "south"
 		TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
 	end
-end
+end)
 
 RegisterCommand("spawnMetro", function()
-	isMetroJob = true
-	spawnTrain(25)
+	TriggerServerEvent("usa_trains:metroSpawnRequest")
+end, false)
+
+RegisterCommand("delTrain", function()
+	TriggerEvent("usa_trains:delTrain")
 end, false)
 
 function toggleDoors()
@@ -560,42 +693,5 @@ AddEventHandler("usa_trains:updateAll", function(Ttable)
 	if showingBlips then
 		RemoveTrainBlips()
 		RefreshTrainBlips(Ttable)
-	end
-end)
-
-Citizen.CreateThread(function()
-	local platforms = {
-		[1] = vector3(-1084.5409, -2719.6482, -7.4101),
-		[2] = vector3(-883.6993, -2315.2178, -11.7328),
-		[3] = vector3(-540.7547, -1282.7534, 29.4656),
-		[4] = vector3(263.8945, -1204.2205, 42.4809),
-		[5] = vector3(-292.9330, -332.3137, 10.0631),
-		[6] = vector3(-815.2302, -135.4008, 19.9070),
-		[7] = vector3(-1353.9834, -464.0378, 15.0453),
-		[8] = vector3(-502.5693, -674.7533, 11.8090),
-		[9] = vector3(-214.0222, -1035.3766, 32.0866),
-		[10] = vector3(115.4997, -1725.8308, 32.2810),
-	}
-	while true do
-		Citizen.Wait(1000)
-		local found = false
-		for i,v in ipairs(platforms) do
-			if (i >= 9 or i == 3 or i == 4) then
-				if #(GetEntityCoords(PlayerPedId()) - v) < 30 and GetEntityCoords(PlayerPedId()).z - v.z < 13 then
-					found = true
-				end
-			else
-				if #(GetEntityCoords(PlayerPedId()) - v) < 50 and GetEntityCoords(PlayerPedId()).z - v.z < 13 then
-					found = true
-				end
-			end
-		end
-
-		if found == true and not showingBlips then
-			TriggerEvent("usa_trains:toggleTrainBlips", true)
-		elseif found == false and showingBlips then
-			TriggerEvent("usa_trains:toggleTrainBlips", false)
-		end
-
 	end
 end)

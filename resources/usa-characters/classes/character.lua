@@ -64,6 +64,7 @@ function CreateCharacter(data)
       TriggerClientEvent("es:setMoneyDisplay", self.source, 1, data)
     elseif field == "job" then
       self.adjustChatSuggestions(data)
+      TriggerClientEvent("usa_trains:setJob", self.source, data)
     end
   end
 

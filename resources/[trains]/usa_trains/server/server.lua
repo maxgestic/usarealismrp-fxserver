@@ -269,3 +269,33 @@ AddEventHandler("character:loaded", function(char)
 	TriggerClientEvent("usa_trains:issueTicket", char.get("source"), "metro", hasMetroPass)
 	TriggerClientEvent("usa_trains:issueTicket", char.get("source"), "train", hasTrainTicket)
 end)
+
+RegisterServerEvent("usa_trains:metroJobToggle")
+AddEventHandler("usa_trains:metroJobToggle", function(isJob)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if isJob then
+		char.set("job", "metroDriver")
+	else
+		char.set("job", "civ")
+	end
+end)
+
+RegisterServerEvent("usa_trains:metroSpawnRequest")
+AddEventHandler("usa_trains:metroSpawnRequest", function()
+	local usource = source
+	local trackOccupied = false
+	local metroSpawnCoords = vector3(-898.7032, -2339.0503, -11.6807)
+	for i,v in ipairs(southboundTrains) do
+		print(#(metroSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))))
+		if #(metroSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))) < 280 then
+			trackOccupied = true
+			break
+		end
+	end
+	print(trackOccupied)
+	if trackOccupied then
+		TriggerClientEvent("usa:notify", usource, "The tack is currently occupied please wait until the current train has left the station!")
+	else
+		TriggerClientEvent("usa_trains:spawnTrain", usource, 25)
+	end
+end)
