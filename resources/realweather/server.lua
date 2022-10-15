@@ -138,6 +138,7 @@ AddEventHandler("meteo:sync",function(delay)
 end)
 
 TriggerEvent('es:addGroupCommand', 'weather', "admin", function(source, args, user)
+    if not Data then Data = {} end
     local type = args[2]
     local duration = args[3]
     if not isValidWeatherType(type) then
