@@ -53,9 +53,24 @@ local serverTrainNIDs = {}
 
 local openCoords = nil
 
-local metroClockIn = vector3(-917.5182, -2341.0186, -3.5075)
+local metroClockIn = vector3(-918.1724, -2345.6904, -3.5075)
 
 local isHelpShowing = false
+
+-- local gate = {coords = vector3(-911.6667, -2344.6772, -3.5075), model = 1531047580}
+
+Citizen.CreateThread(function()
+	while true do
+		local gateObject = GetClosestObjectOfType(GetEntityCoords(PlayerPedId()), 6.0, 1531047580, false, false, false)
+		Wait(100)
+		if hasMetroTicket or isMetroJob then
+			FreezeEntityPosition(gateObject, false)
+		else
+			FreezeEntityPosition(gateObject, true)
+		end
+	end
+end)
+
 
 _menuPool = NativeUI.CreatePool()
 ticketMenu = NativeUI.CreateMenu("LS Transit", "~b~Ticket Machine", 0 --[[X COORD]], 320 --[[Y COORD]])
@@ -350,8 +365,7 @@ Citizen.CreateThread(function() -- Metro Clock In
 						TriggerEvent("usa:notify", "You are too far away please come closer!")
 					end
 				elseif IsControlJustPressed(0, 75) then
-					TriggerEvent("usa:notify", "Your Train has been set ready for you at the Northbound Platform!")
-					spawnTrain(25)
+					TriggerServerEvent("usa_trains:metroSpawnRequest")
 				end
 			else
 				DrawText3D(metroClockIn.x, metroClockIn.y, metroClockIn.z + 0.5, "[E] - Clock On Duty (~r~ Metro~s~)")
@@ -409,6 +423,17 @@ Citizen.CreateThread(function() -- Train Blips
 	end
 end)
 
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(1000)
+		if train then
+			if not AreAllVehicleWindowsIntact(train) then
+				SetVehicleFixed(train)
+			end
+		end
+	end
+end)
+
 RegisterNetEvent("usa_trains:setJob")
 AddEventHandler("usa_trains:setJob", function(job)
 	if job == "metroDriver" then
@@ -431,7 +456,7 @@ AddEventHandler("usa_trains:setJob", function(job)
 			Citizen.Wait(3000)
 			isHelpShowing = false
 		end
-	elseif job == "trainDrive" then
+	elseif job == "trainDriver" then
 		isMetroJob = false
 		isTrainJob = true
 		if train then
@@ -537,6 +562,7 @@ AddEventHandler("usa_trains:spawnTrain",function(type)
 		if type == 25 then
 			train_models = {"metrotrain"}
 			train_type = "Metro"
+			TriggerEvent("usa:notify", "Your Train has been set ready for you at the Northbound Platform!")
 		elseif type == 0 then
 			train_models = {"streakcoaster", "streakcoasterc"}
 		else
@@ -550,7 +576,7 @@ AddEventHandler("usa_trains:spawnTrain",function(type)
 				Citizen.Wait(0)
 			end
 		end
-		train = CreateMissionTrain(tonumber(type), -900.0752, -2343.4150, -12.6036, true)
+		train = CreateMissionTrain(tonumber(type), 1780.5481, 3491.8650, 38.9158, true) ---900.0752, -2343.4150, -12.6036,
 		trainNID = NetworkGetNetworkIdFromEntity(train)
 		local carrigeNID = NetworkGetNetworkIdFromEntity(GetTrainCarriage(train, 1))
 		doors = false
@@ -561,13 +587,22 @@ AddEventHandler("usa_trains:spawnTrain",function(type)
 		SetTrainSpeed(train,0)
 		SetTrainCruiseSpeed(train,0)
 		SetEntityAsMissionEntity(train, true, false)
+		SetVehicleDoorCanBreak(train, 0, false)
+		SetVehicleDoorCanBreak(train, 1, false)
+		SetVehicleDoorCanBreak(train, 2, false)
+		SetVehicleDoorCanBreak(train, 3, false)
 		currentTrack = "south"
-		TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
+		TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "train")
 	end
 end)
 
 RegisterCommand("spawnMetro", function()
 	TriggerServerEvent("usa_trains:metroSpawnRequest")
+end, false)
+
+RegisterCommand("spawnTrain", function()
+	-- TriggerServerEvent("usa_trains:trainSpawnRequest")
+	TriggerEvent("usa_trains:spawnTrain", 0)
 end, false)
 
 RegisterCommand("delTrain", function()
