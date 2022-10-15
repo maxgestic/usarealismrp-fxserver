@@ -140,7 +140,7 @@ Config.RandomFires = {
     Locations = {
         ["ALL"] = {
             [1] = {
-                position = vector3(122.14, -223.04, 54.56),--Clothes shop
+                position = vector3(122.14, -223.04, 54.56),-- Hawick Ave Clothes shop
                 location = "Clothes Shop",
                 flames = 20,
                 spread = 15,
@@ -148,7 +148,7 @@ Config.RandomFires = {
                 timeout = 1800--In Seconds
             },
             [2] = {
-                position = vector3(-41.45, -1097.81, 26.42),--Dealership
+                position = vector3(-41.45, -1097.81, 26.42),-- Power Street PDM
                 location = "Dealer Ship",
                 flames = 20,
                 spread = 15,
@@ -156,7 +156,7 @@ Config.RandomFires = {
                 timeout = 1800--In Seconds
             },
             [3] = {
-                position = vector3(265.09, -1259.29, 29.14),--Gas Station
+                position = vector3(265.09, -1259.29, 29.14),-- Strawberry Ave Gas Station
                 location = "Gas Station",
                 flames = 20,
                 spread = 15,
@@ -164,7 +164,7 @@ Config.RandomFires = {
                 timeout = 1800--In Seconds
             },
             [4] = {
-                position = vector3(855.61, -285.82, 65.52),--Skate Park
+                position = vector3(855.61, -285.82, 65.52),-- Mirror Park Skate Park
                 location = "Skate Park",
                 flames = 20,
                 spread = 20,
@@ -172,7 +172,7 @@ Config.RandomFires = {
                 timeout = 1800--In Seconds
             },
             [5] = {
-                position = vector3(1963.77, 3744.05, 32.34),--24/7
+                position = vector3(1963.77, 3744.05, 32.34),-- Sandy Shores 24/7
                 location = "24/7",
                 flames = 10,
                 spread = 5,
@@ -180,7 +180,7 @@ Config.RandomFires = {
                 timeout = 1800--In Seconds
             },
             [6] = {
-                position = vector3(-92.22, 6415.5, 31.47),--Gas Station
+                position = vector3(-92.22, 6415.5, 31.47),-- Paleto Gas Station 2
                 location = "Gas Station",
                 flames = 20,
                 spread = 10,
@@ -201,6 +201,62 @@ Config.RandomFires = {
                 flames = 30,
                 spread = 50,
                 type = "normal",
+                timeout = 1800--In Seconds
+            },
+            [9] = {
+                position = vector3(265.09, -1259.29, 29.14),-- Paleto Beeker's Garage
+                location = "Beeker's Garage",
+                flames = 12,
+                spread = 12,
+                type = "electrical",
+                timeout = 1800--In Seconds
+            },
+            [10] = {
+                position = vector3(108.39610290527, 6623.6181640625, 32.147254943848),-- Paleto Barn
+                location = "Paleto Barn",
+                flames = 20,
+                spread = 15,
+                type = "bonfire",
+                timeout = 1800--In Seconds
+            },
+            [11] = {
+                position = vector3(1392.1604003906, 3607.5544433594, 34.980926513672),-- Sandy Shores Ace Liquor
+                location = "Ace Liquor (Sandy Shores)",
+                flames = 15,
+                spread = 10,
+                type = "chemical",
+                timeout = 1800--In Seconds
+            },
+            [12] = {
+                position = vector3(1704.1232910156, 4928.2387695313, 42.063655853271),-- Grapeseed 24/7
+                location = "24/7",
+                flames = 12,
+                spread = 10,
+                type = "normal2",
+                timeout = 1800--In Seconds
+            },
+            [13] = {
+                position = vector3(544.46264648438, 2668.3549804688, 42.156497955322),-- Route 68 Harmony 24/7
+                location = "24/7",
+                flames = 12,
+                spread = 10,
+                type = "normal2",
+                timeout = 1800--In Seconds
+            },
+            [14] = {
+                position = vector3(-49.901699066162, -1753.2320556641, 29.421012878418),-- Grove Street 24/7
+                location = "24/7",
+                flames = 12,
+                spread = 10,
+                type = "normal2",
+                timeout = 1800--In Seconds
+            },
+            [15] = {
+                position = vector3(1208.4333496094, -1402.3386230469, 35.224136352539),-- Capital Blvd / El Rancho Gas Station
+                location = "Gas Station",
+                flames = 12,
+                spread = 10,
+                type = "chemical",
                 timeout = 1800--In Seconds
             },
         },
