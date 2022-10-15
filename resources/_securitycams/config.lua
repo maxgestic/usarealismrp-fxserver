@@ -137,6 +137,13 @@ SecurityCamConfig.Locations = {
         }
     },
     {
+        camBox = {label = "Bean Machine (Eclipse Blvd.)", id = 'bm1'},
+        cameras = {
+            {label = "Main Lobby Cam 1", x = -616.74456787109, y = 239.27017211914, z = 84.0, r = {x = -30.0, y = 0.0, z = 113.0}},
+            {label = "Main Lobby Cam 2", x = -620.21356201172, y = 229.68110656738, z = 84.0, r = {x = -20.0, y = 0.0, z = 40.8}},
+        }
+    },
+    {
         camBox = {label = "Rob's Liquor (El Rancho Blvd.)", id = 'store1'},
         cameras = {
             {label = "Camera 1", x = 1132.95, y = -981.44, z = 48.41, r = {x = -40.0, y = 0.0, z = -90.0}},
