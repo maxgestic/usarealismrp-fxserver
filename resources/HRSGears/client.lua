@@ -58,7 +58,9 @@ Citizen.CreateThread(function()
         if newveh == vehicle then
 
         elseif newveh == 0 and vehicle ~= nil then
-            resetvehicle()
+            if manualon then
+                resetvehicle()
+            end
         else
             if GetPedInVehicleSeat(newveh,-1) == ped then
                 if class ~= 13 and class ~= 14 and class ~= 15 and class ~= 16 and class ~= 21 then
@@ -521,3 +523,9 @@ Citizen.CreateThread(function()
     end
 end)
 --]]
+
+RegisterCommand("gettopspeed", function(source, args, rawCommand)
+    local ve = GetVehiclePedIsIn(PlayerPedId())
+    local value = GetVehicleTopSpeedModifier(ve)
+    print(value)
+end)
