@@ -38,6 +38,7 @@ NO_TOOLTIP_WEAPONS.add("Blue Shoe");
 NO_TOOLTIP_WEAPONS.add("Ninja Star");
 NO_TOOLTIP_WEAPONS.add("Ninja Star 2");
 NO_TOOLTIP_WEAPONS.add("Megaphone");
+NO_TOOLTIP_WEAPONS.add("Mace");
 
 var itemImages = {
     "Driver's License": "https://i.imgur.com/dy0SpFh.png",
