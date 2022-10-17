@@ -1,4 +1,5 @@
-resource_manifest_version '05cfa83c-a124-4cfa-a768-c24a5811d8f9'
+fx_version 'adamant'
+game 'gta5'
 
 shared_script '@pmc-callbacks/import.lua'
 
@@ -20,3 +21,7 @@ server_scripts {
 	'Server/Server.lua',
 	'Server/Updates.lua'
 }
+
+data_file 'DLC_ITYP_REQUEST' 'apple_1.ytyp'
+data_file 'DLC_ITYP_REQUEST' 'bzzz_foodpack'
+data_file 'DLC_ITYP_REQUEST' 'natty_props_lollipops.ytyp'

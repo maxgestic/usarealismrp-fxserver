@@ -304,7 +304,7 @@ var itemImages = {
     "Throwing Knife": "https://i.imgur.com/1AS5hrt.png",
     // begin card images
     "Narlee": "https://i.imgur.com/KrPw4gk.png",
-    "Red Eyes B. Dragon": "https://i.imgur.com/UWCQHC3.jpeg",
+    "Red Eyes B. Dragon": "https://i.imgur.com/tKEcju1.png",
     "Dark Magician": "https://i.imgur.com/1XmmhfW.png",
     "Blue Eyes White Dragon": "https://i.imgur.com/E036Ahh.png",
     "Dark Magician Girl": "https://i.imgur.com/g3W0TVm.png",
@@ -431,7 +431,7 @@ var itemImages = {
     "TJ": "https://i.imgur.com/v7CaiIj.png",
     "Tony_2": "https://i.imgur.com/P9maiLH.png",
     "Manual Conversion Kit": "https://i.ibb.co/drjLyk0/a.png",
-    "Metal Pipe": "https://i.imgur.com/d6UlDM5.jpeg",
+    "Metal Pipe": "https://i.imgur.com/HBZdfTz.png",
     "Mace": "https://i.imgur.com/EJoWdJ8.png",
     // begin ammo
     "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",

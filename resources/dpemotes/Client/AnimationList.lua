@@ -1809,7 +1809,61 @@ DP.Emotes = {
         EmoteLoop = true,
         EmoteMoving = true,
     }},
-
+    ["takel"] = {"custom@take_l", "take_l", "Take the L", AnimationOptions =
+    {
+        EmoteMoving = false,
+        EmoteLoop = true,
+    }},
+    ["hitit"] = {"custom@hitit", "hitit", "Hit It", AnimationOptions =
+    {
+        EmoteMoving = false,
+        EmoteLoop = true,
+    }},
+    ["floss"] = {"custom@floss", "floss", "Floss", AnimationOptions =
+    {
+        EmoteMoving = false,
+        EmoteLoop = true,
+    }},
+    ["flex2"] = {"frabi@malepose@solo@firstsport", "pose_sport_002", "Flex 2", AnimationOptions = 
+    {
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+	["gympose"] = {"frabi@malepose@solo@firstsport", "pose_sport_001", "Gym Pose", AnimationOptions = 
+    {
+		EmoteLoop = true,
+    }},
+    ["gympose2"] = {"frabi@malepose@solo@firstsport", "pose_sport_005", "Gym Pose 2 - One Handed Push Up", AnimationOptions = 
+    {
+        EmoteLoop = true,
+    }},
+    ["relax"] = {"lying@on_grass", "base", "Relax", AnimationOptions =
+    {
+        EmoteLoop = true,
+    }},
+    ["relax2"] = {"lying@on_couch_legs_crossed", "base", "Relax 2", AnimationOptions = 
+    {
+        EmoteLoop = true,
+    }},
+    ["uwu"] = {"uwu@egirl", "base", "uWu", AnimationOptions = 
+    {
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["kneelthot"] = {"anim@model_kylie_insta", "kylie_insta_clip", "Kneel Thot Instagram", AnimationOptions = 
+    {
+        EmoteLoop = true,
+    }},
+    ["tslide"] = {"custom@toosie_slide", "toosie_slide", "Toosie Slide", AnimationOptions =
+    {
+        EmoteMoving = false,
+        EmoteLoop = true,
+    }},
+    ["renegade"] = {"custom@renegade", "renegade", "Renegade", AnimationOptions =
+    {
+        EmoteMoving = false,
+        EmoteLoop = true,
+    }},
 -----------------------------------------------------------------------------------------------------------
 ------ These are Scenarios, some of these dont work on women and some other issues, but still good to have.
 -----------------------------------------------------------------------------------------------------------
@@ -3172,4 +3226,403 @@ DP.PropEmotes = {
        EmoteLoop = true,
        EmoteMoving = true,
     }},
+    ["candyapple"] = {"anim@heists@humane_labs@finale@keycards", "ped_a_enter_loop", "Candy Apple", AnimationOptions = 
+    {
+        Prop = "apple_1",
+        PropBone = 18905,
+        PropPlacement = {0.12, 0.15, 0.0, -100.0, 0.0, -12.0},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["vape"] = {"amb@world_human_smoking@male@male_b@base", "base", "Vape", AnimationOptions = 
+    {
+        Prop = 'ba_prop_battle_vape_01',
+        PropBone = 28422,
+        PropPlacement = {-0.0290, 0.0070, -0.0050, 41.9596, 40.0102, -62.7294},
+        EmoteMoving = true,
+        EmoteLoop = true,
+        PtfxAsset = "core",
+        PtfxName = "exp_grd_bzgas_smoke",
+        PtfxNoProp = true,
+        PtfxPlacement = {-0.0100, 0.0600, 0.6600, 0.0, 0.0, 0.0, 2.0},
+        PtfxInfo = Config.Languages[Config.MenuLanguage]['vape'],
+        PtfxWait = 0,
+    }},
+    ["weedbucket"] = {"anim@heists@box_carry@", "idle", "Weed Bucket", AnimationOptions = 
+    {
+        Prop = "bkr_prop_weed_bucket_open_01a",
+        PropBone = 28422,
+        PropPlacement = {0.0, -0.1000, -0.1800, 0.0, 0.0, 0.0},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["pump3"] = {"missfbi4prepp1", "idle", "Pumpkin 3", AnimationOptions = 
+    {
+        Prop = "reh_prop_reh_lantern_pk_01a",
+        PropBone = 28422,
+        PropPlacement = {0.0010, 0.0660, -0.0120, 171.9169, 179.8707,-39.9860},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["pump4"] = {"missfbi4prepp1", "idle", "Pumpkin 4", AnimationOptions = 
+    {
+        Prop = "reh_prop_reh_lantern_pk_01b",
+        PropBone = 28422,
+        PropPlacement = {0.0010, 0.0660, -0.0120, 171.9169, 179.8707, -39.9860},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["pump5"] = {"missfbi4prepp1", "idle", "Pumpkin 5", AnimationOptions = 
+    {
+        Prop = "reh_prop_reh_lantern_pk_01c",
+        PropBone = 28422,
+        PropPlacement = {0.0010, 0.0660, -0.0120, 171.9169, 179.8707, -39.9860},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["apple"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Apple", AnimationOptions = 
+    {
+        Prop = 'sf_prop_sf_apple_01b',
+        PropBone = 60309,
+        PropPlacement = {0.0, 0.0150, -0.0200, -124.6964, -166.5760, 8.4572},
+        EmoteMoving = true,
+    }},
+    ["taco"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Taco", AnimationOptions = 
+    {
+        Prop = 'prop_taco_01',
+        PropBone = 60309,
+        PropPlacement = {-0.0170, 0.0070, -0.0210, 107.9846, -105.0251, 55.7779},
+        EmoteMoving = true,
+    }},
+    ["hotdog"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Hotdog", AnimationOptions = 
+    {
+        Prop = 'prop_cs_hotdog_02',
+        PropBone = 60309,
+        PropPlacement = {-0.0300, 0.0100, -0.0100, 95.1071, 94.7001, -66.9179},
+        EmoteMoving = true,
+    }},
+    ["newspaper"] = {"amb@world_human_clipboard@male@idle_a", "idle_a", "Newspaper", AnimationOptions = 
+    {
+        Prop = 'prop_cliff_paper',
+        PropBone = 60309,
+        PropPlacement = {0.0970, -0.0280, -0.0170, 107.4008, 3.2712, -10.5080},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["newspaper2"] = {"amb@world_human_clipboard@male@idle_a", "idle_a", "Newspaper 2", AnimationOptions = 
+    {
+        Prop = 'ng_proc_paper_news_quik',
+        PropBone = 60309,
+        PropPlacement = {0.1590, 0.0290, -0.0100, 90.9998, 0.0087, 0.5000},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["newspaper3"] = {"amb@world_human_clipboard@male@idle_a", "idle_a", "Newspaper 3", AnimationOptions = 
+    {
+        Prop = 'ng_proc_paper_news_rag',
+        PropBone = 60309,
+        PropPlacement = {0.1760, -0.00070, 0.0200, 99.8306, 3.2841, -4.7185},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["pornmag"] = {"amb@world_human_clipboard@male@base", "base", "Porn Magazine", AnimationOptions = 
+    {
+        Prop = 'prop_porn_mag_02',
+        PropBone = 60309,
+        PropPlacement = {0.1000, -0.0360, -0.0300, -86.9096, 179.2527, 13.8804},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["pornmag2"] = {"amb@world_human_clipboard@male@base", "base", "Porn Magazine 2", AnimationOptions = 
+    {
+        Prop = 'prop_cs_magazine',
+        PropBone = 60309,
+        PropPlacement = {0.0800, -0.0490, -0.0500, 87.9369, -0.4292, -14.3925},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["pornmag3"] = {"amb@world_human_clipboard@male@base", "base", "Porn Magazine 3", AnimationOptions = 
+    {
+        Prop = 'prop_porn_mag_03',
+        PropBone = 60309,
+        PropPlacement = {0.1000, -0.0700, -0.0200, -90.0000, -180.0000, 22.7007},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["pornmag4"] = {"amb@world_human_clipboard@male@base", "base", "Porn Magazine 4", AnimationOptions = 
+    {
+        Prop = 'v_res_tt_pornmag01',
+        PropBone = 60309,
+        PropPlacement = {-0.0200, -0.0300, 0.0000, 88.9862, 0.2032, -20.0016},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["pornmag5"] = {"amb@world_human_clipboard@male@base", "base", "Porn Magazine 5", AnimationOptions = 
+    {
+        Prop = 'v_res_tt_pornmag02',
+        PropBone = 60309,
+        PropPlacement = {-0.0200, -0.0300, 0.0000, 88.9862, 0.2032, -20.0016},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["pornmag6"] = {"amb@world_human_clipboard@male@base", "base", "Porn Magazine 6", AnimationOptions = 
+    {
+        Prop = 'v_res_tt_pornmag03',
+        PropBone = 60309,
+        PropPlacement = {-0.0200, -0.0300, 0.0000, 88.9862, 0.2032, -20.0016},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["pornmag7"] = {"amb@world_human_clipboard@male@base", "base", "Porn Magazine 7", AnimationOptions = 
+    {
+        Prop = 'v_res_tt_pornmag04',
+        PropBone = 60309,
+        PropPlacement = {-0.0200, -0.0300, 0.0000, 88.9862, 0.2032, -20.0016},
+        EmoteMoving = true,
+        EmoteLoop = true
+    }},
+    ["donut2"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Donut Chocolate", AnimationOptions = 
+    {
+        Prop = 'bzzz_foodpack_donut002',
+        PropBone = 60309,
+        PropPlacement = {0.0000, -0.0300, -0.0100, 10.0000, 0.0000, -1.0000},
+        EmoteMoving = true,
+    }},
+    ["donut3"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Donut Raspberry", AnimationOptions = 
+    {
+        Prop = 'bzzz_foodpack_donut001',
+        PropBone = 60309,
+        PropPlacement = {0.0000, -0.0300, -0.0100, 10.0000, 0.0000, -1.0000},
+        EmoteMoving = true,
+    }},
+    ["croissant"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Croissant", AnimationOptions = 
+    {
+        Prop = 'bzzz_foodpack_croissant001',
+        PropBone = 60309,
+        PropPlacement = {0.0000, 0.0000, -0.0100, 0.0000, 0.0000, 90.0000},
+        EmoteMoving = true,
+    }},
+    ["lollipop1"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Lollipop Spiral Red", AnimationOptions = 
+    {
+        Prop = 'natty_lollipop_spiral01',
+        PropBone = 60309,
+        PropPlacement = {-0.0100, 0.0200, -0.0100, -175.1935, 97.6975, 20.9598},
+        EmoteMoving = true,
+    }},
+    ["lollipop1b"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Lollipop Spiral Pink", AnimationOptions = 
+    {
+        Prop = 'natty_lollipop_spiral02',
+        PropBone = 60309,
+        PropPlacement = {-0.0100, 0.0200, -0.0100, -175.1935, 97.6975, 20.9598},
+        EmoteMoving = true,
+    }},
+    ["lollipop1c"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Lollipop Spiral Green", AnimationOptions = 
+    {
+        Prop = 'natty_lollipop_spiral03',
+        PropBone = 60309,
+        PropPlacement = {-0.0100, 0.0200, -0.0100, -175.1935, 97.6975, 20.9598},
+        EmoteMoving = true,
+    }},
+    ["lollipop1d"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Lollipop Spiral Blue", AnimationOptions = 
+    {
+        Prop = 'natty_lollipop_spiral04',
+        PropBone = 60309,
+        PropPlacement = {-0.0100, 0.0200, -0.0100, -175.1935, 97.6975, 20.9598},
+        EmoteMoving = true,
+    }},
+    ["lollipop1e"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Lollipop Spiral Yellow", AnimationOptions = 
+    {
+        Prop = 'natty_lollipop_spiral05',
+        PropBone = 60309,
+        PropPlacement = {-0.0100, 0.0200, -0.0100, -175.1935, 97.6975, 20.9598},
+        EmoteMoving = true,
+    }},
+    ["lollipop1f"] = {"mp_player_inteat@burger", "mp_player_int_eat_burger", "Lollipop Spiral Purple", AnimationOptions = 
+    {
+        Prop = 'natty_lollipop_spiral06',
+        PropBone = 60309,
+        PropPlacement = {-0.0100, 0.0200, -0.0100, -175.1935, 97.6975, 20.9598},
+        EmoteMoving = true,
+    }},
+    ["lollipop2a"] = {"anim@heists@humane_labs@finale@keycards", "ped_a_enter_loop", "Lollipop Spin Red", AnimationOptions = 
+    {
+        Prop = "natty_lollipop_spin01",
+        PropBone = 60309,
+        PropPlacement = {-0.0300, -0.0500, 0.0500, 112.4227, -128.8559, 15.6107},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["lollipop2b"] = {"anim@heists@humane_labs@finale@keycards", "ped_a_enter_loop", "Lollipop Spin Yellow And Pink", AnimationOptions = 
+    {
+        Prop = "natty_lollipop_spin02",
+        PropBone = 60309,
+        PropPlacement = {-0.0300, -0.0500, 0.0500, 112.4227, -128.8559, 15.6107},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["lollipop2c"] = {"anim@heists@humane_labs@finale@keycards", "ped_a_enter_loop", "Lollipop Spin Yellow And Green", AnimationOptions = 
+    {
+        Prop = "natty_lollipop_spin03",
+        PropBone = 60309,
+        PropPlacement = {-0.0300, -0.0500, 0.0500, 112.4227, -128.8559, 15.6107},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["lollipop2d"] = {"anim@heists@humane_labs@finale@keycards", "ped_a_enter_loop", "Lollipop Spin Yellow And White", AnimationOptions = 
+    {
+        Prop = "natty_lollipop_spin04",
+        PropBone = 60309,
+        PropPlacement = {-0.0300, -0.0500, 0.0500, 112.4227, -128.8559, 15.6107},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["lollipop2e"] = {"anim@heists@humane_labs@finale@keycards", "ped_a_enter_loop", "Lollipop Spin Pink And White", AnimationOptions = 
+    {
+        Prop = "natty_lollipop_spin05",
+        PropBone = 60309,
+        PropPlacement = {-0.0300, -0.0500, 0.0500, 112.4227, -128.8559, 15.6107},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["lollipop3a"] = {"amb@world_human_smoking@male@male_a@enter", "enter", "Lollipop Suck", AnimationOptions = 
+    {
+        Prop = 'natty_lollipop01',
+        PropBone = 47419,
+        PropPlacement = {0.0100, 0.0300, 0.0100, -90.0000, 10.0000, -10.0000},
+        EmoteMoving = true,
+        EmoteDuration = 2600
+    }},
+    ["shaka"] = {"sign@hang_loose", "base", "Shaka 'Hang Loose'", AnimationOptions = 
+    {
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["shaka2"] = {"sign@hang_loose_casual", "base", "Shaka 'Hang Loose Casual'", AnimationOptions = 
+    {
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["selfiecrouch"] = {"crouching@taking_selfie", "base", "Selfie Crouching", AnimationOptions = 
+    {
+        Prop = "prop_phone_ing",
+        PropBone = 18905,
+        PropPlacement = {0.1580, 0.0180, 0.0300, -150.4798, -67.8240, -46.0417},
+        EmoteLoop = true,
+        EmoteMoving = false,
+        PtfxAsset = "scr_tn_meet",
+        PtfxName = "scr_tn_meet_phone_camera_flash",
+        PtfxPlacement = {-0.015, 0.0, 0.041, 0.0, 0.0, 0.0, 1.0},
+        PtfxInfo = Config.Languages[Config.MenuLanguage]['camera'],
+        PtfxWait = 200,
+    }},
+    ["selfiecrouch2"] = {"eagle@girlphonepose13", "girl", "Selfie Crouching 2", AnimationOptions = 
+    {
+        Prop = "prop_phone_ing",
+        PropBone = 60309,
+        PropPlacement = {0.0670, 0.0300, 0.0300, -90.0000, 0.0000, -25.9000},
+        EmoteLoop = true,
+        EmoteMoving = false,
+        PtfxAsset = "scr_tn_meet",
+        PtfxName = "scr_tn_meet_phone_camera_flash",
+        PtfxPlacement = {-0.015, 0.0, 0.041, 0.0, 0.0, 0.0, 1.0},
+        PtfxInfo = Config.Languages[Config.MenuLanguage]['camera'],
+        PtfxWait = 200,
+    }},
+    ["selfiecrouch3"] = {"anim@male_insta_selfie", "insta_selfie_clip", "Selfie Crouching 3", AnimationOptions = 
+    {
+        Prop = "prop_phone_ing",
+        PropBone = 60309,
+        PropPlacement = {0.0700, 0.0100, 0.0690, 0.0, 0.0, -150.0000},
+        EmoteLoop = true,
+        EmoteMoving = false,
+        PtfxAsset = "scr_tn_meet",
+        PtfxName = "scr_tn_meet_phone_camera_flash",
+        PtfxPlacement = {-0.015, 0.0, 0.041, 0.0, 0.0, 0.0, 1.0},
+        PtfxInfo = Config.Languages[Config.MenuLanguage]['camera'],
+        PtfxWait = 200,
+    }},
+    ["selfiefu"] = {"anim@fuck_you_selfie", "fuck_you_selfie_clip", "Selfie Middle Finger", AnimationOptions = 
+    {
+        Prop = "prop_phone_ing",
+        PropBone = 28422,
+        PropPlacement = {0.1200, 0.0220, -0.0210, 98.6822, -4.9809, 109.6216},
+        EmoteLoop = true,
+        EmoteMoving = false,
+        PtfxAsset = "scr_tn_meet",
+        PtfxName = "scr_tn_meet_phone_camera_flash",
+        PtfxPlacement = {-0.015, 0.0, 0.041, 0.0, 0.0, 0.0, 1.0},
+        PtfxInfo = Config.Languages[Config.MenuLanguage]['camera'],
+        PtfxWait = 200,
+    }},
+    ["selfiethot"] = {"anim@sitting_thot", "sitting_thot_clip", "Selfie Thot Instagram", AnimationOptions = 
+    {
+        Prop = "prop_phone_ing",
+        PropBone = 28422,
+        PropPlacement = {0.1030, 0.0440, -0.0270, -160.2802, -99.4080, -3.4048},
+        EmoteLoop = true,
+        EmoteMoving = false,
+        PtfxAsset = "scr_tn_meet",
+        PtfxName = "scr_tn_meet_phone_camera_flash",
+        PtfxPlacement = {-0.015, 0.0, 0.041, 0.0, 0.0, 0.0, 1.0},
+        PtfxInfo = Config.Languages[Config.MenuLanguage]['camera'],
+        PtfxWait = 200,
+    }},
+    ["bball"] = {"anim@male_bskball_hold", "bskball_hold_clip", "Basketball Hold", AnimationOptions = 
+    {
+        Prop = "prop_bskball_01",
+        PropBone = 28422,
+        PropPlacement = {0.0600, 0.0400, -0.1200, 0.0, 0.0, 40.00},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["bball2"] = {"anim@male_bskball_photo_pose", "photo_pose_clip", "Basketball Pose", AnimationOptions = 
+    {
+        Prop = "prop_bskball_01",
+        PropBone = 60309,
+        PropPlacement = {-0.0100, 0.0200, 0.1300, 0.0, 0.0, 0.0},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ["selfiepeace"] = {"mirror_selfie@peace_sign", "base", "Selfie Peace", AnimationOptions = 
+    {
+        Prop = "prop_phone_ing",
+        PropBone = 57005,
+        PropPlacement = {0.1700, 0.0299, -0.0159, -126.2687, -139.9058, 35.6203},
+        EmoteLoop = true,
+        EmoteMoving = true,
+        PtfxAsset = "scr_tn_meet",
+        PtfxName = "scr_tn_meet_phone_camera_flash",
+        PtfxPlacement = {-0.015, 0.0, 0.041, 0.0, 0.0, 0.0, 1.0},
+        PtfxInfo = Config.Languages[Config.MenuLanguage]['camera'],
+        PtfxWait = 200,
+    }},
+    ["beer2"] = {"amb@world_human_drinking@coffee@male@idle_a", "idle_c", "Beer", AnimationOptions =
+   {
+       Prop = 'prop_cs_beer_bot_40oz',
+       PropBone = 28422,
+       PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
+   ["spray"] = {"switch@franklin@lamar_tagging_wall", "lamar_tagging_exit_loop_lamar", "Spray", AnimationOptions =
+   {
+        Prop = 'prop_cs_spray_can',
+        PropBone = 28422,
+        PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        EmoteLoop = true,
+        EmoteMoving = false,
+        PtfxAsset = "scr_playerlamgraff",
+        PtfxName = "scr_lamgraff_paint_spray",
+        PtfxPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
+        PtfxInfo = Config.Languages[Config.MenuLanguage]['spray'],
+        PtfxWait = 5000,
+   }},
+   ["spray2"] = {"switch@franklin@lamar_tagging_wall", "lamar_tagging_wall_loop_lamar", "Spray 2", AnimationOptions =
+   {
+        Prop = 'prop_cs_spray_can',
+        PropBone = 28422,
+        PropPlacement = {0.0, 0.0, 0.0, 0.0, 0.0, 130.0},
+        EmoteLoop = true,
+        EmoteMoving = true,
+   }},
 }
