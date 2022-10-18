@@ -11,8 +11,8 @@ var orangejob_lib = new Vue({
     data: {
 	active: false,
 	style: 0,
-	buy: 5,
-	sale: 4,
+	buy: 40,
+	sale: 30,
     },
     methods:{
         gostyle: function(index) {
