@@ -272,9 +272,14 @@ end)
 
 RegisterServerEvent("usa_trains:metroJobToggle")
 AddEventHandler("usa_trains:metroJobToggle", function(isJob)
+	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if isJob then
-		char.set("job", "metroDriver")
+		if char.hasItem("Driver's License") then
+			char.set("job", "metroDriver")
+		else
+			TriggerClientEvent("usa:notify", usource, "You do not have a Driver's License.")
+		end
 	else
 		char.set("job", "civ")
 	end
@@ -300,22 +305,37 @@ AddEventHandler("usa_trains:metroSpawnRequest", function()
 	end
 end)
 
+RegisterServerEvent("usa_trains:trainJobToggle")
+AddEventHandler("usa_trains:trainJobToggle", function(isJob)
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if isJob then
+		if char.hasItem("Driver's License") then
+			char.set("job", "trainDriver")
+		else
+			TriggerClientEvent("usa:notify", usource, "You do not have a Driver's License.")
+		end
+	else
+		char.set("job", "civ")
+	end
+end)
+
 RegisterServerEvent("usa_trains:trainSpawnRequest")
 AddEventHandler("usa_trains:trainSpawnRequest", function()
 	local usource = source
 	local trackOccupied = false
-	local metroSpawnCoords = vector3(-898.7032, -2339.0503, -11.6807)
-	for i,v in ipairs(southboundTrains) do
-		print(#(metroSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))))
-		if #(metroSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))) < 280 then
+	local trainSpawnCoords = vector3(217.3837, -2509.7693, 6.4603)
+	for i,v in ipairs(northboundTrains) do
+		print(#(trainSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))))
+		if #(trainSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))) < 280 then
 			trackOccupied = true
 			break
 		end
 	end
 	print(trackOccupied)
 	if trackOccupied then
-		TriggerClientEvent("usa:notify", usource, "The tack is currently occupied please wait until the current train has left the station!")
+		TriggerClientEvent("usa:notify", usource, "The tack is currently occupied please wait until the current train has left the trainyard!")
 	else
-		TriggerClientEvent("usa_trains:spawnTrain", usource, 25)
+		TriggerClientEvent("usa_trains:spawnTrain", usource, 0, trainSpawnCoords)
 	end
 end)
