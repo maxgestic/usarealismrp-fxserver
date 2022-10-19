@@ -34,7 +34,7 @@ local MAGAZINE_LOAD_ANIM = {
 
 local MAGS_ENABLED = true
 
-Citizen.CreateThread(function()
+AddEventHandler("character:loaded", function()
     MAGS_ENBALED = TriggerServerCallback {
         eventName = "ammo:getMagMode",
         args = {}
@@ -111,7 +111,7 @@ AddEventHandler("ammo:reloadFromInventoryButton", function(data)
         end
         TriggerServerEvent("ammo:checkForMagazine", data.inventoryItemIndex, (vehiclePlate or false))
     else
-        TriggerServerEvent("ammo:checkForAmmo")
+        TriggerServerEvent("ammo:checkForAmmo", data.inventoryItemIndex)
     end
 end)
 
@@ -236,10 +236,12 @@ Citizen.CreateThread(function()
         if IsDisabledControlJustPressed(1, 45) then -- 45 = R
             if GetGameTimer() - lastPressTime >= RELOAD_TIME_MS then
                 lastPressTime = GetGameTimer()
-                if MAGS_ENBALED then
-                    TriggerServerEvent("ammo:checkForMagazine")
-                else
-                    TriggerServerEvent("ammo:checkForAmmo")
+                if IsPedArmed(PlayerPedId(), 4 | 2) then
+                    if MAGS_ENBALED then
+                        TriggerServerEvent("ammo:checkForMagazine")
+                    else
+                        TriggerServerEvent("ammo:checkForAmmo")
+                    end
                 end
             end
         end

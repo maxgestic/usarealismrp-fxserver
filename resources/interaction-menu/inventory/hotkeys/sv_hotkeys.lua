@@ -1,5 +1,5 @@
 RegisterServerEvent("interaction:hotkeyPressed")
-AddEventHandler("interaction:hotkeyPressed", function(key, isModifierKeyPressed, vehiclePlate)
+AddEventHandler("interaction:hotkeyPressed", function(key, isModifierKeyPressed, vehiclePlate) -- believe isModifierKeyPressed is no longer needed/used
     key = tonumber(key) - 1
     local char = exports["usa-characters"]:GetCharacter(source)
     local item = char.getItemByIndex(key)

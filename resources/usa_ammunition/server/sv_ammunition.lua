@@ -146,7 +146,7 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
     if not selectedIndex then
         selectedIndex = char.get("currentlySelectedIndex")
     end
-    if selectedIndex then
+    if selectedIndex ~= nil then
         local curWep = char.getItemByIndex(selectedIndex)
         if curWep and curWep.type == "weapon" then
             curWep.hash = tonumber(curWep.hash) & 0xFFFFFFFF -- ensure hash key is an unsigned int to match our look up table
@@ -261,10 +261,15 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
 end)
 
 RegisterServerEvent("ammo:checkForAmmo")
-AddEventHandler("ammo:checkForAmmo", function()
+AddEventHandler("ammo:checkForAmmo", function(selectedIndex)
     local char = exports["usa-characters"]:GetCharacter(source)
-    local selectedIndex = char.get("currentlySelectedIndex")
-    if selectedIndex then
+    if selectedIndex == nil then
+        selectedIndex = char.get("currentlySelectedIndex")
+    end
+    if selectedIndex == nil then
+        selectedIndex = char.get("lastSelectedIndex")
+    end
+    if selectedIndex ~= nil then
         local curWep = char.getItemByIndex(selectedIndex)
         if curWep and curWep.type == "weapon" then
             curWep.hash = tonumber(curWep.hash) & 0xFFFFFFFF -- ensure hash key is an unsigned int to match our look up table
@@ -548,7 +553,7 @@ RegisterServerCallback {
     eventCallback = function(source)
         local char = exports["usa-characters"]:GetCharacter(source)
         local doc = exports.essentialmode:getDocument("magmode-setting", char.get("_id"))
-        if doc and doc.value then
+        if doc then
             return doc.value
         else
             return true -- mag mode enabled by default
