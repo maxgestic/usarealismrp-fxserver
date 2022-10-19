@@ -25,7 +25,7 @@ local vehicles = {
   { name = "2021 Chevorlet Tahoe", hash = GetHashKey("p21tah") },
   { name = "Ford F-150", hash = GetHashKey("sotruck") },
   { name = "BMW 1200RT", hash = GetHashKey("1200RT") },
-  { name = "Dodge Charger Hellcat", hash = GetHashKey("npolchar") },
+  { name = "Dodge Charger Hellcat", hash = GetHashKey("intchar") },
   { name = "Ford Mustang", hash = GetHashKey("npolstang") },
   { name = "Dodge Challenger", hash = GetHashKey("npolchal") },
   { name = "Chevorlet Corvette", hash = GetHashKey("npolvette") },

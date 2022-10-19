@@ -90,10 +90,10 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1, 2, 3 },
 			hash = -1109563416
 		},
-		["npolchar"] = {
+		["intchar"] = {
 			rank = 7,
 			allowedLiveries = {1, 2, 3, 4, 5},
-			hash = GetHashKey("npolchar")
+			hash = GetHashKey("intchar")
 		},
 		["predator"] = {
 			rank = 1,
@@ -242,10 +242,10 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1, 2, 3 },
 			hash = -1109563416
 		},
-		["npolchar"] = {
+		["intchar"] = {
 			rank = 7,
 			allowedLiveries = {1, 2, 3, 4, 5},
-			hash = GetHashKey("npolchar")
+			hash = GetHashKey("intchar")
 		},
 		["predator"] = {
 			rank = 1,

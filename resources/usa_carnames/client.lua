@@ -1,4 +1,4 @@
---[[ 
+--[[
 
 AddTextEntry('<gameName>', '<replaced name>')
 
@@ -26,7 +26,7 @@ AddTextEntry('p21dur', '2021 Police Dodge Durango')
 AddTextEntry('p21tah', '2021 Police Chevorlet Tahoe')
 AddTextEntry('SOTRUCK', 'Police Ford F-350')
 AddTextEntry('p4x4', '2020 Police Polaris Ranger')
-AddTextEntry('NPOLCHAR', 'Police Dodge Charger Hellcat')
+AddTextEntry('intchar', 'Police Dodge Charger Hellcat')
 AddTextEntry('npolstang', 'Police Ford Mustang')
 AddTextEntry('npolchal', 'Police Dodge Challenger')
 AddTextEntry('npolvette', 'Police Chevorlet Corvette C7')
