@@ -224,7 +224,8 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
                 if ammoCount > 0 then
                     local neededAmmo = max - ((curWep.magazine and curWep.magazine.currentCapacity) or 0)
                     local ammoCountToUse = math.min(neededAmmo, ammoCount)
-                    TriggerClientEvent("ammo:reloadMag", src, ammoCountToUse)
+                    local prevAmmo = ((curWep.magazine and curWep.magazine.currentCapacity) or 0)
+                    TriggerClientEvent("ammo:reloadMag", src, prevAmmo + ammoCountToUse)
                     -- modify weapon's ammo
                     local magToUse = nil
                     if curWep.magazine then
@@ -281,6 +282,7 @@ AddEventHandler("ammo:checkForAmmo", function(selectedIndex)
                 local neededAmmo = max - ((curWep.magazine and curWep.magazine.currentCapacity) or 0)
                 local ammoItem = char.getItem(WEPS_WITH_MAGS[curWep.hash].accepts)
                 if ammoItem then
+                    local prevAmmo = ((curWep.magazine and curWep.magazine.currentCapacity) or 0)
                     local ammoCountToUse = math.min(neededAmmo, ammoItem.quantity)
                     char.modifyItemByUUID(ammoItem.uuid, { quantity = ammoItem.quantity - ammoCountToUse })
                     if curWep.magazine then
@@ -297,7 +299,7 @@ AddEventHandler("ammo:checkForAmmo", function(selectedIndex)
                         }
                         char.modifyItemByUUID(curWep.uuid, { magazine = newMag })
                     end
-                    TriggerClientEvent("ammo:reloadMag", source, ammoCountToUse)
+                    TriggerClientEvent("ammo:reloadMag", source, prevAmmo + ammoCountToUse)
                 else
                     TriggerClientEvent("usa:notify", source, "No " .. WEPS_WITH_MAGS[curWep.hash].accepts .. " ammo found!")
                 end
@@ -306,6 +308,7 @@ AddEventHandler("ammo:checkForAmmo", function(selectedIndex)
                 local neededAmmo = max - ((curWep.magazine and curWep.magazine.currentCapacity) or 0)
                 local ammoItem = char.getItem(WEPS_NO_MAGS[curWep.hash].AMMO_NAME)
                 if ammoItem then
+                    local prevAmmo = ((curWep.magazine and curWep.magazine.currentCapacity) or 0)
                     local ammoCountToUse = math.min(neededAmmo, ammoItem.quantity)
                     char.modifyItemByUUID(ammoItem.uuid, { quantity = ammoItem.quantity - ammoCountToUse })
                     if curWep.magazine then
@@ -322,7 +325,7 @@ AddEventHandler("ammo:checkForAmmo", function(selectedIndex)
                         }
                         char.modifyItemByUUID(curWep.uuid, { magazine = newMag })
                     end
-                    TriggerClientEvent("ammo:reloadMag", source, ammoCountToUse)
+                    TriggerClientEvent("ammo:reloadMag", source, prevAmmo + ammoCountToUse)
                     if curWep.name:find("Taser") or curWep.name:find("Stun Gun") then
                         TriggerClientEvent("usa-taser:enable", source, true)
                     end
