@@ -561,6 +561,9 @@ function CreateCharacter(data)
           for key, val in pairs(newVals) do
             self.inventory.items[tostring(i)][key] = val
           end
+          if self.inventory.items[tostring(i)].quantity <= 0 then
+            self.inventory.items[tostring(i)] = nil -- remove item if an update passed in was setting quantity to <= 0
+          end
           return
         end
       end

@@ -32,6 +32,23 @@ local MAGAZINE_LOAD_ANIM = {
     NAME = "reload_aim"
 }
 
+Citizen.CreateThread(function()
+    local MAGS_ENBALED = TriggerServerCallback {
+        eventName = "ammo:getMagMode",
+        args = {}
+    }
+end)
+
+RegisterNetEvent("ammo:setMagMode")
+AddEventHandler("ammo:setMagMode", function(val)
+    MAGS_ENBALED = val
+    if MAGS_ENBALED then
+        exports.globals:notify("Realistic mag mode enabled")
+    else
+        exports.globals:notify("Arcade mag mode enabled")
+    end
+end)
+
 RegisterNetEvent("ammo:playMagazineFillingAnimation")
 AddEventHandler("ammo:playMagazineFillingAnimation", function()
     playAnimation(MAGAZINE_LOAD_ANIM.DICT, MAGAZINE_LOAD_ANIM.NAME, MAGAZINE_LOAD_TIME, 48, "Loading Mag")
@@ -63,12 +80,36 @@ AddEventHandler("ammo:reloadMag", function(data)
                 end
             end
         end
-        -- fill currently equipped weapon with mag.currentCapacity (or +1 if not pistol)
+        -- fill currently equipped weapon with mag.currentCapacity
         --SetPedAmmo(myped, currentWeaponHash, ammoCountToUse)
         SetAmmoInClip(myped, currentWeaponHash, ammoCountToUse)
-        if isFullAuto(currentWeaponHash) then
-            SetPedAmmo(myped, currentWeaponHash, ammoCountToUse + 1) -- give pseudo ammo so we don't auto store weapon
+    end
+end)
+
+RegisterNetEvent("ammo:ejectMag")
+AddEventHandler("ammo:ejectMag", function(data)
+    if MAGS_ENBALED then
+        TriggerServerEvent("ammo:ejectMag", data.inventoryItemIndex)
+	    exports.globals:playAnimation("cover@weapon@machinegun@combat_mg_str", "low_reload_left", 2000, 48, "Unloading")
+    else 
+        exports.globals:notify("Disabled in ammo only mode")
+    end
+end)
+
+RegisterNetEvent("ammo:reloadFromInventoryButton")
+AddEventHandler("ammo:reloadFromInventoryButton", function(data)
+    if MAGS_ENBALED then
+        local me = PlayerPedId()
+        local myveh = nil
+        local vehiclePlate = nil
+        if IsPedInAnyVehicle(me, false) then
+            myveh = GetVehiclePedIsIn(me, false)
+            vehiclePlate = GetVehicleNumberPlateText(myveh)
+            vehiclePlate = exports.globals:trim(vehiclePlate)
         end
+        TriggerServerEvent("ammo:checkForMagazine", data.inventoryItemIndex, (vehiclePlate or false))
+    else
+        TriggerServerEvent("ammo:checkForAmmo")
     end
 end)
 
@@ -77,7 +118,10 @@ Citizen.CreateThread(function()
     while true do
         local myped = PlayerPedId()
         if IsPedShooting(myped) then
-            Wait(50)
+            local start = GetGameTimer()
+            while GetGameTimer() - start < 300 do
+                Wait(1)
+            end
             if not IsPedShooting(myped) then
                 local w = GetSelectedPedWeapon(myped)
                 local b1, wa = GetAmmoInClip(myped, w)
@@ -190,7 +234,11 @@ Citizen.CreateThread(function()
         if IsDisabledControlJustPressed(1, 45) then -- 45 = R
             if GetGameTimer() - lastPressTime >= RELOAD_TIME_MS then
                 lastPressTime = GetGameTimer()
-                TriggerServerEvent("ammo:checkForMagazine")
+                if MAGS_ENBALED then
+                    TriggerServerEvent("ammo:checkForMagazine")
+                else
+                    TriggerServerEvent("ammo:checkForAmmo")
+                end
             end
         end
         Wait(1)

@@ -538,7 +538,7 @@ exports("getDocument", function(db, docID)
 	return retVal
 end)
 
-exports("updateDocument", function(db, docID, updates)
+exports("updateDocument", function(db, docID, updates, createDocIfNotExist)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docID, function(err, rText, headers)
 		if err ~= 404 then
 			local doc = json.decode(rText)
@@ -553,6 +553,8 @@ exports("updateDocument", function(db, docID, updates)
 				print("put err: " .. err)
 				print("put rText: " .. rText)
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+		elseif createDocIfNotExist then
+			exposedDB.createDocumentWithId(db, updates, docID, function(ok) end)
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end)
