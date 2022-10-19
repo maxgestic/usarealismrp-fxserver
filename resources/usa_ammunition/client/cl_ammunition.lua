@@ -34,20 +34,15 @@ local MAGAZINE_LOAD_ANIM = {
 
 local MAGS_ENABLED = true
 
-AddEventHandler("character:loaded", function()
-    MAGS_ENBALED = TriggerServerCallback {
-        eventName = "ammo:getMagMode",
-        args = {}
-    }
-end)
-
 RegisterNetEvent("ammo:setMagMode")
-AddEventHandler("ammo:setMagMode", function(val)
+AddEventHandler("ammo:setMagMode", function(val, notify)
     MAGS_ENBALED = val
-    if MAGS_ENBALED then
-        exports.globals:notify("Realistic mag mode enabled")
-    else
-        exports.globals:notify("Arcade mag mode enabled")
+    if notify then
+        if MAGS_ENBALED then
+            exports.globals:notify("Realistic mag mode enabled")
+        else
+            exports.globals:notify("Arcade mag mode enabled")
+        end
     end
 end)
 

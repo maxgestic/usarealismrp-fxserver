@@ -143,8 +143,11 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
         notStackable = true
     }
     local char = exports["usa-characters"]:GetCharacter(src)
-    if not selectedIndex then
+    if selectedIndex == nil then
         selectedIndex = char.get("currentlySelectedIndex")
+    end
+    if selectedIndex == nil then
+        selectedIndex = char.get("lastSelectedIndex")
     end
     if selectedIndex ~= nil then
         local curWep = char.getItemByIndex(selectedIndex)
@@ -446,6 +449,7 @@ AddEventHandler("ammo:showHelpText", function(forWeapons)
 end)
 
 AddEventHandler("character:loaded", function(char)
+    -- tazer:
     local shouldHaveLoadedCartridge = false
     local tazer = char.getItem("Taser")
     local stunGun = char.getItem("Stun Gun")
@@ -461,6 +465,13 @@ AddEventHandler("character:loaded", function(char)
     if not shouldHaveLoadedCartridge then
         TriggerClientEvent("usa-taser:enable", char.get("source"), false)
     end
+    -- mag mode:
+    local doc = exports.essentialmode:getDocument("magmode-setting", char.get("_id"))
+    local magModeVal = true
+    if doc then
+        magModeVal = doc.value
+    end
+    TriggerClientEvent("ammo:setMagMode", char.get("source"), magModeVal)
 end)
 
 function FindMagToReloadWith(char, weaponHash)
@@ -544,21 +555,8 @@ TriggerEvent('es:addCommand', 'magmode', function(source, args, char)
     else
         newVal = false
     end
-    TriggerClientEvent("ammo:setMagMode", source, newVal)
+    TriggerClientEvent("ammo:setMagMode", source, newVal, true)
     exports.essentialmode:updateDocument("magmode-setting", char.get("_id"), {value = newVal}, true)
 end, {help = "Toggle weapon magazine feature"})
-
-RegisterServerCallback {
-    eventName = "ammo:getMagMode",
-    eventCallback = function(source)
-        local char = exports["usa-characters"]:GetCharacter(source)
-        local doc = exports.essentialmode:getDocument("magmode-setting", char.get("_id"))
-        if doc then
-            return doc.value
-        else
-            return true -- mag mode enabled by default
-        end
-    end
-}
 
 exports["globals"]:PerformDBCheck("usa_ammunition", "magmode-setting", nil)
