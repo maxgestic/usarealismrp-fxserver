@@ -32,8 +32,10 @@ local MAGAZINE_LOAD_ANIM = {
     NAME = "reload_aim"
 }
 
+local MAGS_ENABLED = true
+
 Citizen.CreateThread(function()
-    local MAGS_ENBALED = TriggerServerCallback {
+    MAGS_ENBALED = TriggerServerCallback {
         eventName = "ammo:getMagMode",
         args = {}
     }

@@ -532,10 +532,12 @@ function getAmmoTypeByWeaponHash(wepHash)
 end
 
 TriggerEvent('es:addCommand', 'magmode', function(source, args, char)
-    local newVal = true
+    local newVal = nil
     local doc = exports.essentialmode:getDocument("magmode-setting", char.get("_id"))
     if doc then
         newVal = not doc.value
+    else
+        newVal = false
     end
     TriggerClientEvent("ammo:setMagMode", source, newVal)
     exports.essentialmode:updateDocument("magmode-setting", char.get("_id"), {value = newVal}, true)
