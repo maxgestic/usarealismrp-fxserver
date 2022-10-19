@@ -6,6 +6,59 @@ local updateInterval = 1
 local metroPasses = {}
 local trainTickets = {}
 
+-- Threads
+
+Citizen.CreateThread(function()
+	while true do
+		for i,v in ipairs(southboundTrains) do
+			TriggerClientEvent("usa_trains:checkDistances", v.owner, v.id, v.type, southboundTrains)
+		end
+		Citizen.Wait(2000)
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		for i,v in ipairs(northboundTrains) do
+			TriggerClientEvent("usa_trains:checkDistances", v.owner, v.id, v.type, northboundTrains)
+		end
+		Citizen.Wait(2000)
+	end
+end)
+
+Citizen.CreateThread(function()
+	local lastUpdateTime = os.time()
+	while true do
+		if os.difftime(os.time(), lastUpdateTime) >= updateInterval then
+			for i, data in pairs(trains) do
+				trains[i].coords = vector3(GetEntityCoords(NetworkGetEntityFromNetworkId(data.trainNetID)))
+			end
+			TriggerClientEvent("usa_trains:updateAll", -1, trains)
+			lastUpdateTime = os.time()
+		end
+		Wait(500)
+	end
+end)
+
+-- Server Events
+
+AddEventHandler("character:loaded", function(char)
+	local hasMetroPass = false
+	local hasTrainTicket = false
+	for i,v in ipairs(metroPasses) do
+		if v == char.get("_id") then
+			hasMetroPass = true
+		end
+	end
+	for i,v in ipairs(trainTickets) do
+		if v == char.get("_id") then
+			hasTrainTicket = true
+		end
+	end
+	TriggerClientEvent("usa_trains:issueTicket", char.get("source"), "metro", hasMetroPass)
+	TriggerClientEvent("usa_trains:issueTicket", char.get("source"), "train", hasTrainTicket)
+end)
+
 RegisterServerEvent("usa_trains:seat")
 AddEventHandler("usa_trains:seat", function(train, ped)
 	local deseat = false
@@ -174,38 +227,6 @@ AddEventHandler("usa_trains:checkTrainDriver", function(id)
 	end
 end)
 
--- check distances
-Citizen.CreateThread(function()
-	while true do
-		for i,v in ipairs(southboundTrains) do
-			TriggerClientEvent("usa_trains:checkDistances", v.owner, v.id, v.type, southboundTrains)
-		end
-		Citizen.Wait(2000)
-	end
-end)
-Citizen.CreateThread(function()
-	while true do
-		for i,v in ipairs(northboundTrains) do
-			TriggerClientEvent("usa_trains:checkDistances", v.owner, v.id, v.type, northboundTrains)
-		end
-		Citizen.Wait(2000)
-	end
-end)
-
-Citizen.CreateThread(function()
-	local lastUpdateTime = os.time()
-	while true do
-		if os.difftime(os.time(), lastUpdateTime) >= updateInterval then
-			for i, data in pairs(trains) do
-				trains[i].coords = vector3(GetEntityCoords(NetworkGetEntityFromNetworkId(data.trainNetID)))
-			end
-			TriggerClientEvent("usa_trains:updateAll", -1, trains)
-			lastUpdateTime = os.time()
-		end
-		Wait(500)
-	end
-end)
-
 RegisterServerEvent("usa_trains:buyTicket")
 AddEventHandler("usa_trains:buyTicket", function(ticket_type)
 	local source = source
@@ -251,23 +272,6 @@ AddEventHandler("usa_trains:passengerNoTicket", function(player_coords)
 		end
 	end
 	TriggerClientEvent("usa:notify", result, "Head's Up: There is a passenger on your train without a Ticket!")
-end)
-
-AddEventHandler("character:loaded", function(char)
-	local hasMetroPass = false
-	local hasTrainTicket = false
-	for i,v in ipairs(metroPasses) do
-		if v == char.get("_id") then
-			hasMetroPass = true
-		end
-	end
-	for i,v in ipairs(trainTickets) do
-		if v == char.get("_id") then
-			hasTrainTicket = true
-		end
-	end
-	TriggerClientEvent("usa_trains:issueTicket", char.get("source"), "metro", hasMetroPass)
-	TriggerClientEvent("usa_trains:issueTicket", char.get("source"), "train", hasTrainTicket)
 end)
 
 RegisterServerEvent("usa_trains:metroJobToggle")

@@ -39,7 +39,7 @@ end)
 
 RegisterNetEvent("ammo:reloadMag")
 AddEventHandler("ammo:reloadMag", function(data)
-    if not exports["usa_stretcher"]:IsInStretcher() then
+    if not exports["usa_stretcher"]:IsInStretcher() and not exports["usa_trains"]:checkIsPassanger()  then
         local myped = PlayerPedId()
         local currentWeaponHash = GetSelectedPedWeapon(myped)
         local ammoCountToUse = nil

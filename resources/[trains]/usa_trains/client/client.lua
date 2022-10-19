@@ -8,8 +8,23 @@ local isMetroJob = false
 local isTrainJob = false
 local isEMS = false
 local doors = false
-SetTrainsForceDoorsOpen(false)
 local lastDoorToggle = GetGameTimer()
+local showingMetroBlips = false
+local showingTrainBlips = false
+local trainFlipPointSouth = vector3(508.6995, -2617.5898, 12.5120)
+local trainFlipPointNorth = vector3(1382.2756, 6416.7627, 33.3126)
+local metroFlipPointSouth = vector3(-1232.5068, -2885.6240, -8.9238)
+local metroFlipPointNorth = vector3(553.0604, -1984.6080, 17.1745)
+local currentTrack = nil
+local hasMetroTicket = false
+local hasTrainTicket = false
+local serverTrainNIDs = {}
+local openCoords = nil
+local metroClockIn = vector3(-918.1724, -2345.6904, -3.5075)
+local trainClockIn = vector3(235.8775, -2506.5186, 6.4852)
+local isHelpShowing = false
+local disableControlHint = false
+local breaking = false
 local metrostations = {
 	[1] = {coords = vector3(-1042.2565, -2745.7266, 15.9190)},
 	[2] = {coords = vector3(-946.0543, -2340.5015, 6.5338)},
@@ -35,101 +50,82 @@ local cargostations = {
 	[1] = {coords = vector3(2201.1565, 1362.0720, 85.5326)},
 	[2] = {coords = vector3(3026.0645, 4255.8647, 64.0981)},
 }
-
+local ticketMachines = {
+	vector3(656.5287, -1216.6416, 24.7288),
+	vector3(656.5995, -1215.4160, 24.7288),
+	vector3(656.6309, -1214.1396, 24.7288),
+	vector3(656.5386, -1212.8849, 24.7288),
+	vector3(654.2658, -1212.8998, 24.7287),
+	vector3(654.2506, -1214.1533, 24.7287),
+	vector3(654.2059, -1215.4633, 24.7287),
+	vector3(654.1624, -1216.6091, 24.7287),
+	vector3(675.1742, -968.1018, 23.4772),
+	vector3(675.1564, -966.8605, 23.4772),
+	vector3(675.2309, -965.5681, 23.4772),
+	vector3(675.1404, -964.4034, 23.4772),
+	vector3(672.9257, -964.4099, 23.4773),
+	vector3(672.8621, -965.6062, 23.4773),
+	vector3(672.8605, -966.7598, 23.4773),
+	vector3(672.8602, -968.1181, 23.4773),
+	vector3(2328.3696, 2676.4756, 45.5602),
+	vector3(2327.2871, 2676.0879, 45.5602),
+	vector3(2326.1616, 2675.5554, 45.5602),
+	vector3(2325.0371, 2675.0825, 45.5602),
+	vector3(2328.4436, 2676.4978, 45.5601),
+	vector3(2327.3330, 2676.0420, 45.5601),
+	vector3(2326.0913, 2675.5286, 45.5602),
+	vector3(2324.9307, 2675.0571, 45.5602),
+	vector3(1769.5721, 3490.7168, 39.4500),
+	vector3(1768.5219, 3490.0818, 39.4500),
+	vector3(1767.4751, 3489.5032, 39.4500),
+	vector3(1766.2870, 3488.8232, 39.4500),
+	vector3(1765.2615, 3490.9688, 39.4500),
+	vector3(1766.2001, 3491.3999, 39.4500),
+	vector3(1767.2905, 3492.0210, 39.4500),
+	vector3(1768.3812, 3492.6616, 39.4500),
+	vector3(-238.9935, 6037.0249, 34.7139),
+	vector3(-238.3404, 6037.6743, 34.7139),
+	vector3(-237.4695, 6038.5732, 34.7139),
+	vector3(-236.5120, 6039.5522, 34.7139),
+	vector3(-234.7809, 6038.0498, 34.7139),
+	vector3(-235.6033, 6037.0967, 34.7139),
+	vector3(-236.5086, 6036.1626, 34.7139),
+	vector3(-237.4038, 6035.2373, 34.7139),
+	vector3(2887.8413, 4851.2563, 63.8540),
+	vector3(2888.5701, 4850.1069, 63.8540),
+	vector3(2889.1328, 4849.1807, 63.8540),
+	vector3(2889.7324, 4848.0474, 63.8540),
+	vector3(2887.7844, 4846.8423, 63.8541),
+	vector3(2887.2178, 4847.7417, 63.8540),
+	vector3(2886.5317, 4848.8760, 63.8540),
+	vector3(2885.9768, 4849.9365, 63.8540),
+	vector3(2619.0161, 1690.5801, 27.5985),
+	vector3(298.9805, -1205.5347, 38.8926),
+	vector3(299.0714, -1203.0671, 38.8926),
+	vector3(281.8425, -1203.0641, 38.9000),
+	vector3(278.9162, -1203.0573, 38.8945),
+	vector3(276.9263, -1203.0562, 38.8943),
+	vector3(276.9967, -1205.5442, 38.8942),
+	vector3(278.7496, -1205.5029, 38.8941),
+	vector3(281.9468, -1205.4637, 38.9001),
+	vector3(251.5182, -1208.0530, 29.2894),
+	vector3(253.4942, -1208.0487, 29.2893),
+	vector3(253.6056, -1200.2748, 29.2905),
+	vector3(251.4944, -1200.2795, 29.2907),
+	vector3(-538.9167, -1281.6249, 26.8978),
+	vector3(-539.3651, -1282.7717, 26.9016),
+	vector3(-539.8860, -1283.9149, 26.9016),
+	vector3(-540.4699, -1284.9905, 26.9016),
+	vector3(-542.5540, -1284.0881, 26.9016),
+	vector3(-542.1733, -1282.9955, 26.9016),
+	vector3(-541.5959, -1281.7271, 26.9016),
+	vector3(-541.1106, -1280.7523, 26.9016),
+}
 local metroBlipTable = {}
 local trainBlipTable = {}
-local showingMetroBlips = false
-local showingTrainBlips = false
+SetTrainsForceDoorsOpen(false)
 
-local trainFlipPointSouth = vector3(396.0495, -2617.6992, 13.3674)
-local trainFlipPointNorth = vector3(1382.2756, 6416.7627, 33.3126)
-local metroFlipPointSouth = vector3(-1232.5068, -2885.6240, -8.9238)
-local metroFlipPointNorth = vector3(553.0604, -1984.6080, 17.1745)
-
-local currentTrack = nil
-
-local hasMetroTicket = false
-local hasTrainTicket = false
-
-local serverTrainNIDs = {}
-
-local openCoords = nil
-
-local metroClockIn = vector3(-918.1724, -2345.6904, -3.5075)
-local trainClockIn = vector3(235.8775, -2506.5186, 6.4852)
-
-local isHelpShowing = false
-
-local disableControlHint = false
-
-_menuPool = NativeUI.CreatePool()
-ticketMenu = NativeUI.CreateMenu("LS Transit", "~b~Ticket Machine", 0 --[[X COORD]], 320 --[[Y COORD]])
-buyMetroTicket = NativeUI.CreateItem("Metro Day Pass", "Purchase a daypass for the metro system for $50")
-buyMetroTicket.Activated = function(parentmenu, selected)
-	if not hasMetroTicket then
-    	TriggerServerEvent("usa_trains:buyTicket", "metro")
-    else
-    	TriggerEvent("usa:notify", "You already have a daypass for today!")
-    end
-end
-buyTrainTicket = NativeUI.CreateItem("Train Day Ticket", "Purchase a Train Day Ticket for $100")
-buyTrainTicket.Activated = function(parentmenu, selected)
-	if not hasTrainTicket then
-    	TriggerServerEvent("usa_trains:buyTicket", "train")
-    else
-    	TriggerEvent("usa:notify", "You already have a train day ticket for today!")
-    end
-end
-_menuPool:Add(ticketMenu)
-ticketMenu:AddItem(buyMetroTicket)
-ticketMenu:AddItem(buyTrainTicket)
-
-Citizen.CreateThread(function() -- Add Blips for stations
-	for i,v in ipairs(metrostations) do
-		local blip = AddBlipForCoord(v.coords)
-		SetBlipSprite(blip, 607)
-		SetBlipDisplay(blip, 4)
-		SetBlipScale(blip, 0.5)
-		SetBlipColour(blip, 1)
-		SetBlipAsShortRange(blip, true)
-		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString('Metro Station')
-		EndTextCommandSetBlipName(blip)
-	end
-	for i,v in ipairs(trainstations) do
-		local blip = AddBlipForCoord(v.coords)
-		SetBlipSprite(blip, 473)
-		SetBlipDisplay(blip, 4)
-		SetBlipScale(blip, 0.35)
-		SetBlipColour(blip, 61)
-		SetBlipAsShortRange(blip, true)
-		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString('Train Station')
-		EndTextCommandSetBlipName(blip)
-	end
-end)
-
-Citizen.CreateThread(function() -- Track switch checking
-	while true do
-		Citizen.Wait(1000)
-		if isDriver then
-			if currentTrack == "north" then
-				if (#(GetEntityCoords(train) - trainFlipPointNorth) < 30 or #(GetEntityCoords(train) - metroFlipPointNorth) < 30) then
-					-- print("switching to southbound")
-					currentTrack = "south"
-					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
-				end
-			elseif currentTrack == "south" then
-
-				if (#(GetEntityCoords(train) - trainFlipPointSouth) < 30 or #(GetEntityCoords(train) - metroFlipPointSouth) < 30) then
-					-- print("switching to northbound")
-					currentTrack = "north"
-					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
-				end
-			end
-		end
-	end
-end)
+-- Functions
 
 function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)
     SetTextFont(6)
@@ -175,8 +171,175 @@ function alert(msg)
 	DisplayHelpTextFromStringLabel(0,0,1,-1)
 end
 
+function isNearTicketMachine()
+	local ticketMachineModels = {
+		'prop_train_ticket_02',
+		'prop_train_ticket_02_tu'
+	}
+
+	for i,v in ipairs(ticketMachines) do
+		if #(GetEntityCoords(PlayerPedId())-v) < 1.0 then
+			return true
+		end
+	end
+
+	local plyCoords = GetEntityCoords(PlayerPedId())
+	for i = 1, #ticketMachineModels do
+		local obj = GetClosestObjectOfType(plyCoords.x, plyCoords.y, plyCoords.z, 0.7, GetHashKey(ticketMachineModels[i]), false, false, false)
+		if DoesEntityExist(obj) then
+			return true
+		end
+	end
+end
+
+function toggleDoors()
+	if GetGameTimer() - lastDoorToggle > 500 then
+		lastDoorToggle = GetGameTimer()
+		TriggerServerEvent("usa_trains:toggleDoors", trainNID, doors)
+		doors = not doors
+	end
+end
+
+function RemoveTrainBlips()
+	for i = #trainBlipTable, 1, -1 do
+		local b = trainBlipTable[i]
+		if b ~= 0 then
+			RemoveBlip(b)
+			table.remove(trainBlipTable, i)
+		end
+	end
+end
+
+function RemoveMetroBlips()
+	for i = #metroBlipTable, 1, -1 do
+		local b = metroBlipTable[i]
+		if b ~= 0 then
+			RemoveBlip(b)
+			table.remove(metroBlipTable, i)
+		end
+	end
+end
+
+function RefreshBlips(Ttable)
+	for k,v in pairs(Ttable) do
+		if v and v.name and v.coords then
+			local blip = AddBlipForCoord(v.coords)
+			SetBlipSprite(blip, 795)
+			SetBlipColour(blip, 41)
+			SetBlipAsShortRange(blip, true)
+			SetBlipDisplay(blip, 4)
+			SetBlipShowCone(blip, true)
+			BeginTextCommandSetBlipName("STRING")
+			AddTextComponentString(v.name)
+			EndTextCommandSetBlipName(blip)
+			if v.name == "Train" then
+				table.insert(trainBlipTable, blip)
+			else
+				table.insert(metroBlipTable, blip)
+			end
+		end
+	end
+end
+
+-- Exports
+
 exports('checkIsPassanger', function()
 	return isPassanger
+end)
+
+-- Threads
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(1000)
+		while train ~= nil do
+			Wait(0)
+			print(GetTrainCurrentTrackNode(train))
+		end
+	end
+end)
+
+Citizen.CreateThread(function() -- Setup Ticket Machine Menu
+	_menuPool = NativeUI.CreatePool()
+	ticketMenu = NativeUI.CreateMenu("LS Transit", "~b~Ticket Machine", 0 --[[X COORD]], 320 --[[Y COORD]])
+	buyMetroTicket = NativeUI.CreateItem("Metro Day Pass", "Purchase a daypass for the metro system for $50")
+	buyMetroTicket.Activated = function(parentmenu, selected)
+		if not hasMetroTicket then
+	    	TriggerServerEvent("usa_trains:buyTicket", "metro")
+	    else
+	    	TriggerEvent("usa:notify", "You already have a daypass for today!")
+	    end
+	end
+	buyTrainTicket = NativeUI.CreateItem("Train Day Ticket", "Purchase a Train Day Ticket for $100")
+	buyTrainTicket.Activated = function(parentmenu, selected)
+		if not hasTrainTicket then
+	    	TriggerServerEvent("usa_trains:buyTicket", "train")
+	    else
+	    	TriggerEvent("usa:notify", "You already have a train day ticket for today!")
+	    end
+	end
+	_menuPool:Add(ticketMenu)
+	ticketMenu:AddItem(buyMetroTicket)
+	ticketMenu:AddItem(buyTrainTicket)
+
+end)
+
+Citizen.CreateThread(function() -- Add Blips for stations
+	for i,v in ipairs(metrostations) do
+		local blip = AddBlipForCoord(v.coords)
+		SetBlipSprite(blip, 607)
+		SetBlipDisplay(blip, 4)
+		SetBlipScale(blip, 0.5)
+		SetBlipColour(blip, 1)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString('Metro Station')
+		EndTextCommandSetBlipName(blip)
+	end
+	for i,v in ipairs(trainstations) do
+		local blip = AddBlipForCoord(v.coords)
+		SetBlipSprite(blip, 473)
+		SetBlipDisplay(blip, 4)
+		SetBlipScale(blip, 0.35)
+		SetBlipColour(blip, 61)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString('Train Station')
+		EndTextCommandSetBlipName(blip)
+	end
+end)
+
+Citizen.CreateThread(function() -- Track switch checking
+	while true do
+		Citizen.Wait(1000)
+		if isTrainJob then
+			if currentTrack == "north" then
+				if #(GetEntityCoords(train) - trainFlipPointNorth) < 30 then
+					print("switching to southbound")
+					currentTrack = "south"
+					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "train")
+				end
+			elseif currentTrack == "south" then
+				if #(GetEntityCoords(train) - trainFlipPointSouth) < 30 then
+					print("switching to northbound")
+					currentTrack = "north"
+					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "train")
+				end
+			end
+		elseif isMetroJob then
+			if #(GetEntityCoords(train) - metroFlipPointNorth) < 30 then
+					print("switching to southbound")
+					currentTrack = "south"
+					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
+				end
+			elseif currentTrack == "south" then
+				if #(GetEntityCoords(train) - metroFlipPointSouth) < 30 then
+					print("switching to northbound")
+					currentTrack = "north"
+					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
+				end
+		end
+	end
 end)
 
 Citizen.CreateThread(function() -- train controlls
@@ -277,35 +440,20 @@ Citizen.CreateThread(function() -- train enter prompts
 	end 
 end)
 
-function isNearTicketMachine()
-	local ticketMachineModels = {
-		'prop_train_ticket_02',
-		'prop_train_ticket_02_tu'
-	}
-
-	local plyCoords = GetEntityCoords(PlayerPedId())
-	for i = 1, #ticketMachineModels do
-		local obj = GetClosestObjectOfType(plyCoords.x, plyCoords.y, plyCoords.z, 0.7, GetHashKey(ticketMachineModels[i]), false, false, false)
-		if DoesEntityExist(obj) then
-			return true
-		end
-	end
-end
-
 Citizen.CreateThread(function() -- ticket machines
 	while true do
-		Citizen.Wait(0)
-
+		Citizen.Wait(1)
 		_menuPool:MouseControlsEnabled(false)
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:ProcessMenus()
-
+		if #(GetEntityCoords(PlayerPedId()) - vector3(2619.0161, 1690.5801, 27.5985)) < 5 then
+			DrawText3D(2619.0161, 1690.5801, 27.9985, "[E] - Buy Tickets")
+		end
         if IsControlJustPressed(1, 51) and isNearTicketMachine() then
         	--open ticket menu
         	ticketMenu:Visible(true)
         	openCoords = GetEntityCoords(PlayerPedId())
 		end
-
 		if _menuPool:IsAnyMenuOpen() then -- close when far away
             if #(GetEntityCoords(PlayerPedId()) - openCoords) > 0.7 then
                 openCoords = nil
@@ -520,6 +668,8 @@ Citizen.CreateThread(function() -- Repair Windows
 	end
 end)
 
+-- Client Events
+
 RegisterNetEvent("usa_trains:setJob")
 AddEventHandler("usa_trains:setJob", function(job)
 	if job == "metroDriver" then
@@ -648,7 +798,7 @@ AddEventHandler("usa_trains:delTrain", function()
 		trainNID= nil
 		trainSpeed = 0.0
 	end
-end, false)
+end)
 
 RegisterNetEvent("usa_trains:spawnTrain")
 AddEventHandler("usa_trains:spawnTrain",function(type, spawnCoords)
@@ -697,26 +847,6 @@ AddEventHandler("usa_trains:spawnTrain",function(type, spawnCoords)
 	end
 end)
 
-RegisterCommand("spawnMetro", function()
-	TriggerServerEvent("usa_trains:metroSpawnRequest")
-end, false)
-
-RegisterCommand("spawnTrain", function()
-	TriggerServerEvent("usa_trains:trainSpawnRequest")
-end, false)
-
-RegisterCommand("delTrain", function()
-	TriggerEvent("usa_trains:delTrain")
-end, false)
-
-function toggleDoors()
-	if GetGameTimer() - lastDoorToggle > 500 then
-		lastDoorToggle = GetGameTimer()
-		TriggerServerEvent("usa_trains:toggleDoors", trainNID, doors)
-		doors = not doors
-	end
-end
-
 RegisterNetEvent("usa_trains:toggleDoorsC")
 AddEventHandler("usa_trains:toggleDoorsC", function(trainID, open)
 	local lTrain = NetworkGetEntityFromNetworkId(trainID)
@@ -745,7 +875,6 @@ AddEventHandler("usa_trains:toggleDoorsC", function(trainID, open)
 	end
 end)
 
-local breaking = false
 RegisterNetEvent("usa_trains:checkDistances")
 AddEventHandler("usa_trains:checkDistances", function(trainNetworkID, trainType, trainTable)
 	for i,v in ipairs(trainTable) do
@@ -788,37 +917,6 @@ AddEventHandler("usa_trains:syncDeleteTrain", function(id1, id2)
 	end
 end)
 
-function RemoveMetroBlips()
-	for i = #metroBlipTable, 1, -1 do
-		local b = metroBlipTable[i]
-		if b ~= 0 then
-			RemoveBlip(b)
-			table.remove(metroBlipTable, i)
-		end
-	end
-end
-
-function RefreshBlips(Ttable)
-	for k,v in pairs(Ttable) do
-		if v and v.name and v.coords then
-			local blip = AddBlipForCoord(v.coords)
-			SetBlipSprite(blip, 795)
-			SetBlipColour(blip, 41)
-			SetBlipAsShortRange(blip, true)
-			SetBlipDisplay(blip, 4)
-			SetBlipShowCone(blip, true)
-			BeginTextCommandSetBlipName("STRING")
-			AddTextComponentString(v.name)
-			EndTextCommandSetBlipName(blip)
-			if v.name == "Train" then
-				table.insert(trainBlipTable, blip)
-			else
-				table.insert(metroBlipTable, blip)
-			end
-		end
-	end
-end
-
 RegisterNetEvent("usa_trains:toggleMetroBlips")
 AddEventHandler("usa_trains:toggleMetroBlips", function(bool)
 	showingMetroBlips = bool
@@ -836,17 +934,6 @@ AddEventHandler("usa_trains:updateAll", function(Ttable)
 	end
 end)
 
-function RemoveTrainBlips()
-	for i = #trainBlipTable, 1, -1 do
-		local b = trainBlipTable[i]
-		if b ~= 0 then
-			RemoveBlip(b)
-			table.remove(trainBlipTable, i)
-		end
-	end
-end
-
-
 RegisterNetEvent("usa_trains:toggleTrainBlips")
 AddEventHandler("usa_trains:toggleTrainBlips", function(bool)
 	showingTrainBlips = bool
@@ -854,3 +941,18 @@ AddEventHandler("usa_trains:toggleTrainBlips", function(bool)
 		RemoveTrainBlips()
 	end
 end)
+
+-- Debug Commands
+
+RegisterCommand("spawnMetro", function()
+	TriggerServerEvent("usa_trains:metroSpawnRequest")
+end, false)
+
+RegisterCommand("spawnTrain", function()
+	TriggerEvent("usa_trains:spawnTrain", 0, GetEntityCoords(PlayerPedId()))
+	-- TriggerServerEvent("usa_trains:trainSpawnRequest")
+end, false)
+
+RegisterCommand("delTrain", function()
+	TriggerEvent("usa_trains:delTrain")
+end, false)
