@@ -43,7 +43,6 @@ local showingTrainBlips = false
 
 local trainFlipPointSouth = vector3(396.0495, -2617.6992, 13.3674)
 local trainFlipPointNorth = vector3(1382.2756, 6416.7627, 33.3126)
-
 local metroFlipPointSouth = vector3(-1232.5068, -2885.6240, -8.9238)
 local metroFlipPointNorth = vector3(553.0604, -1984.6080, 17.1745)
 
@@ -60,6 +59,8 @@ local metroClockIn = vector3(-918.1724, -2345.6904, -3.5075)
 local trainClockIn = vector3(235.8775, -2506.5186, 6.4852)
 
 local isHelpShowing = false
+
+local disableControlHint = false
 
 _menuPool = NativeUI.CreatePool()
 ticketMenu = NativeUI.CreateMenu("LS Transit", "~b~Ticket Machine", 0 --[[X COORD]], 320 --[[Y COORD]])
@@ -174,6 +175,10 @@ function alert(msg)
 	DisplayHelpTextFromStringLabel(0,0,1,-1)
 end
 
+exports('checkIsPassanger', function()
+	return isPassanger
+end)
+
 Citizen.CreateThread(function() -- train controlls
 	while true do
 		Citizen.Wait(0)
@@ -222,12 +227,13 @@ Citizen.CreateThread(function() -- train controlls
 				Citizen.Wait(1500)
 				DoScreenFadeIn(500)
 			end
-		end
-		if isPassanger then
-			if (GetEntitySpeed(passangerTrain) == 0) then
-				alert("~b~Switch Seats ~INPUT_MOVE_DOWN_ONLY~\n~b~Leave Train ~INPUT_ENTER~")
-			else
-				alert("~b~Switch Seats ~INPUT_MOVE_DOWN_ONLY~")
+		elseif isPassanger then
+			if not disableControlHint then
+				if (GetEntitySpeed(passangerTrain) == 0) then
+					alert("~b~Switch Seats ~INPUT_MOVE_DOWN_ONLY~\n~b~Leave Train ~INPUT_ENTER~")
+				else
+					alert("~b~Switch Seats ~INPUT_MOVE_DOWN_ONLY~")
+				end
 			end
 
 			if IsDisabledControlJustReleased(0, 75) and GetEntitySpeed(passangerTrain) == 0 then
@@ -312,15 +318,16 @@ end)
 Citizen.CreateThread(function() -- ticket checking
 	while true do
 		Citizen.Wait(0)
-		if (IsPedInAnyTrain(GetPlayerPed(-1)) and GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1), false)) or isPassanger) == 0 and not isMetroJob and not isTrainJob and not isEMS then
+		if IsPedInAnyTrain(GetPlayerPed(-1)) and GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1), false)) == 0 and not isMetroJob and not isEMS then
 			if not hasMetroTicket then
 				local grace_time = 30
 				local enter_time = GetGameTimer()
 				local left = false
 				TriggerServerEvent("usa_trains:passengerNoTicket", vector3(GetEntityCoords(PlayerPedId())))
+				disableControlHint = true
 				while GetGameTimer() - enter_time < grace_time * 1000 do
 					Wait(0)
-					alert("You do not have a train ticket, leave the train! You have " .. math.floor((30 - ((GetGameTimer() - enter_time)/1000))) .. " seconds before the police is called")
+					alert("You do not have a metro pass, leave the train! You have " .. math.floor((30 - ((GetGameTimer() - enter_time)/1000))) .. " seconds before the police is called")
 					if not IsPedInAnyTrain(GetPlayerPed(-1)) then
 						left = true
 						break
@@ -333,7 +340,38 @@ Citizen.CreateThread(function() -- ticket checking
 						-- TODO: Implement 911 Call
 					end
 				else
+					alert("Thank you for leaving please buy a metro pass!")
+				end
+				disableControlHint = false
+			end
+		elseif isPassanger and not isTrainJob and not isEMS then
+			if not hasTrainTicket then
+				local grace_time = 30
+				local enter_time = GetGameTimer()
+				local left = false
+				TriggerServerEvent("usa_trains:passengerNoTicket", vector3(GetEntityCoords(PlayerPedId())))
+				disableControlHint = true
+				while GetGameTimer() - enter_time < grace_time * 1000 do
+					Wait(0)
+					alert("You have no ticket.\n" .. math.floor((30 - ((GetGameTimer() - enter_time)/1000))) .. " seconds before 911\n~b~Leave Train ~INPUT_ENTER~")
+					if not isPassanger then
+						left = true
+						disableControlHint = false
+						break
+					end
+				end
+				if not left then
+					local called = false
+					while isPassanger do
+						Wait(0)
+						alert("911 Called\n~b~Leave Train ~INPUT_ENTER~")
+						if not called then
+							-- TODO: Implement 911 Call
+						end
+					end
+				else
 					alert("Thank you for leaving please buy a ticket!")
+					disableControlHint = false
 				end
 			end
 		end
@@ -563,7 +601,8 @@ AddEventHandler("usa_trains:seat_player", function(seat, trainID)
 	DoScreenFadeOut(500)
 	Citizen.Wait(600)
 	TaskPlayAnim(GetPlayerPed(-1), dict, "base", 8.0, 8.0, -1, 69, 1, false, false, false)
-	AttachEntityToEntity(GetPlayerPed(-1), trainent, 0, seat.x, seat.y, seat.z, 0, 0, seat.rotation, true, false, false, false, 2, true)
+	AttachEntityToEntity(GetPlayerPed(-1), trainent, 0, seat.x, seat.y, seat.z, 0, 0, seat.rotation, false, true, false, false, 2, true)
+	SetEntityCollision(PlayerPedId(), false, true)
 	isPassanger = true
 	Citizen.Wait(500)
 	DoScreenFadeIn(500)
@@ -582,9 +621,11 @@ end)
 RegisterNetEvent("usa_trains:unseat_player")
 AddEventHandler("usa_trains:unseat_player", function()
 	isPassanger = false
+	SetEntityCollision(PlayerPedId(), true, true)
 	DetachEntity(PlayerPedId(), true, false)
 	local coords = GetOffsetFromEntityInWorldCoords(passangerTrain, -2.0, 0.0, -0.5)
 	SetEntityCoords(PlayerPedId(), coords.x,coords.y,coords.z)
+	ClearPedTasks(PlayerPedId())
 	passangerTrain = nil
 	Citizen.Wait(500)
 	DoScreenFadeIn(500)
