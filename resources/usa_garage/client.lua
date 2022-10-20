@@ -73,7 +73,9 @@ locations = {
 	{x = -464.47183227539, y = -619.52258300781, z = 31.174465179443, noBlip = false}, -- Shopping Mall Garage
 	{x = -1293.5942382813, y = -274.45895385742, z = 39.047008514404, noBlip = true}, -- Arcade Garage
 	{x = -100.82892608643, y = 93.411506652832, z = 71.825096130371, noBlip = true}, -- Benefactor
-	{x = -24.549116134644, y = -1024.7790527344, z = 28.883750915527, noBlip = true} -- PDM
+	{x = -24.549116134644, y = -1024.7790527344, z = 28.883750915527, noBlip = true}, -- PDM
+	{x = 234.1309, y = -2492.6128, z = 6.5814, noBlip = true}, -- Train Clock in
+	{x = -935.0384, y = -2316.2700, z =  6.7091, noBlip = true} -- metro Clock in
 }
 
 local VEHICLE_DAMAGES = {}
