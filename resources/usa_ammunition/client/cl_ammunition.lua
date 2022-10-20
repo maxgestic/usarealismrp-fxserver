@@ -96,8 +96,11 @@ end, false)
 RegisterNetEvent("ammo:ejectMag")
 AddEventHandler("ammo:ejectMag", function(data)
     if MAGS_ENBALED then
+        local me = PlayerPedId()
         TriggerServerEvent("ammo:ejectMag", data.inventoryItemIndex)
-	    exports.globals:playAnimation("cover@weapon@machinegun@combat_mg_str", "low_reload_left", 2000, 48, "Unloading")
+        exports.globals:playAnimation("cover@weapon@machinegun@combat_mg_str", "low_reload_left", 2000, 48, "Unloading")
+        SetPedAmmo(me, GetSelectedPedWeapon(me), 0)
+        SetAmmoInClip(me, GetSelectedPedWeapon(me), 0)
     else 
         exports.globals:notify("Disabled in ammo only mode")
     end
