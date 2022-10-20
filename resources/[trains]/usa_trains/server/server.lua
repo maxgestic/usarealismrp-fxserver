@@ -1,6 +1,4 @@
 local trains = {}
-local northboundTrains = {}
-local southboundTrains = {}
 local trainTable = {}
 local updateInterval = 1
 local metroPasses = {}
@@ -10,22 +8,12 @@ local trainTickets = {}
 
 Citizen.CreateThread(function()
 	while true do
-		for i,v in ipairs(southboundTrains) do
-			TriggerClientEvent("usa_trains:checkDistances", v.owner, v.id, v.type, southboundTrains)
+		for i,v in ipairs(trains) do
+			TriggerClientEvent("usa_trains:checkDistances", v.driver, v.trainNetID, v.name, trains)
 		end
-		Citizen.Wait(2000)
+		Citizen.Wait(1000)
 	end
 end)
-
-Citizen.CreateThread(function()
-	while true do
-		for i,v in ipairs(northboundTrains) do
-			TriggerClientEvent("usa_trains:checkDistances", v.owner, v.id, v.type, northboundTrains)
-		end
-		Citizen.Wait(2000)
-	end
-end)
-
 Citizen.CreateThread(function()
 	local lastUpdateTime = os.time()
 	while true do
@@ -169,16 +157,6 @@ end)
 RegisterServerEvent("usa_trains:deleteTrainServer")
 AddEventHandler("usa_trains:deleteTrainServer", function(id)
 	local carrigeID = nil
-	for i,v in ipairs(southboundTrains) do
-		if v.id == id then
-			table.remove(southboundTrains, i)
-		end
-	end
-	for i,v in ipairs(northboundTrains) do
-		if v.id == id then
-			table.remove(northboundTrains, i)
-		end
-	end
 	for i,v in ipairs(trains) do
 		if v.trainNetID == id then
 			carrigeID = v.carrigeNetID
@@ -192,28 +170,6 @@ end)
 RegisterServerEvent("usa_trains:toggleDoors")
 AddEventHandler("usa_trains:toggleDoors", function(train, open)
 	TriggerClientEvent("usa_trains:toggleDoorsC", -1, train, open)
-end)
-
-RegisterServerEvent("usa_trains:setTrainTrack")
-AddEventHandler("usa_trains:setTrainTrack", function(trainNetID, direction, type)
-	local owner = source
-	if direction == "north" then
-		for i,v in ipairs(southboundTrains) do
-			if v.id == trainNetID then
-				table.remove(southboundTrains, i)
-				break
-			end
-		end
-		table.insert(northboundTrains, {id = trainNetID, type = type, owner = owner})
-	elseif direction == "south" then
-		for i,v in ipairs(northboundTrains) do
-			if v.id == trainNetID then
-				table.remove(northboundTrains, i)
-				break
-			end
-		end
-		table.insert(southboundTrains, {id = trainNetID, type = type, owner = owner})
-	end
 end)
 
 RegisterServerEvent("usa_trains:checkTrainDriver")
@@ -294,18 +250,16 @@ AddEventHandler("usa_trains:metroSpawnRequest", function()
 	local usource = source
 	local trackOccupied = false
 	local metroSpawnCoords = vector3(-898.7032, -2339.0503, -11.6807)
-	for i,v in ipairs(southboundTrains) do
-		print(#(metroSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))))
-		if #(metroSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))) < 280 then
+	for i,v in ipairs(trains) do
+		if #(metroSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.trainNetID))) < 280 then
 			trackOccupied = true
 			break
 		end
 	end
-	print(trackOccupied)
 	if trackOccupied then
 		TriggerClientEvent("usa:notify", usource, "The tack is currently occupied please wait until the current train has left the station!")
 	else
-		TriggerClientEvent("usa_trains:spawnTrain", usource, 25)
+		TriggerClientEvent("usa_trains:spawnTrain", usource, 25, metroSpawnCoords)
 	end
 end)
 
@@ -329,14 +283,12 @@ AddEventHandler("usa_trains:trainSpawnRequest", function()
 	local usource = source
 	local trackOccupied = false
 	local trainSpawnCoords = vector3(217.3837, -2509.7693, 6.4603)
-	for i,v in ipairs(northboundTrains) do
-		print(#(trainSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))))
-		if #(trainSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))) < 280 then
+	for i,v in ipairs(trains) do
+		if #(trainSpawnCoords - GetEntityCoords(NetworkGetEntityFromNetworkId(v.trainNetID))) < 280 then
 			trackOccupied = true
 			break
 		end
 	end
-	print(trackOccupied)
 	if trackOccupied then
 		TriggerClientEvent("usa:notify", usource, "The tack is currently occupied please wait until the current train has left the trainyard!")
 	else

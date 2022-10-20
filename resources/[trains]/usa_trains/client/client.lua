@@ -11,11 +11,6 @@ local doors = false
 local lastDoorToggle = GetGameTimer()
 local showingMetroBlips = false
 local showingTrainBlips = false
-local trainFlipPointSouth = vector3(508.6995, -2617.5898, 12.5120)
-local trainFlipPointNorth = vector3(1382.2756, 6416.7627, 33.3126)
-local metroFlipPointSouth = vector3(-1232.5068, -2885.6240, -8.9238)
-local metroFlipPointNorth = vector3(553.0604, -1984.6080, 17.1745)
-local currentTrack = nil
 local hasMetroTicket = false
 local hasTrainTicket = false
 local serverTrainNIDs = {}
@@ -249,16 +244,6 @@ end)
 
 -- Threads
 
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(1000)
-		while train ~= nil do
-			Wait(0)
-			print(GetTrainCurrentTrackNode(train))
-		end
-	end
-end)
-
 Citizen.CreateThread(function() -- Setup Ticket Machine Menu
 	_menuPool = NativeUI.CreatePool()
 	ticketMenu = NativeUI.CreateMenu("LS Transit", "~b~Ticket Machine", 0 --[[X COORD]], 320 --[[Y COORD]])
@@ -281,7 +266,6 @@ Citizen.CreateThread(function() -- Setup Ticket Machine Menu
 	_menuPool:Add(ticketMenu)
 	ticketMenu:AddItem(buyMetroTicket)
 	ticketMenu:AddItem(buyTrainTicket)
-
 end)
 
 Citizen.CreateThread(function() -- Add Blips for stations
@@ -306,39 +290,6 @@ Citizen.CreateThread(function() -- Add Blips for stations
 		BeginTextCommandSetBlipName("STRING")
 		AddTextComponentString('Train Station')
 		EndTextCommandSetBlipName(blip)
-	end
-end)
-
-Citizen.CreateThread(function() -- Track switch checking
-	while true do
-		Citizen.Wait(1000)
-		if isTrainJob then
-			if currentTrack == "north" then
-				if #(GetEntityCoords(train) - trainFlipPointNorth) < 30 then
-					print("switching to southbound")
-					currentTrack = "south"
-					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "train")
-				end
-			elseif currentTrack == "south" then
-				if #(GetEntityCoords(train) - trainFlipPointSouth) < 30 then
-					print("switching to northbound")
-					currentTrack = "north"
-					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "train")
-				end
-			end
-		elseif isMetroJob then
-			if #(GetEntityCoords(train) - metroFlipPointNorth) < 30 then
-					print("switching to southbound")
-					currentTrack = "south"
-					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
-				end
-			elseif currentTrack == "south" then
-				if #(GetEntityCoords(train) - metroFlipPointSouth) < 30 then
-					print("switching to northbound")
-					currentTrack = "north"
-					TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "metro")
-				end
-		end
 	end
 end)
 
@@ -423,7 +374,7 @@ Citizen.CreateThread(function() -- train enter prompts
 					local id = NetworkGetNetworkIdFromEntity(vehicle)
 					TriggerServerEvent("usa_trains:checkTrainDriver", id)
 	            end
-	        elseif GetEntityModel(vehicle) == GetHashKey("streakcoasterc") and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle)) < 5 and not isPassanger then 
+	        elseif GetEntityModel(vehicle) == GetHashKey("streakcoasterc") and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle)) < 5 and GetEntitySpeed(vehicle) == 0 and not isPassanger and not isDriver then 
 	        	alert("~b~Enter Train as Passanger ~INPUT_CONTEXT~")
 				if IsControlJustPressed(1, 51) then
 					local trainNetID = NetworkGetNetworkIdFromEntity(vehicle)
@@ -805,17 +756,14 @@ AddEventHandler("usa_trains:spawnTrain",function(type, spawnCoords)
 	if not train then
 		local train_models = {}
 		local train_type = "Train"
-		local trackDir = nil
 		if type == 25 then
 			train_models = {"metrotrain"}
 			train_type = "Metro"
 			TriggerEvent("usa:notify", "Your Train has been set ready for you at the Southbound Platform!")
-			trackDir = "south"
 		elseif type == 0 then
 			train_models = {"streakcoaster", "streakcoasterc"}
 			train_type = "Train"
 			TriggerEvent("usa:notify", "Your Train has been set ready for you!")
-			trackDir = "north"
 		else
 			train_models = {"freight", "freightcar", "freightcar2", "freightcont1", "freightcont2", "freightgrain", "metrotrain", "tankercar", "streakcoaster", "streakcoastercab", "streakcoasterc"}
 		end
@@ -842,8 +790,6 @@ AddEventHandler("usa_trains:spawnTrain",function(type, spawnCoords)
 		SetVehicleDoorCanBreak(train, 1, false)
 		SetVehicleDoorCanBreak(train, 2, false)
 		SetVehicleDoorCanBreak(train, 3, false)
-		currentTrack = trackDir
-		TriggerServerEvent("usa_trains:setTrainTrack", trainNID, currentTrack, "train")
 	end
 end)
 
@@ -877,21 +823,37 @@ end)
 
 RegisterNetEvent("usa_trains:checkDistances")
 AddEventHandler("usa_trains:checkDistances", function(trainNetworkID, trainType, trainTable)
+	local stopDistance = -60
+	if trainType == 25 then
+		stopDistance = -40
+	end
 	for i,v in ipairs(trainTable) do
-		if trainNetworkID ~= v.id and trainType == v.type then
-			if #(GetEntityCoords(NetworkGetEntityFromNetworkId(trainNetworkID)) - GetEntityCoords(NetworkGetEntityFromNetworkId(v.id))) < 280 and not breaking then
-				breaking = true
-				while trainSpeed ~= 0.0 do
-					-- print(trainSpeed)
-					if trainSpeed > 0.2 then
-						trainSpeed = trainSpeed - 0.1
-					elseif trainSpeed < -0.2 then
-						trainSpeed = trainSpeed + 0.1
-					else
-						trainSpeed = 0
-					end
+		if trainNetworkID ~= v.trainNetID and trainType == v.name then
+			if NetworkGetEntityFromNetworkId(v.trainNetID) ~= 0 then
+				local train1Node = GetTrainCurrentTrackNode(NetworkGetEntityFromNetworkId(trainNetworkID))
+				local train2Node = GetTrainCurrentTrackNode(NetworkGetEntityFromNetworkId(v.trainNetID))
+				local distance = 0
+				-- print(distance)
+				if trainSpeed >= 0 then
+					distance = train1Node - train2Node
+				else
+					distance = train2Node - train1Node
 				end
-				breaking = false
+				if distance >= stopDistance and distance < stopDistance/2 then
+					TriggerEvent("usa:notify", "You are getting to close to another train, SLOW DOWN!")
+				elseif distance >= stopDistance/2 and distance <= 0 then
+					breaking = true
+					while trainSpeed ~= 0.0 do
+						if trainSpeed > 0.2 then
+							trainSpeed = trainSpeed - 0.1
+						elseif trainSpeed < -0.2 then
+							trainSpeed = trainSpeed + 0.1
+						else
+							trainSpeed = 0
+						end
+					end
+					breaking = false
+				end
 			end
 		end
 	end
@@ -945,7 +907,8 @@ end)
 -- Debug Commands
 
 RegisterCommand("spawnMetro", function()
-	TriggerServerEvent("usa_trains:metroSpawnRequest")
+	TriggerEvent("usa_trains:spawnTrain", 25, GetEntityCoords(PlayerPedId()))
+	-- TriggerServerEvent("usa_trains:metroSpawnRequest")
 end, false)
 
 RegisterCommand("spawnTrain", function()
