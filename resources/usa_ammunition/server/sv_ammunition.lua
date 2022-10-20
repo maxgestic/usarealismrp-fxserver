@@ -390,7 +390,8 @@ AddEventHandler("ammo:ejectMag", function(itemIndex)
             if char.canHoldItem(mag) then
                 char.giveItem(mag)
             else
-                TriggerClientEvent("usa:notify", source, "Inventory full!")
+                mag.coords = GetEntityCoords(GetPlayerPed(source))
+                TriggerEvent("interaction:addDroppedItem", mag)
             end
         else
             TriggerClientEvent("usa:notify", source, "No magazine!")

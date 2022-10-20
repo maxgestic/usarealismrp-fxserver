@@ -63,7 +63,7 @@ AddEventHandler("ammo:reloadMag", function(data)
             ammoCountToUse = data
         end
         -- play reload animation --
-        playAnimation("cover@weapon@machinegun@combat_mg_str", "low_reload_left", RELOAD_TIME_MS, 48, "Reloading")
+        --playAnimation("cover@weapon@machinegun@combat_mg_str", "low_reload_left", RELOAD_TIME_MS, 48, "Reloading")
         -- set / remove extended mag if applicable --
         if type(data) == "table" then
             if data.magComponent then
@@ -78,10 +78,20 @@ AddEventHandler("ammo:reloadMag", function(data)
             end
         end
         -- fill currently equipped weapon with mag.currentCapacity
-        --SetPedAmmo(myped, currentWeaponHash, ammoCountToUse)
-        SetAmmoInClip(myped, currentWeaponHash, ammoCountToUse)
+        -- for mag mode just set ped ammo to max cur capacity / for non mag mode same deal just set ped ammo to what it should be and see if game will handle reloading then for us
+        SetPedAmmo(myped, currentWeaponHash, ammoCountToUse)
+        MakePedReload(myped)
     end
 end)
+
+RegisterCommand("getammo", function()
+    local me = PlayerPedId()
+    local currentWeaponHash = GetSelectedPedWeapon(me)
+    local _,clipAmmoCount = GetAmmoInClip(me, currentWeaponHash)
+    print("current clip ammo is: " .. clipAmmoCount)
+    print("current total wep ammo is: " .. GetAmmoInPedWeapon(me, currentWeaponHash))
+    print("max ammo for wep: " .. GetMaxAmmoInClip(me, currentWeaponHash, 1))
+end, false)
 
 RegisterNetEvent("ammo:ejectMag")
 AddEventHandler("ammo:ejectMag", function(data)
@@ -145,7 +155,6 @@ Citizen.CreateThread(function()
         if wasJustArmed then
             TriggerServerEvent("ammo:weaponStored", wa)
             wasJustArmed = false
-            TriggerEvent("Weapons:Client:resetAlreadyTriggeredOutOfAmmo")
         end
         Wait(1)
     end
@@ -221,7 +230,7 @@ function playAnimation(dict, name, duration, flag, timerBarText)
 end
 
 Citizen.CreateThread(function()
-	SetWeaponsNoAutoreload(true)
+	--SetWeaponsNoAutoreload(true)
 	SetWeaponsNoAutoswap(true)
 end)
 

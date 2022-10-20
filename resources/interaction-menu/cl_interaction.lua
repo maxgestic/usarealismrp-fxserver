@@ -737,7 +737,7 @@ RegisterNUICallback('reloadWeapon', function(data, cb)
 end)
 
 RegisterNUICallback('unloadWeapon', function(data, cb)
-	TriggerEvent("ammo:ejectMag", data.inventoryItemIndex)
+	TriggerEvent("ammo:ejectMag", data)
 end)
 
 RegisterNUICallback('notification', function(data, cb)
@@ -1448,13 +1448,6 @@ AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount, pla
 	if equip then
 		local currentWeaponAmmo = (ammoAmount or (item.magazine and item.magazine.currentCapacity) or 0)
 		print("equipping wep with ammo count: " .. currentWeaponAmmo)
-		if currentWeaponAmmo ~= 0 then
-			TriggerEvent("ammo:setRanOutOfAmmo", false)
-		else
-			if not isMeleeWeapon(item.hash) then
-				TriggerEvent("ammo:setRanOutOfAmmo", true)
-			end
-		end
 		GiveWeaponToPed(ped, item.hash, currentWeaponAmmo, false, equipNow)
 		if item.components then
 			if #item.components > 0 then

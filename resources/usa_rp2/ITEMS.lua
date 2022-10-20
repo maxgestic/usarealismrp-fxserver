@@ -1,4 +1,6 @@
 local ITEMS = {
+    { name = "Heavy Pistol", type = "weapon", hash = -771403250, price = 1500, quantity = 1, weight = 20, objectModel = "w_pi_heavypistol" },
+    { name = "Empty Heavy Pistol Extended Mag", quantity = 1, type = "magazine", price = 500, weight = 7, receives = ".45", MAX_CAPACITY = 36, currentCapacity = 0, legality = "illegal", notStackable = true, magComponent = "COMPONENT_HEAVYPISTOL_CLIP_02", compatibleWeapon = GetHashKey("WEAPON_HEAVYPISTOL") },
     { name = "Manual Conversion Kit", type = "mechanicPart", price = 2000, legality = "legal", quantity = 5, weight = 15},
     { name = "Large Firework", type = "misc", price = 2000, legality = "legal", quantity = 5, weight = 15, objectModel = "ind_prop_firework_03" },
     { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 5000, legality = "legal", quantity = 1, weight = 35, objectModel = "w_lr_firework" },
