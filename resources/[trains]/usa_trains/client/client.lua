@@ -222,7 +222,11 @@ function RefreshBlips(Ttable)
 		if v and v.name and v.coords then
 			local blip = AddBlipForCoord(v.coords)
 			SetBlipSprite(blip, 795)
-			SetBlipColour(blip, 41)
+			if v.name == "Train" then
+				SetBlipColour(blip, 31)
+			else
+				SetBlipColour(blip, 41)
+			end
 			SetBlipAsShortRange(blip, true)
 			SetBlipDisplay(blip, 4)
 			SetBlipShowCone(blip, true)
@@ -284,15 +288,33 @@ Citizen.CreateThread(function() -- Add Blips for stations
 	end
 	for i,v in ipairs(trainstations) do
 		local blip = AddBlipForCoord(v.coords)
-		SetBlipSprite(blip, 473)
+		SetBlipSprite(blip, 677)
 		SetBlipDisplay(blip, 4)
-		SetBlipScale(blip, 0.35)
-		SetBlipColour(blip, 61)
+		SetBlipScale(blip, 0.45)
+		SetBlipColour(blip, 31)
 		SetBlipAsShortRange(blip, true)
 		BeginTextCommandSetBlipName("STRING")
 		AddTextComponentString('Train Station')
 		EndTextCommandSetBlipName(blip)
 	end
+	local blip = AddBlipForCoord(metroClockIn)
+	SetBlipSprite(blip, 78)
+	SetBlipDisplay(blip, 4)
+	SetBlipScale(blip, 0.5)
+	SetBlipColour(blip, 61)
+	SetBlipAsShortRange(blip, true)
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentString('Metro Clock In')
+	EndTextCommandSetBlipName(blip)
+	local blip = AddBlipForCoord(trainClockIn)
+	SetBlipSprite(blip, 79)
+	SetBlipDisplay(blip, 4)
+	SetBlipScale(blip, 0.5)
+	SetBlipColour(blip, 31)
+	SetBlipAsShortRange(blip, true)
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentString('Train Clock In')
+	EndTextCommandSetBlipName(blip)
 end)
 
 Citizen.CreateThread(function() -- train controlls
