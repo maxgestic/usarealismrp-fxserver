@@ -20,6 +20,8 @@ local trainClockIn = vector3(235.8775, -2506.5186, 6.4852)
 local isHelpShowing = false
 local disableControlHint = false
 local breaking = false
+local called = false
+local leftNoTicket = false
 local metrostations = {
 	[1] = {coords = vector3(-1042.2565, -2745.7266, 15.9190)},
 	[2] = {coords = vector3(-946.0543, -2340.5015, 6.5338)},
@@ -421,23 +423,27 @@ Citizen.CreateThread(function() -- ticket checking
 			if not hasMetroTicket then
 				local grace_time = 30
 				local enter_time = GetGameTimer()
-				local left = false
+				leftNoTicket = false
 				TriggerServerEvent("usa_trains:passengerNoTicket", vector3(GetEntityCoords(PlayerPedId())))
 				disableControlHint = true
 				while GetGameTimer() - enter_time < grace_time * 1000 do
 					Wait(0)
 					alert("You do not have a metro pass, leave the train! You have " .. math.floor((30 - ((GetGameTimer() - enter_time)/1000))) .. " seconds before the police is called")
 					if not IsPedInAnyTrain(GetPlayerPed(-1)) then
-						left = true
+						leftNoTicket = true
 						break
 					end
 				end
-				if not left then
+				if not leftNoTicket then
 					while IsPedInAnyTrain(PlayerPedId()) and GetEntityModel(GetVehiclePedIsIn(PlayerPedId(), false)) do
 						Wait(0)
 						alert("911 Called")
-						-- TODO: Implement 911 Call
+						if not called then
+							called = true
+							TriggerServerEvent("911:NoTicket", GetEntityCoords(PlayerPedId()))
+						end
 					end
+					leftNoTicket = true
 				else
 					alert("Thank you for leaving please buy a metro pass!")
 				end
@@ -447,31 +453,47 @@ Citizen.CreateThread(function() -- ticket checking
 			if not hasTrainTicket then
 				local grace_time = 30
 				local enter_time = GetGameTimer()
-				local left = false
+				leftNoTicket = false
 				TriggerServerEvent("usa_trains:passengerNoTicket", vector3(GetEntityCoords(PlayerPedId())))
 				disableControlHint = true
 				while GetGameTimer() - enter_time < grace_time * 1000 do
 					Wait(0)
 					alert("You have no ticket.\n" .. math.floor((30 - ((GetGameTimer() - enter_time)/1000))) .. " seconds before 911\n~b~Leave Train ~INPUT_ENTER~")
 					if not isPassanger then
-						left = true
+						leftNoTicket = true
 						disableControlHint = false
 						break
 					end
 				end
-				if not left then
-					local called = false
+				if not leftNoTicket then
 					while isPassanger do
 						Wait(0)
 						alert("911 Called\n~b~Leave Train ~INPUT_ENTER~")
 						if not called then
-							-- TODO: Implement 911 Call
+							called = true
+							TriggerServerEvent("911:NoTicket", GetEntityCoords(PlayerPedId()))
 						end
 					end
+					leftNoTicket = true
 				else
 					alert("Thank you for leaving please buy a ticket!")
-					disableControlHint = false
 				end
+				disableControlHint = false
+			end
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		while called do
+			Wait(5000)
+			if not leftNoTicket then
+				TriggerServerEvent("911:NoTicketUpdate", GetEntityCoords(PlayerPedId()))
+			else
+				called = false
+				TriggerServerEvent("911:NoTicketEnd", GetEntityCoords(PlayerPedId()))
 			end
 		end
 	end
@@ -843,7 +865,6 @@ AddEventHandler("usa_trains:checkDistances", function(trainNetworkID, trainType,
 				local train1Node = GetTrainCurrentTrackNode(NetworkGetEntityFromNetworkId(trainNetworkID))
 				local train2Node = GetTrainCurrentTrackNode(NetworkGetEntityFromNetworkId(v.trainNetID))
 				local distance = 0
-				-- print(distance)
 				if trainSpeed >= 0 then
 					distance = train1Node - train2Node
 				else

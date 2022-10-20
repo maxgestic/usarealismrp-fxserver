@@ -187,6 +187,9 @@ RegisterServerEvent('911:MuggingNPC')
 RegisterServerEvent('911:Shoplifting')
 RegisterServerEvent('911:JewelleryRobbery')
 RegisterServerEvent('911:UncontrolledFire')
+RegisterServerEvent('911:NoTicket')
+RegisterServerEvent('911:NoTicketUpdate')
+RegisterServerEvent('911:NoTicketEnd')
 
 local DISPATCH_DELAY_PERIOD_SECONDS = 60
 
@@ -475,6 +478,30 @@ AddEventHandler('911:Burglary', function(x, y, z, street, isMale)
         local string = '^*Burglary:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
         Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Burglary')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^burglary^r at ^3'..street..'^r, expose those theives! Don\'t get too much attention!', x, y, z, 'Burglary')
+    end
+end)
+
+AddEventHandler("911:NoTicket", function(coords)
+    if not recentCalls["No Ticket"] then
+        recentCalls["No Ticket"] = true
+        local string = '^*^rLS Transit^r: There is a person without a valid ticket on a train or metro!'
+        Send911Notification({'sheriff', 'corrections'}, string, coords.x, coords.y, coords.z, 'No Ticket')
+    end
+end)
+
+AddEventHandler("911:NoTicketUpdate", function(coords)
+    if not recentCalls["No Ticket Update"] then
+        recentCalls["No Ticket Update"] = true
+        local string = '^*^rLS Transit^r: Updated location of the person without a ticket on train or metro!'
+        Send911Notification({'sheriff', 'corrections'}, string, coords.x, coords.y, coords.z, 'No Ticket Update')
+    end
+end)
+
+AddEventHandler("911:NoTicketEnd", function(coords)
+    if not recentCalls["No Ticket End"] then
+        recentCalls["No Ticket End"] = true
+        local string = '^*^rLS Transit^r: A person without a valid ticket has left the train or metro!'
+        Send911Notification({'sheriff', 'corrections'}, string, coords.x, coords.y, coords.z, 'No Ticket End')
     end
 end)
 
