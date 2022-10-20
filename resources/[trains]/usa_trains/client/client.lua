@@ -320,7 +320,30 @@ end)
 Citizen.CreateThread(function() -- train controlls
 	while true do
 		Citizen.Wait(0)
-		if IsPedInAnyTrain(GetPlayerPed(-1)) and isDriver then
+		if IsPedInAnyTrain(PlayerPedId()) and isDriver then
+			if IsPedDeadOrDying(PlayerPedId(), 1) then
+				if trainSpeed > 5.0 then
+					trainSpeed = trainSpeed - 1.0
+				elseif trainSpeed < 5.0 and trainSpeed > -5.0 then
+					trainSpeed = 0
+				elseif trainSpeed < -5.0 then
+				 	trainSpeed = trainSpeed + 1.0
+				end
+				if GetEntitySpeed(train) == 0.0 then
+					if GetEntityModel(GetVehiclePedIsIn(PlayerPedId(), false)) == GetHashKey("metrotrain") then
+						toggleDoors()
+					end
+					TriggerEvent("usa_hud:setTrain", false)
+					DoScreenFadeOut(500)
+					Citizen.Wait(1000)
+					local coords = GetOffsetFromEntityInWorldCoords(train, -2.0, 0.0, -0.5)
+					TaskLeaveVehicle(PlayerPedId(), GetVehiclePedIsIn(GetPlayerPed(-1), false), 16)
+					SetEntityCoords(PlayerPedId(), coords.x,coords.y,coords.z)
+					isDriver = false
+					Citizen.Wait(1500)
+					DoScreenFadeIn(500)
+				end
+			end
 			if GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1), false)) == GetHashKey("metrotrain") then
 				if (GetEntitySpeed(train) == 0) then
 					alert("~b~Horn ~INPUT_VEH_HORN~\n~b~Open/Close Doors ~INPUT_DETONATE~\n~b~Leave Train ~INPUT_ENTER~")
@@ -349,7 +372,7 @@ Citizen.CreateThread(function() -- train controlls
 				elseif trainSpeed < -5.0 then
 				 	trainSpeed = trainSpeed + 1.0
 				end
-			elseif IsControlJustReleased(0, 47) and GetEntitySpeed(train) == 0 then
+			elseif IsControlJustReleased(0, 47) and GetEntitySpeed(train) == 0 and GetEntityModel(GetVehiclePedIsIn(PlayerPedId(), false)) == GetHashKey("metrotrain") then
 				toggleDoors()
 			end
 			local playerVeh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
@@ -390,26 +413,30 @@ end)
 Citizen.CreateThread(function() -- train enter prompts
 	while true do
 		Citizen.Wait(0)
-		for i,v in ipairs(serverTrainNIDs) do
-			local vehicle = NetworkGetEntityFromNetworkId(v)
-			if isTrainJob and GetEntityModel(vehicle) == GetHashKey("streakcoaster") and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle)) < 5 and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then 
-				alert("~b~Enter Train as Driver ~INPUT_CONTEXT~")
-				if IsControlJustPressed(1, 51) then
-					local id = NetworkGetNetworkIdFromEntity(vehicle)
-					TriggerServerEvent("usa_trains:checkTrainDriver", id)
-	            end
-	        elseif GetEntityModel(vehicle) == GetHashKey("streakcoasterc") and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle)) < 5 and GetEntitySpeed(vehicle) == 0 and not isPassanger and not isDriver then 
-	        	alert("~b~Enter Train as Passanger ~INPUT_CONTEXT~")
-				if IsControlJustPressed(1, 51) then
-					local trainNetID = NetworkGetNetworkIdFromEntity(vehicle)
-					TriggerServerEvent("usa_trains:seat", trainNetID, GetPlayerPed(-1))
-	            end
-	        elseif isMetroJob and GetEntityModel(vehicle == GetHashKey("metrotrain")) and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle)) < 5 and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), -1) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then
-	        	alert("~b~Enter Metro as Driver ~INPUT_CONTEXT~")
-				if IsControlJustPressed(1, 51) then
-					local id = NetworkGetNetworkIdFromEntity(vehicle)
-					TriggerServerEvent("usa_trains:checkTrainDriver", id)
-	            end
+		if GetEntityHealth(PlayerPedId()) > 0.0 and not IsPedDeadOrDying(PlayerPedId(), 1) then
+			for i,v in ipairs(serverTrainNIDs) do
+				local vehicle = NetworkGetEntityFromNetworkId(v)
+				if GetVehicleBodyHealth(vehicle) > 0.0 then
+					if isTrainJob and GetEntityModel(vehicle) == GetHashKey("streakcoaster") and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle)) < 5 and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then 
+						alert("~b~Enter Train as Driver ~INPUT_CONTEXT~")
+						if IsControlJustPressed(1, 51) then
+							local id = NetworkGetNetworkIdFromEntity(vehicle)
+							TriggerServerEvent("usa_trains:checkTrainDriver", id)
+			            end
+			        elseif GetEntityModel(vehicle) == GetHashKey("streakcoasterc") and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle)) < 5 and GetEntitySpeed(vehicle) == 0 and not isPassanger and not isDriver then 
+			        	alert("~b~Enter Train as Passanger ~INPUT_CONTEXT~")
+						if IsControlJustPressed(1, 51) then
+							local trainNetID = NetworkGetNetworkIdFromEntity(vehicle)
+							TriggerServerEvent("usa_trains:seat", trainNetID, GetPlayerPed(-1))
+			            end
+			        elseif isMetroJob and GetEntityModel(vehicle == GetHashKey("metrotrain")) and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle)) < 5 and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), -1) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then
+			        	alert("~b~Enter Metro as Driver ~INPUT_CONTEXT~")
+						if IsControlJustPressed(1, 51) then
+							local id = NetworkGetNetworkIdFromEntity(vehicle)
+							TriggerServerEvent("usa_trains:checkTrainDriver", id)
+			            end
+					end
+				end
 			end
 		end
 	end 
