@@ -751,6 +751,16 @@ AddEventHandler("usa_trains:delTrain", function()
 	end
 end)
 
+RegisterNetEvent("usa_trains:cleanTrain")
+AddEventHandler("usa_trains:cleanTrain", function(traiNID)
+	local dtrain = NetworkGetEntityFromNetworkId(traiNID)
+	takeOwn(dtrain)
+	if (NetworkGetEntityOwner(dtrain) == 128) then
+		TriggerServerEvent("usa_trains:deleteTrainServer", trainNID)
+		DeleteMissionTrain(dtrain)
+	end
+end)
+
 RegisterNetEvent("usa_trains:spawnTrain")
 AddEventHandler("usa_trains:spawnTrain",function(type, spawnCoords)
 	if not train then

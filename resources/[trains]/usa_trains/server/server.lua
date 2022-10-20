@@ -295,3 +295,16 @@ AddEventHandler("usa_trains:trainSpawnRequest", function()
 		TriggerClientEvent("usa_trains:spawnTrain", usource, 0, trainSpawnCoords)
 	end
 end)
+
+RegisterServerEvent("playerDropped")
+AddEventHandler("playerDropped", function()
+    print("drop")
+    print(source)
+	for i,v in ipairs(trains) do
+		print(v.driver)
+		if v.driver == source then
+			Wait(1000)
+			TriggerClientEvent("usa_trains:cleanTrain", NetworkGetEntityOwner(NetworkGetEntityFromNetworkId(v.trainNetID)), v.trainNetID)
+		end
+	end
+end)
