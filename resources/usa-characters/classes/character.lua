@@ -608,6 +608,13 @@ function CreateCharacter(data)
           self.inventory.items[from] = nil
         end
       else
+        -- make sure to remove weapon from client ped if the player moved their selected weapon out slot with it drawn (to prevent infinite ammo exploiting)
+        if self.inventory.items[from].type and self.inventory.items[from].type == "weapon" then
+          if (self.currentlySelectedIndex and self.currentlySelectedIndex == tonumber(from)) or (self.lastSelectedIndex and self.lastSelectedIndex == tonumber(from)) then -- only checking lastSelectedIndex here due to an issue with usa_holster
+            TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[from], false)
+          end
+        end
+        -- do the move!
         self.inventory.items[to] = inv.items[from]
         self.inventory.items[from] = nil
       end
