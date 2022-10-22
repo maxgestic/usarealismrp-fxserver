@@ -46,7 +46,7 @@ local PRISON_GUARD_SIGN_IN_LOCATIONS = {
     {x = -1787.9445800781, y = 2997.0026855469, z = 32.809375762939} -- Zancudo
 }
 
-local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 , 19, 20}
+local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 , 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30}
 
 local MAX_COMPONENT = 270
 local MAX_COMPONENT_TEXTURE = 100
