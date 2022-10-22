@@ -39,6 +39,7 @@ NO_TOOLTIP_WEAPONS.add("Ninja Star");
 NO_TOOLTIP_WEAPONS.add("Ninja Star 2");
 NO_TOOLTIP_WEAPONS.add("Megaphone");
 NO_TOOLTIP_WEAPONS.add("Mace");
+NO_TOOLTIP_WEAPONS.add("Plasma Pistol");
 
 var itemImages = {
     "Driver's License": "https://i.imgur.com/dy0SpFh.png",
@@ -495,6 +496,7 @@ var itemImages = {
     "Crumpled Paper": "https://i.imgur.com/DpUUSZ8.png",
     "Bank Laptop": "https://i.imgur.com/5gefEBK.png",
     "Metal Scraps": "https://i.imgur.com/08oQInE.png",
+    "Plasma Pistol": "https://i.imgur.com/a3D4tsI.png"
 }
 
 var menuItems = [{
