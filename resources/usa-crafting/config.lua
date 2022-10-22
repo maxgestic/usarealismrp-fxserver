@@ -193,6 +193,26 @@ Config.recipes = {
             type = "weapons"
         },
         { 
+            name = "Revolver",
+            image = "https://i.imgur.com/h1xuFdn.png",
+            requires = {
+                { name = "Revolver Kit", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Revolver",
+                    hash = GetHashKey("WEAPON_REVOLVER"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 20,
+                    objectModel = "w_pi_revolver",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "weapons"
+        },
+        { 
             name = "Pump Shotgun",
             image = "https://steamuserimages-a.akamaihd.net/ugc/29613457985659003/1B48193086C05B7FB56FA9770E2507492F47B6DF/",
             requires = {
