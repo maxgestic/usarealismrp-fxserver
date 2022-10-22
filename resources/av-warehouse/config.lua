@@ -113,6 +113,7 @@ Config.Rewards = {
 			[1] = { name = "Pistol Parts", type = "weaponParts", weight = 10.0, quantity = 1 },
 			[2] = { name = "AP Pistol Parts", price = 20000, type = "weaponParts", weight = 15.0, quantity = 1 },
 			[3] = { name = "AK-47 Parts", type = "weaponParts", weight = 45.0, quantity = 1 },
+			[4] = { name = "Revolver Kit", type = "weaponParts", weight = 15.0, quantity = 1 },
 		}
 	},
 	[5] = {
