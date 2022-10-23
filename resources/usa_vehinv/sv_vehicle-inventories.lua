@@ -133,10 +133,19 @@ AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, to
             exports["usa_vehinv"]:removeVehicleBusy(plate)
             return
         end
-        if item and not canBypassItemMovePermCheck(char) and (item.serviceWeapon or item.notTakeable) then
-            TriggerClientEvent("usa:notify", src, "Can't take that")
-            exports["usa_vehinv"]:removeVehicleBusy(plate)
-            return
+        if item and (item.serviceWeapon or item.restrictedToThisOwner) then
+            if item.serviceWeapon and not canBypassItemMovePermCheck(char) then
+                TriggerClientEvent("usa:notify", src, "Can't take that")
+                exports["usa_vehinv"]:removeVehicleBusy(plate)
+                return
+            elseif item.restrictedToThisOwner then
+                local player = exports.essentialmode:getPlayerFromId(src)
+                if player.getIdentifier() ~= item.restrictedToThisOwner then
+                    TriggerClientEvent("usa:notify", src, "Can't take that")
+                    exports["usa_vehinv"]:removeVehicleBusy(plate)
+                    return
+                end
+            end
         end
         -- move item --
         if item then

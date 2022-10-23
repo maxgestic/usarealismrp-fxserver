@@ -100,6 +100,9 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 			TriggerClientEvent("usa:notify", targetPlayerId, "Can't trade licenses. Sorry!")
 			return
 		end
+		if item.restrictedToThisOwner then -- assign new owner since item is being traded intentionally by the owner of it
+			item.restrictedToThisOwner = exports.essentialmode:getPlayerFromId(targetPlayerId).getIdentifier()
+		end
 		if item.type == "weapon" then
 			toChar.giveItem(item)
 			if item.uuid then

@@ -95,6 +95,7 @@ TEBEX_PACKAGE_FUNCTIONS = {
     end,
     plasmaPistol = function(src)
         local plasmaPistol = exports.usa_rp2:getItem("Plasma Pistol")
+        plasmaPistol.restrictedToThisOwner = exports.essentialmode:getPlayerFromId(src).getIdentifier()
         local char = exports["usa-characters"]:GetCharacter(src)
         char.giveItem(plasmaPistol)
         TriggerClientEvent("usa:notify", src, "Plasma Pistol claimed!", "INFO: Plasma Pistol claimed!")
