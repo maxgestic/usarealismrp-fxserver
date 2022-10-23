@@ -433,6 +433,7 @@ var itemImages = {
     "TJ": "https://i.imgur.com/v7CaiIj.png",
     "Tony_2": "https://i.imgur.com/P9maiLH.png",
     "Manual Conversion Kit": "https://i.ibb.co/drjLyk0/a.png",
+    "Auto Conversion Kit": "https://i.ibb.co/drjLyk0/a.png",
     "Metal Pipe": "https://i.imgur.com/HBZdfTz.png",
     "Mace": "https://i.imgur.com/EJoWdJ8.png",
     // begin ammo

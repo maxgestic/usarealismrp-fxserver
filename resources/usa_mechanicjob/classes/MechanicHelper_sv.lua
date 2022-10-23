@@ -118,4 +118,20 @@ MechanicHelper.doesVehicleHaveUpgrades = function(plate, upgradesToLookFor)
     return result
 end
 
+MechanicHelper.removeVehicleUpgrades = function(plate, upgrades)
+    plate = exports.globals:trim(plate)
+    MechanicHelper.db.getDocumentById("vehicles", plate, function(doc)
+        if doc and doc.upgrades then
+            for i = #doc.upgrades, 1, -1 do
+                for j = 1, #upgrades do
+                    if doc.upgrades[i] == upgrades[j] then
+                        table.remove(doc.upgrades, i)
+                    end
+                end
+            end
+            exports.essentialmode:updateDocument("vehicles", plate, { upgrades = doc.upgrades })
+        end
+    end)
+end
+
 exports("doesVehicleHaveUpgrades", MechanicHelper.doesVehicleHaveUpgrades)
