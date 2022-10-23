@@ -213,7 +213,7 @@ AddEventHandler("inventory:moveItem", function(data)
 			if isPlayerActive(data.searchedPersonSource) then
 				local fromChar = exports["usa-characters"]:GetCharacter(data.searchedPersonSource)
 				local item = fromChar.getItemByIndex(data.fromSlot)
-				if item.serviceWeapon or item.notTakeable then
+				if item.serviceWeapon or (item.restrictedToThisOwner and item.restrictedToThisOwner ~= exports.essentialmode:getPlayerFromId(usource).getIdentifier()) then
 					TriggerClientEvent("usa:notify", usource, "Can't take that")
 					return
 				end
