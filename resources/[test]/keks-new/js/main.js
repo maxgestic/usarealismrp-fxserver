@@ -11,6 +11,7 @@
     ]
     let chosenVideo = LOADSCREEN_VIDEOS[Math.floor(Math.random() * LOADSCREEN_VIDEOS.length)];
     $("video").attr("src", chosenVideo)
+    $("video").play();
 
     /* BEGIN HOWL RADIO PLAYER */
     var stations = [
