@@ -343,7 +343,17 @@ AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
 			end
 		end
 	end)
-	
+
+	-- negative bank check --
+	if char.get("bank") <= 0 then
+		local msg = {
+			type = "personCheckNotification",
+			message  = "Person owes $" .. exports.globals:comma_value(char.get("bank")) .. " to the state!"
+		}
+		TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+	end
+
+	-- send it!
 	TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
 end)
 
@@ -362,6 +372,7 @@ end
 
 RegisterServerEvent("mdt:PerformPersonCheckByName")
 AddEventHandler("mdt:PerformPersonCheckByName", function(data)
+	print("uhh")
 	local usource = source
 	TriggerEvent('es:exposeDBFunctions', function(db)
 		local query = {
@@ -399,7 +410,9 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 					person_info.mugshot = person.mugshot
 				end
 
+				print("aa")
 				TriggerEvent('properties:getAddressByName', person.name.first .. ' ' .. person.name.last, function(address)
+					print("bb")
 					if address then
 						person_info.address = address
 					else
@@ -450,6 +463,17 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 							end
 						end
 					end)
+
+					-- negative bank check --
+					if person.bank <= 0 then
+						local msg = {
+							type = "personCheckNotification",
+							message  = "Person owes $" .. exports.globals:comma_value(person.bank) .. " to the state!"
+						}
+						TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+					end
+
+					-- send it!
 					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
 				end)
 			else
@@ -547,6 +571,17 @@ AddEventHandler("mdt:PerformPersonCheckByDNA", function(data)
 							end
 						end
 					end)
+
+					-- negative bank check --
+					if person.bank <= 0 then
+						local msg = {
+							type = "personCheckNotification",
+							message  = "Person owes $" .. exports.globals:comma_value(person.bank) .. " to the state!"
+						}
+						TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+					end
+
+					-- send it!
 					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
 				end)
 			else
@@ -1046,6 +1081,17 @@ AddEventHandler("mdt:performPersonCheckByCharID", function(id)
 							end
 						end
 					end)
+
+					-- negative bank check --
+					if person.bank <= 0 then
+						local msg = {
+							type = "personCheckNotification",
+							message  = "Person owes $" .. exports.globals:comma_value(person.bank) .. " to the state!"
+						}
+						TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+					end
+
+					-- send it!
 					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
 				end)
 			end

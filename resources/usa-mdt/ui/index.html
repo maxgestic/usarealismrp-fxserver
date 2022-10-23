@@ -302,7 +302,13 @@
                                         </div>
 
                                     <div style="display: inline-block; width: 60%; margin-right: 3em;">
-                                        <div class="w3-text-red">{{ personCheckNotification }}</div>
+                                        <div class="w3-text-red">
+                                            <ul>
+                                                <li v-for="notification in personCheckNotifications">
+                                                    {{ notification }}
+                                                </li>
+                                            </ul>
+                                        </div>
 
                                         <h4><b>Name:</b></h4>
 

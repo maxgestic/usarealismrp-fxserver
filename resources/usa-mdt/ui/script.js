@@ -76,7 +76,7 @@ const mdtApp = new Vue({
         mugshot_url: null,
         dnaModalInput: null,
         error: null,
-        personCheckNotification: null,
+        personCheckNotifications: [],
         notification: null,
         current_tab: "Person(s) Check", // default tab
         searchedPersonResults: [],
@@ -161,7 +161,7 @@ const mdtApp = new Vue({
         changePage(new_page) {
             this.error = null;
             this.notification = null;
-            this.personCheckNotification = null;
+            this.personCheckNotifications = [];
             this.current_tab = new_page;
             /* Clear active nav tab */
             ClearActiveNavItem(new_page);
@@ -481,7 +481,7 @@ document.onreadystatechange = () => {
                 }
                 mdtApp.current_tab = "Police Reports"
             } else if (event.data.type == "personCheckNotification") {
-                mdtApp.personCheckNotification = event.data.message
+                mdtApp.personCheckNotifications.push(event.data.message)
             } else if (event.data.type == "addressInfoLoaded") {
                 let s = "";
                 for (let i = 0; i < event.data.info.length; i++) {
