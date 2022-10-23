@@ -1,12 +1,11 @@
 local trains = {}
-local trainTable = {}
 local updateInterval = 1
 local metroPasses = {}
 local trainTickets = {}
 
 -- Threads
 
-Citizen.CreateThread(function()
+Citizen.CreateThread(function() -- server side distance check init
 	while true do
 		for i,v in ipairs(trains) do
 			TriggerClientEvent("usa_trains:checkDistances", v.driver, v.trainNetID, v.name, trains)
@@ -14,7 +13,8 @@ Citizen.CreateThread(function()
 		Citizen.Wait(1000)
 	end
 end)
-Citizen.CreateThread(function()
+
+Citizen.CreateThread(function() -- update train coords
 	local lastUpdateTime = os.time()
 	while true do
 		if os.difftime(os.time(), lastUpdateTime) >= updateInterval then
@@ -25,6 +25,18 @@ Citizen.CreateThread(function()
 			lastUpdateTime = os.time()
 		end
 		Wait(500)
+	end
+end)
+
+Citizen.CreateThread(function() -- check if trains have been removed or other
+	while true do
+		Citizen.Wait(5000)
+		for i,v in ipairs(trains) do
+			if NetworkGetEntityFromNetworkId(v.trainNetID) == 0 or NetworkGetEntityFromNetworkId(v.trainNetID) == nil then
+				TriggerEvent("usa_trains:deleteTrainServer", v.trainNetID)
+				TriggerClientEvent("usa_trains:delTrainServerReq", v.driver)
+			end
+		end
 	end
 end)
 
@@ -48,12 +60,12 @@ AddEventHandler("character:loaded", function(char)
 end)
 
 RegisterServerEvent("usa_trains:seat")
-AddEventHandler("usa_trains:seat", function(train, ped)
+AddEventHandler("usa_trains:seat", function(train)
 	local deseat = false
 	for i,v in ipairs(trains) do
 		if (v.carrigeNetID == train) then
 			for k,w in pairs(v.seats) do
-				if (w.taken == ped) then
+				if (w.taken == source) then
 					TriggerClientEvent("usa_trains:unseat_player", source)
 					w.taken = nil
 					deseat = true
@@ -64,7 +76,7 @@ AddEventHandler("usa_trains:seat", function(train, ped)
 			if not deseat then
 				for k,x in pairs(v.seats) do
 					if (x.taken == nil) then
-						x.taken = ped
+						x.taken = source
 						TriggerClientEvent("usa_trains:seat_player", source, {x = x.x, y = x.y, z = x.z, rotation = x.rotate}, train)
 						break
 					end
@@ -76,12 +88,12 @@ AddEventHandler("usa_trains:seat", function(train, ped)
 end)
 
 RegisterServerEvent("usa_trains:moveseat")
-AddEventHandler("usa_trains:moveseat", function(train, ped)
+AddEventHandler("usa_trains:moveseat", function(train)
 	for i,v in ipairs(trains) do
 		if (v.carrigeNetID == train) then
 			local currentseat = 0
 			for k,w in pairs(v.seats) do
-				if w.taken == ped then
+				if w.taken == source then
 					currentseat = w.number
 					break
 				end
@@ -159,6 +171,13 @@ AddEventHandler("usa_trains:deleteTrainServer", function(id)
 	local carrigeID = nil
 	for i,v in ipairs(trains) do
 		if v.trainNetID == id then
+			for j, z in pairs(v.seats) do
+				if (z.taken) ~= nil then
+					TriggerClientEvent("usa_trains:unseat_player", z.taken)
+					TriggerClientEvent("usa:notify", z.taken, "The train you where seated on seams to have poofed!")
+				end
+			end
+			TriggerClientEvent("usa_trains:delTrainServerReq", source)
 			carrigeID = v.carrigeNetID
 			table.remove(trains, i)
 		end
@@ -301,6 +320,8 @@ AddEventHandler("playerDropped", function()
 	for i,v in ipairs(trains) do
 		if v.driver == source then
 			Wait(1000)
+			for j, z in pairs(v.seats) do
+			end
 			TriggerClientEvent("usa_trains:cleanTrain", NetworkGetEntityOwner(NetworkGetEntityFromNetworkId(v.trainNetID)), v.trainNetID)
 		end
 	end

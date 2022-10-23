@@ -404,7 +404,7 @@ Citizen.CreateThread(function() -- train controlls
 				TriggerServerEvent("usa_trains:seat", trainNetID, GetPlayerPed(-1))
 			elseif IsControlJustReleased(0, 33) then
 				local trainNetID = NetworkGetNetworkIdFromEntity(passangerTrain)
-				TriggerServerEvent("usa_trains:moveseat", trainNetID, GetPlayerPed(-1))
+				TriggerServerEvent("usa_trains:moveseat", trainNetID)
 			end
 		end
 	end 
@@ -427,7 +427,7 @@ Citizen.CreateThread(function() -- train enter prompts
 			        	alert("~b~Enter Train as Passanger ~INPUT_CONTEXT~")
 						if IsControlJustPressed(1, 51) then
 							local trainNetID = NetworkGetNetworkIdFromEntity(vehicle)
-							TriggerServerEvent("usa_trains:seat", trainNetID, GetPlayerPed(-1))
+							TriggerServerEvent("usa_trains:seat", trainNetID)
 			            end
 			        elseif isMetroJob and GetEntityModel(vehicle == GetHashKey("metrotrain")) and #(GetEntityCoords(PlayerPedId()) - GetEntityCoords(vehicle)) < 5 and IsVehicleSeatFree(vehicle, -1) and IsVehicleSeatFree(vehicle, 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), -1) and IsVehicleSeatFree(GetTrainCarriage(vehicle, 1), 0) and not IsPedInVehicle(GetPlayerPed(-1), vehicle, true) and not isPassanger and not isDriver then
 			        	alert("~b~Enter Metro as Driver ~INPUT_CONTEXT~")
@@ -533,7 +533,7 @@ Citizen.CreateThread(function() -- ticket checking
 	end
 end)
 
-Citizen.CreateThread(function()
+Citizen.CreateThread(function() -- no ticket update
 	while true do
 		Citizen.Wait(0)
 		while called do
@@ -574,7 +574,11 @@ Citizen.CreateThread(function() -- Clock In
 						TriggerEvent("usa:notify", "You are too far away please come closer!")
 					end
 				elseif IsControlJustPressed(0, 75) then
-					TriggerServerEvent("usa_trains:metroSpawnRequest")
+					if not train then
+						TriggerServerEvent("usa_trains:metroSpawnRequest")
+					else
+						TriggerEvent("usa:notify", "You already have a train!")
+					end
 				end
 			else
 				DrawText3D(metroClockIn.x, metroClockIn.y, metroClockIn.z + 0.5, "[E] - Clock On Duty (~r~Metro~s~)")
@@ -597,7 +601,11 @@ Citizen.CreateThread(function() -- Clock In
 						TriggerEvent("usa:notify", "You are too far away please come closer!")
 					end
 				elseif IsControlJustPressed(0, 75) then
-					TriggerServerEvent("usa_trains:trainSpawnRequest")
+					if not train then
+						TriggerServerEvent("usa_trains:trainSpawnRequest")
+					else
+						TriggerEvent("usa:notify", "You already have a train!")
+					end
 				end
 			else
 				DrawText3D(trainClockIn.x, trainClockIn.y, trainClockIn.z + 0.5, "[E] - Clock On Duty (~r~Train~s~)")
@@ -811,6 +819,11 @@ end)
 
 RegisterNetEvent("usa_trains:delTrain")
 AddEventHandler("usa_trains:delTrain", function()
+	TriggerServerEvent("usa_trains:deleteTrainServer", trainNID)
+end)
+
+RegisterNetEvent("usa_trains:delTrainServerReq")
+AddEventHandler("usa_trains:delTrainServerReq", function()
 	local dtrain = NetworkGetEntityFromNetworkId(trainNID)
 	takeOwn(dtrain)
 	if (NetworkGetEntityOwner(dtrain) == 128) then
@@ -871,6 +884,8 @@ AddEventHandler("usa_trains:spawnTrain",function(type, spawnCoords)
 		SetVehicleDoorCanBreak(train, 1, false)
 		SetVehicleDoorCanBreak(train, 2, false)
 		SetVehicleDoorCanBreak(train, 3, false)
+	else
+		TriggerEvent("usa:notify", "You already have a train!")
 	end
 end)
 
