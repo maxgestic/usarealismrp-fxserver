@@ -63,6 +63,15 @@ local policeGarages = {
 	{x = -1822.7368164063, y = 3000.8508300781, z = 32.810050964355, _x = -1833.6276855469, _y = 2996.2858886719, _z = 32.810028076172, _heading = 337.49}, -- Fort Zancudo
 }
 
+local locationsData = {}
+for i = 1, #policeGarages do
+  table.insert(locationsData, {
+    coords = vector3(policeGarages[i].x, policeGarages[i].y, policeGarages[i].z + 0.5),
+    text = '[E] - Garage | [U] - Customization'
+  })
+end
+exports.globals:register3dTextLocations(locationsData)
+
 ----------------- VEHICLE MENU -----------------
 menuPool:Add(customizationMenu)
 menuPool:Add(garageMenu)
@@ -286,9 +295,6 @@ garageMenu:RefreshIndex()
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		for i = 1, #policeGarages do
-			DrawText3Ds(policeGarages[i].x,policeGarages[i].y,policeGarages[i].z + 0.5, 370, 16, '[E] - Garage | [U] - Customization') -- putting this in a loop gave > 0.04 ms in resmon, should be ok tho...
-		end
 		menuPool:MouseControlsEnabled(false)
         menuPool:ControlDisablingEnabled(false)
         menuPool:ProcessMenus()
@@ -462,23 +468,4 @@ function ShowNotification(text)
     SetNotificationTextEntry("STRING")
     AddTextComponentString(text)
     DrawNotification(false, false)
-end
-
-function DrawText3Ds(x,y,z,q,a, text)
-    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-    local px,py,pz=table.unpack(GetGameplayCamCoords())
-    local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
-
-    if dist < a then
-	    SetTextScale(0.35, 0.35)
-	    SetTextFont(4)
-	    SetTextProportional(1)
-	    SetTextColour(255, 255, 255, 215)
-	    SetTextEntry("STRING")
-	    SetTextCentre(1)
-	    AddTextComponentString(text)
-	    DrawText(_x,_y)
-	    local factor = (string.len(text)) / q
-	    DrawRect(_x,_y+0.0125, 0.015+ factor, 0.03, 41, 11, 41, 68)
-	end
 end

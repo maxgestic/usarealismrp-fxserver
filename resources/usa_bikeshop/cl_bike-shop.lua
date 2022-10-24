@@ -22,6 +22,15 @@ local locations = {
 
 local closest = nil
 
+local locationsData = {}
+for i = 1, #locations do
+  table.insert(locationsData, {
+    coords = vector3(locations[i].x, locations[i].y, locations[i].z),
+    text = "[E] - Bike Shop"
+  })
+end
+exports.globals:register3dTextLocations(locationsData)
+
 function comma_value(amount)
   local formatted = amount
   while true do
@@ -42,22 +51,6 @@ function isPlayerAtBikeShop()
 		end
 	end
 	return false
-end
-
-function DrawText3D(x, y, z, distance, text)
-    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-    if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), x, y, z, true) < distance then
-      SetTextScale(0.35, 0.35)
-      SetTextFont(4)
-      SetTextProportional(1)
-      SetTextColour(255, 255, 255, 215)
-      SetTextEntry("STRING")
-      SetTextCentre(1)
-      AddTextComponentString(text)
-      DrawText(_x,_y)
-      local factor = (string.len(text)) / 500
-      DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-  end
 end
 
 ----------------------
@@ -93,12 +86,6 @@ Citizen.CreateThread(function()
     _menuPool:MouseControlsEnabled(false)
     _menuPool:ControlDisablingEnabled(false)
     _menuPool:ProcessMenus()
-    ------------------
-    -- Draw Markers --
-    ------------------
-		for i = 1, #locations do
-			DrawText3D(locations[i].x, locations[i].y, locations[i].z, 10, '[E] - Bike Shop')
-		end
     -------------------
     -- draw help txt --
     -------------------
