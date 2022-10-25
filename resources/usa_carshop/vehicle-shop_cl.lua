@@ -31,9 +31,17 @@ local SHOPS = {
 				HEADING = 204.0
 			}
 		}
-},
-
+	},
 }
+
+local locationsData = {}
+for i = 1, #SHOPS do
+  table.insert(locationsData, {
+	coords = vector3(SHOPS[i].store_x, SHOPS[i].store_y, SHOPS[i].store_z),
+	text = "[E] - Car Dealership"
+  })
+end
+exports.globals:register3dTextLocations(locationsData)
 
 local vehicleShopItems = nil
 
@@ -262,10 +270,10 @@ Citizen.CreateThread(function()
 			-----------------------------------------------------------
 			-- watch for entering store and menu open keypress event --
 			-----------------------------------------------------------
-			DrawText3D(SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z, 10, '[E] - Car Dealership')
-			if getPlayerDistanceFromShop(playerPed, SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z) < 3 then
-				if not mainMenu:Visible() then
-					if IsControlJustPressed(1, MENU_KEY) then
+			--DrawText3D(SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z, 10, '[E] - Car Dealership')
+			if IsControlJustPressed(1, MENU_KEY) then
+				if getPlayerDistanceFromShop(playerPed, SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z) < 3 then
+					if not mainMenu:Visible() then
 						menu_data.closest = SHOPS[k]
 						if menu_data.closest.onlySellsCustom then
 							customsMenu:Visible(not customsMenu:Visible())
