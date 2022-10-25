@@ -93,6 +93,26 @@ Config.recipes = {
             type = "weapons"
         },
         { 
+            name = "Ceramic Pistol",
+            image = "https://i.imgur.com/zhZJdBq.png",
+            requires = {
+                { name = "Ceramic Pistol Parts", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Ceramic Pistol",
+                    hash = GetHashKey("WEAPON_CERAMICPISTOL"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 10,
+                    objectModel = "w_pi_ceramic_pistol",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "weapons"
+        },
+        { 
             name = "SNS Pistol",
             image = "https://vignette.wikia.nocookie.net/gtawiki/images/f/f5/SNSPistol-GTAV-SocialClub.png/revision/latest/scale-to-width-down/185?cb=20180202170333",
             requires = {
@@ -110,6 +130,26 @@ Config.recipes = {
                 }
             },
             requiredCraftingLevel = 1,
+            type = "weapons"
+        },
+        { 
+            name = "SNS Pistol Mk2",
+            image = "https://i.imgur.com/kEiTXLt.png",
+            requires = {
+                { name = "SNS Pistol Parts", quantity = 2 }
+            },
+            produces = {
+                {
+                    name = "SNS Pistol Mk2",
+                    hash = GetHashKey("WEAPON_SNSPISTOL_MK2"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 10,
+                    objectModel = "w_pi_sns_pistolmk2",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 2,
             type = "weapons"
         },
         { 
@@ -193,6 +233,46 @@ Config.recipes = {
             type = "weapons"
         },
         { 
+            name = "Double Action Revolver",
+            image = "https://i.imgur.com/zwIXqO3.png",
+            requires = {
+                { name = "Revolver Kit", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Double Action Revolver",
+                    hash = GetHashKey("WEAPON_DOUBLEACTION"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 18,
+                    objectModel = "w_pi_wep1_gun",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "weapons"
+        },
+        { 
+            name = "Navy Revolver",
+            image = "https://i.imgur.com/VSqkAPp.png",
+            requires = {
+                { name = "Revolver Kit", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Navy Revolver",
+                    hash = GetHashKey("WEAPON_NAVYREVOLVER"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 15,
+                    objectModel = "w_pi_wep2_gun",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "weapons"
+        },  
+        { 
             name = "Revolver",
             image = "https://i.imgur.com/h1xuFdn.png",
             requires = {
@@ -213,6 +293,46 @@ Config.recipes = {
             type = "weapons"
         },
         { 
+            name = "Revolver Mk2",
+            image = "https://i.imgur.com/GGjioEw.png",
+            requires = {
+                { name = "Revolver Kit", quantity = 2 }
+            },
+            produces = {
+                {
+                    name = "Revolver Mk2",
+                    hash = GetHashKey("WEAPON_REVOLVER_MK2"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 22,
+                    objectModel = "w_pi_revolvermk2",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 2,
+            type = "weapons"
+        },
+        { 
+            name = "Marksman Pistol",
+            image = "https://i.imgur.com/dIR4duM.png",
+            requires = {
+                { name = "Marksman Pistol Parts", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Marksman Pistol",
+                    hash = GetHashKey("WEAPON_MARKSMANPISTOL"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 15,
+                    objectModel = "W_PI_SingleShot",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 2,
+            type = "weapons"
+        },
+        {
             name = "Pump Shotgun",
             image = "https://steamuserimages-a.akamaihd.net/ugc/29613457985659003/1B48193086C05B7FB56FA9770E2507492F47B6DF/",
             requires = {
@@ -273,6 +393,26 @@ Config.recipes = {
             type = "weapons"
         },
         { 
+            name = "Double Barrel Shotgun",
+            image = "https://i.imgur.com/cSRrM0R.png",
+            requires = {
+                { name = "Double Barrel Shotgun Parts", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Double Barrel Shotgun",
+                    hash = GetHashKey("WEAPON_DBSHOTGUN"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 35,
+                    objectModel = "w_sg_doublebarrel",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 2,
+            type = "weapons"
+        },
+        { 
             name = "AP Pistol",
             image = "https://i.pinimg.com/originals/3e/5b/09/3e5b09796cb124639c5f2232e5f32d9b.png",
             requires = {
@@ -314,7 +454,7 @@ Config.recipes = {
         },
         { 
             name = "SMG",
-            image = "https://i.imgur.com/XbTVfAB.png",
+            image = "https://i.imgur.com/bWKE4O6.png",
             requires = {
                 { name = "SMG Parts", quantity = 1 }
             },
@@ -326,6 +466,46 @@ Config.recipes = {
                     type = "weapon",
                     weight = 35,
                     objectModel = "w_sb_smg",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 3,
+            type = "weapons"
+        },
+        { 
+            name = "Assault SMG",
+            image = "https://i.imgur.com/XbTVfAB.png",
+            requires = {
+                { name = "SMG Parts", quantity = 2 }
+            },
+            produces = {
+                {
+                    name = "Assault SMG",
+                    hash = GetHashKey("WEAPON_ASSAULTSMG"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 40,
+                    objectModel = "w_sb_assaultsmg",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 3,
+            type = "weapons"
+        },
+        { 
+            name = "Combat PDW",
+            image = "https://i.imgur.com/wHbb0V4.png",
+            requires = {
+                { name = "Combat PDW Parts", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Combat PDW",
+                    hash = GetHashKey("WEAPON_COMBATPDW"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 30,
+                    objectModel = "w_sb_pdw",
                     notStackable = true
                 }
             },
@@ -386,6 +566,46 @@ Config.recipes = {
                     type = "weapon",
                     weight = 45,
                     objectModel = "w_ar_carbinerifle",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 3,
+            type = "weapons"
+        },
+        { 
+            name = "Tactical Carbine",
+            image = "https://i.imgur.com/Z1OFXtU.png",
+            requires = {
+                { name = "Carbine Parts", quantity = 2 }
+            },
+            produces = {
+                {
+                    name = "Tactical Carbine",
+                    hash = GetHashKey("WEAPON_TACTICALRIFLE"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 45,
+                    objectModel = "w_ar_carbinerifle_reh",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 3,
+            type = "weapons"
+        },
+        { 
+            name = "Military Rifle",
+            image = "https://i.imgur.com/5dInslW.png",
+            requires = {
+                { name = "Military Rifle Parts", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Military Rifle",
+                    hash = GetHashKey("WEAPON_MILITARYRIFLE"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 45,
+                    objectModel = "w_ar_bullpuprifleh4",
                     notStackable = true
                 }
             },

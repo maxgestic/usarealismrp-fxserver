@@ -114,6 +114,11 @@ Config.Rewards = {
 			[2] = { name = "AP Pistol Parts", price = 20000, type = "weaponParts", weight = 15.0, quantity = 1 },
 			[3] = { name = "AK-47 Parts", type = "weaponParts", weight = 45.0, quantity = 1 },
 			[4] = { name = "Revolver Kit", type = "weaponParts", weight = 15.0, quantity = 1 },
+			[5] = { name = "Ceramic Pistol Parts", price = 3200, type = "weaponParts", weight = 10.0, quantity = 1 },
+			[6] = { name = "Marksman Pistol Parts", price = 3200, type = "weaponParts", weight = 10.0, quantity = 1 },
+			[7] = { name = "Double Barrel Shotgun Parts", price = 3200, type = "weaponParts", weight = 20.0, quantity = 1 },
+			[8] = { name = "Military Rifle Parts", price = 3200, type = "weaponParts", weight = 35.0, quantity = 1 },
+			[9] = { name = "Combat PDW Parts", price = 3200, type = "weaponParts", weight = 25.0, quantity = 1 },
 		}
 	},
 	[5] = {

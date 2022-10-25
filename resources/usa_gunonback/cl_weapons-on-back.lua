@@ -22,12 +22,15 @@ local SETTINGS = {
       ["w_ar_specialcarbine"] = -1063057011,
       ["w_ar_bullpuprifle"] = 2132975508,
       ["w_ar_advancedrifle"] = -1357824103,
+      ["w_ar_bullpuprifleh4"] = GetHashKey("WEAPON_MILITARYRIFLE"),
+      ["w_ar_carbinerifle_reh"] = GetHashKey("WEAPON_TACTICALRIFLE"),
       -- sub machine guns:
       ["w_sb_microsmg"] = 324215364,
       ["w_sb_assaultsmg"] = -270015777,
       ["w_sb_smg"] = 736523883,
       ["w_sb_smgmk2"] = GetHashKey("WEAPON_SMG_MK2"),
       ["w_sb_gusenberg"] = 1627465347,
+      ["w_sb_pdw"] = GetHashKe("WEAPON_COMBATPDW"),
       -- sniper rifles:
       ["w_sr_sniperrifle"] = 100416529,
       -- shotguns:
@@ -36,10 +39,10 @@ local SETTINGS = {
       ["w_sg_pumpshotgun"] = 487013001,
       ["w_ar_musket"] = -1466123874,
       ["w_sg_heavyshotgun"] = GetHashKey("WEAPON_HEAVYSHOTGUN"),
-	  ["w_sg_pumpshotgunmk2"] = GetHashKey("WEAPON_PUMPSHOTGUN_MK2"),
+	    ["w_sg_pumpshotgunmk2"] = GetHashKey("WEAPON_PUMPSHOTGUN_MK2"),
       -- ["w_sg_sawnoff"] = 2017895192 don't show, maybe too small?
       -- launchers:
-      ["w_lr_firework"] = 2138347493
+      ["w_lr_firework"] = 2138347493,
     }
 }
 
