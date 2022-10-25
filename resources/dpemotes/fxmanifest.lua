@@ -25,3 +25,4 @@ server_scripts {
 data_file 'DLC_ITYP_REQUEST' 'apple_1.ytyp'
 data_file 'DLC_ITYP_REQUEST' 'bzzz_foodpack'
 data_file 'DLC_ITYP_REQUEST' 'natty_props_lollipops.ytyp'
+data_file 'DLC_ITYP_REQUEST' 'bzzz_prop_torch_fire001.ytyp'

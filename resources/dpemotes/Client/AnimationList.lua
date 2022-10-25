@@ -3238,7 +3238,7 @@ DP.PropEmotes = {
     {
         Prop = 'ba_prop_battle_vape_01',
         PropBone = 28422,
-        PropPlacement = {-0.0290, 0.0070, -0.0050, 41.9596, 40.0102, -62.7294},
+        PropPlacement = {-0.0290, 0.0070, -0.0050, 91.0, 270.0, -360.0},
         EmoteMoving = true,
         EmoteLoop = true,
         PtfxAsset = "core",
@@ -3625,4 +3625,20 @@ DP.PropEmotes = {
         EmoteLoop = true,
         EmoteMoving = true,
    }},
+   ["ftorch"] = {"anim@heists@humane_labs@finale@keycards", "ped_a_enter_loop", "Fire Torch", AnimationOptions = 
+   {
+        Prop = "bzzz_prop_torch_fire001",
+        PropBone = 18905,
+        PropPlacement = {0.14, 0.21, -0.08, -110.0, -1.0, -10.0},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
+    ['ftorch2'] = {"rcmnigel1d", "base_club_shoulder", "Fire Torch 2", AnimationOptions = 
+    {
+        Prop = "bzzz_prop_torch_fire001",
+        PropBone = 28422,
+        PropPlacement = {-0.0800, -0.0300, -0.1700, 11.4181, -159.1026, 15.0338},
+        EmoteLoop = true,
+        EmoteMoving = true,
+    }},
 }

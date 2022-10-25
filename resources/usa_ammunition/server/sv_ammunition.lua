@@ -10,6 +10,7 @@ local WEPS_WITH_MAGS = {
     [GetHashKey("WEAPON_SNSPISTOL_MK2")] = { accepts = ".45", magAmmoCounts = {6, 12} },
     [GetHashKey("WEAPON_HEAVYPISTOL")] = { accepts = ".45", magAmmoCounts = {18, 36} },
     [GetHashKey("WEAPON_VINTAGEPISTOL")] = { accepts = "9mm", magAmmoCounts = {7, 14} },
+    [GetHashKey("WEAPON_CERAMICPISTOL")] = { accepts = "9mm", magAmmoCounts = {8, 12, 16} },
     -- smg --
     [GetHashKey("WEAPON_MICROSMG")] = { accepts = ".45", magAmmoCounts = {16, 30}},
     [GetHashKey("WEAPON_SMG")] = { accepts = "9mm", magAmmoCounts = {30, 60, 100} },
@@ -28,7 +29,8 @@ local WEPS_WITH_MAGS = {
     [GetHashKey("WEAPON_BULLPUPRIFLE")] = { accepts = "5.56mm", magAmmoCounts = {30, 60} },
     [GetHashKey("WEAPON_BULLPUPRIFLE_MK2")] = { accepts = "5.56mm", magAmmoCounts = {20, 30, 60} },
     [GetHashKey("WEAPON_COMPACTRIFLE")] = { accepts = "7.62mm", magAmmoCounts = {30, 60, 100} },
-    [GetHashKey("WEAPON_MILITARYRIFLE")] = { accepts = "5.56mm", magAmmoCounts = {30, 45} },
+    [GetHashKey("WEAPON_MILITARYRIFLE")] = { accepts = "5.56mm", magAmmoCounts = {20, 30} },
+    [GetHashKey("WEAPON_TACTICALRIFLE")] = { accepts = "5.56mm", magAmmoCounts = {30, 60, 100} },
     -- light machine guns --
     [GetHashKey("WEAPON_MG")] = { accepts = "7.62mm", magAmmoCounts = {54, 100} },
     [GetHashKey("WEAPON_COMBATMG")] = { accepts = "7.62mm", magAmmoCounts = {100, 200} },
@@ -42,7 +44,8 @@ local WEPS_WITH_MAGS = {
     [GetHashKey("WEAPON_MARKSMANRIFLE_MK2")] = { accepts = "7.62mm", magAmmoCounts = {8, 16} },
     -- shotguns --
     [GetHashKey("WEAPON_ASSAULTSHOTGUN")] = { accepts = "12 Gauge Shells", magAmmoCounts = {8, 32} },
-    [GetHashKey("WEAPON_HEAVYSHOTGUN")] = { accepts = "12 Gauge Shells", magAmmoCounts = {6, 12, 30} }
+    [GetHashKey("WEAPON_HEAVYSHOTGUN")] = { accepts = "12 Gauge Shells", magAmmoCounts = {6, 12, 30} },
+    [GetHashKey("WEAPON_DBSHOTGUN")] = { accepts = "12 Gauge Shells", magAmmoCounts = {2} },
 }
 
 local WEPS_NO_MAGS = {
@@ -63,8 +66,24 @@ local WEPS_NO_MAGS = {
         AMMO_NAME = ".45",
         MAX_CAPACITY = 6
     },
+    [GetHashKey("WEAPON_REVOLVER_MK2")] = {
+        AMMO_NAME = ".45",
+        MAX_CAPACITY = 6
+    },
+    [GetHashKey("WEAPON_DOUBLEACTION")] = {
+        AMMO_NAME = ".45",
+        MAX_CAPACITY = 6
+    },
+    [GetHashKey("WEAPON_NAVYREVOLVER")] = {
+        AMMO_NAME = ".45",
+        MAX_CAPACITY = 6
+    },
     [GetHashKey("WEAPON_STUNGUN")] = {
         AMMO_NAME = "Taser Cartridge",
+        MAX_CAPACITY = 1
+    },
+    [GetHashKey("WEAPON_MARKSMANPISTOL")] = {
+        AMMO_NAME = ".50",
         MAX_CAPACITY = 1
     },
     -- shotguns --

@@ -202,6 +202,9 @@ supportedVehicles = {
     { name = "Lamborghini Murcielago LP-670", model = "lp670", class = "S" },
     { name = "Lamborghini Murcielago LP-670 LW", model = "lwlp670", class = "S" },
     { name = "Ferrari 458 LW", model = "lw458s", class = "S" },
+    { name = "Jaguar C-X75", model = "cx75", class = "S" },
+    { name = "Lamborghini Essenza", model = "rmodessenza", class = "S" },
+    { name = "Mercedes SLR Stirling Moss", model = "moss", class = "S" },
     -- A Class:**
     { name = "Sultan RS", model = "sultanrs", class = "A" },
     { name = "Annis Elegy Retro", model = "elegy", class = "A" },
@@ -504,14 +507,17 @@ supportedVehicles = {
     { name = "Dodge Ram TRX", model = "dodgetrx", class = "B" },
     { name = "Ford F100 Slammed", model = "slammedf100", class = "B" },
     { name = "Dababy Car", model = "dababy", class = "B" },
-    { name = "Ford F100 Trophy", model = "f100trophy", class = "B" },
-    { name = "Audi RSQ8 Mansory", model = "rsq8m", class = "B" },
-    { name = "Progen Proff", model = "proff", class = "B" },
     { name = "Ford Mach E", model = "mache", class = "E" }, -- ELECTRIC
     { name = "Audi e-tron GT", model = "ocnetrongt", class = "E" }, -- ELECTRIC
     { name = "2018 Harley Davidson FLHXS", model = "flhxs_streetglide_special18", class = "B" },
     { name = "Harley Davidson Road King", model = "na25", class = "B" },
     { name = "2022 Sur Ron Lightbee Pxx", model = "22Surron", class = "B" },
+    { name = "Ford F100 Trophy", model = "f100trophy", class = "B" },
+    { name = "Audi RSQ8 Mansory", model = "rsq8m", class = "B" },
+    { name = "Progen Proff", model = "proff", class = "B" },
+    { name = "Dodge Ram 1500 Custom", model = "gcram1500", class = "B" },
+    { name = "Spyker C8", model = "spyker", class = "B" },
+    { name = "Xpeng P7", model = "x3p720", class = "B" },
     -- C Class:**
     { name = "Declasse Yosemite Rancher", model = "yosemite3", class = "C" },
     { name = "Dinka Blista Compact", model = "blista2", class = "C" },

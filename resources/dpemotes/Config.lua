@@ -289,24 +289,34 @@ Config.Languages = {
 }
 
 Config.BlacklistedLocations = {
+    ["sunbathe"] = {
+        {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0}, -- cayo perico mansion
+        {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"},
+        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"},
+        {coords = vector3(1845.2885742188, 2608.5454101563, 45.590347290039), dist = 70.0, name = "Prison Front Gate"},
+    },
     ["sunbatheback"] = {
         {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0}, -- cayo perico mansion
         {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"},
-        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"}
+        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"},
+        {coords = vector3(1845.2885742188, 2608.5454101563, 45.590347290039), dist = 70.0, name = "Prison Front Gate"},
     },
     ["sunbathe3"] = {
         {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0}, -- cayo perico mansion
         {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"},
-        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"}
+        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"},
+        {coords = vector3(1845.2885742188, 2608.5454101563, 45.590347290039), dist = 70.0, name = "Prison Front Gate"},
     },
     ["Sunbathe Back"] = {
         {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0}, -- cayo perico mansion
         {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"},
-        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"}
+        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"},
+        {coords = vector3(1845.2885742188, 2608.5454101563, 45.590347290039), dist = 70.0, name = "Prison Front Gate"},
     },
     ["Sunbathe 3"] = {
         {coords = vector3(4994.443359375, -5719.57421875, 19.884262084961), dist = 500.0}, -- cayo perico mansion
         {coords = vector3(264.39782714844, 222.92967224121, 106.278465271), dist = 400.0, name = "Pacific Standard Bank"},
-        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"}
+        {coords = vector3(-104.23067474365, 6467.9448242188, 31.63631439209), dist = 400.0, name = "Paleto Bank"},
+        {coords = vector3(1845.2885742188, 2608.5454101563, 45.590347290039), dist = 70.0, name = "Prison Front Gate"},
     }
 }

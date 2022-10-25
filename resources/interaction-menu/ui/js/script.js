@@ -102,7 +102,7 @@ var itemImages = {
     "Revolver": "https://i.imgur.com/2zbT7sf.png",
     "MK2": "https://i.imgur.com/nd3HR82.png",
     "Vintage Pistol": "https://i.imgur.com/uaawppt.png",
-    "Marksman Pistol": "https://i.imgur.com/13hsj4Q.png",
+    "Marksman Pistol": "https://i.imgur.com/dIR4duM.png",
     "Pump Shotgun": "https://i.imgur.com/V22a57g.png",
     "Bullpup Shotgun": "https://i.imgur.com/kHDyJpH.png",
     "Musket": "https://i.imgur.com/qbMlYhM.png",
@@ -165,7 +165,7 @@ var itemImages = {
     "Sawn-off": "https://i.imgur.com/iJsQmRs.png",
     "Micro SMG": "https://i.imgur.com/yGbb2l5.png",
     "Mini SMG": "https://i.imgur.com/Ebf4MY7.png",
-    "SMG": "https://i.imgur.com/XbTVfAB.png",
+    "SMG": "https://i.imgur.com/bWKE4O6.png",
     "Machine Pistol": "https://i.imgur.com/uQVOf2v.png",
     "Tommy Gun": "https://i.imgur.com/x2F3Pbt.png",
     "AK47": "https://i.imgur.com/zCxeR9m.png",
@@ -497,7 +497,17 @@ var itemImages = {
     "Crumpled Paper": "https://i.imgur.com/DpUUSZ8.png",
     "Bank Laptop": "https://i.imgur.com/5gefEBK.png",
     "Metal Scraps": "https://i.imgur.com/08oQInE.png",
-    "Plasma Pistol": "https://i.imgur.com/a3D4tsI.png"
+    "Plasma Pistol": "https://i.imgur.com/a3D4tsI.png",
+    "Ceramic Pistol": "https://i.imgur.com/zhZJdBq.png",
+    "SNS Pistol Mk2": "https://i.imgur.com/kEiTXLt.png",
+    "Double Action Revolver": "https://i.imgur.com/zwIXqO3.png",
+    "Navy Revolver": "https://i.imgur.com/VSqkAPp.png",
+    "Revolver Mk2": "https://i.imgur.com/GGjioEw.png",
+    "Double Barrel Shotgun": "https://i.imgur.com/cSRrM0R.png",
+    "Assault SMG": "https://i.imgur.com/XbTVfAB.png",
+    "Combat PDW": "https://i.imgur.com/wHbb0V4.png",
+    "Tactical Carbine": "https://i.imgur.com/Z1OFXtU.png",
+    "Military Rifle": "https://i.imgur.com/5dInslW.png",
 }
 
 var menuItems = [{

@@ -345,6 +345,9 @@ supportedVehicles = {
     { name = "Lamborghini Murcielago LP-670", model = "lp670", class = "S" },
     { name = "Lamborghini Murcielago LP-670 LW", model = "lwlp670", class = "S" },
     { name = "Ferrari 458 LW", model = "lw458s", class = "S" },
+    { name = "Jaguar C-X75", model = "cx75", class = "S" },
+    { name = "Lamborghini Essenza", model = "rmodessenza", class = "S" },
+    { name = "Mercedes SLR Stirling Moss", model = "moss", class = "S" },
     -- A CLASS
     { name = "Sultan RS", model = "sultanrs", class = "A" },
     { name = "Annis Elegy Retro", model = "elegy", class = "A" },
@@ -501,7 +504,7 @@ supportedVehicles = {
     { name = "Rhinehart", model = "rhinehart", class = "B" },
     { name = "Imponte Ruiner ZZ-8", model = "ruiner4", class = "B" },
     { name = "Ubermacht Sentinel Classic Widebody", model = "sentinel4", class = "B" },
-    
+
     -- Custom B Class
     { name = "Toyota 4Runner", model = "4runner", class = "B" },
     { name = "2019 Mercedes-Benz S650 Maybach", model = "19S650", class = "B" },
@@ -563,6 +566,9 @@ supportedVehicles = {
     { name = "Ford F100 Trophy", model = "f100trophy", class = "B" },
     { name = "Audi RSQ8 Mansory", model = "rsq8m", class = "B" },
     { name = "Progen Proff", model = "proff", class = "B" },
+    { name = "Dodge Ram 1500 Custom", model = "gcram1500", class = "B" },
+    { name = "Spyker C8", model = "spyker", class = "B" },
+    { name = "Xpeng P7", model = "x3p720", class = "B" },
     -- C CLASS
     { name = "Dinka Blista Compact", model = "blista2", class = "C" },
     { name = "Karin Asterope", model = "asterope", class = "C" },

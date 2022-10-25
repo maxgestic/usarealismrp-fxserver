@@ -469,6 +469,7 @@ local vehicleShopItems = {
 			{make = "Dodge", model = "Charger (2016)", price = 120000, hash = "16charger", storage_capacity = 160.0},
 			{make = "Dodge", model = "Challenger", price = 120000, hash = "16challenger", storage_capacity = 130.0},
 			{make = "Dodge", model = "Hellephant Durango", price = 190000, hash = "hellephantdurango", storage_capacity = 260.0},
+			{make = "Dodge", model = "Ram 1500 Custom", price = 170000, hash = "gcram1500", storage_capacity = 200.0},
 			{make = "Dodge", model = "Ram Donk (2019)", price = 160000, hash = "19ramdonk", storage_capacity = 300.0},
 			{make = "Dodge", model = "Ram SRT-10", price = 140000, hash = "ramsrt10", storage_capacity = 400.0},
 			{make = "Dodge", model = "Ram TRX", price = 190000, hash = "dodgetrx", storage_capacity = 400.0},
@@ -527,6 +528,8 @@ local vehicleShopItems = {
 			--
 			{make = "Italdesign", model = "GTR50", price = 2000000, hash = "rmodgtr50", storage_capacity = 130.0},
 			--
+			{make = "Jaguar", model = "C-X75", price = 1100000, hash = "cx75", storage_capacity = 130.0},
+			--
 			{make = "Jeep", model = "Gladiator", price = 70000, hash = "jeepg", storage_capacity = 280.0},
 			{make = "Jeep", model = "SRT8", price = 100000, hash = "srt8", storage_capacity = 185.0},
 			--
@@ -539,6 +542,7 @@ local vehicleShopItems = {
 			{make = "Land Rover", model = "Range Rover Vogue Mansory (2020)", price = 240000, hash = "mansrr", storage_capacity = 280.0},
 			--
 			{make = "Lamborghini", model = "Diablo GTR (1999)", price = 975000, hash = "500gtrlam", storage_capacity = 120.0},
+			{make = "Lamborghini", model = "Essenza (NOT ROAD LEGAL)", price = 3000000, hash = "rmodessenza", storage_capacity = 90.0},
 			{make = "Lamborghini", model = "Gallardo LW", price = 450000, hash = "GallardoLW", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Huracan Evo 2 (2022) (NOT ROAD LEGAL)", price = 2800000, hash = "evo2", storage_capacity = 90.0},
 			{make = "Lamborghini", model = "Huracan LW", price = 750000, hash = "lwhuracan", storage_capacity = 130.0},
@@ -571,7 +575,8 @@ local vehicleShopItems = {
 			{make = "Mercedes-Benz", model = "GT63", price = 215000, hash = "rmodgt63", storage_capacity = 175.0},
 			{make = "Mercedes-Benz", model = "G-Class Brabus", price = 180000, hash = "w463a1", storage_capacity = 280.0},
 			{make = "Mercedes-Benz", model = "S63 AMG Cabriolet (2017)", price = 190000, hash = "mers63c", storage_capacity = 185.0},
-            		{make = "Mercedes-Benz", model = "S650 Maybach (2019)", price = 220000, hash = "19S650", storage_capacity = 220.0},
+     		 	{make = "Mercedes-Benz", model = "S650 Maybach (2019)", price = 220000, hash = "19S650", storage_capacity = 220.0},
+			{make = "Mercedes-Benz", model = "SLR Stirling Moss", price = 800000, hash = "moss", storage_capacity = 130.0},
 			--
 			{make = "Mitsubishi", model = "EVO IX (DRIFT)", price = 85000, hash = "evoix", storage_capacity = 160.0},
 			--
@@ -594,6 +599,8 @@ local vehicleShopItems = {
 			--
 			{make = "Rolls Royce", model = "Cullinan", price = 500000, hash = "cullinan", storage_capacity = 230.0},
 			{make = "Rolls Royce", model = "Wraith (2016)", price = 400000, hash = "wraith", storage_capacity = 220.0},
+			--
+			{make = "Spyker", model = "C8", price = 170000, hash = "spyker", storage_capacity = 160.0},
 			--
 			{make = "Subaru", model = "BRZ", price = 80000, hash = "brz13", storage_capacity = 160.0},
 			{make = "Subaru", model = "WRX STI (2004)", price = 100000, hash = "subwrx", storage_capacity = 160.0},
@@ -624,6 +631,8 @@ local vehicleShopItems = {
 			{make = "Volkswagon", model = "Type 2 (1966)", price = 50000, hash = "type266", storage_capacity = 165.0},
 			--
 			{make = "Weeny", model = "Tamworth", price = 28000, hash = "tamworth", storage_capacity = 120.0},
+			--
+			{make = "Xpeng", model = "P7", price = 85000, hash = "x3p720", storage_capacity = 190.0},
 			--
 			{make = "Yamaha", model = "R1", price = 85000, hash = "yamahar1", storage_capacity = 20.0},
 			--
