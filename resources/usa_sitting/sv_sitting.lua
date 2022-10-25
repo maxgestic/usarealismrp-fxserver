@@ -58,7 +58,19 @@ local BLACKLISTED_SIT_LOCATIONS = {
 	{
 		coords = vector3(1791.2034912109, 2552.0615234375, 45.673080444336), -- Prison Cafe 3
 		distance = 2
-	}
+	},
+	{
+		coords = vector3(1845.2885742188, 2608.5454101563, 45.590347290039), -- Prison Front Gate
+		distance = 20
+	},
+	{
+		coords = vector3(1818.9332275391, 2608.4833984375, 45.593780517578), -- Prison Front Gate 2
+		distance = 20
+	},
+	{
+		coords = vector3(1796.9038085938, 2596.880859375, 45.62133026123), -- Prison Visitation Gates
+		distance = 20
+	},
 }
 
 local function isAtBlacklistedLocation(coords)
