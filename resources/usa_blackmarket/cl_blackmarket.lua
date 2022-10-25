@@ -120,42 +120,51 @@ function isOpen()
 end
 
 Citizen.CreateThread(function()
+  local registered3dTextLocations = false
 	while true do
-    	Wait(0)
-      -- Process Menu --
-      _menuPool:MouseControlsEnabled(false)
-      _menuPool:ControlDisablingEnabled(false)
-      _menuPool:ProcessMenus()
-      ------------------
-      -- Draw Markers --
-      ------------------
+    Wait(0)
+    ------------------
+    -- Register 3d text locations once markets laoded--
+    ---------------------------------------------
+    if markets['marketA'] and not registered3dTextLocations then
+      registered3dTextLocations = true
+      local locationsData = {}
       for k, v in pairs(markets) do
         local x, y, z = table.unpack(markets[k]['coords'])
-        DrawText3D(x, y, z, (markets[k]['3dTextDistance'] or 5), '[E] - Black Market')
+        table.insert(locationsData, {
+          coords = vector3(x, y, z),
+          text = "[E] - Black Market"
+        })
       end
-      --------------------------
-      -- Listen for menu open --
-      --------------------------
-      if IsControlJustPressed(1, MENU_KEY) then
-          if IsPlayerAtBlackMarket() then
-              if isOpen() then
-                  mainMenu:Clear()
-                  CreateItemList(mainMenu)
-                  mainMenu:Visible(not mainMenu:Visible())
-              else
-                  exports.globals:notify("My connect is still sleeping! Come back later!")
-              end
-          end
-      end
+      exports.globals:register3dTextLocations(locationsData)
+    end
+    -- Process Menu --
+    _menuPool:MouseControlsEnabled(false)
+    _menuPool:ControlDisablingEnabled(false)
+    _menuPool:ProcessMenus()
+    --------------------------
+    -- Listen for menu open --
+    --------------------------
+    if IsControlJustPressed(1, MENU_KEY) then
+        if IsPlayerAtBlackMarket() then
+            if isOpen() then
+                mainMenu:Clear()
+                CreateItemList(mainMenu)
+                mainMenu:Visible(not mainMenu:Visible())
+            else
+                exports.globals:notify("My connect is still sleeping! Come back later!")
+            end
+        end
+    end
 
-      if mainMenu:Visible() then
-          local playerPed = PlayerPedId()
-          local playerCoords = GetEntityCoords(playerPed)
-          local x, y, z = table.unpack(markets[closest_shop]['coords'])
-          if Vdist(playerCoords, x, y, z) > 5.0 then
-              mainMenu:Visible(false)
-          end
-      end
+    if mainMenu:Visible() then
+        local playerPed = PlayerPedId()
+        local playerCoords = GetEntityCoords(playerPed)
+        local x, y, z = table.unpack(markets[closest_shop]['coords'])
+        if Vdist(playerCoords, x, y, z) > 5.0 then
+            mainMenu:Visible(false)
+        end
+    end
 	end
 end)
 
