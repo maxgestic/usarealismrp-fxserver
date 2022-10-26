@@ -291,23 +291,20 @@ Citizen.CreateThread(function()
 end)
 
 -- draw 3D text --
-Citizen.CreateThread(function()
-	while true do
-		if not isMechanicPartMenuOpen then
-			for name, data in pairs(locations) do
-				if onDuty == "no" then
-					DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign in (~g~Mechanic~s~)')
-				else
-					DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign out (~g~Mechanic~s~) | [Hold E] - Order Parts | [Hold V] - Retrieve Truck')
-				end
-				if data.impound then
-					DrawText3D(data.impound.x, data.impound.y, (data.impound.z + 1.5), 15, '[E] - Impound Vehicle')
-				end
-			end
-		end
-		Wait(1)
+local locationsData = {}
+for name, data in pairs(locations) do
+	table.insert(locationsData, {
+		coords = vector3(data.duty.x, data.duty.y, data.duty.z + 1.0),
+		text = '[E] - Toggle Duty (~g~Mechanic~s~) | [Hold E] - Order Parts | [Hold V] - Retrieve Truck'
+	})
+	if data.impound then
+		table.insert(locationsData, {
+			coords = vector3(data.impound.x, data.impound.y, data.impound.z + 1.5),
+			text = '[E] - Impound Vehicle'
+		})
 	end
-end)
+end
+exports.globals:register3dTextLocations(locationsData)
 
 -- listen for key presses --
 Citizen.CreateThread(function()
