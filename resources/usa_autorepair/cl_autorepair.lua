@@ -35,6 +35,15 @@ vehicleRepairStation = {
 
 }
 
+local locationsData = {}
+for i = 1, #vehicleRepairStation do
+	table.insert(locationsData, {
+		coords = vector3(vehicleRepairStation[i][1], vehicleRepairStation[i][2], vehicleRepairStation[i][3] + 1.0),
+		text = "[E] - Auto Repair"
+	})
+end
+exports.globals:register3dTextLocations(locationsData)
+
 repairBlips = {
 	{536.1182,  -178.5338,  53.08846},
 	{2006.354,  3798.739,  30.83191},
@@ -108,10 +117,6 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
-		for i = 1, #vehicleRepairStation do
-			local repairStation = vehicleRepairStation[i]
-			DrawText3D(repairStation[1], repairStation[2], (repairStation[3] + 1.0), 5, '[E] - Auto Repair')
-		end
 	end
 end)
 
@@ -133,22 +138,6 @@ end
 -----------------
 -----------------
 -----------------
-
-function DrawText3D(x, y, z, distance, text)
-  if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
-    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(1)
-    AddTextComponentString(text)
-    DrawText(_x,_y)
-    local factor = (string.len(text)) / 470
-    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-  end
-end
 
 function DrawTimer(beginTime, duration, x, y, text)
     if not HasStreamedTextureDictLoaded('timerbars') then
