@@ -19,6 +19,15 @@ local locations = {
   { x = -542.51873779297, y = -583.68939208984, z = 34.681762695313} -- New Mall MLO
 }
 
+local locationsData = {}
+for i = 1, #locations do
+  table.insert(locationsData, {
+	coords = vector3(locations[i].x, locations[i].y, locations[i].z),
+	text = "[E] - Ammunation"
+  })
+end
+exports.globals:register3dTextLocations(locationsData)
+
 local purchasedWeapons = 0
 
 local recentWeapon911 = false
@@ -114,7 +123,6 @@ Citizen.CreateThread(function()
     local mycoords = GetEntityCoords(GetPlayerPed(-1))
 		-- see if close to any stores --
     for i = 1, #locations do
-    	DrawText3D(locations[i].x, locations[i].y, locations[i].z, 5, '[E] - Ammunation')
     	if IsControlJustPressed(1, MENU_KEY) and not _menuPool:IsAnyMenuOpen() then
 				if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 1.3 then
 					Wait(500)
@@ -229,22 +237,6 @@ Citizen.CreateThread(function()
     	TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true);
 	end
 end)
-
-function DrawText3D(x, y, z, distance, text)
-  if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
-    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(1)
-    AddTextComponentString(text)
-    DrawText(_x,_y)
-    local factor = (string.len(text)) / 370
-    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-  end
-end
 
 function ShowCCWTerms(src)
 	TriggerEvent('chatMessage', '', { 0, 0, 0 }, "^01) The license holder is legally allowed to carry a weapon so long as it remains ^3CONCEALED^0 at all times.")
