@@ -19,6 +19,15 @@ local LOCATIONS = {
     {x = -434.47225952148, y = -32.409156799316, z = 40.875095367432} --Cockatoos Downstairs Bar
 }
 
+local locationsData = {}
+for i = 1, #LOCATIONS do
+  table.insert(locationsData, {
+	coords = vector3(LOCATIONS[i].x, LOCATIONS[i].y, LOCATIONS[i].z),
+	text = "[E] - Bar"
+  })
+end
+exports.globals:register3dTextLocations(locationsData)
+
 local ITEMS = {} -- loaded from server
 TriggerServerEvent("bars:loadItems")
 
@@ -63,10 +72,6 @@ Citizen.CreateThread(function()
     _menuPool:MouseControlsEnabled(false)
     _menuPool:ControlDisablingEnabled(false)
     _menuPool:ProcessMenus()
-
-    for i = 1, #LOCATIONS do
-	    DrawText3D(LOCATIONS[i].x, LOCATIONS[i].y, LOCATIONS[i].z, 4, '[E] - Bar')
-    end
 
 		if IsControlJustPressed(1, MENU_OPEN_KEY) then
       for i = 1, #LOCATIONS do
