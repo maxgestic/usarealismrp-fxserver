@@ -46,6 +46,15 @@ local PRISON_GUARD_SIGN_IN_LOCATIONS = {
     {x = -1787.9445800781, y = 2997.0026855469, z = 32.809375762939} -- Zancudo
 }
 
+local locationsData = {}
+for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
+  table.insert(locationsData, {
+	coords = vector3(PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z),
+	text = "[E] - Locker Room"
+  })
+end
+exports.globals:register3dTextLocations(locationsData)
+
 local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 , 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30}
 
 local MAX_COMPONENT = 270
@@ -307,9 +316,6 @@ Citizen.CreateThread(function()
         _menuPool:ProcessMenus()
         local mycoords = GetEntityCoords(GetPlayerPed(-1))
         -- see if close to any stores --
-        for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
-          DrawText3D(PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z, 5, '[E] - Locker Room')
-        end
         if IsControlJustPressed(1, MENU_KEY) and not _menuPool:IsAnyMenuOpen() then
           for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
             if Vdist(mycoords, PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z) < 2.0 then
