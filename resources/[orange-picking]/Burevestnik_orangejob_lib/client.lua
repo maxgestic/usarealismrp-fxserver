@@ -68,9 +68,7 @@ Citizen.CreateThread(function()
             local playerPed = PlayerPedId()
             local x,y,z = table.unpack(GetEntityCoords(playerPed, true))
             local Blips = Config.Blips[i]
-            if GetDistanceBetweenCoords(x,y,z, Blips["x"], Blips["y"], Blips["z"], true) > 2.0 then
-                IsPlayerNearObj = false
-            else
+            if GetDistanceBetweenCoords(x,y,z, Blips["x"], Blips["y"], Blips["z"], true) <= 2.0 then
                 DisplayHelpText(Config.Translation['menu']) 
                 if IsControlJustPressed(0, 38) then
                     TriggerEvent('bur_nui_orangejob_lib:open') 
@@ -98,28 +96,32 @@ if Config.UseBlips == true then
     end)
 end
 
-
 Citizen.CreateThread(function()
 	while true do
-        Citizen.Wait(10)
-        local playerPed = PlayerPedId()
-        local x,y,z = table.unpack(GetEntityCoords(playerPed, true))
-        Citizen.Wait(0)
-        for i=1, #Config.Orange, 1 do
-            local Orange = Config.Orange[i]
-            if GetDistanceBetweenCoords(x,y,z, Orange["x"], Orange["y"], Orange["z"], true) > 2.0 then
-                IsPlayerNearObj = false
-            else
-                DisplayHelpText(Config.Translation['menu'])
-                if Orange["done"] == true then 
-                    DisplayHelpText(Config.Translation['collected']) 
-                else 
-                    if IsControlJustPressed(0, 38) then
+        if IsControlJustPressed(0, 38) then
+            local playerPed = PlayerPedId()
+            local x,y,z = table.unpack(GetEntityCoords(playerPed, true))
+            for i=1, #Config.Orange do
+                local Orange = Config.Orange[i]
+                if GetDistanceBetweenCoords(x,y,z, Orange["x"], Orange["y"], Orange["z"], true) <= 2.0 then
+                    if not Orange["done"] then
                         Orange["done"] = true
                         TriggerEvent('bur_nui_orangejob:open')
+                    else
+                        exports.globals:notify("Already harvested")
                     end
                 end
             end
         end
+        Wait(1)
 	end 
 end)
+
+local locationsData = {}
+for i = 1, #Config.Orange do
+  table.insert(locationsData, {
+	coords = vector3(Config.Orange[i].x, Config.Orange[i].y, Config.Orange[i].z),
+	text = "[E] - Harvest Oranges"
+  })
+end
+exports.globals:register3dTextLocations(locationsData)
