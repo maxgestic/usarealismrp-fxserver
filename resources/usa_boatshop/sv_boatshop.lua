@@ -16,7 +16,8 @@ local boats = {
   ["Submersible 2"] = {name = "Submersible 2", buy = 750000, rent = 20000},
   ["Sea Ray L650 Fly"] = {name = "Sea Ray L650 Fly", buy = 3000000, rent = 50000},
   ["Amels 200"] = {name = "Amels 200", buy = 15000000, rent = 500000},
-  ["Kraken Avisa"] = {name = "Kraken Avisa", buy = 1000000, rent = 50000}
+  ["Kraken Avisa"] = {name = "Kraken Avisa", buy = 1000000, rent = 50000},
+  ["42ft Yellow Fin"] = {name = "42ft Yellow Fin", buy = 75000, rent = 11000}
 }
 
 local rentals = {}
