@@ -30,7 +30,7 @@ local SETTINGS = {
       ["w_sb_smg"] = 736523883,
       ["w_sb_smgmk2"] = GetHashKey("WEAPON_SMG_MK2"),
       ["w_sb_gusenberg"] = 1627465347,
-      ["w_sb_pdw"] = GetHashKe("WEAPON_COMBATPDW"),
+      ["w_sb_pdw"] = GetHashKey("WEAPON_COMBATPDW"),
       -- sniper rifles:
       ["w_sr_sniperrifle"] = 100416529,
       -- shotguns:
