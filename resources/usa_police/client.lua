@@ -18,6 +18,21 @@ local policeArmourys = {
 	{x = -1807.0364990234, y = 3002.6257324219, z = 32.809722900391} -- Fort Zancudo
 }
 
+local locationsData = {}
+for i = 1, #policeLockerRooms do
+	table.insert(locationsData, {
+		coords = vector3(policeLockerRooms[i].x, policeLockerRooms[i].y, policeLockerRooms[i].z),
+		text = "[E] - Locker Room"
+	})
+end
+for i = 1, #policeArmourys do
+	table.insert(locationsData, {
+		coords = vector3(policeArmourys[i].x, policeArmourys[i].y, policeArmourys[i].z),
+		text = "[E] - Armory"
+	})
+end
+exports.globals:register3dTextLocations(locationsData)
+
 local weapons = {} -- armory items
 
 local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 , 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30}
@@ -331,22 +346,6 @@ end
 
 _menuPool:RefreshIndex()
 
--- Functions --
-function DrawText3D(x, y, z, distance, text)
-    if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), x, y, z, true) < distance then
-        local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-        SetTextScale(0.35, 0.35)
-        SetTextFont(4)
-        SetTextProportional(1)
-        SetTextColour(255, 255, 255, 215)
-        SetTextEntry("STRING")
-        SetTextCentre(1)
-        AddTextComponentString(text)
-        DrawText(_x,_y)
-        local factor = (string.len(text)) / 370
-        DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-    end
-end
 -- Script Loop --
 Citizen.CreateThread(function()
 	while true do
@@ -357,8 +356,6 @@ Citizen.CreateThread(function()
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:ProcessMenus()
 		for i = 1, #policeLockerRooms do
-			DrawText3D(policeLockerRooms[i].x, policeLockerRooms[i].y, policeLockerRooms[i].z, 3.5, '[E] - Locker Room')
-			DrawText3D(policeArmourys[i].x, policeArmourys[i].y, policeArmourys[i].z, 4, '[E] - Armory')
 			if Vdist(playerCoords, policeLockerRooms[i].x, policeLockerRooms[i].y, policeLockerRooms[i].z)  <  2 then
 				if IsControlJustPressed(1, MENU_OPEN_KEY) then
 					closest_shop = policeLockerRooms[i] --// set shop player is at
