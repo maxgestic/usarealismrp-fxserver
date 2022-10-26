@@ -16,6 +16,15 @@ local EMSLockerRooms = {
 {x = -252.5450, y = 6309.8086, z = 32.4272} -- paleto clinic
 }
 
+local locationsData = {}
+for i = 1, #EMSLockerRooms do
+  table.insert(locationsData, {
+	coords = vector3(EMSLockerRooms[i].x, EMSLockerRooms[i].y, EMSLockerRooms[i].z),
+	text = "[E] - Locker Room"
+  })
+end
+exports.globals:register3dTextLocations(locationsData)
+
 local emsoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 local arrSkinGeneralCaptions = {"MP Male", "MP Female", "Fireman", "Paramedic - Male", "Paramedic - Female", "Doctor"}
@@ -288,23 +297,6 @@ end
 
 _menuPool:RefreshIndex()
 
--- Functions --
-function DrawText3D(x, y, z, distance, text)
-    if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), x, y, z, true) < distance then
-        local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-        SetTextScale(0.35, 0.35)
-        SetTextFont(4)
-        SetTextProportional(1)
-        SetTextColour(255, 255, 255, 215)
-        SetTextEntry("STRING")
-        SetTextCentre(1)
-        AddTextComponentString(text)
-        DrawText(_x,_y)
-        local factor = (string.len(text)) / 370
-        DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-    end
-end
-
 Citizen.CreateThread(function()
 	while true do
 		local me = GetPlayerPed(-1)
@@ -313,7 +305,6 @@ Citizen.CreateThread(function()
 	    _menuPool:ControlDisablingEnabled(false)
 	    _menuPool:ProcessMenus()
 		for i = 1, #EMSLockerRooms do
-			DrawText3D(EMSLockerRooms[i].x, EMSLockerRooms[i].y, EMSLockerRooms[i].z, 5, '[E] - Locker Room')
 			if Vdist(playerCoords, EMSLockerRooms[i].x, EMSLockerRooms[i].y, EMSLockerRooms[i].z)  <  2 then
 				if IsControlJustPressed(1, MENU_OPEN_KEY) then
 					closest_shop = EMSLockerRooms[i] --// set shop player is at
