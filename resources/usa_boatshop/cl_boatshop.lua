@@ -162,6 +162,19 @@ local locations = {
 	}
 }
 
+local locationsData = {}
+for name, data in pairs(locations) do
+  table.insert(locationsData, {
+	coords = vector3(data.rent.x, data.rent.y, data.rent.z),
+	text = "[E] - Boat Management"
+  })
+  table.insert(locationsData, {
+	coords = vector3(data.return_rental.x, data.return_rental.y, data.return_rental.z),
+	text = "[E] - Return Boat"
+  })
+end
+exports.globals:register3dTextLocations(locationsData)
+
 -- S P A W N  J O B  P E D S
 local createdJobPeds = {}
 Citizen.CreateThread(function()
@@ -201,8 +214,6 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		-- for accessing shops
 		for name, data in pairs(locations) do
-			DrawText3D(data.rent.x, data.rent.y, data.rent.z, 8, '[E] - Boat Management')
-			DrawText3D(data.return_rental.x, data.return_rental.y, data.return_rental.z, 30, '[E] - Return Boat')
 			if IsControlJustPressed(0, MENU_OPEN_KEY) then
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.return_rental.x, data.return_rental.y, data.return_rental.z, true) < 10 then
 					Citizen.Wait(500)
