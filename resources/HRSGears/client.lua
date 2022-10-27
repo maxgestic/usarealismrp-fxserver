@@ -157,7 +157,7 @@ RegisterCommand("manny-tranny-upshift", function()
     end
 end, false)
 
-RegisterKeyMapping('manny-tranny-downshift', 'Vehicle: Down Shift', 'keyboard', 'LSHIFT')
+RegisterKeyMapping('manny-tranny-downshift', 'Vehicle: Down Shift', 'keyboard', 'LCONTROL')
 RegisterKeyMapping('manny-tranny-upshift', 'Vehicle: Up Shift', 'keyboard', 'G')
 
 function SimulateGears()
