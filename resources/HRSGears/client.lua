@@ -127,53 +127,38 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0) 
         if manualon == true and vehicle ~= nil then
-        DisableControlAction(0, 80, true)
-        DisableControlAction(0, 21, true)
+        DisableControlAction(0, 80, true) -- 80 = R
+        --DisableControlAction(0, 21, true)
         end
-    end
-
-end)
-
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0) 
-        
-        if manualon == true and vehicle ~= nil then
-
-            if vehicle ~= nil then
-
-
-            
-            -- Shift up and down
-                if ready == true then
-                    if IsDisabledControlJustPressed(0, 21) then
-                        if selectedgear <= numgears - 1 then 
-                            DisableControlAction(0, 71, true)
-                            Wait(300)
-                            selectedgear = selectedgear + 1
-                            DisableControlAction(0, 71, false)
-                            SimulateGears()
-                        end
-                    elseif IsDisabledControlJustPressed(0, 80) then
-                        if selectedgear > -1 then
-                           
-                            DisableControlAction(0, 71, true)
-                            Wait(300)
-                            selectedgear = selectedgear - 1
-                            DisableControlAction(0, 71, false)
-                            SimulateGears()
-                        end
-                    end
-                end
-            end
-
-        end
-
     end
 end)
 
+RegisterCommand("manny-tranny-downshift", function()
+    if manualon == true and vehicle ~= nil and ready == true then
+        if selectedgear > -1 then
+            DisableControlAction(0, 71, true)
+            Wait(300)
+            selectedgear = selectedgear - 1
+            DisableControlAction(0, 71, false)
+            SimulateGears()
+        end
+    end
+end, false)
 
+RegisterCommand("manny-tranny-upshift", function()
+    if manualon == true and vehicle ~= nil and ready == true then
+        if selectedgear <= numgears - 1 then 
+            DisableControlAction(0, 71, true)
+            Wait(300)
+            selectedgear = selectedgear + 1
+            DisableControlAction(0, 71, false)
+            SimulateGears()
+        end
+    end
+end, false)
+
+RegisterKeyMapping('manny-tranny-downshift', 'Vehicle: Down Shift', 'keyboard', 'LSHIFT')
+RegisterKeyMapping('manny-tranny-upshift', 'Vehicle: Up Shift', 'keyboard', 'G')
 
 function SimulateGears()
 
