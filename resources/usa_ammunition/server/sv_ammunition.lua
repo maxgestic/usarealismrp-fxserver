@@ -255,7 +255,8 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
                             type = "magazine",
                             receives = ammoName,
                             MAX_CAPACITY = max,
-                            currentCapacity = ammoCountToUse
+                            currentCapacity = ammoCountToUse,
+                            weight = 7
                         }
                     end
                     if not curWep.uuid then
@@ -340,7 +341,8 @@ AddEventHandler("ammo:checkForAmmo", function(selectedIndex)
                             type = "magazine",
                             receives = WEPS_NO_MAGS[curWep.hash].AMMO_NAME,
                             MAX_CAPACITY = WEPS_NO_MAGS[curWep.hash].MAX_CAPACITY,
-                            currentCapacity = ammoCountToUse
+                            currentCapacity = ammoCountToUse,
+                            weight = 7
                         }
                         char.modifyItemByUUID(curWep.uuid, { magazine = newMag })
                     end
