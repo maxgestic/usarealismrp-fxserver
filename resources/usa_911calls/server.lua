@@ -191,6 +191,9 @@ RegisterServerEvent('911:BankTruck')
 RegisterServerEvent('911:TruckAtRisk')
 RegisterServerEvent('911:SuspiciousPerson')
 RegisterServerEvent('911:VehicleBoosting')
+RegisterServerEvent('911:NoTicket')
+RegisterServerEvent('911:NoTicketUpdate')
+RegisterServerEvent('911:NoTicketEnd')
 
 
 local DISPATCH_DELAY_PERIOD_SECONDS = 60
@@ -511,6 +514,30 @@ end)
 AddEventHandler('911:VehicleBoosting', function(x, y, z, street, plate, vehclass)
     local string = '^*Vehicle Boosting in Progress:^r '..street..' ^1^*|^r ^*Vehicle Class:^r ['..vehclass..'] ^1^*|^r ^*Plate:^r '..plate..' ^1^*'
     Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Vehicle Boosting')
+end)
+
+AddEventHandler("911:NoTicket", function(coords)
+    if not recentCalls["No Ticket"] then
+        recentCalls["No Ticket"] = true
+        local string = '^*^rLS Transit^r: There is a person without a valid ticket on a train or metro!'
+        Send911Notification({'sheriff', 'corrections'}, string, coords.x, coords.y, coords.z, 'No Ticket')
+    end
+end)
+
+AddEventHandler("911:NoTicketUpdate", function(coords)
+    if not recentCalls["No Ticket Update"] then
+        recentCalls["No Ticket Update"] = true
+        local string = '^*^rLS Transit^r: Updated location of the person without a ticket on train or metro!'
+        Send911Notification({'sheriff', 'corrections'}, string, coords.x, coords.y, coords.z, 'No Ticket Update')
+    end
+end)
+
+AddEventHandler("911:NoTicketEnd", function(coords)
+    if not recentCalls["No Ticket End"] then
+        recentCalls["No Ticket End"] = true
+        local string = '^*^rLS Transit^r: A person without a valid ticket has left the train or metro!'
+        Send911Notification({'sheriff', 'corrections'}, string, coords.x, coords.y, coords.z, 'No Ticket End')
+    end
 end)
 
 RegisterServerEvent('carjack:playHandsUpOnAll')

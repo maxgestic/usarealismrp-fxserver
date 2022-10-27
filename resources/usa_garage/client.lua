@@ -76,7 +76,9 @@ locations = {
 	{x = -24.549116134644, y = -1024.7790527344, z = 28.883750915527, noBlip = true}, -- PDM
 	{x = -3142.0212402344, y = 1091.0336914063, z = 20.686082839966, noBlip = false}, -- Great Ocean Highway (tattoo Shop)
 	{x = -1520.6877441406, y = 4957.5854492188, z = 62.234802246094, noBlip = false}, -- Great Ocean Highway (hunting blip)
-	{x = -581.46343994141, y = -242.82208251953, z = 35.965721130371, noBlip = true} -- Court House, Rockford Drive
+	{x = -581.46343994141, y = -242.82208251953, z = 35.965721130371, noBlip = true}, -- Court House, Rockford Drive
+  {x = 234.1309, y = -2492.6128, z = 6.5814, noBlip = true}, -- Train Clock in
+	{x = -935.0384, y = -2316.2700, z =  6.7091, noBlip = true} -- metro Clock in
 }
 
 local VEHICLE_DAMAGES = {}

@@ -105,6 +105,8 @@ Citizen.CreateThread(function()
 					DrawTxt(0.663, 1.455, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)
 				end
 				DisplayRadar(true)
+			elseif GetVehicleClass(playerVeh) == 21 then
+				DisplayRadar(true)
 			else -- on foot
 				DisplayRadar(false)
 				DrawRect(0.08555, 0.976, 0.14, 0.0149999999999998, 0, 0, 0, 140)
