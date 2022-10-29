@@ -250,6 +250,24 @@ locations = {
 			disable_blip = false
 		}
 	},
+	["Greenwich PW."] = {
+		duty = {
+			x = -1140.01, 
+			y = -2005.84, 
+			z = 13.18,
+		},
+		truck_spawn = {
+			x = -1150.46, 
+			y = -1981.68, 
+			z = 13.16,
+			heading = 310.64
+		},
+		impound = nil,
+		ped = nil,
+		show_blip = {
+			disable_blip = true
+		}
+	},
 }
 	
 -- S P A W N  J O B  P E D S
