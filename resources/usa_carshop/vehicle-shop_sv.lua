@@ -547,7 +547,7 @@ local vehicleShopItems = {
 			{make = "Lamborghini", model = "Diablo GTR (1999)", price = 975000, hash = "500gtrlam", storage_capacity = 120.0},
 			{make = "Lamborghini", model = "Essenza (NOT ROAD LEGAL)", price = 3000000, hash = "rmodessenza", storage_capacity = 90.0},
 			{make = "Lamborghini", model = "Gallardo LW", price = 450000, hash = "GallardoLW", storage_capacity = 130.0},
-			{make = "Lamborghini", model = "Huracan Evo 2 (2022) (NOT ROAD LEGAL)", price = 2800000, hash = "evo2", storage_capacity = 90.0},
+			{make = "Lamborghini", model = "Huracan Evo 2 (2022) (NOT ROAD LEGAL)", price = 1800000, hash = "evo2", storage_capacity = 90.0},
 			{make = "Lamborghini", model = "Huracan LW", price = 750000, hash = "lwhuracan", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Murcielago LP-670", price = 450000, hash = "lp670", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Murcielago LP-670 LW", price = 450000, hash = "lwlp670", storage_capacity = 130.0},
