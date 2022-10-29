@@ -205,6 +205,9 @@ supportedVehicles = {
     { name = "Jaguar C-X75", model = "cx75", class = "S" },
     { name = "Lamborghini Essenza", model = "rmodessenza", class = "S" },
     { name = "Mercedes SLR Stirling Moss", model = "moss", class = "S" },
+    { name = "Ford GT500" , model = "shelby20", class = "S" },
+    { name = "Mercedes-Benz AMG GT" , model = "rr20amggt", class = "S" },
+    { name = "Dodge Charger (Redeye)" , model = "chr20" , class = "S" },
     -- A Class:**
     { name = "Sultan RS", model = "sultanrs", class = "A" },
     { name = "Annis Elegy Retro", model = "elegy", class = "A" },
@@ -322,6 +325,8 @@ supportedVehicles = {
     { name = "Ducati Panigale", model = "panigale", class = "A" },
     { name = "Yamaha R1", model = "yamahar1", class = "A" },
     { name = "Obey 8F Drafter", model = "drafter", class = "A" },
+    { name = "Lamborghini Urus", model = "urustc", class = "A" },
+    { name = "Dodge Hellephant Durango", model = "hellephantdurango", class = "A"},
     -- B Class:**
     { name = "Bravado Gauntlet Hellfire", model = "gauntlet4", class = "B" },
     { name = "Declasse Hotring Sabre", model = "hotring", class = "B" },

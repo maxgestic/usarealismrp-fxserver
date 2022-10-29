@@ -468,6 +468,7 @@ local vehicleShopItems = {
 			{make = "Datsun", model = "Bluebird 910 SSS (1982) (DRIFT)", price = 60000, hash = "datsun910", storage_capacity = 180.0},
 			--
 			{make = "Dodge", model = "Charger (2016)", price = 120000, hash = "16charger", storage_capacity = 160.0},
+			{make = "Dodge", model = "Charger (Redeye)", price = 275000, hash = "chr20", storage_capacity = 160.0},
 			{make = "Dodge", model = "Challenger", price = 120000, hash = "16challenger", storage_capacity = 130.0},
 			{make = "Dodge", model = "Hellephant Durango", price = 190000, hash = "hellephantdurango", storage_capacity = 260.0},
 			{make = "Dodge", model = "Ram 1500 Custom", price = 170000, hash = "gcram1500", storage_capacity = 200.0},
@@ -502,6 +503,7 @@ local vehicleShopItems = {
 			{make = "Ford", model = "Focus RS (2017)", price = 75000, hash = "17fordRS", storage_capacity = 140.0},
 			{make = "Ford", model = "Galaxie", price = 62000, hash = "galaxie", storage_capacity = 160.0},
 			{make = "Ford", model = "GT500 (1967)", price = 130000, hash = "67GT500", storage_capacity = 140.0},
+			{make = "Ford", model = "GT500 (2020)", price = 250000, hash = "shelby20", storage_capacity = 170.0},
 			--{make = "Ford", model = "Hula Girl (1932)", price = 60000, hash = "ford32hulagirl", storage_capacity = 160.0}, -- Model messed up, doesn't drive right
 			{make = "Ford", model = "Mach-E", price = 92000, hash = "mache", storage_capacity = 240.0},
 			{make = "Ford", model = "Mustang", price = 100000, hash = "mgt", storage_capacity = 150.0},
@@ -550,6 +552,7 @@ local vehicleShopItems = {
 			{make = "Lamborghini", model = "Murcielago LP-670", price = 450000, hash = "lp670", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Murcielago LP-670 LW", price = 450000, hash = "lwlp670", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "LP 700R", price = 850000, hash = "lp700r", storage_capacity = 130.0},
+			{make = "Lamborghini", model = "Urus", price = 250000, hash = "urustc", storage_capacity = 200.0}, 
 			{make = "Lamborghini", model = "Sian", price = 3800000, hash = "rmodsianr", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Terzo Millennio", price = 2800000, hash = "ocnlamtmc", storage_capacity = 130.0},
 			--
@@ -574,6 +577,7 @@ local vehicleShopItems = {
 			{make = "Mercedes-Benz", model = "C63 AMG", price = 175000, hash = "C63AMG", storage_capacity = 175.0},
 			{make = "Mercedes-Benz", model = "E55 AMG", price = 100000, hash = "benze55", storage_capacity = 175.0},
 			{make = "Mercedes-Benz", model = "GT63", price = 215000, hash = "rmodgt63", storage_capacity = 175.0},
+			{make = "Mercedes-Benz", model = "AMG GT", price = 500000, hash = "rr20amggt", storage_capacity = 175.0},
 			{make = "Mercedes-Benz", model = "G-Class Brabus", price = 180000, hash = "w463a1", storage_capacity = 280.0},
 			{make = "Mercedes-Benz", model = "S63 AMG Cabriolet (2017)", price = 190000, hash = "mers63c", storage_capacity = 185.0},
      		 	{make = "Mercedes-Benz", model = "S650 Maybach (2019)", price = 220000, hash = "19S650", storage_capacity = 220.0},
@@ -596,6 +600,7 @@ local vehicleShopItems = {
 			{make = "Porsche", model = "928 GTS (1993)", price = 60000, hash = "928gts", storage_capacity = 160.0},
 			{make = "Porsche", model = "GT1", price = 3850000, hash = "gt1", storage_capacity = 130.0},
 			{make = "Porsche", model = "GT3", price = 280000, hash = "pgt3", storage_capacity = 160.0},
+			{make = "Porsche", model = "GT3 (2022)", price = 325000, hash = "pgt322", storage_capacity = 160.0},
 			{make = "Porsche", model = "Taycan", price = 140000, hash = "taycan", storage_capacity = 180.0},
 			--
 			{make = "Rolls Royce", model = "Cullinan", price = 500000, hash = "cullinan", storage_capacity = 230.0},
