@@ -11,6 +11,7 @@ const mdtApp = new Vue({
             }
         },
         person_check: {
+            _id: null,
             ssn: null,
             fname: null,
             lname: null,
@@ -24,7 +25,8 @@ const mdtApp = new Vue({
                 crimes: null,
                 tickets: null
             },
-            mugshot: "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg"
+            mugshot: "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg",
+            personNotes: null
         },
         plate_check: {
             search_input: null,
@@ -80,7 +82,8 @@ const mdtApp = new Vue({
         notification: null,
         current_tab: "Person(s) Check", // default tab
         searchedPersonResults: [],
-        isLoadingAsyncData: false
+        isLoadingAsyncData: false,
+        lastTimeoutId: null
     },
     methods: {
         UpdatePhoto() {
@@ -305,6 +308,17 @@ const mdtApp = new Vue({
             }));
             this.searchedPersonResults = [];
             this.name_search = "";
+        },
+        setNoteSaveTimeout() {
+            // save 2 seconds after done pressing keys
+            if (this.lastTimeoutId) window.clearTimeout(this.lastTimeoutId);
+            this.lastTimeoutId = window.setTimeout(() =>{
+                // send value to server script for saving in mdt-person-check-notes db
+                $.post("http://usa-mdt/saveNote", JSON.stringify({
+                    targetCharId: this.person_check._id,
+                    value: this.person_check.personNotes
+                }));
+            }, 2000);
         }
     },
     computed: {
@@ -416,18 +430,20 @@ document.onreadystatechange = () => {
                 /* clear fields */
                 if  (mdtApp.current_tab == "Person(s) Check") {
                     mdtApp.person_check = {
-                            ssn: null,
-                            fname: null,
-                            lname: null,
-                            dob: null,
-                            licenses: null,
-                            insurance: null,
-                            criminal_history: {
-                                crimes: null,
-                                tickets: null
-                            },
-                            mugshot: "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg"
-                        }
+                        _id: null,
+                        ssn: null,
+                        fname: null,
+                        lname: null,
+                        dob: null,
+                        licenses: null,
+                        insurance: null,
+                        criminal_history: {
+                            crimes: null,
+                            tickets: null
+                        },
+                        mugshot: "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg",
+                        personNotes: null
+                    }
                 } else if (mdtApp.current_tab == "Plate Check") {
                     mdtApp.plate_check = {
                         search_input: null,
@@ -502,10 +518,6 @@ document.onreadystatechange = () => {
 document.onkeydown = function (data) {
     if (data.which == 27 || data.which == 112) { // ESC or F1
         $.post('http://usa-mdt/close', JSON.stringify({}));
-    } else if (data.which == 13) { // enter
-        /* prevent enter key from closing MDT for some reason */
-        if (!$("textarea").hasFocus())
-            return false;
     }
 };
 

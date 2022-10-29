@@ -287,8 +287,8 @@
                                     </div>
                                     </div>
 
-                                     <!-- Mugshot Photo Update Modal -->
-                                     <div id="dna-update" class="w3-modal">
+                                    <!-- Mugshot Photo Update Modal -->
+                                    <div id="dna-update" class="w3-modal">
                                         <div class="w3-modal-content">
                                             <div class="w3-container" style="padding: 0 2em 2em 2em;">
                                                 <span onclick="document.getElementById('dna-update').style.display='none'"
@@ -301,42 +301,49 @@
                                         </div>
                                         </div>
 
-                                    <div style="display: inline-block; width: 60%; margin-right: 3em;">
-                                        <div class="w3-text-red">
-                                            <ul>
-                                                <li v-for="notification in personCheckNotifications">
-                                                    {{ notification }}
-                                                </li>
-                                            </ul>
+                                    <div class="w3-cell-row">
+                                        <div class="w3-container w3-cell w3-cell-middle">
+                                            <div class="w3-text-red">
+                                                <ul>
+                                                    <li v-for="notification in personCheckNotifications">
+                                                        {{ notification }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <h4><b>Name:</b></h4>
+
+                                            <table v-if="person_check.fname" class="w3-table-all w3-small">
+                                                <tr>
+                                                    <td>{{ person_check.fname + " " + person_check.lname }}</td>
+                                                </tr>
+                                            </table>
+
+                                            <h4><b>DOB:</b></h4>
+
+                                            <table v-if="person_check.dob" class="w3-table-all w3-small">
+                                                <tr>
+                                                    <td>{{ person_check.dob }}</td>
+                                                </tr>
+                                            </table>
+
+                                            <h4><b>DNA:</b></h4>
+
+                                            <table v-if="person_check.returnedDNA" class="w3-table-all w3-small">
+                                                <tr>
+                                                    <td>{{ person_check.returnedDNA }}</td>
+                                                </tr>
+                                            </table>
+
+                                            <h4><b>Notes:</b></h4>
+
+                                            <textarea v-model="person_check.personNotes" @keyup="setNoteSaveTimeout()" class="w3-small" v-if="typeof person_check.personNotes === 'string'" name="personNotes" id="person-notes" cols="70" rows="10" placeholder="No notes"></textarea>
                                         </div>
 
-                                        <h4><b>Name:</b></h4>
-
-                                        <table v-if="person_check.fname" class="w3-table-all w3-small">
-                                            <tr>
-                                                <td>{{ person_check.fname + " " + person_check.lname }}</td>
-                                            </tr>
-                                        </table>
-
-                                        <h4><b>DOB:</b></h4>
-
-                                        <table v-if="person_check.dob" class="w3-table-all w3-small">
-                                            <tr>
-                                                <td>{{ person_check.dob }}</td>
-                                            </tr>
-                                        </table>
-
-                                        <h4><b>DNA:</b></h4>
-
-                                        <table v-if="person_check.returnedDNA" class="w3-table-all w3-small">
-                                            <tr>
-                                                <td>{{ person_check.returnedDNA }}</td>
-                                            </tr>
-                                        </table>
+                                        <div class="w3-cell">
+                                            <img v-if="person_check.dob" v-bind:src="person_check.mugshot" alt="Mug Shot" height="300" width="235">
+                                        </div>
                                     </div>
-
-                                    <img v-if="person_check.dob" v-bind:src="person_check.mugshot" alt="Mug Shot" height="300" width="235">
-
                                 </div>
 
                                 <h4><b>Address:</b></h4>

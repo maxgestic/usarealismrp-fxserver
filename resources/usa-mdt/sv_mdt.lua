@@ -353,6 +353,14 @@ AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
 		TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 	end
 
+	-- person notes --
+	local notes = exports.essentialmode:getDocument("mdt-person-check-notes", char.get("_id"))
+	if notes and notes.value then
+		person_info.personNotes = notes.value
+	end
+
+	person_info._id = char.get("_id")
+
 	-- send it!
 	TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
 end)
@@ -372,7 +380,6 @@ end
 
 RegisterServerEvent("mdt:PerformPersonCheckByName")
 AddEventHandler("mdt:PerformPersonCheckByName", function(data)
-	print("uhh")
 	local usource = source
 	TriggerEvent('es:exposeDBFunctions', function(db)
 		local query = {
@@ -410,9 +417,7 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 					person_info.mugshot = person.mugshot
 				end
 
-				print("aa")
 				TriggerEvent('properties:getAddressByName', person.name.first .. ' ' .. person.name.last, function(address)
-					print("bb")
 					if address then
 						person_info.address = address
 					else
@@ -472,6 +477,14 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 						}
 						TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 					end
+
+					-- person notes --
+					local notes = exports.essentialmode:getDocument("mdt-person-check-notes", person._id)
+					if notes and notes.value then
+						person_info.personNotes = notes.value
+					end
+
+					person_info._id = person._id
 
 					-- send it!
 					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
@@ -580,6 +593,14 @@ AddEventHandler("mdt:PerformPersonCheckByDNA", function(data)
 						}
 						TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 					end
+
+					-- person notes --
+					local notes = exports.essentialmode:getDocument("mdt-person-check-notes", person._id)
+					if notes and notes.value then
+						person_info.personNotes = notes.value
+					end
+
+					person_info._id = person._id
 
 					-- send it!
 					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
@@ -1091,12 +1112,24 @@ AddEventHandler("mdt:performPersonCheckByCharID", function(id)
 						TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 					end
 
+					local notes = exports.essentialmode:getDocument("mdt-person-check-notes", person._id)
+					if notes and notes.value then
+						person_info.personNotes = notes.value
+					end
+
+					person_info._id = person._id
+
 					-- send it!
 					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
 				end)
 			end
 		end)
 	end)
+end)
+
+RegisterServerEvent("mdt:saveNote")
+AddEventHandler("mdt:saveNote", function(noteId, note)
+	exports.essentialmode:updateDocument("mdt-person-check-notes", noteId, { value = note } , true)
 end)
 
 function addTableEntries(target, src)
@@ -1297,3 +1330,4 @@ end
 -- PERFORM FIRST TIME DB CHECKS --
 exports["globals"]:PerformDBCheck("POLICE REPORTS", "policereports")
 exports["globals"]:PerformDBCheck("BOLOS", "bolos", removeOldBOLOs)
+exports["globals"]:PerformDBCheck("MDT PERSON NOTES", "mdt-person-check-notes")
