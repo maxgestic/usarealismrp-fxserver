@@ -155,6 +155,9 @@ USAVehicles = {
     { name = "Lamborghini Murcielago LP-670", model = "lp670", class = "S" },
     { name = "Lamborghini Murcielago LP-670 LW", model = "lwlp670", class = "S" },
     { name = "Ferrari 458 LW", model = "lw458s", class = "S" },
+    { name = "Ford GT500" , model = "shelby20", class = "S" },
+    { name = "Mercedes-Benz AMG GT" , model = "rr20amggt", class = "S" },
+    { name = "Dodge Charger (Redeye)" , model = "chr20" , class = "S" },
     -- A Class:**
     { name = "Sultan RS", model = "sultanrs", class = "A" },
     { name = "Annis Elegy Retro", model = "elegy", class = "A" },
@@ -271,6 +274,8 @@ USAVehicles = {
     { name = "Kawasaki Z1000", model = "z1000", class = "A" },
     { name = "Ducati Panigale", model = "panigale", class = "A" },
     { name = "Yamaha R1", model = "yamahar1", class = "A" },
+    { name = "Lamborghini Urus", model = "urustc", class = "A" },
+    { name = "Dodge Hellephant Durango", model = "hellephantdurango", class = "A"},
     -- B Class:**
     { name = "Bravado Gauntlet Hellfire", model = "gauntlet4", class = "B" },
     { name = "Declasse Hotring Sabre", model = "hotring", class = "B" },
