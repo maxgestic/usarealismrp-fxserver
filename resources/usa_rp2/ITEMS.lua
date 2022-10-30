@@ -170,6 +170,8 @@ local ITEMS = {
     { name = "5.56mm Bullets", type = "ammo", price = 600, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_03"  },
     { name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.25, quantity = 1 },
     { name = "Stun Gun", type = "weapon", hash = 911657153, price = 400, weight = 5 },
+    { name = "Gun Powder", legality = "legal", quantity = 1, type = "misc", weight = 5 },
+	{ name = "7.62mm Shell Casing", legality = "legal", quantity = 2, type = "misc", weight = 0.2 },
 }
 
 

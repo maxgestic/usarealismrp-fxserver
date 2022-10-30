@@ -693,6 +693,26 @@ Config.recipes = {
             requiredCraftingLevel = 1,
             type = "weapons"
         },
+        { 
+            name = "(10x) 7.62mm Bullets",
+            image = "https://i.imgur.com/twK3t2s.png",
+            requires = {
+                { name = "7.62mm Shell Casing", quantity = 10 },
+                { name = "Gun Powder", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "7.62mm Bullets",
+                    quantity = 10,
+                    type = "ammo",
+                    weight = 0.25,
+                    objectModel = "prop_ld_ammo_pack_03"
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "ammo",
+            craftDurationSeconds = 3 * 60
+        },
     }
 }
 

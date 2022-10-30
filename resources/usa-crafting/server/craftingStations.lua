@@ -14,7 +14,7 @@ AddEventHandler("crafting:attemptCraft", function(recipe)
     local char = exports["usa-characters"]:GetCharacter(source)
     if doesCharHaveAllRequiredItems(char, recipe) then
         -- begin crafting item
-        print("has all items! going to craft!")
+        print("has all items! going to craft: " .. recipe.name)
         TriggerClientEvent("crafting:beginCrafting", source, recipe)
     else
         TriggerClientEvent("usa:notify", source, "Missing required items", "INFO: That requires items: " .. getStringListOfRequiredItems(recipe))
@@ -85,7 +85,7 @@ end
 function getStringListOfRequiredItems(recipe)
     local list = recipe.requires[1].name
     for i = 2, #recipe.requires do
-        list = list + ", " + recipe.requires[i].name
+        list = list .. ", " .. recipe.requires[i].name
     end
     return list
 end

@@ -112,11 +112,21 @@ end
 
 function isOpen()
   local currentHour = GetClockHours()
-  if currentHour >= openingHour and currentHour <= closingHour then
-      return true
-  else
-      return false
+  local openHours = {}
+  local i = openingHour
+  -- gather set of open hour numbers
+  while i ~= closingHour do
+    table.insert(openHours, i)
+    i = (i + 1) % 24
+    Wait(1)
   end
+  -- check to see if current hour matches any
+  for i = 1, #openHours do
+    if openHours[i] == currentHour then
+      return true
+    end
+  end
+  return false
 end
 
 Citizen.CreateThread(function()
