@@ -743,6 +743,9 @@ RegisterServerEvent("mdt:fetchWarrants")
 AddEventHandler("mdt:fetchWarrants", function()
 	local usource = source
 	exports["usa-warrants"]:getWarrants(function(warrants)
+		table.sort(warrants, function(a, b)
+			return a.timestamp > b.timestamp
+		end)
 		TriggerClientEvent("mdt:fetchWarrants", usource, warrants)
 	end)
 end)
@@ -752,7 +755,7 @@ AddEventHandler("mdt:createWarrant", function(warrant)
 	local author = exports["usa-characters"]:GetCharacter(source)
 	warrant.created_by = author.getFullName()
 	warrant.notes = warrant.charges .. " | " .. warrant.suspect_description
-	warrant.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
+	warrant.timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
 	exports["usa-warrants"]:createWarrant(source, warrant, true)
 end)
 
@@ -796,7 +799,7 @@ AddEventHandler("mdt:createBOLO", function(bolo)
 	local usource = source
 	local author = exports["usa-characters"]:GetCharacter(source)
 	bolo.author = author.getFullName()
-	bolo.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
+	bolo.timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
 	bolo.createdTime = os.time()
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
 		-- insert into db
@@ -856,7 +859,7 @@ AddEventHandler("mdt:createPoliceReport", function(report)
 	local usource = source
 	local author = exports["usa-characters"]:GetCharacter(usource)
 	report.author = author.getFullName()
-	report.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
+	report.timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ")
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
 		------------------------------
 		-- Insert into database  --
@@ -1188,6 +1191,11 @@ function fetchBOLOs(src)
 			for i = 1, #(response.rows) do
 				table.insert(BOLOs, response.rows[i].doc)
 			end
+			-- sort by timestamp
+			table.sort(BOLOs, function(a, b)
+				return a.timestamp > b.timestamp
+			end)
+			-- send it!
 			local msg = {
 				type = "bolosLoaded",
 				bolos = BOLOs
@@ -1221,6 +1229,11 @@ function fetchPoliceReports(src)
 				}
 				table.insert(police_reports, report)
 			end
+			-- sort by timestamp
+			table.sort(police_reports, function(a, b)
+				return a.timestamp > b.timestamp
+			end)
+			-- send it!
 			local msg = {
 				type = "policeReportsLoaded",
 				police_reports = police_reports
