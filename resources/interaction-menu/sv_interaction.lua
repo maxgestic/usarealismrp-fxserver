@@ -200,8 +200,8 @@ AddEventHandler("inventory:moveItem", function(data)
 				-- perform move --
 				TriggerEvent("vehicle:moveItemToPlayerInv", usource, data.plate, data.fromSlot, data.toSlot, quantity, char, function(inv)
 					if inv then
-						--TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "updateBothInventories", inventory = { primary = char.get("inventory"), secondary = inv}})
-						TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "inventoryLoaded", inventory = char.get("inventory")})
+						TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "updateBothInventories", inventory = { primary = char.get("inventory"), secondary = inv}})
+						--TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "inventoryLoaded", inventory = char.get("inventory")})
 						TriggerEvent("vehicle:updateForOthers", data.plate, inv)
 					end
 				end)
