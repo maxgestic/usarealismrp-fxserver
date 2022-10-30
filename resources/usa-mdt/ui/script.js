@@ -383,6 +383,9 @@ document.onreadystatechange = () => {
                 }
             } else if (event.data.type == "personInfoLoaded") {
                 /* fill person info data */
+                if (!event.data.person_info.personNotes) {
+                    event.data.person_info.personNotes = "";
+                }
                 mdtApp.person_check = event.data.person_info;
                 /* hide error message */
                 mdtApp.error = null;
