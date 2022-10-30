@@ -262,6 +262,7 @@ var itemImages = {
     "Iron Oxide": "https://i.imgur.com/pBhnwQl.png",
     "Vape": "https://i.imgur.com/d8BS61Q.png",
     "Black Powder": "https://i.imgur.com/Zct2dcM.png",
+    "Gun Powder": "https://i.imgur.com/Zct2dcM.png",
     "Large Firework": "https://i.imgur.com/XHhxRmG.png",
     "Spike Strips": "https://i.imgur.com/0iPbmxW.png",
     "Heavy Shotgun": "https://i.imgur.com/JRP4gPv.png",
@@ -304,6 +305,9 @@ var itemImages = {
     "Blue Shoe": "https://i.imgur.com/Y095wVA.png",
     "Red Shoe": "https://i.imgur.com/SG1z8y3.png",
     "Throwing Knife": "https://i.imgur.com/1AS5hrt.png",
+    "7.62mm Shell Casing": "https://i.imgur.com/JdD8Lf8.png",
+    "5.56mm Shell Casing": "https://i.imgur.com/JdD8Lf8.png",
+    "9x18mm Shell Casing": "https://i.imgur.com/pza2fXR.png",
     // begin card images
     "Narlee": "https://i.imgur.com/KrPw4gk.png",
     "Red Eyes B. Dragon": "https://i.imgur.com/tKEcju1.png",

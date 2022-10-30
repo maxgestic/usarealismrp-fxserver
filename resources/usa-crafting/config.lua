@@ -713,6 +713,46 @@ Config.recipes = {
             type = "ammo",
             craftDurationSeconds = 3 * 60
         },
+        { 
+            name = "(10x) 5.56mm Bullets",
+            image = "https://i.imgur.com/ivr2Jcg.png",
+            requires = {
+                { name = "5.56mm Shell Casing", quantity = 10 },
+                { name = "Gun Powder", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "5.56mm Bullets",
+                    quantity = 10,
+                    type = "ammo",
+                    weight = 0.25,
+                    objectModel = "prop_ld_ammo_pack_03"
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "ammo",
+            craftDurationSeconds = 3 * 60
+        },
+        { 
+            name = "(10x) 9x18mm Bullets",
+            image = "https://i.imgur.com/TFW3q4q.png",
+            requires = {
+                { name = "9x18mm Shell Casing", quantity = 10 },
+                { name = "Gun Powder", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "9x18mm Bullets",
+                    quantity = 10,
+                    type = "ammo",
+                    weight = 0.25,
+                    objectModel = "prop_ld_ammo_pack_03"
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "ammo",
+            craftDurationSeconds = 3 * 60
+        },
     }
 }
 
