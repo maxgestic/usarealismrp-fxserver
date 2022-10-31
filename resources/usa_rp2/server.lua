@@ -251,7 +251,7 @@ TriggerEvent('es:addCommand', 'dv', function(source, args, char)
 	if group ~= "user" or char.get("job") == "eventPlanner" then
 		TriggerClientEvent('impoundVehicle', source)
 	end
-end, { help = "(Delete) Impound a vehicle." })
+end, { help = "(Delete) Impound a vehicle. DO NOT USE FOR TRAINS USE /dt INSTEAD" })
 
 RegisterServerEvent("impound:impoundVehicle")
 AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
