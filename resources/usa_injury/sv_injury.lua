@@ -87,13 +87,19 @@ end, {
 	help = "Inspect the nearest player's injuries or your own injuries"
 })
 
-TriggerEvent('es:addJobCommand', 'inspect', { "ems", "sheriff", "corrections", "doctor"}, function(source, args, char)
+TriggerEvent('es:addCommand', 'inspect' , function(source, args, char)
 	local _source = source
 	local targetSource = tonumber(args[2])
-	if targetSource and GetPlayerName(targetSource) then
-		TriggerEvent('injuries:getPlayerInjuries', targetSource, _source)
-	else
-		TriggerClientEvent("injuries:inspectNearestPed", _source, _source)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
+	local group = user.getGroup()
+	if job == "corrections" or job == "sheriff" or job == "cop" or job == "ems" or job == "doctor" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
+		if targetSource and GetPlayerName(targetSource) then
+			TriggerEvent('injuries:getPlayerInjuries', targetSource, _source)
+		else
+			TriggerClientEvent("injuries:inspectNearestPed", _source, _source)
+		end
 	end
 end, {
 	help = "Inspect the nearest player's injuries",
