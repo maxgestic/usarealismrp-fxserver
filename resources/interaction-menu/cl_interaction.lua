@@ -987,6 +987,7 @@ function interactionMenuUse(index, itemName, wholeItem)
 
 		exports.globals:loadAnimDict(JERRY_CAN_ANIMATION.dict)
 
+		hitHandleVehicle, distance = getVehicleInsideOrInFrontOfUser()
 		if tonumber(hitHandleVehicle) ~= 0 then
 			busy = true
 			local ped = GetPlayerPed(-1)
