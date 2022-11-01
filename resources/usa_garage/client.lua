@@ -78,7 +78,8 @@ locations = {
 	{x = -1520.6877441406, y = 4957.5854492188, z = 62.234802246094, noBlip = false}, -- Great Ocean Highway (hunting blip)
 	{x = -581.46343994141, y = -242.82208251953, z = 35.965721130371, noBlip = true}, -- Court House, Rockford Drive
   {x = 234.1309, y = -2492.6128, z = 6.5814, noBlip = true}, -- Train Clock in
-	{x = -935.0384, y = -2316.2700, z =  6.7091, noBlip = true} -- metro Clock in
+	{x = -935.0384, y = -2316.2700, z =  6.7091, noBlip = true}, -- metro Clock in
+	{x = -2315.1484375, y = 283.1760559082, z = 169.46704101563, noBlip = true} -- plasma kart 
 }
 
 local VEHICLE_DAMAGES = {}
