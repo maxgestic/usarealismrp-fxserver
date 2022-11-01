@@ -15,7 +15,8 @@ local WEATHER_TYPES = {
     "SNOW",
     "BLIZZARD",
     "SNOWLIGHT",
-    "XMAS"
+    "XMAS",
+    "Halloween"
 }
 
 local Data = nil
