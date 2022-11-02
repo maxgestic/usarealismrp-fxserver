@@ -150,7 +150,7 @@ RegisterNUICallback("performPersonCheckByCharID", function(data, cb)
 end)
 
 RegisterNUICallback("saveNote", function(data, cb)
-    TriggerServerEvent("mdt:saveNote", data.targetCharId, data.value)
+    TriggerServerEvent("mdt:saveNote", data.targetCharId, data.targetCharFName, data.targetCharLName, data.value)
     cb('ok')
 end)
 

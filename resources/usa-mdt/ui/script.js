@@ -316,6 +316,8 @@ const mdtApp = new Vue({
                 // send value to server script for saving in mdt-person-check-notes db
                 $.post("http://usa-mdt/saveNote", JSON.stringify({
                     targetCharId: this.person_check._id,
+                    targetCharFName: this.person_check.fname,
+                    targetCharLName: this.person_check.lname,
                     value: this.person_check.personNotes
                 }));
             }, 2000);
