@@ -753,6 +753,75 @@ Config.recipes = {
             type = "ammo",
             craftDurationSeconds = 3 * 60
         },
+        { 
+            name = "30 round Magazine (7.62mm)",
+            image = "https://i.imgur.com/2AOnIid.png",
+            requires = {
+                { name = "Sheet Metal", quantity = 5 },
+                { name = "Metal Spring", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Empty 7.62mm Mag [30]",
+                    quantity = 1,
+                    type = "magazine",
+                    weight = 5,
+                    receives = "7.62mm",
+                    MAX_CAPACITY = 30,
+                    currentCapacity = 0,
+                    objectModel = "w_ar_carbinerifle_mag1" 
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "magazine",
+            craftDurationSeconds = 2 * 60
+        },
+        { 
+            name = "30 round Magazine (5.56mm)",
+            image = "https://i.imgur.com/9tK7cKI.png",
+            requires = {
+                { name = "Sheet Metal", quantity = 5 },
+                { name = "Metal Spring", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Empty 5.56mm Mag [30]",
+                    quantity = 1,
+                    type = "magazine",
+                    weight = 5,
+                    receives = "5.56mm",
+                    MAX_CAPACITY = 30,
+                    currentCapacity = 0,
+                    objectModel = "w_ar_carbinerifle_mag1"
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "magazine",
+            craftDurationSeconds = 2 * 60
+        },
+        { 
+            name = "18 round Magazine (9x18mm)",
+            image = "https://i.imgur.com/brGIZW0.png",
+            requires = {
+                { name = "Sheet Metal", quantity = 2 },
+                { name = "Metal Spring", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Empty 9x18mm Mag [18]",
+                    quantity = 1,
+                    type = "magazine",
+                    weight = 5,
+                    receives = "9x18mm",
+                    MAX_CAPACITY = 18,
+                    currentCapacity = 0,
+                    objectModel = "w_pi_heavypistol_mag2"
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "magazine",
+            craftDurationSeconds = 1.5 * 60
+        },
     }
 }
 

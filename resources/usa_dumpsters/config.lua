@@ -31,6 +31,8 @@ Config.DumpsterSearchItems = {
 	{ name = "Metal Scraps", legality = "legal", quantity = 1, type = "misc", weight = 8 },
 	{ name = "Metal Pipe", legality = "legal", quantity = 1, type = "misc", weight = 8 },
 	{ name = "Gun Powder", legality = "legal", quantity = 1, type = "misc", weight = 5 },
+	{ name = "Sheet Metal", legality = "legal", quantity = 1, type = "misc", weight = 8 },
+	{ name = "Metal Spring", legality = "legal", quantity = 1, type = "misc", weight = 2 },
 	{ name = "7.62mm Shell Casing", legality = "legal", quantity = 2, type = "misc", weight = 0.2 },
 	{ name = "5.56mm Shell Casing", legality = "legal", quantity = 2, type = "misc", weight = 0.2 },
 	{ name = "9x18mm Shell Casing", legality = "legal", quantity = 2, type = "misc", weight = 0.2 },

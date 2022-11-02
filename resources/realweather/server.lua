@@ -21,7 +21,7 @@ local WEATHER_TYPES = {
 
 local Data = nil
 
-local cityName = "Los Angeles"
+local cityName = "Los+Angeles"
 local apikey = "fac7afd04fe5b0747a2b7da0c8b4e2f2"
 local GetWeather = "http://api.openweathermap.org/data/2.5/weather?q="..cityName.."&lang=fr&units=metric&APPID="..apikey
 

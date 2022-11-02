@@ -440,6 +440,8 @@ var itemImages = {
     "Auto Conversion Kit": "https://i.ibb.co/drjLyk0/a.png",
     "Metal Pipe": "https://i.imgur.com/HBZdfTz.png",
     "Mace": "https://i.imgur.com/EJoWdJ8.png",
+    "Sheet Metal": "https://i.imgur.com/9ogIvE9.png",
+    "Metal Spring": "https://i.imgur.com/2zWRSLx.png",
     // begin ammo
     "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
     "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",

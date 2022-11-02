@@ -1131,8 +1131,50 @@ AddEventHandler("mdt:performPersonCheckByCharID", function(id)
 end)
 
 RegisterServerEvent("mdt:saveNote")
-AddEventHandler("mdt:saveNote", function(noteId, note)
+AddEventHandler("mdt:saveNote", function(noteId, targetFname, targetLname, note)
 	exports.essentialmode:updateDocument("mdt-person-check-notes", noteId, { value = note } , true)
+	local WEBHOOK_URL = GetConvar("mdt-webook", "")
+	local char = exports["usa-characters"]:GetCharacter(source)
+  local name = char.get("name")
+	local charName = name.first .. " " .. name.last
+  local targetName = targetFname .. " " .. targetLname
+  -- local msg = "\n**MDT - Note Modified**\n\n**Note update for this person:**\n"..targetName.."\n**Note Updated by:**\n"..charName.."\n**New Note Value:**\n"..note.."\n\n**Timestamp:**\n"..os.date('%m-%d-%Y %H:%M:%S', os.time()).." PST\n"
+  -- exports["globals"]:SendDiscordLog(WEBHOOK_URL, msg) -- this looks shit
+	PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
+		if text then
+			print(text)
+		end
+	end, "POST", json.encode({
+		embeds = {
+			{
+				author = {
+					name = 'MDT - Note Modified'
+				},
+
+				fields = {
+					{
+						name = "Note update for this person",
+						value = targetName,
+						inline = true
+					},
+					{
+						name = "Note Updated by",
+						value = charName,
+						inline = true
+					},
+					{
+						name = "New Note Value",
+						value = note,
+						inline = true
+					},
+				},
+
+				footer = {
+					text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PST'
+				}
+			}
+		},
+	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end)
 
 function addTableEntries(target, src)
