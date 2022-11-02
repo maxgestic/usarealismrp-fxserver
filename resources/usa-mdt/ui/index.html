@@ -485,6 +485,10 @@
                                 </table>
                                 <span v-else style="color: red"><b>No flags found!</b></span>
 
+                                <h3><b>Notes:</b></h3>
+
+                                <textarea v-model="plate_check.vehicleNotes" @keyup="setVehNoteSaveTimeout()" class="w3-small" v-if="typeof plate_check.vehicleNotes === 'string'" name="vehicleNotes" id="vehicle-notes" cols="70" rows="10" placeholder="No notes"></textarea>
+
                             </div>
 
                             <!-- Weapon Check -->
@@ -535,6 +539,10 @@
                                     </tr>
                                 </table>
                                 <span v-else style="color: red"><b>No issue date found!</b></span>
+
+                                <h3><b>Notes:</b></h3>
+
+                                <textarea v-model="weapon_check.weaponNotes" @keyup="setWepNoteSaveTimeout()" class="w3-small" v-if="typeof weapon_check.weaponNotes === 'string'" name="weaponNotes" id="weapon-notes" cols="70" rows="10" placeholder="No notes"></textarea>
 
                             </div>
 

@@ -33,11 +33,13 @@ const mdtApp = new Vue({
             registered_owner: null,
             flags: null,
             veh_name: null,
-            plate: null
+            plate: null,
+            vehicleNotes: null
         },
         weapon_check: {
             search_input: null,
-            weapon: null
+            weapon: null,
+            weaponNotes: null,
         },
         warrants: [],
         bolos: [],
@@ -321,6 +323,28 @@ const mdtApp = new Vue({
                     value: this.person_check.personNotes
                 }));
             }, 2000);
+        },
+        setVehNoteSaveTimeout() {
+            // save 2 seconds after done pressing keys
+            if (this.lastTimeoutId) window.clearTimeout(this.lastTimeoutId);
+            this.lastTimeoutId = window.setTimeout(() =>{
+                // send value to server script for saving in mdt-person-check-notes db
+                $.post("http://usa-mdt/saveVehNote", JSON.stringify({
+                    plate: this.plate_check.plate,
+                    value: this.plate_check.vehicleNotes
+                }));
+            }, 2000);
+        },
+        setWepNoteSaveTimeout() {
+            // save 2 seconds after done pressing keys
+            if (this.lastTimeoutId) window.clearTimeout(this.lastTimeoutId);
+            this.lastTimeoutId = window.setTimeout(() =>{
+                // send value to server script for saving in mdt-person-check-notes db
+                $.post("http://usa-mdt/saveWepNote", JSON.stringify({
+                    serial: this.weapon_check.search_input,
+                    value: this.weapon_check.weaponNotes
+                }));
+            }, 2000);
         }
     },
     computed: {
@@ -399,15 +423,23 @@ document.onreadystatechange = () => {
                 }));
             } else if (event.data.type == "plateInfoLoaded") {
                 /* fill plate info data */
+                if (!event.data.plate_info.vehicleNotes) {
+                    event.data.plate_info.vehicleNotes = "";
+                }
                 mdtApp.plate_check.registered_owner = event.data.plate_info.registered_owner;
                 mdtApp.plate_check.veh_name = event.data.plate_info.veh_name;
                 mdtApp.plate_check.plate = event.data.plate_info.plate;
                 mdtApp.plate_check.flags = event.data.plate_info.flags;
+                mdtApp.plate_check.vehicleNotes = event.data.plate_info.vehicleNotes;
                 /* hide error message */
                 mdtApp.error = null;
             } else if (event.data.type == "weaponInfoLoaded") {
                 /* fill plate info data */
+                if (!event.data.weapon_info.weaponNotes) {
+                    event.data.weapon_info.weaponNotes = "";
+                }
                 mdtApp.weapon_check.weapon = event.data.weapon_info;
+                mdtApp.weapon_check.weaponNotes = event.data.weapon_info.weaponNotes;
                 /* hide error message */
                 mdtApp.error = null;
             } else if (event.data.type == "warrantsLoaded") {
@@ -455,12 +487,14 @@ document.onreadystatechange = () => {
                         registered_owner: null,
                         flags: null,
                         veh_name: null,
-                        plate: null
+                        plate: null,
+                        vehicleNotes: null
                     }
                 } else if (mdtApp.current_tab == "Weapon Check") {
                     mdtApp.weapon_check = {
                         search_input: null,
-                        weapon: null
+                        weapon: null,
+                        weaponNotes: null
                     }
                 }
             } else if (event.data.type == "warrantDeleteFinish") {

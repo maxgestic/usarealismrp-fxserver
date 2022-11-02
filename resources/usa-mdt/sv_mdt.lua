@@ -628,6 +628,11 @@ AddEventHandler("mdt:performPlateCheck", function(plateNumber)
 			vehicle.veh_name = vehs[1].make .. " " .. vehs[1].model
 			vehicle.registered_owner = vehs[1].owner
 			vehicle.plate = plateNumber
+			-- vehicle notes --
+			local notes = exports.essentialmode:getDocument("mdt-vehicle-check-notes", plateNumber)
+			if notes and notes.value then
+				vehicle.vehicleNotes = notes.value
+			end
 			TriggerClientEvent("mdt:performPlateCheck", usource, vehicle)
 		else
 			-- make a random registration for the vehicle or check if vehicle is in temp list --
@@ -652,6 +657,11 @@ AddEventHandler("mdt:performWeaponCheck", function(serialNumber)
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
         couchdb.getDocumentById("legalweapons", serialNumber, function(weapon)
             if weapon then
+            	-- vehicle notes --
+							local notes = exports.essentialmode:getDocument("mdt-weapon-check-notes", serialNumber)
+							if notes and notes.value then
+								weapon.weaponNotes = notes.value
+							end
             	TriggerClientEvent("mdt:performWeaponCheck", usource, weapon)
             else
                 local msg = {
@@ -1177,6 +1187,94 @@ AddEventHandler("mdt:saveNote", function(noteId, targetFname, targetLname, note)
 	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end)
 
+RegisterServerEvent("mdt:saveVehNote")
+AddEventHandler("mdt:saveVehNote", function(noteId, note)
+	exports.essentialmode:updateDocument("mdt-vehicle-check-notes", noteId, { value = note } , true)
+	local WEBHOOK_URL = GetConvar("mdt-webook", "")
+	local char = exports["usa-characters"]:GetCharacter(source)
+  local name = char.get("name")
+	local charName = name.first .. " " .. name.last
+	PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
+		if text then
+			print(text)
+		end
+	end, "POST", json.encode({
+		embeds = {
+			{
+				author = {
+					name = 'MDT - Vehicle Note Modified'
+				},
+
+				fields = {
+					{
+						name = "Plate",
+						value = noteId,
+						inline = true
+					},
+					{
+						name = "Note Updated by",
+						value = charName,
+						inline = true
+					},
+					{
+						name = "New Note Value",
+						value = note,
+						inline = true
+					},
+				},
+
+				footer = {
+					text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PST'
+				}
+			}
+		},
+	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+end)
+
+RegisterServerEvent("mdt:saveWepNote")
+AddEventHandler("mdt:saveWepNote", function(noteId, note)
+	exports.essentialmode:updateDocument("mdt-weapon-check-notes", noteId, { value = note } , true)
+	local WEBHOOK_URL = GetConvar("mdt-webook", "")
+	local char = exports["usa-characters"]:GetCharacter(source)
+  local name = char.get("name")
+	local charName = name.first .. " " .. name.last
+	PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
+		if text then
+			print(text)
+		end
+	end, "POST", json.encode({
+		embeds = {
+			{
+				author = {
+					name = 'MDT - Weapon Note Modified'
+				},
+
+				fields = {
+					{
+						name = "Weapon Serial",
+						value = noteId,
+						inline = true
+					},
+					{
+						name = "Note Updated by",
+						value = charName,
+						inline = true
+					},
+					{
+						name = "New Note Value",
+						value = note,
+						inline = true
+					},
+				},
+
+				footer = {
+					text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PST'
+				}
+			}
+		},
+	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+end)
+
 function addTableEntries(target, src)
 	if src then
 		for i = 1, #src do
@@ -1386,3 +1484,5 @@ end
 exports["globals"]:PerformDBCheck("POLICE REPORTS", "policereports")
 exports["globals"]:PerformDBCheck("BOLOS", "bolos", removeOldBOLOs)
 exports["globals"]:PerformDBCheck("MDT PERSON NOTES", "mdt-person-check-notes")
+exports["globals"]:PerformDBCheck("MDT VEHICLE NOTES", "mdt-vehicle-check-notes")
+exports["globals"]:PerformDBCheck("MDT WEAPON NOTES", "mdt-weapon-check-notes")
