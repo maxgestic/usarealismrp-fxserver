@@ -67,6 +67,10 @@ local GENERAL_STORE_ITEMS = {
     { name = "Tablet", price = 1000, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "imp_prop_impexp_tablet", blockedInPrison = true},
     { name = "Vape", price = 400, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "ba_prop_battle_vape_01", blockedInPrison = true}
   },
+  ["Sports"] = {
+    { name = "Roller Skates", price = 350, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "objectModel", blockedInPrison = true},
+    { name = "Ice Skates", price = 350, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "objectModel", blockedInPrison = true},
+  },
   ["Misc"] = {
     { name = "First Aid Kit", price = 80, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
     { name = "The Daily Weazel", price = 2, type = "misc", quantity = 1, legality = "legal", weight = 9, objectModel = "prop_cs_newspaper"},

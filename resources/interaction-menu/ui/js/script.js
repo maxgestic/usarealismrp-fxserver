@@ -514,6 +514,8 @@ var itemImages = {
     "Combat PDW": "https://i.imgur.com/wHbb0V4.png",
     "Tactical Carbine": "https://i.imgur.com/Z1OFXtU.png",
     "Military Rifle": "https://i.imgur.com/5dInslW.png",
+    "Roller Skates": "https://i.imgur.com/ZnhiWZv.png",
+    "Ice Skates": "https://i.imgur.com/azeoyEp.png",
 }
 
 var menuItems = [{

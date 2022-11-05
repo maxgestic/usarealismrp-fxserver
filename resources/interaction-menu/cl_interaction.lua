@@ -1224,6 +1224,10 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerServerEvent("usa:removeItem", itemName, 1)
 	elseif itemName == "Bank Laptop" then
 		TriggerEvent("usa:notify", "Device not connected to a terminal.")
+	elseif itemName == "Roller Skates" then
+		TriggerEvent("skating:roller", wholeItem)
+	elseif itemName == "Ice Skates" then
+		TriggerEvent("skating:iceroller", wholeItem)
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
