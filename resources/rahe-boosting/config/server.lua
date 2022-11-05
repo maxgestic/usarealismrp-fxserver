@@ -438,6 +438,9 @@ supportedVehicles = {
     { name = "Aston Martin DBS", model = "rmodmartin", class = "A" },
     { name = "Ford Raptor Pandem", model = "razerpandemraptor", class = "A" },
     { name = "Chrysler 300 SRT8", model = "300srt8", class = "A" },
+    { name = "Dodge Durango Hellephant", model = "hellephantdurango", class = "A" },
+    { name = "1977 Ford Mustang Boss", model = "rr70bosswide", class = "A" },
+    { name = "Lexus RC-F", model = "rrrcf", class = "A" },
     -- B CLASS
     { name = "Bravado Gauntlet Hellfire", model = "gauntlet4", class = "B" },
     { name = "Declasse Hotring Sabre", model = "hotring", class = "B" },
@@ -568,7 +571,7 @@ supportedVehicles = {
     { name = "Progen Proff", model = "proff", class = "B" },
     { name = "Dodge Ram 1500 Custom", model = "gcram1500", class = "B" },
     { name = "Spyker C8", model = "spyker", class = "B" },
-    { name = "Xpeng P7", model = "x3p720", class = "B" },
+    { name = "Pontiac G8", model = "pontiacg8", class = "B" },
     -- C CLASS
     { name = "Dinka Blista Compact", model = "blista2", class = "C" },
     { name = "Karin Asterope", model = "asterope", class = "C" },

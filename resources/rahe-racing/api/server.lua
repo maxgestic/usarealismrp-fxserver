@@ -327,6 +327,8 @@ supportedVehicles = {
     { name = "Obey 8F Drafter", model = "drafter", class = "A" },
     { name = "Lamborghini Urus", model = "urustc", class = "A" },
     { name = "Dodge Hellephant Durango", model = "hellephantdurango", class = "A"},
+    { name = "1977 Ford Mustang Boss", model = "rr70bosswide", class = "A" },
+    { name = "Lexus RC-F", model = "rrrcf", class = "A" },
     -- B Class:**
     { name = "Bravado Gauntlet Hellfire", model = "gauntlet4", class = "B" },
     { name = "Declasse Hotring Sabre", model = "hotring", class = "B" },
@@ -440,7 +442,7 @@ supportedVehicles = {
     { name = "Lampadati Viseris", model = "viseris", class = "B" },
     { name = "Dewbauchee Rapid GT Classic", model = "rapidgt3", class = "B" },
     { name = "Bravado Gauntlet Classic", model = "gauntlet3", class = "B" },
-    { name = "Bravado Gauntlet Classic Custom", model = "gauntlet5", class = "B" }, 
+    { name = "Bravado Gauntlet Classic Custom", model = "gauntlet5", class = "B" },
     { name = "Coil Savanna", model = "savanna", class = "B" },
     { name = "Albany VSTR", model = "vstr", class = "B" },
     { name = "Lampadati Novak", model = "novak", class = "B" },
@@ -522,7 +524,8 @@ supportedVehicles = {
     { name = "Progen Proff", model = "proff", class = "B" },
     { name = "Dodge Ram 1500 Custom", model = "gcram1500", class = "B" },
     { name = "Spyker C8", model = "spyker", class = "B" },
-    { name = "Xpeng P7", model = "x3p720", class = "B" },
+    { name = "Pontiac G8", model = "pontiacg8", class = "B" },
+    { name = "Xpeng P7", model = "x3p720", class = "E" }, -- ELECTRIC
     -- C Class:**
     { name = "Declasse Yosemite Rancher", model = "yosemite3", class = "C" },
     { name = "Dinka Blista Compact", model = "blista2", class = "C" },
@@ -678,7 +681,7 @@ supportedVehicles = {
 
 RegisterServerCallback {
 	eventName = 'rahe-racing:hasItem',
-	eventCallback = function(source)		
+	eventCallback = function(source)
 		local char = exports["usa-characters"]:GetCharacter(source)
         local reqItem = char.getItem("Tablet")
         if reqItem then

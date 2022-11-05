@@ -496,7 +496,7 @@ local vehicleShopItems = {
 			{make = "Ford", model = "F150 Raptor 2", price = 140000, hash = "foxraptor", storage_capacity = 280.0},
 			{make = "Ford", model = "F350", price = 95000, hash = "wdf350", storage_capacity = 300.0},
 			{make = "Ford", model = "F350 Dually (2000)", price = 75000, hash = "00f350d", storage_capacity = 400.0},
-            		{make = "Ford", model = "F-450 Platinum (2021)", price = 170000, hash = "f450plat", storage_capacity = 400.0},
+			{make = "Ford", model = "F-450 Platinum (2021)", price = 170000, hash = "f450plat", storage_capacity = 400.0},
 			{make = "Ford", model = "F-450 (2020)", price = 155000, hash = "20f450", storage_capacity = 300.0},
 			{make = "Ford", model = "F-350 (2020)", price = 160000, hash = "f350d", storage_capacity = 300.0},
 			{make = "Ford", model = "Focus RS (2009)", price = 65000, hash = "09fordRS", storage_capacity = 140.0},
@@ -552,13 +552,14 @@ local vehicleShopItems = {
 			{make = "Lamborghini", model = "Murcielago LP-670", price = 450000, hash = "lp670", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Murcielago LP-670 LW", price = 450000, hash = "lwlp670", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "LP 700R", price = 850000, hash = "lp700r", storage_capacity = 130.0},
-			{make = "Lamborghini", model = "Urus", price = 250000, hash = "urustc", storage_capacity = 200.0}, 
+			{make = "Lamborghini", model = "Urus", price = 250000, hash = "urustc", storage_capacity = 200.0},
 			{make = "Lamborghini", model = "Sian", price = 3800000, hash = "rmodsianr", storage_capacity = 130.0},
 			{make = "Lamborghini", model = "Terzo Millennio", price = 2800000, hash = "ocnlamtmc", storage_capacity = 130.0},
 			--
 			{make = "Lexus", model = "LC 500 (2020)", price = 155000, hash = "lc500", storage_capacity = 160.0},
 			{make = "Lexus", model = "LFA (2010)", price = 500000, hash = "lfa", storage_capacity = 120.0},
-			{make = "Lexus", model = "IS300", price = 60000, hash = "is300", storage_capacity = 180.0},
+			{make = "Lexus", model = "IS300", price = 60000, hash = "is300", storage_capacity = 165.0},
+			{make = "Lexus", model = "RC-F", price = 180000, hash = "rrrcf", storage_capacity = 165.0},
 			--
 			{make = "Lincoln", model = "Continental (Custom Wheels) (2020)", price = 90000, hash = "cont", storage_capacity = 220.0},
 			--
@@ -593,6 +594,8 @@ local vehicleShopItems = {
 			{make = "Nissan", model = "Silvia S15 (DRIFT)", price = 80000, hash = "s15yoshio", storage_capacity = 220.0},
 			--
 			{make = "Peugeot", model = "206 GTi", price = 30000, hash = "peugeot206", storage_capacity = 175.0},
+			--
+			{make = "Pontiac", model = "G8", price = 80000, hash = "pontiacg8", storage_capacity = 165.0},
 			--
 			{make = "Porsche", model = "356", price = 100000, hash = "356ac", storage_capacity = 165.0},
 			{make = "Porsche", model = "911 Turbo S", price = 280000, hash = "pts21", storage_capacity = 160.0},
