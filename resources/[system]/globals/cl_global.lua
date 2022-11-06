@@ -346,3 +346,10 @@ function playAnimation(dict, name, duration, flag, timerBarText)
       TriggerEvent("interaction:setBusy", false)
   end)
 end
+
+exports("sleep", function(timeMs)
+  local start = GetGameTimer()
+  while GetGameTimer() - start < timeMs do
+    Wait(1)
+  end
+end)

@@ -191,6 +191,7 @@ RegisterServerEvent('911:BankTruck')
 RegisterServerEvent('911:TruckAtRisk')
 RegisterServerEvent('911:SuspiciousPerson')
 RegisterServerEvent('911:VehicleBoosting')
+RegisterServerEvent('911:USAF')
 RegisterServerEvent('911:NoTicket')
 RegisterServerEvent('911:NoTicketUpdate')
 RegisterServerEvent('911:NoTicketEnd')
@@ -514,6 +515,12 @@ end)
 AddEventHandler('911:VehicleBoosting', function(x, y, z, street, plate, vehclass)
     local string = '^*Vehicle Boosting in Progress:^r '..street..' ^1^*|^r ^*Vehicle Class:^r ['..vehclass..'] ^1^*|^r ^*Plate:^r '..plate..' ^1^*'
     Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Vehicle Boosting')
+end)
+
+
+AddEventHandler('911:USAF', function(x, y, z)
+    local string = '^*United States AirForce: ^1^*|^r ^*Dispatch Info:^r USAF Reports helicopter in the prison area and will engage. Prison has entered lockdown.'
+    Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'USAF')
 end)
 
 AddEventHandler("911:NoTicket", function(coords)
