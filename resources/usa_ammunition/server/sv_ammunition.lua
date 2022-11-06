@@ -252,6 +252,7 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
                         magToUse = curWep.magazine
                     else
                         magToUse = {
+                            name = ammoName .. " Mag",
                             type = "magazine",
                             receives = ammoName,
                             MAX_CAPACITY = max,
