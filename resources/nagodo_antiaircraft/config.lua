@@ -10,7 +10,7 @@ Config = {
         },
     },
 
-    BlipText = "Restricted Access",
+    BlipText = "No Fly Zone",
 
     cooldownTimeSeconds = 60,
     timeToLeaveBeforeShootingSeconds = 5
