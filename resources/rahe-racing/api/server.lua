@@ -208,6 +208,7 @@ supportedVehicles = {
     { name = "Ford GT500" , model = "shelby20", class = "S" },
     { name = "Mercedes-Benz AMG GT" , model = "rr20amggt", class = "S" },
     { name = "Dodge Charger (Redeye)" , model = "chr20" , class = "S" },
+    { name = "Lamborghini Urus", model = "urustc", class = "S" },
     -- A Class:**
     { name = "Sultan RS", model = "sultanrs", class = "A" },
     { name = "Annis Elegy Retro", model = "elegy", class = "A" },
@@ -277,6 +278,7 @@ supportedVehicles = {
     { name = "Ocelot Locust", model = "locust", class = "A" },
     { name = "Ocelot Lynx", model = "lynx", class = "A" },
     { name = "Maibatsu Penumbra FF", model = "penumbra2", class = "A" },
+    { name = "Obey 8F Drafter", model = "drafter", class = "A" },
     -- CUSTOM- A Class:
     { name = "Dodge Challenger", model = "16challenger", class = "A" },
     { name = "2016 Dodge Charger", model = "16charger", class = "A" },
@@ -324,8 +326,6 @@ supportedVehicles = {
     { name = "Kawasaki Z1000", model = "z1000", class = "A" },
     { name = "Ducati Panigale", model = "panigale", class = "A" },
     { name = "Yamaha R1", model = "yamahar1", class = "A" },
-    { name = "Obey 8F Drafter", model = "drafter", class = "A" },
-    { name = "Lamborghini Urus", model = "urustc", class = "A" },
     { name = "Dodge Hellephant Durango", model = "hellephantdurango", class = "A"},
     { name = "1977 Ford Mustang Boss", model = "rr70bosswide", class = "A" },
     { name = "Lexus RC-F", model = "rrrcf", class = "A" },
