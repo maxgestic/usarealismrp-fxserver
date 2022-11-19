@@ -506,7 +506,7 @@ end, {
 
 TriggerEvent('es:addCommand', 'fix', function(source, args, char)
 	local group = exports["essentialmode"]:getPlayerFromId(source).getGroup()
-	if (group ~= "user" and group ~= "mod") or char.get("job") == "eventPlanner" then
+	if group ~= "user" or char.get("job") == "eventPlanner" then 
 		TriggerClientEvent('es_admin:fix', source)
 		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has requested to fix their vehicle')
 	end
