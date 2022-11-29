@@ -119,14 +119,14 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoor
 
 	vehicle.upgrades = exports["usa_mechanicjob"]:GetUpgradeObjectsFromIds(vehicle.upgrades)
 	if vehicle.impounded == true then
-		if money >= IMPOUND_FEE then
+		if hasEnoughMoney(char, IMPOUND_FEE) then
 			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Vehicle retrieved from the impound! Fee: ~y~$"..IMPOUND_FEE..".00")
 			GetVehicleCustomizations(vehicle.plate, function(customizations)
 				vehicle.customizations = customizations
 				TriggerClientEvent("garage:vehicleStored", usource, vehicle)
 				TriggerEvent('es:exposeDBFunctions', function(couchdb)
 					couchdb.updateDocument("vehicles", vehicle.plate, { impounded = false, stored = false, stored_location = "deleteMePlz!" }, function()
-						char.removeMoney(IMPOUND_FEE)
+						removeMoney(char, IMPOUND_FEE)
 						if business then
 							exports["usa-businesses"]:GiveBusinessCashPercent(business, IMPOUND_FEE)
 						end
@@ -141,7 +141,7 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoor
 		if isAtProperty(char, playerCoords) then
 			doPay = false
 		end
-		if doPay and money < WITHDRAW_FEE then
+		if doPay and not hasEnoughMoney(char, WITHDRAW_FEE) then
 			TriggerClientEvent("usa:notify", usource, "Your vehicle can be retrieved for a fee of ~y~$".. WITHDRAW_FEE ..".00~s~!")
 			return
 		end
@@ -151,7 +151,7 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoor
 			TriggerEvent('es:exposeDBFunctions', function(couchdb)
 				couchdb.updateDocument("vehicles", vehicle.plate, { stored = false, stored_location = "deleteMePlz!" }, function()
 					if doPay then
-						char.removeMoney(WITHDRAW_FEE)
+						removeMoney(char, WITHDRAW_FEE)
 						TriggerClientEvent("usa:notify", usource, "Vehicle retrieved from garage! Fee: ~y~$" .. WITHDRAW_FEE ..'.00')
 					else 
 						TriggerClientEvent("usa:notify", usource, "Vehicle retrieved from garage!")
@@ -275,4 +275,23 @@ function calculateAutomaticTowCost(startCoord, endCoord)
 	local dist = #(startCoord - endCoord)
 	local cost = AUTOMATIC_TOW_SERVICE_FEE + (AUTOMATIC_TOW_DISTANCE_PER_UNIT_FEE * dist)
 	return math.floor(cost)
+end
+
+function hasEnoughMoney(char, amount)
+	if char.get("money") >= amount then
+		return true
+	elseif char.get("bank") >= amount then
+		return true
+	else
+		return false
+	end
+end
+
+function removeMoney(char, amount)
+	amount = math.abs(amount)
+	if char.get("money") >= amount then
+		char.removeMoney(amount)
+	elseif char.get("bank") >= amount then
+		char.removeBank(amount)
+	end
 end
