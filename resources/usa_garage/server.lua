@@ -192,12 +192,12 @@ AddEventHandler("garage:automaticTow", function(vehPlate, garageCoords)
 	local storedCoords = exports.essentialmode:getDocument("vehicles", vehPlate).stored_location
 	storedCoords = vector3(storedCoords.x, storedCoords.y, storedCoords.z)
 	local cost = calculateAutomaticTowCost(storedCoords, garageCoords)
-	if char.get("bank") >= cost then
+	if hasEnoughMoney(char, cost) then
 		-- update vehicle stored_location to garageCoords
 		local new = { x = garageCoords.x, y = garageCoords.y, z = garageCoords.z }
 		exports.essentialmode:updateDocument("vehicles", vehPlate, { stored_location = new })
 		-- take money from user
-		char.removeBank(cost)
+		removeMoney(char, cost)
 		-- notify
 		TriggerClientEvent("usa:notify", src, "Vehicle transfered!", "INFO: Vehicle transfer successful!")
 	else
