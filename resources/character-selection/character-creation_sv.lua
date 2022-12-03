@@ -20,7 +20,7 @@ AddEventHandler("character:swapChar", function()
 	exports["usa-characters"]:SaveCurrentCharacter(usource, function()
 		local steamID = GetPlayerIdentifiers(usource)[1]
 		exports["usa-characters"]:LoadCharactersForSelection(steamID, function(characters)
-			TriggerClientEvent("character:open", usource, menu, characters)
+			TriggerClientEvent("character:open", usource, 'home', characters)
 		end)
 	end)
 end)
