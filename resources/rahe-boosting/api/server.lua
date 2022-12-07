@@ -107,6 +107,11 @@ function giveItem(playerId, itemId, amount)
             item.notStackable = true
             item.weight = 10
             item.objectModel = "imp_prop_impexp_tablet"
+        elseif itemId == "Hotwiring Kit" then
+            item.type = "misc"
+            item.legality = "illegal"
+            item.notStackable = true
+            item.weight = 10
         end
         char.giveItem(item)
         TriggerClientEvent("usa:notify", "You have picked up your item!")
