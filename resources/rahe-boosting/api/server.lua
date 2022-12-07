@@ -159,7 +159,7 @@ AddEventHandler('rahe-boosting:server:vinScratchSuccessful', function(playerId, 
         hash = vehInfo.hash,
         plate = licensePlate,
         stored = true,
-        price = vehInfo.price,
+        price = vehInfo.price * 0.05,
         inventory = exports["usa_vehinv"]:NewInventory(vehInfo.storage_capacity),
         storage_capacity = vehInfo.storage_capacity,
         isVinScratched = true
@@ -173,6 +173,7 @@ AddEventHandler('rahe-boosting:server:vinScratchSuccessful', function(playerId, 
         model = vehInfo.model,
         plate = licensePlate
     }
+    -- print("The total sell price of this vehicle will be "..vehicle.price) -- DEBUG STUFF FOR WEEPY
     -- add vehicle to database
     exports.usa_carshop:AddVehicleToDB(vehicle)
     -- add vehicle to player's list of owned vehicles
