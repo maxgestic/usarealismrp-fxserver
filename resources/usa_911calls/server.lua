@@ -196,6 +196,7 @@ RegisterServerEvent('911:USAF')
 RegisterServerEvent('911:NoTicket')
 RegisterServerEvent('911:NoTicketUpdate')
 RegisterServerEvent('911:NoTicketEnd')
+RegisterServerEvent('911:StolenTestDriveVehicle')
 
 
 local DISPATCH_DELAY_PERIOD_SECONDS = 60
@@ -551,6 +552,14 @@ AddEventHandler("911:NoTicketEnd", function(coords)
         recentCalls["No Ticket End"] = true
         local string = '^*^rLS Transit^r: A person without a valid ticket has left the train or metro!'
         Send911Notification({'sheriff', 'corrections'}, string, coords.x, coords.y, coords.z, 'No Ticket End')
+    end
+end)
+
+AddEventHandler("911:StolenTestDriveVehicle", function(coords,plate,name)
+    if not recentCalls["Stolen Test Drive Vehicle"] then
+        recentCalls["Stolen Test Drive Vehicle"] = true
+        local string = '^*^rCar Dealership^r: ' .. name .. ' stole a test drive vehicle, the plate is ' .. plate .. '. It has a tracker fitted use /trackveh ' .. plate .. ' to add the tracker to your satnav!'
+        Send911Notification({'sheriff', 'corrections'}, string, coords.x, coords.y, coords.z, 'Stolen Test Drive Vehicle')
     end
 end)
 
