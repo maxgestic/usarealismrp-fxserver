@@ -214,8 +214,7 @@ Citizen.CreateThread(function()
 end)
 
 AddEventHandler('911:ShotsFired', function(x, y, z, street, area, isMale)
-    local inGunRange = exports["rcore_gunrange"]:isPlayerShooting(source)
-    if not recentCalls["Shots Fired"] and not inGunRange then
+    if not recentCalls["Shots Fired"] then
         recentCalls["Shots Fired"] = true
         local time = math.random(2000, 5000)
         Citizen.Wait(time)
