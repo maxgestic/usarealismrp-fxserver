@@ -8,7 +8,7 @@ RegisterServerCallback {
             table.insert(ret, { serverId = players[i], identifier = GetPlayerIdentifiers(players[i])[1]})
         end
         table.sort(ret, function(a, b)
-            return a.serverId < b.serverId
+            return tonumber(a.serverId) < tonumber(b.serverId)
         end)
         return ret
     end
