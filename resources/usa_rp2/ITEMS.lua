@@ -226,7 +226,7 @@ local ITEMS = {
         objectModel = "prop_ld_binbag_01",
         invisibleWhenDropped = true
     },
-    { name = "Random Potion", type = "magicPotion", quantity = 1, weight = 5},
+    { name = "Magic Potion", type = "magicPotion", quantity = 1, weight = 5},
     { name = "Hawk Potion", type = "magicPotion", quantity = 1, weight = 5, model = "a_c_chickenhawk"},
     { name = "Chimp Potion", type = "magicPotion", quantity = 1, weight = 5, model = "a_c_chimp"},
     { name = "Cormorant Potion", type = "magicPotion", quantity = 1, weight = 5, model = "a_c_cormorant"},

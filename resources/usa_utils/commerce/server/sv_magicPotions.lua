@@ -3,12 +3,12 @@ AddEventHandler("magicPotion:used", function(item)
     local char = exports["usa-characters"]:GetCharacter(source)
     local potionItem = char.getItemByUUID(item.uuid)
     if potionItem then
-        if potionItem.name == "Random Potion" then
-            -- give random potion
+        if potionItem.name == "Magic Potion" then
+            -- give magic potion
             local options = exports.usa_rp2:getAllItemsByFieldVal("type", "magicPotion")
             local chosen = options[math.random(#options)]
-            while chosen.name == "Random Potion" do
-                chosen = options[math.random(#options)] -- select anything but the random potion in this case
+            while chosen.name == "Magic Potion" do
+                chosen = options[math.random(#options)] -- select anything but the magic potion in this case
             end
             char.giveItem(chosen)
             TriggerClientEvent("usa:notify", source, "Claimed: " .. chosen.name .. "!", "^3INFO: ^0Claimed a " .. chosen.name .. "!")
