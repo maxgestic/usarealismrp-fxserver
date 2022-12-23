@@ -100,5 +100,12 @@ TEBEX_PACKAGE_FUNCTIONS = {
         char.giveItem(plasmaPistol)
         TriggerClientEvent("usa:notify", src, "Plasma Pistol claimed!", "INFO: Plasma Pistol claimed!")
         return true
+    end,
+    magicPotion = function(src)
+        local char = exports["usa-characters"]:GetCharacter(src)
+        local randomPotion = exports.usa_rp2:getItem("Random Potion")
+        char.giveItem(randomPotion)
+        TriggerClientEvent("usa:notify", src, "Magic potion claimed!", "INFO: Random magic potion claimed!")
+        return true
     end
 }
