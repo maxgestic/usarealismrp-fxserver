@@ -40,6 +40,11 @@ NO_TOOLTIP_WEAPONS.add("Ninja Star 2");
 NO_TOOLTIP_WEAPONS.add("Megaphone");
 NO_TOOLTIP_WEAPONS.add("Mace");
 NO_TOOLTIP_WEAPONS.add("Plasma Pistol");
+NO_TOOLTIP_WEAPONS.add("Snowhammer");
+NO_TOOLTIP_WEAPONS.add("Batxmas");
+NO_TOOLTIP_WEAPONS.add("Olaf Minigun");
+NO_TOOLTIP_WEAPONS.add("Noel Launcher");
+NO_TOOLTIP_WEAPONS.add("Candycrow");
 
 var itemImages = {
     "Driver's License": "https://i.imgur.com/dy0SpFh.png",
