@@ -2,7 +2,7 @@ AiPopulation = {}
 
 AiPopulation.Main = {
     VehicleDensity = 0.5,
-    PedDensity = 0.5,
+    PedDensity = 0.8,
     RandomVehicleDensity = 0.5,
     ParkedVehicleDensity = 0.5,
     ScenarioPedDensity = 0.5
