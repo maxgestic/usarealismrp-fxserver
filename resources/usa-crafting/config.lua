@@ -33,6 +33,19 @@ Config.craftingLocations = {
     
         },
         type = "weapons"
+    },
+    {
+        coords = vector3(2332.44, 3027.11, 47.16), -- Sandy Bench
+        object = {
+            model = "prop_toolchest_05",
+            heading = 181.16
+    
+        },
+        type = "weapons"
+    },
+    {
+        coords = vector3(1110.321, -2006.447, 29.90479), -- refinery in LS
+        type = "refinery"
     }
 }
 

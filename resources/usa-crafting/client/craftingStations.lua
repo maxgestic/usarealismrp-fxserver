@@ -38,7 +38,7 @@ Citizen.CreateThread(function()
             local station = Config.craftingLocations[i]
             local dist = #(mycoords - station.coords)
             if dist < Config.CRAFT_STATION_OBJECT_DISTANCE then
-                if not craftStationObjectHandles[i] then
+                if not craftStationObjectHandles[i] and station.object then
                     craftStationObjectHandles[i] = spawnCraftingStation(station)
                 end
                 if dist < Config.CRAFT_INTERACT_DISTANCE then
