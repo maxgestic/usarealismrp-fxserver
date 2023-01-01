@@ -533,7 +533,8 @@ var itemImages = {
     "Candycrow": "https://i.imgur.com/FBXMz6q.png",
     "Batxmas": "https://i.imgur.com/nJpSAic.png",
     "Snowhammer": "https://i.imgur.com/qgBfs19.png",
-    "Akorus Receiver": "https://i.imgur.com/3kvY24m.png"
+    "Akorus Receiver": "https://i.imgur.com/3kvY24m.png",
+    "Steel": "https://i.imgur.com/o4sROlT.png"
 }
 
 var menuItems = [{

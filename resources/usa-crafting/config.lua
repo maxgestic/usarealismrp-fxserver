@@ -856,7 +856,24 @@ Config.recipes = {
             },
             requiredCraftingLevel = 1,
             type = "refineryGoods"
-        }, 
+        },
+        { 
+            name = "Steel",
+            image = "https://i.imgur.com/o4sROlT.png",
+            requires = {
+                { name = "Iron", quantity = 5 },
+            },
+            produces = {
+                {
+                    name = "Steel",
+                    quantity = 1,
+                    type = "misc",
+                    weight = 15
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "refineryGoods"
+        },
     }
 }
 
