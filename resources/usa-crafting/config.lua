@@ -1,37 +1,39 @@
 Config = {}
 
 Config.craftingLocations = {
-    weapons = {
-        {
-            coords = vector3(-505.67352294922, -1759.0928955078, 17.644302368164), -- LS
-            object = {
-                model = "gr_prop_gr_bench_02b",
-                heading = 160.0
-            }
+    {
+        coords = vector3(-505.67352294922, -1759.0928955078, 17.644302368164), -- LS
+        object = {
+            model = "gr_prop_gr_bench_02b",
+            heading = 160.0
         },
-        {
-            coords = vector3(-21.198345565796, 6662.040625, 30.004909515381), -- paleto
-            object = {
-                model = "gr_prop_gr_bench_02b",
-                heading = 201.0
-            }
+        type = "weapons"
+    },
+    {
+        coords = vector3(-21.198345565796, 6662.040625, 30.004909515381), -- paleto
+        object = {
+            model = "gr_prop_gr_bench_02b",
+            heading = 201.0
         },
-        {
-            coords = vector3(14.64, -2694.64, 5.01), -- Docks Bench
-            object = {
-                model = "prop_tool_bench02",
-                heading = 0.0
-            }
+        type = "weapons"
+    },
+    {
+        coords = vector3(14.64, -2694.64, 5.01), -- Docks Bench
+        object = {
+            model = "prop_tool_bench02",
+            heading = 0.0
         },
-        {
-            coords = vector3(2332.44, 3027.11, 47.16), -- Sandy Bench
-            object = {
-                model = "prop_toolchest_05",
-                heading = 181.16
-        
-            }   
-        }
-    } 
+        type = "weapons"
+    },
+    {
+        coords = vector3(2332.44, 3027.11, 47.16), -- Sandy Bench
+        object = {
+            model = "prop_toolchest_05",
+            heading = 181.16
+    
+        },
+        type = "weapons"
+    }
 }
 
 Config.recipes = {
