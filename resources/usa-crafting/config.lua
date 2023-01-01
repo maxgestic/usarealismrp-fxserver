@@ -837,10 +837,34 @@ Config.recipes = {
             type = "magazine",
             craftDurationSeconds = 1.5 * 60
         },
+        { 
+            name = "Akorus",
+            image = "https://i.imgur.com/5KYTXGp.png",
+            requires = {
+                { name = "Akorus Gun Cast", quantity = 1 },
+                { name = "Spring", quantity = 1 },
+                { name = "Wood", quantity = 1 },
+                { name = "Refined Gold", quantity = 1 },
+                { name = "Knife", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Akorus",
+                    hash = GetHashKey("WEAPON_AKORUS"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 20,
+                    objectModel = "w_ar_carbinerifle",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 3,
+            type = "weapons"
+        },  
     },
     refineryGoods = {
         { 
-            name = "Akorus Receiver",
+            name = "Akorus Gun Cast",
             image = "https://i.imgur.com/3kvY24m.png",
             requires = {
                 { name = "Steel", quantity = 1 },
@@ -848,7 +872,7 @@ Config.recipes = {
             },
             produces = {
                 {
-                    name = "Akorus Receiver",
+                    name = "Akorus Gun Cast",
                     quantity = 1,
                     type = "misc",
                     weight = 10
@@ -866,6 +890,23 @@ Config.recipes = {
             produces = {
                 {
                     name = "Steel",
+                    quantity = 1,
+                    type = "misc",
+                    weight = 15
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "refineryGoods"
+        },
+        { 
+            name = "Refined Gold",
+            image = "https://i.imgur.com/QYthPRN.png",
+            requires = {
+                { name = "Gold", quantity = 5 },
+            },
+            produces = {
+                {
+                    name = "Refined Gold",
                     quantity = 1,
                     type = "misc",
                     weight = 15
