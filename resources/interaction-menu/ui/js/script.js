@@ -532,7 +532,8 @@ var itemImages = {
     "Olaf Minigun": "https://i.imgur.com/rvgg4V9.png",
     "Candycrow": "https://i.imgur.com/FBXMz6q.png",
     "Batxmas": "https://i.imgur.com/nJpSAic.png",
-    "Snowhammer": "https://i.imgur.com/qgBfs19.png"
+    "Snowhammer": "https://i.imgur.com/qgBfs19.png",
+    "Akorus Receiver": "https://i.imgur.com/3kvY24m.png"
 }
 
 var menuItems = [{

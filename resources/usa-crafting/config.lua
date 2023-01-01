@@ -45,7 +45,7 @@ Config.craftingLocations = {
     },
     {
         coords = vector3(1110.321, -2006.447, 29.90479), -- refinery in LS
-        type = "refinery"
+        type = "refineryGoods"
     }
 }
 
@@ -837,6 +837,26 @@ Config.recipes = {
             type = "magazine",
             craftDurationSeconds = 1.5 * 60
         },
+    },
+    refineryGoods = {
+        { 
+            name = "Akorus Receiver",
+            image = "https://i.imgur.com/3kvY24m.png",
+            requires = {
+                { name = "Steel", quantity = 1 },
+                { name = "Refined Gold", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Akorus Receiver",
+                    quantity = 1,
+                    type = "misc",
+                    weight = 10
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "refineryGoods"
+        }, 
     }
 }
 

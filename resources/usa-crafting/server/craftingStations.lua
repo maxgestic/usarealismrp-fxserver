@@ -107,17 +107,19 @@ function getNumberOfSuccessfulCraftsOfType(charID, recipeType)
 end
 
 function getCurrentCraftingLevelOfType(numCrafts, recipeType)
+    local ret = 1
     if recipeType == "weapons" then
         if numCrafts <= Config.LEVEL_1_MAX_CRAFT_COUNT then
-            return 1
+            ret = 1
         elseif numCrafts <= Config.LEVEL_2_MAX_CRAFT_COUNT then
-            return 2
+            ret = 2
         elseif numCrafts <= Config.LEVEL_3_MAX_CRAFT_COUNT then
-            return 3
+            ret = 3
         else
-            return 4
+            ret = 4
         end
     end
+    return ret
 end
 
 function getUnlockedRecipesOfType(charID, recipeType)
