@@ -535,7 +535,8 @@ var itemImages = {
     "Snowhammer": "https://i.imgur.com/qgBfs19.png",
     "Akorus Gun Cast": "https://i.imgur.com/3kvY24m.png",
     "Steel": "https://i.imgur.com/o4sROlT.png",
-    "Akorus": "https://i.imgur.com/5KYTXGp.png"
+    "Akorus": "https://i.imgur.com/5KYTXGp.png",
+    "Revolver Ultra": "https://i.imgur.com/QK4SEq3.png"
 }
 
 var menuItems = [{
