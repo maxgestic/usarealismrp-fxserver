@@ -79,6 +79,10 @@ local WEPS_NO_MAGS = {
         AMMO_NAME = ".45",
         MAX_CAPACITY = 6
     },
+    [GetHashKey("WEAPON_REVOLVERULTRA")] = {
+        AMMO_NAME = ".45",
+        MAX_CAPACITY = 6
+    },
     [GetHashKey("WEAPON_STUNGUN")] = {
         AMMO_NAME = "Taser Cartridge",
         MAX_CAPACITY = 1

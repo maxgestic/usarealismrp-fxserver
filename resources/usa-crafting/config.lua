@@ -842,9 +842,9 @@ Config.recipes = {
             image = "https://i.imgur.com/5KYTXGp.png",
             requires = {
                 { name = "Akorus Gun Cast", quantity = 1 },
-                { name = "Spring", quantity = 1 },
-                { name = "Wood", quantity = 1 },
-                { name = "Refined Gold", quantity = 1 },
+                { name = "Spring", quantity = 2 },
+                { name = "Wood", quantity = 2 },
+                { name = "Refined Gold", quantity = 2 },
                 { name = "Knife", quantity = 1 }
             },
             produces = {
@@ -853,8 +853,31 @@ Config.recipes = {
                     hash = GetHashKey("WEAPON_AKORUS"),
                     quantity = 1,
                     type = "weapon",
-                    weight = 20,
+                    weight = 25,
                     objectModel = "w_ar_carbinerifle",
+                    notStackable = true
+                }
+            },
+            requiredCraftingLevel = 3,
+            type = "weapons"
+        },
+        { 
+            name = "Revolver Ultra",
+            image = "https://i.imgur.com/QK4SEq3.png",
+            requires = {
+                { name = "Revolver Ultra Gun Cast", quantity = 1 },
+                { name = "Spring", quantity = 1 },
+                { name = "Wood", quantity = 1 },
+                { name = "Refined Gold", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Revolver Ultra",
+                    hash = GetHashKey("WEAPON_REVOLVERULTRA"),
+                    quantity = 1,
+                    type = "weapon",
+                    weight = 15,
+                    objectModel = "w_pi_pistol",
                     notStackable = true
                 }
             },
@@ -867,12 +890,30 @@ Config.recipes = {
             name = "Akorus Gun Cast",
             image = "https://i.imgur.com/3kvY24m.png",
             requires = {
-                { name = "Steel", quantity = 1 },
-                { name = "Refined Gold", quantity = 1 }
+                { name = "Steel", quantity = 3 },
+                { name = "Refined Gold", quantity = 2 }
             },
             produces = {
                 {
                     name = "Akorus Gun Cast",
+                    quantity = 1,
+                    type = "misc",
+                    weight = 10
+                }
+            },
+            requiredCraftingLevel = 1,
+            type = "refineryGoods"
+        },
+        { 
+            name = "Revolver Ultra Gun Cast",
+            image = "https://i.imgur.com/l1nvTAE.png",
+            requires = {
+                { name = "Steel", quantity = 2 },
+                { name = "Refined Gold", quantity = 1 }
+            },
+            produces = {
+                {
+                    name = "Revolver Ultra Gun Cast",
                     quantity = 1,
                     type = "misc",
                     weight = 10
