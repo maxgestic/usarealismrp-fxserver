@@ -73,6 +73,9 @@ local ITEMS = {
                 { name = "Empty Pistol Extended Mag", quantity = 1, type = "magazine", price = 300, weight = 7, receives = "9mm", MAX_CAPACITY = 16, currentCapacity = 0, legality = "illegal", notStackable = true, magComponent = "COMPONENT_PISTOL_CLIP_02", compatibleWeapon = GetHashKey("WEAPON_PISTOL") },
                 {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP_02", price = 1500, weapon_hash = 453432689}
             },
+            ["Revolver Ultra"] = {
+                {name = "Suppressor", value = "COMPONENT_AT_REVOLVERLEOSHOP_SUPP", price = 3500, weapon_hash = GetHashKey("WEAPON_REVOLVERULTRA")}
+            },
             ["SNS Pistol"] = {
                 { name = "Empty SNS Pistol Extended Mag", quantity = 1, type = "magazine", price = 200, weight = 6, receives = ".45", MAX_CAPACITY = 12, currentCapacity = 0, legality = "illegal", notStackable = true, magComponent = "COMPONENT_SNSPISTOL_CLIP_02", compatibleWeapon = GetHashKey("WEAPON_SNSPISTOL") },
             },
