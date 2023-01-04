@@ -72,7 +72,7 @@ AddEventHandler("crafting:beginCrafting", function(recipe)
         ToggleGui()
 
         if lib.progressCircle({
-            duration = recipe.craftDurationSeconds or Config.DEFAULT_CRAFT_DURATION_SECONDS * 1000,
+            duration = (recipe.craftDurationSeconds or Config.DEFAULT_CRAFT_DURATION_SECONDS) * 1000,
             label = 'Crafting...',
             position = 'bottom',
             useWhileDead = false,
