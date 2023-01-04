@@ -87,19 +87,19 @@ AddEventHandler("crafting:beginCrafting", function(recipe)
                 clip = 'idle_a',
                 flag = 39,
             },
-        }) then 
+        }) then
             while securityToken == nil do
                 Wait(1)
             end
             TriggerServerEvent("crafting:finishedCrafting", recipe, securityToken)
             TriggerEvent("dpemotes:command", 'e', GetPlayerServerId(PlayerId()), {"c"})
             alreadyCrafting = false
-        else 
+        else
             TriggerEvent("dpemotes:command", 'e', GetPlayerServerId(PlayerId()), {"c"})
             alreadyCrafting = false
         end
 
     else
-       exports.globals:notify("Already crafting") 
+       exports.globals:notify("Already crafting")
     end
 end)
