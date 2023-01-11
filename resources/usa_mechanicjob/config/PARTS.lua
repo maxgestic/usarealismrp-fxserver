@@ -84,5 +84,19 @@ PARTS = {
 		weight = 5,
 		type = "misc",
 		notStackable = true
+	},
+	["Low Grip Tires"] = {
+		name = "Low Grip Tires",
+		price = 5000,
+		quantity = 1,
+		weight = 50,
+		type = "misc"
+	},
+	["Normal Tires"] = {
+		name = "Normal Tires",
+		price = 5000,
+		quantity = 1,
+		weight = 50,
+		type = "misc"
 	}
 }

@@ -101,10 +101,6 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 		SetVehicleNeonLightEnabled(currentvehicle, 2, not not veh.neonlightenabled)
 		SetVehicleNeonLightEnabled(currentvehicle, 3, not not veh.neonlightenabled)
 
-		print("(veh.driftTiresEnabled or false): " .. tostring((veh.driftTiresEnabled or false)))
-
-		SetDriftTyresEnabled(currentvehicle, (veh.driftTiresEnabled or false))
-
 		-- set mods --
     	SetVehicleModKit(currentvehicle,0)
 		for x = 0, 48 do
@@ -1202,8 +1198,8 @@ AddEventHandler("LSC:buttonSelected", function(name, button, canpurchase)
 				SetVehicleMod(veh,24,myveh.mods[24].mod,false)
 				myveh.mods[24].variation = false
 			end
-			SetDriftTyresEnabled(veh, false)
-			myveh.driftTiresEnabled = false
+			--SetDriftTyresEnabled(veh, false)
+			--myveh.driftTiresEnabled = false
 		elseif button.name == "Custom Tires" and  (button.purchased or CanPurchase(price, canpurchase)) then
 			SetVehicleModKit(veh,0)
 			SetVehicleMod(veh,23,myveh.mods[23].mod,true)
@@ -1553,7 +1549,7 @@ function CheckPurchases(m)
 	elseif name == "wheel accessories" then
 		for i,b in pairs(m.buttons) do
 			if b.name == "Stock Tires" then
-				if GetVehicleModVariation(myveh.vehicle,23) == false and not GetDriftTyresEnabled(myveh.vehicle) then
+				if GetVehicleModVariation(myveh.vehicle,23) == false then
 					b.sprite = "garage"
 				else
 					b.sprite = nil
