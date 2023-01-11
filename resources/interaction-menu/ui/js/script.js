@@ -542,7 +542,8 @@ var itemImages = {
     "Akorus": "https://i.imgur.com/5KYTXGp.png",
     "Revolver Ultra": "https://i.imgur.com/QK4SEq3.png",
     "Revolver Gun Cast": "https://i.imgur.com/l1nvTAE.png",
-    "Low Grip Tires": "https://i.imgur.com/dbnI2Fl.png"
+    "Low Grip Tires": "https://i.imgur.com/dbnI2Fl.png",
+    "Normal Tires": "https://i.imgur.com/dbnI2Fl.png",
 }
 
 var menuItems = [{
