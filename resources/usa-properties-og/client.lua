@@ -899,3 +899,13 @@ function RemoveBlips()
         RemoveBlip(currentMapBlips[i])
     end
 end
+
+function isUnderglowOn(veh)
+	local indexes = {0, 1, 2, 3}
+	for i = 1, #indexes do
+		if IsVehicleNeonLightEnabled(veh, indexes[i]) then
+			return true
+		end
+	end
+	return false
+end
