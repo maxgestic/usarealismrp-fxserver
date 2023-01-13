@@ -90,13 +90,13 @@ PARTS = {
 		price = 5000,
 		quantity = 1,
 		weight = 50,
-		type = "misc"
+		type = "mechanicPart"
 	},
 	["Normal Tires"] = {
 		name = "Normal Tires",
 		price = 5000,
 		quantity = 1,
 		weight = 50,
-		type = "misc"
+		type = "mechanicPart"
 	}
 }
