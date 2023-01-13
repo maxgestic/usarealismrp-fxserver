@@ -258,6 +258,7 @@ local ITEMS = {
     { name = "Westy Potion", type = "magicPotion", quantity = 1, weight = 5, model = "a_c_westy"},
     { name = "Low Grip Tires", price = 5000, type = "mechanicPart", quantity = 1, weight = 50, objectModel = "prop_wheel_03"},
     { name = "Normal Tires", price = 5000, type = "mechanicPart", quantity = 1, weight = 50, objectModel = "prop_wheel_03"},
+    { name = "Underglow Kit", price = 5000, type = "mechanicPart", quantity = 1, weight = 30},
 }
 
 

@@ -462,6 +462,7 @@ local function DriveInGarage()
 
 		local m = LSCMenu.categories:addSubMenu("LIGHTS", "Lights", "Improved night time visibility.",true)
 		AddMod(22,LSCMenu.categories.Lights,"HEADLIGHTS", "Headlights", nil, false)
+		--[[
 		if not IsThisModelABike(GetEntityModel(veh)) then
 			m = m:addSubMenu("NEON KITS", "Neon kits", nil, true)
 				m:addSubMenu("NEON LAYOUT", "Neon layout", nil, true)
@@ -475,6 +476,7 @@ local function DriveInGarage()
 					local btn = m:addPurchase(mod.name,mod.price)btn.neon = mod.neon
 				end
 		end
+		--]]
 
 
 		respray = LSCMenu.categories:addSubMenu("RESPRAY", "Respray", "Transforms vehicle appearance.",true)

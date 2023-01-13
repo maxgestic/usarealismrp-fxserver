@@ -33,6 +33,20 @@ MechanicHelper.UPGRADE_FUNC_MAP = {
     end,
     ["normal-tires"] = function(veh)
         SetDriftTyresEnabled(veh, false)
+    end,
+    ["underglow-kit"] = function(veh)
+        SetVehicleNeonLightEnabled(veh, 0, true)
+		SetVehicleNeonLightEnabled(veh, 1, true)
+		SetVehicleNeonLightEnabled(veh, 2, true)
+		SetVehicleNeonLightEnabled(veh, 3, true)
+        -- get saved underglow state (saved by storing at garage after using RGB controller to apply desired color)
+        local rgb = TriggerServerCallback {
+            eventName = "mechanic:getUnderglow",
+            args = {GetVehicleNumberPlateText(veh)}
+        }
+        if rgb then
+            SetVehicleNeonLightsColour(veh, rgb.r,  rgb.g, rgb.b)
+        end
     end
 }
 

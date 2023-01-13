@@ -128,5 +128,11 @@ UPGRADES = {
             -- remove opposite tire upgrade if applicable
             MechanicHelper.removeVehicleUpgrades(vehPlate, {"low-grip-tires"})
         end
+    },
+    ["underglow-kit"] = {
+        id = "underglow-kit",
+        displayName = "Underglow Kit",
+        requiresItem = "Underglow Kit",
+        postInstall = function(vehPlate) end
     }
 }
