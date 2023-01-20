@@ -1218,6 +1218,8 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerServerEvent("magicPotion:used", wholeItem)
 	elseif itemName == "Christmas Present" then
 		TriggerServerEvent("usa:openChristmasPresent", wholeItem)
+	elseif itemName == "RC Car" then
+		TriggerEvent("rc:start")
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
