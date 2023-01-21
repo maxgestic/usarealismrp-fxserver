@@ -12,6 +12,8 @@ function onVehicleOptionSelect(a, buttonInfo, hitHandle)
         EnableGui(vehPlate, "vehicleActions.close")
     elseif buttonInfo.label == "Inventory" then
         EnableGui(vehPlate, "inventory")
+    elseif buttonInfo.label == "Hide Trunk" then
+        TriggerEvent('trunkhide:hideInNearestTrunk')
     end
 end
 
@@ -29,6 +31,10 @@ target.addVehicle("vehicleOptions", "Vehicle", 'fas fa-car', 1.0, onVehicleOptio
     {
         name = "inventory",
         label = "Inventory"
+    },
+    {
+        name = "hideTrunk",
+        label = "Hide Trunk"
     }
 })
 
