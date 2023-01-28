@@ -169,7 +169,7 @@ if char.hasItem("Tuna Fish") then
 	-- do something
 end
 
-if char.get("job") == "sheriff" then
+if char.get("job") == "sasp" then
 	-- do something
 end
 
@@ -221,17 +221,18 @@ Also check out `resources/[system]/globals` for a library of some miscellaneous 
 
 **Job Types**
 1. "civ"
-2. "sheriff" (AKA SASP)
+2. "sasp"
 3. "ems"
-4. "corrections" (AKA BCSO)
-5. "judge"
-6. "taxi"
-7. "tow"
-8. "reporter" (weazel news)
-9. "chickenFactory"
-10. "gopostal"
-11. "burgerShotEmployee"
-11. ... could be more ...
+4. "bcso"
+5. "corrections"
+6. "judge"
+7. "taxi"
+8. "tow"
+9. "reporter" (weazel news)
+10. "chickenFactory"
+11. "gopostal"
+12. "burgerShotEmployee"
+13. ... could be more ...
 
 **FiveM Asset Protection/Encryption**
 
