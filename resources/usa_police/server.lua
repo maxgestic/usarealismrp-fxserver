@@ -90,7 +90,8 @@ AddEventHandler('rconCommand', function(commandName, args)
             else
                 char.set("policeRank", 0)
                 char.set("job", "civ")
-                RconPrint("DEBUG: " .. playerId .. " un-whitelisted as sasp.")
+                TriggerClientEvent("thirdEye:updateActionsForNewJob", playerId, "civ")
+                RconPrint("DEBUG: " .. playerId .. " un-whitelisted as police.")
             end
         elseif wl_type == "ems" then
             local char = exports["usa-characters"]:GetCharacter(playerId)
@@ -101,6 +102,7 @@ AddEventHandler('rconCommand', function(commandName, args)
             else
                 char.set("emsRank", 0)
                 char.set("job", "civ")
+                TriggerClientEvent("thirdEye:updateActionsForNewJob", playerId, "civ")
                 RconPrint("DEBUG: " .. playerId .. " un-whitelisted as EMS.")
             end
         elseif wl_type == "doctor" then
@@ -112,6 +114,7 @@ AddEventHandler('rconCommand', function(commandName, args)
             else
                 char.set("doctorRank", 0)
                 char.set("job", "civ")
+                TriggerClientEvent("thirdEye:updateActionsForNewJob", playerId, "civ")
                 RconPrint("DEBUG: " .. playerId .. " un-whitelisted as Doctor.")
             end
         elseif wl_type == "da" then
@@ -123,6 +126,7 @@ AddEventHandler('rconCommand', function(commandName, args)
             else
                 char.set("daRank", 0)
                 char.set("job", "civ")
+                TriggerClientEvent("thirdEye:updateActionsForNewJob", playerId, "civ")
                 RconPrint("DEBUG: " .. playerId .. " un-whitelisted as DA.")
             end
         elseif wl_type == "judge" then
@@ -134,6 +138,7 @@ AddEventHandler('rconCommand', function(commandName, args)
             else
                 char.set("judgeRank", 0)
                 char.set("job", "civ")
+                TriggerClientEvent("thirdEye:updateActionsForNewJob", playerId, "civ")
                 RconPrint("DEBUG: " .. playerId .. " un-whitelisted as judge.")
             end
         elseif wl_type == "realtor" then
@@ -145,6 +150,7 @@ AddEventHandler('rconCommand', function(commandName, args)
             else
                 char.set("realtorRank", 0)
                 char.set("job", "civ")
+                TriggerClientEvent("thirdEye:updateActionsForNewJob", playerId, "civ")
                 RconPrint("DEBUG: " .. playerId .. " un-whitelisted as realtor.")
             end
         elseif wl_type == "bcso" then
@@ -156,6 +162,7 @@ AddEventHandler('rconCommand', function(commandName, args)
             else
                 char.set("bcsoRank", 0)
                 char.set("job", "civ")
+                TriggerClientEvent("thirdEye:updateActionsForNewJob", playerId, "civ")
                 RconPrint("DEBUG: " .. playerId .. " un-whitelisted from BCSO.")
             end
         elseif wl_type == "corrections" then
@@ -293,6 +300,7 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, char)
         local user_job = target.get("job")
         if user_job == "ems" or user_job == "doctor" or user_job == "fire" or user_job == "sasp" or user_job == "corrections" or user_job == "bcso" then
             target.set("job", "civ")
+            TriggerClientEvent("thirdEye:updateActionsForNewJob", playerId, "civ")
         end
         TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been un-whitelisted for " .. type)
     end
@@ -464,8 +472,9 @@ AddEventHandler("policestation2:loadOutfit", function(slot)
             db.getDocumentById(DB_NAME, docID, function(outfit)
                 TriggerClientEvent("policestation2:setCharacter", src, outfit)
                 if char.get("job") ~= 'sasp' then
-                    char.set("job", "sasp")
+                    char.set("job", JOB_NAME)
                     TriggerEvent('job:sendNewLog', src, JOB_NAME, true)
+                    TriggerClientEvent("thirdEye:updateActionsForNewJob", src, JOB_NAME)
                 end
                 TriggerClientEvent('interaction:setPlayersJob', src, 'sasp')
                 TriggerEvent("eblips:add", {name = char.getName(), src = src, color = 3})
@@ -484,6 +493,7 @@ AddEventHandler("policestation2:offduty", function()
     TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
     TriggerClientEvent("policestation2:setciv", source, char.get("appearance"), playerWeapons)
     char.set("job", "civ")
+    TriggerClientEvent("thirdEye:updateActionsForNewJob", source, "civ")
     TriggerEvent('job:sendNewLog', source, JOB_NAME, false)
     TriggerEvent("eblips:remove", source)
     TriggerClientEvent("radio:unsubscribe", source)
