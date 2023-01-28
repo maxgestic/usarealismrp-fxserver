@@ -11,7 +11,7 @@ TriggerEvent('es:addCommand', 'place', function(src, args, char, location)
 			draggedPlayers[src] = nil
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
-		if user_job == "sheriff" or user_job == "ems" or user_job == "corrections" then
+		if user_job == "sasp" or user_job == "ems" or user_job == "corrections" or user_job == "bcso" then
 			TriggerClientEvent("place:place", tPID, "any", true, src)
 		else
 			TriggerClientEvent("place:place", tPID, "any", false, src)
@@ -24,7 +24,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'placef', {'sheriff', 'ems', 'fire', 'corrections'}, function(src, args, char, location)
+TriggerEvent('es:addJobCommand', 'placef', {'sasp', 'ems', 'fire', 'corrections', "bcso"}, function(src, args, char, location)
 	local tPID = tonumber(args[2])
 	TriggerEvent('drag:getTable', function(table)
 		draggedPlayers = table
@@ -45,7 +45,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'placeb', {'sheriff', 'ems', 'fire', 'corrections'}, function(src, args, char, location)
+TriggerEvent('es:addJobCommand', 'placeb', {'sasp', 'ems', 'fire', 'corrections', "bcso"}, function(src, args, char, location)
 	local tPID = tonumber(args[2])
 	TriggerEvent('drag:getTable', function(table)
 		draggedPlayers = table
@@ -107,7 +107,7 @@ AddEventHandler("place:placePerson", function(targetId)
 		end
 		local c = exports["usa-characters"]:GetCharacter(source)
 		local cJob = c.get("job")
-		if cJob == "ems" or cJob == "sheriff" or cJob == "corrections" then
+		if cJob == "ems" or cJob == "sasp" or cJob == "bcso" or cJob == "corrections" then
 			TriggerClientEvent("place:place", targetId, "any", true, src)
 		else 
 			TriggerClientEvent("place:place", targetId, "any", false, src)
@@ -119,7 +119,7 @@ RegisterServerEvent("place:unseatPerson")
 AddEventHandler("place:unseatPerson", function(targetId)
 	local c = exports["usa-characters"]:GetCharacter(source)
 	local cJob = c.get("job")
-	if cJob == "sheriff" or cJob == "corrections" or cJob == "ems" then
+	if cJob == "sasp" or cJob == "bcso" or cJob == "corrections" or cJob == "ems" then
 		TriggerClientEvent("place:unseat", targetId, source, true)
 	else
 		TriggerClientEvent("place:unseat", targetId, source, false)
@@ -131,7 +131,7 @@ TriggerEvent('es:addCommand', 'unseat', function(source, args, char)
 	local user_job = char.get("job")
 	local targetPlayer = args[2]
 	if targetPlayer ~= source then
-		if user_job == "sheriff" or user_job == "ems" or user_job == "corrections" then
+		if user_job == "sasp" or user_job == "bcso" or user_job == "ems" or user_job == "corrections" then
 			TriggerClientEvent("place:unseat", targetPlayer, source, true)
 			local msg = "removes from vehicle"
 			exports["globals"]:sendLocalActionMessage(source, msg)

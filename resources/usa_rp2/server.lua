@@ -236,7 +236,7 @@ AddEventHandler("usa:loadPlayerComponents", function(id)
 	TriggerClientEvent("usa:setPlayerComponents", usource, appearance)
 end)
 
-TriggerEvent('es:addJobCommand', 'impound', { "sheriff", "ems", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'impound', { "sasp", "ems", "bcso", "corrections" }, function(source, args, char)
 	if exports["usa-characters"]:GetNumCharactersWithJob("mechanic") < 5 then
 		local msg = "Calls for State Tow"
 		TriggerEvent('display:shareDisplayBySource', source, msg, 5, 370, 10, 8000, true)
@@ -258,7 +258,7 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local userGroup = user.getGroup()
 	local playerJob = exports["usa-characters"]:GetCharacterField(source, "job")
-	if playerJob == "mechanic" or playerJob == "sheriff" or playerJob == "ems" or playerJob == "corrections" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" or userGroup == "superadmin" then
+	if playerJob == "mechanic" or playerJob == "sasp" or playerJob == "ems" or playerJob == "bcso" or playerJob == "corrections" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" or userGroup == "superadmin" then
 		if plate then
 			-- update impounded status of vehicle in DB --
 			TriggerEvent('es:exposeDBFunctions', function(couchdb)
@@ -273,13 +273,18 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
 end)
 
 local JOBS_TO_LOG = {
-	sheriff = {
+	sasp = {
 		DISPLAY_NAME = "SASP",
 		WEBHOOK_URL = GetConvar("sasp-timesheet-webhook", "")
 		
 	},
+	bcso = {
+		DISPLAY_NAME = "BCSO",
+		WEBHOOK_URL = GetConvar("bcso-timesheet-webhook", "")
+		
+	},
 	corrections = {
-		DISPLAY_NAME = "BCSO/Corrections",
+		DISPLAY_NAME = "Corrections",
 		WEBHOOK_URL = GetConvar("bcso-timesheet-webhook", "")
 		
 	},

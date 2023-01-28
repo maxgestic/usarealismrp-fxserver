@@ -62,7 +62,9 @@ function canBypassItemMovePermCheck(char)
     local charJob = char.get("job")
     if charJob == "corrections" then
         return true
-    elseif charJob == "sheriff" then
+    elseif charJob == "sasp" then
+        return true
+    elseif charJob == "bcso" then
         return true
     elseif charJob == "ems" then
         return true
@@ -132,7 +134,7 @@ RegisterServerEvent("vehicle:removeAllIllegalItems")
 AddEventHandler("vehicle:removeAllIllegalItems", function(plate)
   local usource = tonumber(source)
   local charJob = exports["usa-characters"]:GetCharacterField(usource, "job")
-  if charJob == "sheriff" or charJob == "corrections" then
+  if charJob == "sasp" or charJob == "corrections" or charJob == "bcso" then
     local inv = GetVehicleInventory(plate)
     VehInventoryManager.removeAllIllegalItems(usource, plate, inv, true)
   else
@@ -144,7 +146,7 @@ RegisterServerEvent("vehicle:seizeVeh")
 AddEventHandler("vehicle:seizeVeh", function(plate, arg)
   local usource = tonumber(source)
   local charJob = exports["usa-characters"]:GetCharacterField(usource, "job")
-  if charJob == "sheriff" or charJob == "corrections" then
+  if charJob == "sasp" or charJob == "corrections" or charJob == "bcso" then
     local inv = GetVehicleInventory(plate)
     VehInventoryManager.seizeVeh(usource, plate, inv, true, arg)
   else

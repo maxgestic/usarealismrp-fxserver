@@ -175,8 +175,10 @@ function AddGarageMenuItems(menu, vehs, job)
 						-- give key to owner
 						TriggerServerEvent("garage:giveKey", vehicle_key)
 						local mdtjob
-						if job == "sheriff" then
+						if job == "sasp" then
 							mdtjob = 'San Andreas State Police'
+						elseif job == "bcso" then
+							mdtjob = "Sheriff's Office"
 						elseif job == "corrections" then
 							mdtjob = 'Correctional Department'
 						elseif job == "ems" then 

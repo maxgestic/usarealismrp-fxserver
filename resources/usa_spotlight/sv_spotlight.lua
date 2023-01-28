@@ -3,13 +3,13 @@ local SPOTLIGHTS = {}
 
 local MAX_SPOTLIGHT_RUN_TIME_MINUTES = 15
 
-TriggerEvent('es:addJobCommand', 'spotlight', {"sheriff", "ems", "corrections", "fire"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'spotlight', {"sasp", "ems", "corrections", "bcso", "fire"}, function(source, args, char)
   TriggerClientEvent("spotlight:spotlight", source)
 end, {
 	help = "Toggle spot light on / off. Use arrow keys to navigate."
 })
 
-TriggerEvent('es:addJobCommand', 's', {"sheriff", "ems", "corrections", "fire"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 's', {"sasp", "ems", "corrections", "bcso", "fire"}, function(source, args, char)
   TriggerClientEvent("spotlight:spotlight", source)
 end, {
 	help = "Toggle spot light on / off. Use arrow keys to navigate."
@@ -49,7 +49,7 @@ end)
 RegisterServerEvent("spotlight:checkJob")
 AddEventHandler("spotlight:checkJob", function()
   local job = exports["usa-characters"]:GetCharacterField(source, "job")
-  if job == "sheriff" or job == "corrections" or job == "ems" or job == "fire" then
+  if job == "sasp" or job == "corrections" or job == "bcso" or job == "ems" or job == "fire" then
     TriggerClientEvent("spotlight:spotlight", source)
   end
 end)

@@ -37,19 +37,19 @@ end)
 -----------------------------
 -- LAWYER / JUDGE COMMANDS --
 -----------------------------
-TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'sheriff', 'corrections'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'sasp', 'bcso'}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local target_item_name = nil
 	local isAllowed = nil
 	-- check SGT + rank for police or if judge --
-	if char.get("job") == "sheriff" then
+	if char.get("job") == "sasp" then
 	    if char.get("policeRank") < 6 then
 			isAllowed = false
 		else
 			isAllowed = true
 	    end
-    elseif char.get("job") == "corrections" then
+    elseif char.get("job") == "bcso" then
 	    if char.get("bcsoRank") < 7 then
 			isAllowed = false
 		else
@@ -99,7 +99,7 @@ end, {
 })
 
 
-TriggerEvent('es:addJobCommand', 'checklicense', {'judge', 'lawyer', 'sheriff', 'corrections'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'checklicense', {'judge', 'lawyer', 'sasp', 'bcso'}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local target_item_name = nil
@@ -194,7 +194,7 @@ TriggerEvent('es:addJobCommand', 'changesuspension', {'judge'}, function(source,
 	local days = tonumber(args[4])
 	local target_item_name = nil
     -- check SGT + rank for police --
-    if char.get("job") == "sheriff" then
+    if char.get("job") == "sasp" then
         if char.get("policeRank") < 6 then
             TriggerClientEvent("usa:notify", source, "Not high enough rank!")
             return
@@ -229,20 +229,20 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff', 'corrections'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sasp', 'bcso'}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local target_item_name = nil
 	local target_item = nil
 	local isAllowed = nil
   	-- check SGT + rank for police or if judge --
-	if char.get("job") == "sheriff" then
+	if char.get("job") == "sasp" then
 	    if char.get("policeRank") < 6 then
 			isAllowed = false
 		else
 			isAllowed = true
 	    end
-    elseif char.get("job") == "corrections" then
+    elseif char.get("job") == "bcso" then
 	    if char.get("bcsoRank") < 7 then
 			isAllowed = false
 		else
@@ -379,20 +379,20 @@ end,{
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sheriff", "corrections"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sasp", "bcso"}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
     local days = tonumber(args[4])
 	local target_item_name = nil
 	local isAllowed = nil
 	-- check SGT + rank for police or if judge --
-	if char.get("job") == "sheriff" then
+	if char.get("job") == "sasp" then
 	    if char.get("policeRank") < 6 then
 			isAllowed = false
 		else
 			isAllowed = true
 	    end
-    elseif char.get("job") == "corrections" then
+    elseif char.get("job") == "bcso" then
 	    if char.get("bcsoRank") < 7 then
 			isAllowed = false
 		else
@@ -454,7 +454,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff', 'corrections'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sasp', 'bcso'}, function(source, args, char)
 	print("inside revoke command handler")
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
@@ -466,13 +466,13 @@ TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff', 'corrections'}, 
 	end
 
     -- check SGT + rank for police or if judge --
-	if char.get("job") == "sheriff" then
+	if char.get("job") == "sasp" then
 	    if char.get("policeRank") < 6 then
 			isAllowed = false
 		else
 			isAllowed = true
 	    end
-    elseif char.get("job") == "corrections" then
+    elseif char.get("job") == "bcso" then
 	    if char.get("bcsoRank") < 7 then
 			isAllowed = false
 		else

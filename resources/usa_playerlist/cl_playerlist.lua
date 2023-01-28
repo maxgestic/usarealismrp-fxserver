@@ -78,7 +78,7 @@ function RefreshMenu(players)
 		local playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Ping: '..player.ping..'ms')
 		if playerlist.group ~= 'user' then
 			playerItem = NativeUI.CreateItem(player.id .. ' | ' .. player.steam, 'Name: '..tostring(player.fullname)..' \nJob: '  ..tostring(player.job))
-			if player.job ~= "civ" and player.job ~= "sheriff" and player.job ~= "corrections" then
+			if player.job ~= "civ" and player.job ~= "sasp" and player.job ~= "bcso" and player.job ~= "corrections" then
 				playerItem:SetRightBadge(18) -- star
 			end
 		end

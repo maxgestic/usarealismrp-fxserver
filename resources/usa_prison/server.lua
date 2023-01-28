@@ -75,7 +75,7 @@ AddEventHandler("doc:getWeapons", function()
 end)
 
 -- Check inmates remaining jail time --
-TriggerEvent('es:addJobCommand', 'roster', {"sheriff", "corrections", "da", "judge"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'roster', {"sasp", "bcso", "corrections", "da", "judge"}, function(source, args, char)
 	local hasInmates = false
 	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1^*[BOLINGBROKE PENITENTIARY]")
 	exports["usa-characters"]:GetCharacters(function(characters)
@@ -111,7 +111,7 @@ RegisterServerEvent("jail:checkJobForWarp")
 AddEventHandler("jail:checkJobForWarp", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	if job == "sheriff" or job == "ems" or job == "fire" or job == "corrections" or job == "doctor" then
+	if job == "sasp" or job == "ems" or job == "bcso" or job == "fire" or job == "corrections" or job == "doctor" then
 		TriggerClientEvent("jail:continueWarp", source)
 	else
 		TriggerClientEvent("usa:notify", source, "That area is prohibited!")
@@ -135,8 +135,8 @@ AddEventHandler("doc:offduty", function()
 	-------------------------
 	-- put back to civ job --
 	-------------------------
-	if job == "corrections" then
-		TriggerEvent('job:sendNewLog', source, "corrections", false)
+	if job == "bcso" then
+		TriggerEvent('job:sendNewLog', source, "bcso", false)
 	end
 	--exports["usa_ems"]:RemoveServiceWeapons(char)
 	char.set("job", "civ")
@@ -159,16 +159,16 @@ RegisterServerEvent("doc:forceDuty")
 AddEventHandler("doc:forceDuty", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	if job ~= "corrections" then
+	if job ~= "bcso" then
 		----------------------------
-		-- set to corrections job --
+		-- set to bcso job --
 		----------------------------
-		char.set("job", "corrections")
+		char.set("job", "sendNewLog")
 		TriggerEvent("doc:loadUniform", 1, source)
 		TriggerClientEvent("usa:notify", source, "You have clocked in!")
-		TriggerEvent('job:sendNewLog', source, "corrections", true)
+		TriggerEvent('job:sendNewLog', source, "bcso", true)
 		TriggerClientEvent("ptt:isEmergency", source, true)
-		TriggerClientEvent("interaction:setPlayersJob", source, "corrections")
+		TriggerClientEvent("interaction:setPlayersJob", source, "bcso")
 		TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 82})
 	end
 end)
@@ -212,12 +212,12 @@ AddEventHandler("doc:loadOutfit", function(slot, id)
 	local char = exports["usa-characters"]:GetCharacter(usource)
 	local job = char.get("job")
 	local player_identifer = GetPlayerIdentifiers(usource)[1]
-	if job ~= "corrections" then
-		char.set("job", "corrections")
-		TriggerEvent('job:sendNewLog', source, "corrections", true)
+	if job ~= "bcso" then
+		char.set("job", "bcso")
+		TriggerEvent('job:sendNewLog', source, "bcso", true)
 		TriggerClientEvent("usa:notify", usource, "You have clocked in!")
 		TriggerClientEvent("ptt:isEmergency", usource, true)
-		TriggerClientEvent("interaction:setPlayersJob", usource, "corrections")
+		TriggerClientEvent("interaction:setPlayersJob", usource, "bcso")
 		TriggerEvent("eblips:add", {name = char.getName(), src = usource, color = 82})
 	end
 	TriggerEvent('es:exposeDBFunctions', function(usersTable)
@@ -233,7 +233,7 @@ RegisterServerEvent("doc:spawnVehicle")
 AddEventHandler("doc:spawnVehicle", function(veh)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	if job == "corrections" then
+	if job == "bcso" then
 		TriggerClientEvent("doc:spawnVehicle", source, veh)
 	else
 		TriggerClientEvent("usa:notify", source, "You are not on-duty!")
@@ -246,7 +246,7 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(usource)
 	local job = char.get("job")
-	if job == "corrections" then
+	if job == "bcso" then
 		weapon.rank = (weapon.rank or 1)
 		if char.get("bcsoRank") >= weapon.rank then
 			if weapon.name == "Spike Strips" then

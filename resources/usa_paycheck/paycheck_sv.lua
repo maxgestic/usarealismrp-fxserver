@@ -26,7 +26,7 @@ function DepositPayCheck(char)
 
     local job = char.get("job")
 
-    if job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
+    if job == "sasp" then
         local cop_rank = char.get("policeRank")
         paycheckAmount = 850 -- Cadet
         if cop_rank == 2 then
@@ -82,7 +82,7 @@ function DepositPayCheck(char)
         paycheckAmount = 750
     elseif job == "judge" then
         paycheckAmount = 1700
-    elseif job == "corrections" then
+    elseif job == "bcso" then
         local bcsoRank = char.get("bcsoRank")
         paycheckAmount = 850 --Correctional Deputy
         if bcsoRank == 2 then
@@ -155,9 +155,9 @@ function DepositPayCheck(char)
         msg = msg .. "of $" .. paycheckAmount .. " from ~y~Bubba's Mechanic Co.~s~."
     elseif job == "reporter" then
         msg = msg .. "of $" .. paycheckAmount .. " from ~y~Weazel News~s~."
-    elseif job == "sheriff" then
+    elseif job == "sasp" then
         msg = msg .. "of $" .. paycheckAmount .. " from the ~y~San Andreas State Police~s~."
-    elseif job == "corrections" then
+    elseif job == "bcso" then
         msg = msg .. "of $" .. paycheckAmount .. " from the ~y~Blaine County Sheriff's Office~s~."
     elseif job == "ems" then
         msg = msg .. "of $" .. paycheckAmount .. " from ~y~Los Santos Fire Department~s~."
@@ -188,33 +188,22 @@ function myJob(job, source)
         TriggerClientEvent('usa:notify', source, "You currently work for ~y~Downtown Cab Co~s~.")
     elseif job == "mechanic" then
         TriggerClientEvent('usa:notify', source, "You currently work for ~y~Bubba's Mechanic Co.~s~.")
-    elseif job == "sheriff" then
-        TriggerClientEvent('usa:notify', source,
-                           "You currently work for the ~y~San Andreas State Police~s~.")
-    elseif job == "police" then
-        TriggerClientEvent('usa:notify', source,
-                           "You currently work for the ~y~Los Santos Police Department~s~.")
+    elseif job == "sasp" then
+        TriggerClientEvent('usa:notify', source, "You currently work for the ~y~San Andreas State Police~s~.")
     elseif job == "ems" then
-        TriggerClientEvent('usa:notify', source,
-                           "You currently work for the ~y~Los Santos Fire Department~s~.")
+        TriggerClientEvent('usa:notify', source, "You currently work for the ~y~Los Santos Fire Department~s~.")
     elseif job == "fire" then
-        TriggerClientEvent('usa:notify', source,
-                           "You currently work for the ~y~Los Santos Fire Department~s~.")
+        TriggerClientEvent('usa:notify', source, "You currently work for the ~y~Los Santos Fire Department~s~.")
     elseif job == "chickenFactory" then
-        TriggerClientEvent('usa:notify', source,
-                           "You currently work for ~y~Cluckin' Bell~s~.")
-    elseif job == 'corrections' then
-        TriggerClientEvent('usa:notify', source,
-                           "You currently work for the ~y~Blaine County Sheriff's Office~s~.")
+        TriggerClientEvent('usa:notify', source, "You currently work for ~y~Cluckin' Bell~s~.")
+    elseif job == 'bcso' then
+        TriggerClientEvent('usa:notify', source, "You currently work for the ~y~Blaine County Sheriff's Office~s~.")
     elseif job == 'lawyer' then
-        TriggerClientEvent('usa:notify', source,
-                           "You currently work for the ~y~San Andreas Legal Association~s~.")
+        TriggerClientEvent('usa:notify', source, "You currently work for the ~y~San Andreas Legal Association~s~.")
     elseif job == 'judge' then
-        TriggerClientEvent('usa:notify', source,
-                           'You are currently working for the ~y~San Andreas Court Administration~s~.')
+        TriggerClientEvent('usa:notify', source, 'You are currently working for the ~y~San Andreas Court Administration~s~.')
     elseif job == 'doctor' then
-        TriggerClientEvent('usa:notify', source,
-                           'You are currently working for the ~y~Pillbox Medical Center~s~.')
+        TriggerClientEvent('usa:notify', source, 'You are currently working for the ~y~Pillbox Medical Center~s~.')
     elseif job == "gopostal" then
         TriggerClientEvent("usa:notify", source,'You are currently working for ~y~GoPostal~s~.')
     elseif job == 'metroDriver' or job == "trainDriver" then

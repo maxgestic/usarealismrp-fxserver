@@ -8,15 +8,15 @@ AddEventHandler('policelights:requestHeadlightColor', function(netVeh, value)
 	TriggerClientEvent('policelights:setHeadlightColor', -1, netVeh, value)
 end)
 
-TriggerEvent('es:addJobCommand', 'uclights', {'sheriff', 'corrections'}, function(src, args, char)
+TriggerEvent('es:addJobCommand', 'uclights', {'sasp', 'bcso'}, function(src, args, char)
 	local job = char.get("job")
-	if job == "sheriff" then -- SASP
+	if job == "sasp" then -- SASP
 		if char.get("policeRank") >= 4 then
 			TriggerClientEvent('policelights:enableLightsOnVehicle', src)
 		else 
 			TriggerClientEvent("usa:notify", src, "Must be rank 4+")
 		end
-	elseif job == "corrections" then -- BCSO
+	elseif job == "bcso" then -- BCSO
 		if char.get("bcsoRank") >= 5 then
 			TriggerClientEvent('policelights:enableLightsOnVehicle', src)
 		else 

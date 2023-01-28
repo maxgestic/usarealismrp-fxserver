@@ -633,7 +633,7 @@ AddEventHandler('properties:loadOutfit', function(slot)
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'bbreach', {'sheriff', 'ems', "corrections"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'bbreach', {'sasp', 'ems', "bcso"}, function(source, args, char, location)
 	location = vector3(table.unpack(location))
 	for i = 1, #burglaryHouses do
 		if find_distance(location, burglaryHouses[i]) < 2.0 then
@@ -1102,7 +1102,7 @@ RegisterServerEvent('properties:forceEntry')
 AddEventHandler('properties:forceEntry', function(location, index)
 	local usource = source
 	local job = exports["usa-characters"]:GetCharacterField(usource, "job")
-	if job == 'sheriff' or job == 'corrections' or job == "ems" then
+	if job == 'sasp' or job == 'bcso' or job == "ems" then
 		print('PROPERTIES: '..usource.. ' has forcefully BREACHED into room '..index.. ' at location '..location)
 		local room = properties[location].rooms[index]
 		table.insert(properties[location].rooms[index].instance, usource)

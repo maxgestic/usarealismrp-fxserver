@@ -1,5 +1,5 @@
 local VEHICLE_RANKS = {
-	["sheriff"] = {
+	["sasp"] = {
 		["pcvpi"] = {
 			rank = 1,
 			allowedLiveries = {1, 2, 3, 4},
@@ -151,7 +151,7 @@ local VEHICLE_RANKS = {
 			hash = GetHashKey("14suvrb")
 		}
 	},
-	["corrections"] = {
+	["bcso"] = {
 		["p4x4"] = {
 			rank = 1,
 			allowedLiveries = {1, 2},
@@ -302,8 +302,8 @@ local VEHICLE_RANKS = {
 			allowedLiveries = {1},
 			hash = GetHashKey("14suvrb")
 		}
-	    },
-	    ["ems"] = {
+	},
+	["ems"] = {
 		["fordambo"] = {
 			rank = 1,
 			allowedLiveries = { 1, 2},
@@ -386,6 +386,28 @@ local VEHICLE_RANKS = {
 			hash = GetHashKey("bostonwhale")
 		}
 	},
+	["corrections"] = {
+		["pcvpi"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3, 4},
+			hash = GetHashKey("pcvpi")
+		},
+		["bearcatrb"] = {
+			rank = 3,
+			allowedLiveries = {1, 2, 3},
+			hash = -500937862
+		},
+		["policet"] = {
+			rank = 2,
+			allowedLiveries = {1, 2, 3},
+			hash = -500937862
+		},
+		["pbus"] = {
+			rank = 2,
+			allowedLiveries = {1},
+			hash = GetHashKey("14suvrb")
+		}
+	},
 	["doctor"] = {
 		--["paraexp"] = 1,
 		--[[
@@ -399,16 +421,18 @@ local VEHICLE_RANKS = {
 }
 
 function getRankForJob(char, job, cb)
-	if job == "sheriff" then
+	if job == "sasp" then
 		cb(char.get("policeRank"))
 	elseif job == "ems" or job == "doctor" then
 		cb(char.get("emsRank"))
-	elseif job == "corrections" then
+	elseif job == "bcso" then
 		cb(char.get("bcsoRank"))
+	elseif job == "corrections" then
+		cb(char.get("correctionsRank"))
 	end
 end
 
-TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", "doctor", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'spawn', { "police", "sasp", "ems", "fire", "doctor", "corrections", "bcso" }, function(source, args, char)
 	local usource = source
 	local job = char.get('job')
 	getRankForJob(char, job, function(rank)
@@ -419,7 +443,7 @@ TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", 
 			return
 		end
 		local vehicleRequested = selected
-		if job == "sheriff" or job == "corrections" or job == "ems" then
+		if job == "sasp" or job == "bcso" or job == "corrections" or job == "ems" then
 			local neededRank = VEHICLE_RANKS[job][vehicleRequested]
 			if neededRank then
 				if type(neededRank) == "table" then
@@ -469,7 +493,7 @@ AddEventHandler("vehCommands:gotVehModel", function(model, srcAction, selected)
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'livery', { "sheriff", "ems", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'livery', { "sasp", "ems", "corrections", "bcso" }, function(source, args, char)
 	local selected = tonumber(args[2])
 	if selected then
 		TriggerClientEvent("vehCommands:getVehModel", source, selected)
@@ -483,7 +507,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'extra', { "sheriff", "ems", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'extra', { "sasp", "ems", "corrections", "bcso" }, function(source, args, char)
 	if args[2] then
 		TriggerClientEvent("vehicleCommands:setExtra", source, args[2], args[3])
 	else

@@ -281,7 +281,7 @@ AddEventHandler('playerDropped', function()
 end)
 
 -- /admit [id] [time] [reason]
-TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", "corrections", "doctor" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "sasp", "bcso", "corrections", "doctor" }, function(source, args, char)
 	local targetPlayerId = tonumber(args[2])
 	local bed = nil
 	table.remove(args, 1)

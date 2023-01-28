@@ -27,6 +27,10 @@ local POLICE_RANKS = {
 		[10] = "Undersheriff",
 		[11] = "Sheriff"
 	},
+	["Corrections"] = {
+		[1] = "Correctional Deputy",
+		[2] = "Senior Correctional Deputy",
+	}
 	["EMS"] = {
 		[1] = "Probationary Fire Paramedic",
 		[2] = "Fire Paramedic",
@@ -51,7 +55,7 @@ local POLICE_RANKS = {
 
 local target_player_id = 0
 
-TriggerEvent('es:addJobCommand', 'ticket', { 'sheriff', 'police' , 'judge', "corrections"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'ticket', { 'sasp', 'police' , 'judge', "corrections", "bcso"}, function(source, args, char)
 	local targetPlayer = tonumber(args[2])
 	local amount = math.ceil(tonumber(args[3]))
 	table.remove(args, 1)
@@ -89,7 +93,7 @@ end, {
 })
 
 -- /dispatch
-TriggerEvent('es:addJobCommand', 'dispatch', { "corrections", "sheriff", "ems", "taxi", "mechanic" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'dispatch', { "corrections", "sasp", "ems", "taxi", "mechanic", "bcso"}, function(source, args, char)
 	local target = tonumber(args[2])
 	if GetPlayerName(target) then
 		table.remove(args,1)
@@ -98,8 +102,8 @@ TriggerEvent('es:addJobCommand', 'dispatch', { "corrections", "sheriff", "ems", 
 		TriggerClientEvent('dispatch:notify', target, char.get("name").last, source, msg)
 		local cjob = char.get("job")
 		local targetJobs = {}
-		if cjob == "sheriff" or cjob == "corrections" or cjob == "ems" then
-			targetJobs = {"sheriff", "corrections", "ems"}
+		if cjob == "sasp" or cjob == "corrections" or cjob == "ems" or cjob == "bcso" then
+			targetJobs = {"sasp", "corrections", "ems", "bcso"}
 		else
 			targetJobs = {cjob}
 		end
@@ -115,7 +119,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'barrier', { "corrections", "sheriff", "ems", "fire"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'barrier', { "bcso", "sasp", "ems", "fire"}, function(source, args, char)
 	local obj = nil
 	if args[2] == "1" then
 		obj = "prop_mp_cone_01"
@@ -130,19 +134,19 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'cone', { "corrections", "sheriff", "ems", "fire", "mechanic" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'cone', { "bcso", "sasp", "ems", "fire", "mechanic" }, function(source, args, char)
 	TriggerClientEvent('c_setCone', source)
 end, {
 	help = "Drop a cone down"
 })
 
-TriggerEvent('es:addJobCommand', 'pickup', { "corrections", "sheriff", "ems", "fire", "mechanic" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'pickup', { "bcso", "sasp", "ems", "fire", "mechanic" }, function(source, args, char)
 	TriggerClientEvent('c_removeCones', source)
 end, {
 	help = "Pick up cones or barriers"
 })
 
-TriggerEvent('es:addJobCommand', 'removecones', { "corrections", "sheriff", "ems", "fire", "mechanic" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'removecones', { "bcso", "sasp", "ems", "fire", "mechanic" }, function(source, args, char)
 	TriggerClientEvent('c_removeCones', source)
 end, {
 	help = "Pick up cones or barriers"
@@ -280,9 +284,11 @@ end)
 function canBypassDownedOrTiedCheck(char)
 	local isLEO = false
 	local charJob = char.get("job")
-	if charJob == "corrections" then
+	if charJob == "bcso" then
 		return true
-	elseif charJob == "sheriff" then
+	elseif charJob == "corrections" then
+		return true
+	elseif charJob == "sasp" then
 		return true
 	elseif charJob == "ems" then
 		return true
@@ -317,7 +323,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, char)
 	local job = char.get("job")
 	if job == "civ" then
 		TriggerClientEvent("search:attemptToSearchNearestPerson", source)
-	elseif job == "sheriff" or job == "corrections" then
+	elseif job == "sasp" or job == "corrections" or job == "bcso" then
 		if not tonumber(args[2]) then
 			TriggerClientEvent("search:searchNearest", source, source)
 		else
@@ -327,7 +333,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, char)
 	end
 end, {help = "Search the nearest person or vehicle"})
 
-TriggerEvent('es:addJobCommand', 'frisk', {"sheriff", "ems", "corrections"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'frisk', {"sasp", "ems", "corrections", "bcso"}, function(source, args, char)
 	if not tonumber(args[2]) then
 		TriggerClientEvent("police:friskNearest", source, source)
 	else
@@ -339,7 +345,7 @@ end, {help = "Search the nearest person or vehicle"})
 --------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- start bait car
-TriggerEvent('es:addJobCommand', 'lockbc',  {"sheriff", "corrections"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'lockbc',  {"sasp", "bcso"}, function(source, args, user)
 	local ServerID = args[2]
 	if not tonumber(ServerID) then return end
 	TriggerClientEvent("simp:baitCarDisable", tonumber(ServerID))
@@ -350,7 +356,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'unlockbc',  {"sheriff", "corrections"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'unlockbc',  {"sasp", "bcso"}, function(source, args, user)
 	local ServerID = args[2]
 	if not tonumber(ServerID) then return end
 	TriggerClientEvent("simp:baitCarunlock", tonumber(ServerID))
@@ -363,7 +369,7 @@ end, {
 -- end bait car
 
 -- start seize contraband
-TriggerEvent('es:addJobCommand', 'seize', { "sheriff", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'seize', { "sasp", "corrections", "bcso" }, function(source, args, char)
 	local targetId = tonumber(args[2])
 	local arg = args[3]
 	if arg and targetId then
@@ -409,7 +415,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'seizeveh', { "sheriff", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'seizeveh', { "sasp", "corrections", "bcso" }, function(source, args, char)
 	local arg = args[2]
 	if arg then
 		if arg == "contraband" then
@@ -452,8 +458,12 @@ TriggerEvent('es:addCommand', 'showbadge', function(source, args, char, location
 	local bcso_rank = char.get("bcsoRank")
 	local ems_rank = char.get("emsRank")
 	local doctor_rank = char.get("doctorRank")
+	local corrections_rank = char.get("correctionsRank")
 	if (doctor_rank == nil) then
 		doctor_rank = 0
+	end
+	if (corrections_rank == nil) then
+		corrections_rank = 0
 	end
 	local char_name = char.getFullName()
 
@@ -461,16 +471,25 @@ TriggerEvent('es:addCommand', 'showbadge', function(source, args, char, location
 		if police_rank > 0 then
 			exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official police badge.")
 			TriggerClientEvent("badge:client:animation", source)
-			local msg = "^*[SASP BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(police_rank, "sheriff")
+			local msg = "^*[SASP BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(police_rank, "sasp")
 			exports["globals"]:sendLocalActionMessageChat(msg, location)
 		else
 			TriggerClientEvent("usa:notify", source, "Not whitelisted for this dept.")
 		end
 	elseif args[2] == "bcso" then
 		if bcso_rank > 0 then
-			exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official police badge.")
+			exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official sheriff's badge.")
 			TriggerClientEvent("badge:client:animation", source)
-			local msg = "^*[BCSO BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(bcso_rank, "corrections")
+			local msg = "^*[BCSO BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(bcso_rank, "bcso")
+			exports["globals"]:sendLocalActionMessageChat(msg, location)
+		else
+			TriggerClientEvent("usa:notify", source, "Not whitelisted for this dept.")
+		end
+	elseif args[2] == "corrections" then
+		if corrections_rank > 0 then
+			exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official correctional badge.")
+			TriggerClientEvent("badge:client:animation", source)
+			local msg = "^*[BCSO Correctional BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(corrections_rank, "corrections")
 			exports["globals"]:sendLocalActionMessageChat(msg, location)
 		else
 			TriggerClientEvent("usa:notify", source, "Not whitelisted for this dept.")
@@ -497,12 +516,17 @@ TriggerEvent('es:addCommand', 'showbadge', function(source, args, char, location
 		if police_rank > 0 then
 			exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official police badge.")
 			TriggerClientEvent("badge:client:animation", source)
-			local msg = "^*[SASP BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(police_rank, "sheriff")
+			local msg = "^*[SASP BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(police_rank, "sasp")
 			exports["globals"]:sendLocalActionMessageChat(msg, location)
 		elseif bcso_rank > 0 then
 			exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official police badge.")
 			TriggerClientEvent("badge:client:animation", source)
-			local msg = "^*[BCSO BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(bcso_rank, "corrections")
+			local msg = "^*[BCSO BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(bcso_rank, "bcso")
+			exports["globals"]:sendLocalActionMessageChat(msg, location)
+		elseif corrections_rank > 0 then
+			exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official correctional badge.")
+			TriggerClientEvent("badge:client:animation", source)
+			local msg = "^*[BCSO Correctional BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(corrections_rank, "corrections")
 			exports["globals"]:sendLocalActionMessageChat(msg, location)
 		elseif ems_rank > 0 then
 			exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official ems badge.")
@@ -525,9 +549,11 @@ end, {
 
 function GetRankName(rank, dept)
 	local department = nil
-	if dept == "corrections" then 
+	if dept == "bcso" then 
 		department = "BCSO"
-	elseif dept == "sheriff" then 
+	elseif dept == "corrections" then
+		department = "Corrections"
+	elseif dept == "sasp" then 
 		department = "SASP"
 	elseif dept == "ems" then
 		department = "EMS"
@@ -538,14 +564,16 @@ function GetRankName(rank, dept)
 end
 
 function GetPublicServantIds()
-	local sasp = exports["usa-characters"]:GetPlayerIdsWithJob("sheriff")
-	local bcso = exports["usa-characters"]:GetPlayerIdsWithJob("corrections")
+	local sasp = exports["usa-characters"]:GetPlayerIdsWithJob("sasp")
+	local bcso = exports["usa-characters"]:GetPlayerIdsWithJob("bcso")
+	local corrections = exports["usa-characters"]:GetPlayerIdsWithJob("corrections")
 	local ems = exports["usa-characters"]:GetPlayerIdsWithJob("ems")
 	local doctor = exports["usa-characters"]:GetPlayerIdsWithJob("doctor")
 	local judge = exports["usa-characters"]:GetPlayerIdsWithJob("judge")
 	local all = {}
 	for i = 1, #sasp do table.insert(all, sasp[i]) end
 	for i = 1, #bcso do table.insert(all, bcso[i]) end
+	for i = 1, #corrections do table.insert(all, corrections[i]) end
 	for i = 1, #ems do table.insert(all, ems[i]) end
 	for i = 1, #doctor do table.insert(all, doctor[i]) end
 	for i = 1, #judge do table.insert(all, judge[i]) end
@@ -564,7 +592,7 @@ function PlayPanicButtonSound(id)
 	TriggerClientEvent('InteractSound_CL:PlayOnOne', id, "panicButton", 0.26)
 end
 
-TriggerEvent('es:addJobCommand', 'p', { "sheriff", "ems", "corrections", "doctor", "judge" }, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'p', { "sasp", "ems", "corrections", "doctor", "judge", "bcso" }, function(source, args, char, location)
 	-- for all public servants:
 		-- put blip on map for x seconds
 		-- send text message alert
