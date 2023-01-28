@@ -96,7 +96,7 @@ TriggerEvent('es:addCommand', 'inspect' , function(source, args, char)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
 	local group = user.getGroup()
-	if job == "corrections" or job == "sheriff" or job == "cop" or job == "ems" or job == "doctor" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
+	if job == "corrections" or job == "sasp" or job == "bcso" or job == "ems" or job == "doctor" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
 		if targetSource and GetPlayerName(targetSource) then
 			TriggerEvent('injuries:getPlayerInjuries', targetSource, _source)
 		else
@@ -122,7 +122,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'bandage', {'ems', 'doctor', 'sheriff', 'corrections'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'bandage', {'ems', 'doctor', 'sasp', 'bcso', 'corrections'}, function(source, args, char)
 	if not char.hasItem("First Aid Kit") then
 		TriggerClientEvent("usa:notify", source, "No first aid kit")
 		return
@@ -145,7 +145,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'epi', {'ems', 'doctor', 'sheriff', 'corrections'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'epi', {'ems', 'doctor', 'sasp', 'bcso', 'corrections'}, function(source, args, char)
 	local _source = source
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) and targetSource ~= _source then
@@ -262,7 +262,7 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 	TriggerClientEvent("chatMessage", usource, '^3^*[HOSPITAL] ^r^7You have been admitted to the hospital, please wait while you are treated.')
 	TriggerClientEvent('chatMessage', usource, 'The payment has been deducted from your bank balance.')
 	print('INJURIES: '..PlayerName(usource) .. ' has checked-in to hospital and was charged amount['..totalPrice..']')
-	if char.get('job') ~= 'sheriff' and char.get("job") ~= "corrections" and char.get("job") ~= "ems" then
+	if char.get('job') ~= 'sasp' and char.get("job") ~= "bcso" and char.get("job") ~= "corrections" and char.get("job") ~= "ems" then
 		char.removeBank(totalPrice)
 	end
 end)
@@ -302,7 +302,7 @@ AddEventHandler('injuries:chargeForInjuries', function(playerInjuries, multiplie
 		totalPrice = totalPrice * multiplier
 	end
 	local job = char.get("job")
-	if job == "sheriff" or job == "corrections" or job == "ems" then
+	if job == "sasp" or job == "bcso" or job == "corrections" or job == "ems" then
 		char.removeBank(math.floor(totalPrice * 0.25))
 	else 
 		char.removeBank(totalPrice)
@@ -414,7 +414,7 @@ end
 
 function IsPlayerCop(src)
 	local char = exports["usa-characters"]:GetCharacter(src)
-	if char.get("job") == "sheriff" or char.get("job") == "corrections" then
+	if char.get("job") == "sasp" or char.get("job") == "bcso" or char.get("job") == "corrections" then
 		return true
 	else
 		return false

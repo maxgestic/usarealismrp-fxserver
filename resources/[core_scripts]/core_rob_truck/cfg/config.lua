@@ -8,7 +8,7 @@ cfg.interaction = "markermenu" --qbtarget,markermenu,gtav
 cfg.dispatch = "standalone" --nunoradioman,ps_dispatch,cd_dispatch,core_dispatch
 
 cfg.police = {
-	groups = {"sheriff","corrections"}, -- police groups
+	groups = {"sasp", "bcso", "corrections"}, -- police groups
 	amount = 4, -- police amount
 }
 cfg.timers = {

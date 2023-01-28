@@ -142,7 +142,7 @@ local random_names = {
 
 local tempVehicles = {}
 
-TriggerEvent('es:addJobCommand', 'mdt', { "sheriff", "judge", "corrections", "da"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'mdt', { "sasp", "judge", "corrections", "da", "bcso"}, function(source, args, char)
 	TriggerClientEvent('mdt:toggleVisibilty', source)
 end, { help = "Open MDT" })
 
@@ -683,7 +683,7 @@ AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
 	local _source = source
 	local char = exports["usa-characters"]:GetCharacter(_source)
 	local job = char.get("job")
-	if job == 'sheriff' or job == "corrections" then
+	if job == 'sasp' or job == "bcso" then
 		exports["usa-warrants"]:getWarrants(function(warrants)
 			PerformHttpRequest("http://127.0.0.1:5984/bolos/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
 				local response = json.decode(text)
@@ -795,9 +795,9 @@ AddEventHandler("mdt:deleteWarrant", function(id, rev)
 	local job = char.get("job")
 	local permitted = false
 
-	if job == "corrections" and char.get("bcsoRank") >= 7 then
+	if job == "bcso" and char.get("bcsoRank") >= 7 then
 		permitted = true
-	elseif (job == 'sheriff' and char.get("policeRank") >= 6) then
+	elseif (job == 'sasp' and char.get("policeRank") >= 6) then
 		permitted = true
 	elseif job == 'judge' then 
 		permitted = true
@@ -833,9 +833,8 @@ AddEventHandler("mdt:createBOLO", function(bolo)
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
 		-- insert into db
 		couchdb.createDocument("bolos", bolo, function()
-			print("bolo saved!")
 
-			exports["globals"]:notifyPlayersWithJob("sheriff", "^3^*[MDT] ^r^0A new BOLO has been created!")
+			exports["globals"]:notifyPlayersWithJobs({"sasp","bcso"}, "^3^*[MDT] ^r^0A new BOLO has been created!")
 
 			local msg = {
 				type = "bolo_created"
@@ -854,7 +853,7 @@ end)
 RegisterServerEvent("mdt:deleteBOLO")
 AddEventHandler("mdt:deleteBOLO", function(id, rev)
 	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == 'sheriff' or job == 'judge' or job == "corrections" then
+	if job == 'sasp' or job == 'judge' or job == "bcso" then
 		deleteBOLO("bolos", id, rev)
 	else
 		TriggerClientEvent('usa:notify', source, 'Insufficient permission!')
@@ -909,9 +908,9 @@ AddEventHandler("mdt:deletePoliceReport", function(id, rev)
 	local job = char.get("job")
 	local permitted = false
 
-	if job == "corrections" and char.get("bcsoRank") >= 7 then
+	if job == "bcso" and char.get("bcsoRank") >= 7 then
 		permitted = true
-	elseif (job == 'sheriff' and char.get("policeRank") >= 6) then
+	elseif (job == 'sasp' and char.get("policeRank") >= 6) then
 		permitted = true
 	elseif job == 'judge' then 
 		permitted = true
@@ -943,9 +942,9 @@ AddEventHandler("mdt:fetchEmployee", function()
 	local n = char.get("name")
 	local job = char.get("job")
 	local rank = nil
-	if job == "sheriff" then
+	if job == "sasp" then
 		rank = exports["usa_rp2"]:GetRankName(char.get("policeRank"), job)
-	elseif job == "corrections" then
+	elseif job == "bcso" then
 		rank = exports["usa_rp2"]:GetRankName(char.get("bcsoRank"), job)
 	end
 	local employee = {
@@ -1303,10 +1302,12 @@ function addTableEntries(target, src)
 end
 
 function GetDisplayNameFromJob(job)
-	if job == "sheriff" then 
+	if job == "sasp" then 
 		return "San Andreas State Police"
-	elseif job == "corrections" then 
+	elseif job == "bcso" then 
 		return "Sheriff's Department"
+	elseif job == "corrections" then 
+		return "Correctional Department"
 	end
 end
 

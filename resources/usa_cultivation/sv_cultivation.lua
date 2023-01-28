@@ -174,7 +174,7 @@ TriggerEvent('es:addCommand', 'removeplant', function(source, args, char)
     local user = exports["essentialmode"]:getPlayerFromId(source)
     local job = char.get("job")
     local group = user.getGroup()
-    if job == "sheriff" or job == "corrections" or job == "ems" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
+    if job == "sasp" or job == "bcso" or job == "ems" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
         TriggerClientEvent("cultivation:attemptToRemoveNearest", source)
     end
 end, {

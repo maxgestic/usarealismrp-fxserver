@@ -1,6 +1,6 @@
 local detectableItems = {'weed', 'cocaine', 'meth', 'pseudo', 'phosphorus'}
 
-TriggerEvent('es:addJobCommand', 'k9', {'sheriff', 'corrections'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'k9', {'sasp', 'bcso', 'corrections'}, function(source, args, char, location)
 	TriggerClientEvent('k9:openMenu', source)
 end, {
 	help = "Open the K9 interaction menu",

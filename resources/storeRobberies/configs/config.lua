@@ -7,8 +7,8 @@ Config.Framework = "NONE" --Set this between "ESX" or "QBUS" or "VRP" or "NONE"
 Config.UseCopJob = true --Use police check to see if the player can rob the place.\
 Config.UsingSurveillanceSystem = false --Enable this if you are using SurveillanceSystem by Voxit. Check it out here: https://store.voxit.xyz/
 Config.CopJobs = { --Set your police job names here. IF YOU ARE USING VRP SET YOUR GROUP NAMES HERE
-    "sheriff",
-    "corrections"
+    "sasp",
+    "bcso"
 }
 
 Config.NoRobPolice = false --If set to true, policemen cannot start the robbery by aiming.

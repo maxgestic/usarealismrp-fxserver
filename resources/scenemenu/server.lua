@@ -1,6 +1,6 @@
 local ALLOWED_JOBS = {
-    sheriff = true,
-    corrections = true,
+    sasp = true,
+    bcso = true,
     ems = true,
     eventPlanner = true
 }

@@ -378,11 +378,11 @@ function tprint (tbl, indent)
 end
 
 function JobGetsDiscountedUpgrades(job)
-	if job == "sheriff" then
+	if job == "sasp" then
 		return true
 	elseif job == "ems" then
 		return true
-	elseif job == "corrections" then
+	elseif job == "bcso" then
 		return true
 	else
 		return false

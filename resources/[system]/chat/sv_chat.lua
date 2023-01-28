@@ -29,15 +29,15 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 			if job == "cop" then
 				name = "LSPD | " .. name
 				color = {2, 111, 218}
-			elseif job == "sheriff" then
+			elseif job == "sasp" then
 				name = "SASP | " .. name
 				color = {2, 111, 218}
-			elseif job == "corrections" then
+			elseif job == "bcso" then
 				name = "BCSO | " .. name
 				color = {2, 111, 218}
-			elseif job == "highwaypatrol" then
-				name = "Highway Patrol | " .. name
-				color = {102, 153, 255}
+			elseif job == "corrections" then
+				name = "Corrections | " .. name
+				color = {2, 111, 218}
 			elseif job == "ems" then
 				name = "EMS | " .. name
 				color = {255, 51, 153}

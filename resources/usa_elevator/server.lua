@@ -9,13 +9,13 @@ AddEventHandler("usa_elevator:checkJob", function(jobs, number)
 	    	isAllowed = true
 	    elseif jobs[i] == 'judge' and char.get("judgeRank") and char.get("judgeRank") > 0 then -- not clocked in, but whitelisted for job
 	    	isAllowed = true
-	    elseif jobs[i] == 'sheriff' and char.get("policeRank") and char.get("policeRank") > 0 then -- not clocked in, but whitelisted for job
+	    elseif jobs[i] == 'sasp' and char.get("policeRank") and char.get("policeRank") > 0 then -- not clocked in, but whitelisted for job
 	    	isAllowed = true
 	    elseif jobs[i] == 'ems' and char.get("emsRank") and char.get("emsRank") > 0 then -- not clocked in, but whitelisted for job
 	    	isAllowed = true
 	    elseif jobs[i] == 'doctor' and char.get("doctorRank") and char.get("doctorRank") > 0 then
 	    	isAllowed = true
-	    elseif jobs[i] == 'corrections' and char.get("bcsoRank") and char.get("bcsoRank") > 0 then -- not clocked in, but whitelisted for job
+	    elseif jobs[i] == 'bcso' and char.get("bcsoRank") and char.get("bcsoRank") > 0 then -- not clocked in, but whitelisted for job
 	    	isAllowed = true
 	    end
 	end

@@ -3,7 +3,8 @@
 --exports["usa_stores"]:AddGeneralStoreItem("Misc", radioItem)
 
 local EMERGENCY_JOBS = {
-    sheriff = true,
+    sasp = true,
+    bcso = true,
     ems = true,
     corrections = true,
     doctor = true

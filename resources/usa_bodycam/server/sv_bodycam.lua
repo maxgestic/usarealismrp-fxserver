@@ -26,35 +26,46 @@ local POLICE_RANKS = {
 		[9] = "Commander",
 		[10] = "Undersheriff",
 		[11] = "Sheriff"
+	},
+	["BCSO (Corrections)"] = {
+		[1] = "Correctional Deputy",
+		[2] = "Senior Correctional Deputy"
 	}
 }
 
 function GetRankName(rank, dept)
 	local department = nil
-	if dept == "corrections" then 
+	if dept == "bcso" then 
 		department = "BCSO"
-	elseif dept == "sheriff" then 
+	elseif dept == "sasp" then 
 		department = "SASP"
+	elseif dept == "corrections" then
+		department = "BCSO (Corrections)"
 	end
 	local retString = department .. " | " .. POLICE_RANKS[department][rank]
 	return retString
 end
 
-TriggerEvent('es:addJobCommand', 'bodycam', { 'sheriff', "corrections"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'bodycam', { 'sasp', "bcso", "corrections"}, function(source, args, char)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local name = char.getFullName()
 	local job = char.get("job")
 	local rank = ""
 
-	if job == "sheriff" then
+	if job == "sasp" then
 		local police_rank = char.get("policeRank")
 		if police_rank > 0 then
-			rank = GetRankName(police_rank, "sheriff")
+			rank = GetRankName(police_rank, "sasp")
 		end
-	elseif job == "corrections" then
+	elseif job == "bcso" then
 		local bcso_rank = char.get("bcsoRank")
 		if bcso_rank > 0 then
-			rank = GetRankName(bcso_rank, "corrections")
+			rank = GetRankName(bcso_rank, "bcso")
+		end
+	elseif job == "corrections" then
+		local corrections_rank = char.get("correctionsRank")
+		if corrections_rank > 0 then
+			rank = GetRankName(corrections_rank, "corrections")
 		end
 	end
 	TriggerClientEvent("usa_bodycam:show", source, name, rank)

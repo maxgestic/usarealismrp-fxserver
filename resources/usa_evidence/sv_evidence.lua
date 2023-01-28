@@ -54,13 +54,13 @@ local exempt_evidence = {
 
 local NEARBY_DISTANCE = 100
 
-TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'breathalyze', { "sasp", "ems", "bcso" }, function(source, args, char)
 	TriggerClientEvent("evidence:breathalyzeNearest", source)
 end, {
 	help = "breathalyze the nearest person"
 })
 
-TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff", "corrections", "ems" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'dnasample', { "sasp", "bcso", "corrections", "ems" }, function(source, args, char)
 	TriggerClientEvent("evidence:dnaNearest", source)
 end, {
 	help = "dna sample the nearest person"
@@ -92,7 +92,7 @@ AddEventHandler('evidence:returnBreathalyzeResult', function(levelBAC, sourceRet
 end)
 
 -- GSR test --
-TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'gsr', { "sasp", "bcso", "corrections" }, function(source, args, char)
 	TriggerClientEvent("evidence:gsrNearest", source)
 end, {
 	help = "gun shot residue test the nearest person"
@@ -174,7 +174,7 @@ end)
 RegisterServerEvent('evidence:checkJobForMenu')
 AddEventHandler('evidence:checkJobForMenu', function()
 	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == 'police' or job == 'sheriff' or job == 'corrections' then
+	if job == 'sasp' or job == 'bcso' or job == 'corrections' then
 		TriggerClientEvent('evidence:openEvidenceMenu', source)
 	else
 		TriggerClientEvent('usa:notify', source, '~y~You are not on-duty for POLICE.')
@@ -184,7 +184,7 @@ end)
 RegisterServerEvent('evidence:makeObservations')
 AddEventHandler('evidence:makeObservations', function(targetSource)
 	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == 'corrections' or job == 'sheriff' or job == "ems" then
+	if job == 'bcso' or job == 'sasp' or job == 'corrections' or job == "ems" then
 		TriggerClientEvent('evidence:getObservations', targetSource, source)
 	end
 end)

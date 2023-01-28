@@ -177,7 +177,7 @@
         <div id="content_container">
 
                 <!-- Icon Bar Nav-->
-                <nav id="icon_navbar" class="w3-sidebar w3-bar-block w3-center" v-bind:class="{ 'border-right-blue': employee.job.rawName == 'sheriff', 'border-right-gold': employee.job.rawName == 'corrections' }">
+                <nav id="icon_navbar" class="w3-sidebar w3-bar-block w3-center" v-bind:class="{ 'border-right-blue': employee.job.rawName == 'sasp', 'border-right-gold': employee.job.rawName == 'bcso', 'border-right-gold': employee.job.rawName == 'corrections' }">
                     <div v-on:click="changePage('Person(s) Check')" id="person_check" class="w3-bar-item w3-button w3-padding">
                         <i class="fa fa-user w3-xxlarge"></i>
                         <p>Person Check</p>

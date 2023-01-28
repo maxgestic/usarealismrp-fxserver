@@ -313,8 +313,8 @@ AddEventHandler("CORE_ROB_TRUCK:CheckForPolice_s",function(cb)
 	end
 	if cfg.framework == "standalone" then
 		local copsOnline = 0
-		local sasp = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
-		local bcso = exports["usa-characters"]:GetNumCharactersWithJob("corrections")
+		local sasp = exports["usa-characters"]:GetNumCharactersWithJob("sasp")
+		local bcso = exports["usa-characters"]:GetNumCharactersWithJob("bcso")
 		copsOnline = sasp + bcso
 		
 		if copsOnline >= cfg.police.amount then

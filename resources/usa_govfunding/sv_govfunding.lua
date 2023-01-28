@@ -1,9 +1,9 @@
-TriggerEvent('es:addJobCommand', 'govcheck', {"sheriff", "corrections", "judge", "ems", "doctor", "realtor"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'govcheck', {"sasp", "bcso", "judge", "ems", "doctor", "realtor"}, function(source, args, char, location)
     local usource = source
     local job = exports["usa-characters"]:GetCharacterField(source, "job")
     local char = exports["usa-characters"]:GetCharacter(usource)
     local fundAccount = job
-    if job == "corrections" then
+    if job == "bcso" then
         if char.get("bcsoRank") < 8 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
             return
@@ -11,7 +11,7 @@ TriggerEvent('es:addJobCommand', 'govcheck', {"sheriff", "corrections", "judge",
             TriggerClientEvent("govfunding:check", source)
         end
         return
-    elseif job == "sheriff" then
+    elseif job == "sasp" then
         if char.get("policeRank") < 6 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
             return
@@ -42,7 +42,7 @@ TriggerEvent('es:addJobCommand', 'govcheck', {"sheriff", "corrections", "judge",
     end
 end, { help = "Check your departments funding"})
 
-TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge", "ems", "doctor", "realtor"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'govdeposit', {"sasp", "bcso", "judge", "ems", "doctor", "realtor"}, function(source, args, char, location)
     local usource = source
     local amount = tonumber(args[2])
     local job = exports["usa-characters"]:GetCharacterField(source, "job")
@@ -54,7 +54,7 @@ TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge
     end
     if job == "judge" then
         TriggerEvent("govfunding:save", amount, usource, fundAccount)
-    elseif job == "corrections" then
+    elseif job == "bcso" then
         if char.get("bcsoRank") < 5 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
             return
@@ -62,7 +62,7 @@ TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge
             TriggerEvent("govfunding:save", amount, usource, fundAccount)
         end
         return
-    elseif job == "sheriff" then
+    elseif job == "sasp" then
         if char.get("policeRank") < 6 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
         else
@@ -87,7 +87,7 @@ TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge
     end
 end, { help = "Deposit to your departments funds"})
 
-TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "judge", "ems", "doctor", "realtor"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'govwithdraw', {"sasp", "bcso", "judge", "ems", "doctor", "realtor"}, function(source, args, char, location)
     local usource = source
     local amount = tonumber(args[2])
     local job = exports["usa-characters"]:GetCharacterField(source, "job")
@@ -99,7 +99,7 @@ TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "judg
     end
     if job == "judge" then
         TriggerEvent("govfunding:delete", amount, usource, fundAccount)
-    elseif job == "corrections" then
+    elseif job == "bcso" then
         if char.get("bcsoRank") < 5 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
             return
@@ -107,7 +107,7 @@ TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "judg
             TriggerEvent("govfunding:delete", amount, usource, fundAccount)
         end
         return
-    elseif job == "sheriff" then
+    elseif job == "sasp" then
         if char.get("policeRank") < 6 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
             return
@@ -181,11 +181,11 @@ AddEventHandler("govfunding:save", function(depositAmount, src, fundAccount)
             saveBal(usource, finishedBalance, fundAccount)
             char.removeMoney(depositAmount)
             createdBy = char.getFullName()
-            if job == "corrections" then
+            if job == "bcso" then
                 agencyName = "BCSO"
             elseif job == "ems" then
                 agencyName = "LSFD"
-            elseif job == "sheriff" then
+            elseif job == "sasp" then
                 agencyName = "SASP"
             elseif job == "judge" then
                 agencyName = "State"
@@ -228,11 +228,11 @@ AddEventHandler("govfunding:delete", function(withdrawAmount, src, fundAccount)
             saveBal(usource, finishedBalance, fundAccount)
             char.giveMoney(withdrawAmount)
             createdBy = char.getFullName()
-            if job == "corrections" then
+            if job == "bcso" then
                 agencyName = "BCSO"
             elseif job == "ems" then
                 agencyName = "LSFD"
-            elseif job == "sheriff" then
+            elseif job == "sasp" then
                 agencyName = "SASP"
             elseif job == "judge" then
                 agencyName = "State"

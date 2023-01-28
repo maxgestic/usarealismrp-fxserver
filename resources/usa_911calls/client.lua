@@ -393,7 +393,7 @@ end)
 
 RegisterNetEvent('interaction:setPlayersJob')
 AddEventHandler('interaction:setPlayersJob', function(job)
-	if job == 'sheriff' or job == 'ems' or job == 'fire' or job == 'police' or job == 'corrections' then
+	if job == 'sasp' or job == 'ems' or job == 'fire' or job == 'corrections' or job == 'bcso' then
 		onDuty = true
 		RespectPedRelations(true)
 	else

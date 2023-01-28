@@ -35,13 +35,7 @@ function notifyPlayersWithJobs(target_jobs, msg, specialRequest)
 				local job = player.get("job")
 				for i = 1, #target_jobs do
 					if job == target_jobs[i] then
-						if specialRequest == "onlyDeputiesNoCOs" and job == "corrections" then
-							if player.get("bcsoRank") >= 3 then 
-								TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
-							end
-						else
-							TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
-						end
+						TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
 					end
 				end
 			end
@@ -182,42 +176,23 @@ end
 
 function getNumCops(cb)
 	Citizen.CreateThread(function()
-		local doneCounting = false
-		local count = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
-		local bcso = exports["usa-characters"]:GetPlayerIdsWithJob("corrections")
-		if #bcso > 0 then
-			for i = 1, #bcso do
-				local id = bcso[i]
-				local char = exports["usa-characters"]:GetCharacter(id)
-				if char.get("bcsoRank") >= 3 then
-					count = count + 1
-				end
-				if i == #bcso then
-					doneCounting = true
-				end
-			end
-		else
-			doneCounting = true
-		end
-		while not doneCounting do
-			Wait(10)
-		end
-		cb(count)
+		local copsOnline = 0
+		local sasp = exports["usa-characters"]:GetNumCharactersWithJob("sasp")
+		local bcso = exports["usa-characters"]:GetNumCharactersWithJob("bcso")
+		copsOnline = sasp + bcso
+		cb(copsOnline)
 	end)
 end
 
 function getCopIds(cb)
 	Citizen.CreateThread(function()
 		local done = false
-		local ids = exports["usa-characters"]:GetPlayerIdsWithJob("sheriff")
-		local bcso = exports["usa-characters"]:GetPlayerIdsWithJob("corrections")
+		local ids = exports["usa-characters"]:GetPlayerIdsWithJob("sasp")
+		local ids2 = exports["usa-characters"]:GetPlayerIdsWithJob("bcso")
 		if #bcso > 0 then
 			for i = 1, #bcso do
 				local id = bcso[i]
-				local char = exports["usa-characters"]:GetCharacter(id)
-				if char.get("bcsoRank") >= 3 then
-					table.insert(ids, id)
-				end
+				table.insert(ids, id)
 				if i == #bcso then
 					done = true
 				end

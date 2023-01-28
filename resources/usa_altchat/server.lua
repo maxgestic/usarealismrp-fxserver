@@ -5,11 +5,12 @@ local jobNames = {
 	['civ'] = false,
 	['taxi'] = 'Taxi',
 	['mechanic'] = 'Mechanic',
-	['sheriff'] = 'Peace Officer (SASP)',
+	['sasp'] = 'Peace Officer (SASP)',
 	['da'] = 'District Attorney',
 	['ems'] = 'Medical Responder (LSFD)',
 	['doctor'] = 'Doctor',
-	['corrections'] = 'Peace Officer (BCSO)',
+	['bcso'] = 'Peace Officer (BCSO)',
+	['corrections'] = 'Correctional Officer (BCSO)',
 	['lawyer'] = 'Attorney',
 	['judge'] = 'Judge'
 }
@@ -86,12 +87,12 @@ TriggerEvent('es:addCommand', 'showid', function(source, args, char, location)
 	showid(source, char, location)
 end, {help = "Present your identification card / DL."})
 
-TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'corrections'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'fakeid', {'sasp', 'bcso'}, function(source, args, char, location)
 	local job = char.get("job")
-	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
+	if char.get("policeRank") < 4 and job == "sasp" then
 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 		return
-	elseif char.get("bcsoRank") < 5 and job == 'corrections' then
+	elseif char.get("bcsoRank") < 5 and job == 'bcso' then
 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 		return
 	end
@@ -114,40 +115,13 @@ end, {
 	}
 })
 
--- TriggerEvent('es:addJobCommand', 'faketweet', {'sheriff'}, function(source, args, char, location)
--- 	local job = char.get("job")
--- 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
--- 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
--- 		return
--- 	end
--- 	local name = "@" .. args[2] .. "_" .. args[3]
--- 	name = string.lower(name)
--- 	table.remove(args, 1)
--- 	table.remove(args, 1)
--- 	table.remove(args, 1)
--- 	local msg = table.concat(args, " ")
--- 	exports["usa-characters"]:GetCharacters(function(characters)
--- 		for id, char in pairs(characters) do
--- 			if char.hasItem("Cell Phone") then
--- 				TriggerClientEvent('chatMessage', id, "[TWEET] - " .. name, {29,161,242}, msg)
--- 			end
--- 		end
--- 	end)
--- 	TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. msg)
--- end, {
--- 	help = "Send a fake tweet",
--- 	params = {
--- 		{ name = "first name", help = "first name to show on tweet" },
--- 		{ name = "last name", help = "last name to show on tweet" },
--- 	}
--- })
 
-TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'corrections'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'fakead', {'sasp', 'bcso'}, function(source, args, char, location)
 	local job = char.get("job")
-	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
+	if char.get("policeRank") < 4 and job == "sasp" then
 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 		return
-	elseif char.get("bcsoRank") < 5 and job == 'corrections' then
+	elseif char.get("bcsoRank") < 5 and job == 'bcso' then
 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 		return
 	end
@@ -184,19 +158,7 @@ end)
 
 function showid(src, u, location)
 	local job = u.get("job")
-	local employer = nil
-	if job == 'corrections' then
-		if u.get("bcsoRank") > 2 then
-            employer = jobNames[job]
-        else
-        	employer = 'Correctional Officer (BCSO)'
-        end
-		while employer == nil do
-			Wait(0)
-		end
-	else
-		employer = jobNames[job]
-	end
+	local employer = jobNames[job]
 	local char_name = u.getFullName()
 	local dob = u.get("dateOfBirth")
 	exports["globals"]:sendLocalActionMessage(src, "shows ID")

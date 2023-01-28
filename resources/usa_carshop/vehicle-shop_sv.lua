@@ -792,7 +792,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'trackveh', {'sheriff', 'corrections'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'trackveh', {'sasp', 'bcso'}, function(source, args, char)
 	local plate = nil
 	if args[2] ~= nil then
 		plate = string.upper(args[2])
@@ -813,7 +813,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'endtrack', {'sheriff', 'corrections'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'endtrack', {'sasp', 'bcso'}, function(source, args, char)
 	TriggerClientEvent("vehShop:stopTrackStolenVeh", source)
 	for k,v in pairs(stolenVehicles) do
 		for i,s in ipairs(v.trackedBy) do

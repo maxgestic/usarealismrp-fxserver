@@ -27,7 +27,7 @@ AddEventHandler('legal:checkBarCertificate', function()
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'paylawyer', { 'sheriff', 'corrections' , 'judge'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'paylawyer', { 'sasp', 'bcso', 'corrections', 'judge'}, function(source, args, char)
 	local targetSource = tonumber(args[2])
 	local targetAmount = tonumber(args[3])
 	local target = exports["usa-characters"]:GetCharacter(targetSource)
@@ -81,7 +81,7 @@ AddEventHandler('lawyer:payLawyer', function(targetSource, targetAmount, securit
 	end
 	local srcJob = exports["usa-characters"]:GetCharacter(source).get("job")
 	local target = exports["usa-characters"]:GetCharacter(targetSource)
-	if target.get("job") == "lawyer" and (srcJob == "sheriff" or srcJob == "corrections" or srcJob == "judge") then
+	if target.get("job") == "lawyer" and (srcJob == "sasp" or srcJob == "bcso" or srcJob == "corrections" or srcJob == "judge") then
 		local targetMoney = target.get('bank')
 		local targetName = target.getFullName()
 		target.giveBank(targetAmount)

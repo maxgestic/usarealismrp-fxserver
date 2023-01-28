@@ -124,7 +124,7 @@ local isPolice
 AddEventHandler('rahe-boosting:isPlayerPolice', function(isPolice)
     local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	if job == 'sheriff' or job == "corrections" then
+	if job == 'sasp' or job == "bcso" then
         isPolice = true
     else
         isPolice = false
@@ -223,7 +223,7 @@ RegisterServerCallback {
 		local char = exports["usa-characters"]:GetCharacter(source)
         if char == nil then
             print("Player loading in")
-        elseif char.get("job") == 'sheriff' or char.get("job") == 'corrections' then
+        elseif char.get("job") == 'sasp' or char.get("job") == 'bcso' then
             return true
         end
         return false

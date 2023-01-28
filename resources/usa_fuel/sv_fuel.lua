@@ -36,7 +36,7 @@ AddEventHandler('fuel:purchaseFuel', function(amount, type)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
 
-	if job == "sheriff" or job == "ems" or job == "fire" or job == "corrections" then
+	if job == "sasp" or job == "ems" or job == "fire" or job == "bcso" or job == "corrections" then
 		TriggerClientEvent("fuel:refuelAmount", source, amount)
 	else
 		local toPay = (amount or 1) * price

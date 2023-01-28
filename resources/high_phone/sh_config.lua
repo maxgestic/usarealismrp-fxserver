@@ -224,7 +224,7 @@ Config.FrameworkFunctions = {
             self.group = exports["essentialmode"]:getPlayerFromId(source).getGroup()
 
             local tempjob = player.get("job")
-            if tempjob == "ems" or tempjob == "sheriff" or tempjob == "corrections" then 
+            if tempjob == "ems" or tempjob == "sasp" or tempjob == "bcso" then 
                 tempjob = "emergency"
             end
 

@@ -696,7 +696,7 @@ AddEventHandler("properties:addLEO", function(property_name, id, source)
         name = person.getFullName(),
         identifier = person.get("_id")
       }
-      if job == "sheriff" or job == "corrections" then
+      if job == "sasp" or job == "bcso" then
         -- add person to list of co owners --
         table.insert(PROPERTIES[property_name].coowners, coowner)
         -- save --
@@ -784,7 +784,7 @@ AddEventHandler("properties:removeLEO", function(property_name, id, source)
         end
       end
 
-      if job == "sheriff" or job == "corrections" then
+      if job == "sasp" or job == "bcso" then
         -- remove at index --
         if PROPERTIES[property_name].coowners[index] then
           table.remove(PROPERTIES[property_name].coowners, index)

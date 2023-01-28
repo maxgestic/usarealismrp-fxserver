@@ -37,7 +37,7 @@ local elevatorShafts = {
 			{coords = vector3(-1096.0853271484, -848.51428222656, 8.8768911361694), name = "Basement 2", desc = "Forensics"},
 			{coords = vector3(-1095.9346923828, -848.74890136719, 4.8650169372559), name = "Basement 3", desc = "Garages"},
 		},
-		jobs = {"sheriff", "corrections"}
+		jobs = {"sasp", "bcso"}
 	},
 	[2] = {
 		name = "Vespucci PD Elevator 2",
@@ -49,7 +49,7 @@ local elevatorShafts = {
 			{coords = vector3(-1066.4045410156, -832.84204101563, 8.876841545105), name = "Basement 2", desc = "Forensics"},
 			{coords = vector3(-1066.3767089844, -832.70184326172, 4.8650569915771), name = "Basement 3", desc = "Garages"},
 		},
-		jobs = {"sheriff", "corrections"}
+		jobs = {"sasp", "bcso"}
 	}
 }
 

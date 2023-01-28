@@ -57,7 +57,7 @@ end
 TriggerEvent('es:addCommand', 'jail', function(source, args, char)
 	local job = char.get("job")
 	local jailtime = char.get("jailTime")
-	if job == "sheriff" or job == "cop" or job == "corrections" or job == "judge" then
+	if job == "sasp" or job == "bcso" or job == "corrections" or job == "judge" then
 		if isAtPrisonLocation(GetEntityCoords(GetPlayerPed(source))) then
 			TriggerClientEvent("jail:openMenu", tonumber(source))
 		else
@@ -70,7 +70,7 @@ end, {
 	help = "See how much time you have left in jail / jail a player (police)"
 })
 
-TriggerEvent('es:addJobCommand', 'togglealarm', { "corrections", "sheriff", "cop"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'togglealarm', { "corrections", "sasp", "bcso"}, function(source, args, char)
 	if alarm_on == false then
 		alarm_on = true
 	    TriggerClientEvent('chat:addMessage', source, { args = { '^1PRISON SYSTEM', 'Prison Alarm Activated!' } })
@@ -95,7 +95,7 @@ RegisterServerEvent("jail:jailPlayerFromMenu")
 AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get('job')
-	if job == 'sheriff' or job == 'corrections' or job == "judge" then
+	if job == 'sasp' or job == 'bcso' or job == 'corrections' or job == "judge" then
 		local arrestingOfficerName = char.getFullName()
 		jailPlayer(source, data, arrestingOfficerName, data.gender)
 	else
@@ -139,9 +139,9 @@ function jailPlayer(src, data, officerName, gender)
 	-- send to assigned cell --
 	local inmate_name = inmate.getFullName()
 
-	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Jail: ^0".. inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
-	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Charges:^0 " .. reason)
-	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Fine:^0 $" .. fine)
+	exports["globals"]:notifyPlayersWithJobs({"sasp", "bcso", "corrections"}, "^3Jail: ^0".. inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
+	exports["globals"]:notifyPlayersWithJobs({"sasp", "bcso", "corrections"}, "^3Charges:^0 " .. reason)
+	exports["globals"]:notifyPlayersWithJobs({"sasp", "bcso", "corrections"}, "^3Fine:^0 $" .. fine)
 
 	TriggerClientEvent("jail:jail", targetPlayer, assigned_cell, gender)
 	inmate.removeWeapons()
@@ -263,7 +263,7 @@ AddEventHandler("jail:notifyEscapee", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local inmate_name = char.getFullName()
 	local charid = char.get("_id")
-	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3INFO: ^0A person has escaped from Bolingbroke Penitentiary! ^3Inmate info: ^0" .. inmate_name)
+	exports["globals"]:notifyPlayersWithJobs({"sasp", "bcso", "corrections"}, "^3INFO: ^0A person has escaped from Bolingbroke Penitentiary! ^3Inmate info: ^0" .. inmate_name)
 
 	exports.globals:SendDiscordLog(WEBHOOK_URL, "An inmate escaped! Name: `" .. inmate_name .. "`")
 

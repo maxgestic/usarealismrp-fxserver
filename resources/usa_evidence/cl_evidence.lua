@@ -466,7 +466,7 @@ end)
 
 RegisterNetEvent('interaction:setPlayersJob')
 AddEventHandler('interaction:setPlayersJob', function(job)
-	if job == 'sheriff' or job == 'corrections' then
+	if job == 'sasp' or job == 'bcso' or job == "corrections" then
 		onDuty = true
 	else
 		onDuty = false

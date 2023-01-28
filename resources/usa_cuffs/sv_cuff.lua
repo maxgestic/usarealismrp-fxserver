@@ -1,4 +1,4 @@
-TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff", "corrections" }, function(src, args, char, location)
+TriggerEvent('es:addJobCommand', 'cuff', { "sasp", "bcso", "corrections" }, function(src, args, char, location)
 	if args[2] then -- id was passed as param
 		local tPID = tonumber(args[2])
 		if GetPlayerName(tPID) then
@@ -27,7 +27,7 @@ AddEventHandler("cuff:Handcuff", function(id, x, y, z, playerHeading, src)
 		source = src -- allow to be called from server
 	end
 	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == "sheriff" or job == "corrections" then
+	if job == "sasp" or job == "bcso" or job == "corrections" then
 		print("CUFFS: "..GetPlayerName(id).."["..GetPlayerIdentifier(id).."] has been cuffed/uncuffed by "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."]")
 		TriggerClientEvent("cuff:Handcuff", tonumber(id), source, x, y, z, playerHeading)
 	end
@@ -43,7 +43,7 @@ AddEventHandler('cuff:triggerAnimType', function(id, type)
 	TriggerClientEvent("cuff:playPoliceAnim", id, type)
 end)
 
-TriggerEvent('es:addJobCommand', 'hc', {"police", "sheriff", "corrections"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'hc', {"sasp", "bcso", "corrections"}, function(source, args, char, location)
 	if args[2] then
 		local sourceToHardcuff = tonumber(args[2])
 		if GetPlayerName(sourceToHardcuff) then
@@ -57,7 +57,7 @@ TriggerEvent('es:addJobCommand', 'hc', {"police", "sheriff", "corrections"}, fun
 	end
 end, {help = 'Hardcuff the player specified, player must be cuffed first.', params = {{name = "id", help = "Target player ID #"}}})
 
-TriggerEvent('es:addJobCommand', 'sc', {"police", "sheriff", "corrections"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'sc', {"sasp", "bcso", "corrections"}, function(source, args, char, location)
 	if args[2] then
 		local sourceToSoftcuff = tonumber(args[2])
 		if GetPlayerName(sourceToSoftcuff) then
@@ -74,7 +74,7 @@ end, {help = 'Softcuff the player specified, player must be cuffed first.', para
 RegisterServerEvent("cuff:checkWhitelistForPlace")
 AddEventHandler("cuff:checkWhitelistForPlace", function()
   local job = exports["usa-characters"]:GetCharacterField(source, "job")
-  if job == "sheriff" or job == "corrections" or job == "ems" then
+  if job == "sasp" or job == "bcso" or job == "corrections" or job == "ems" then
     TriggerClientEvent("place:attemptToPlaceNearest", source)
   end
 end)
@@ -82,7 +82,7 @@ end)
 RegisterServerEvent("cuff:checkWhitelistForUnseat")
 AddEventHandler("cuff:checkWhitelistForUnseat", function()
   local job = exports["usa-characters"]:GetCharacterField(source, "job")
-  if job == "sheriff" or job == "corrections" or job == "ems" then
+  if job == "sasp" or job == "bcso"  or job == "corrections" or job == "ems" then
     TriggerClientEvent('place:attemptToUnseatNearest', source)
   end
 end)
@@ -90,7 +90,7 @@ end)
 RegisterServerEvent("cuff:checkWhitelistForCuff")
 AddEventHandler("cuff:checkWhitelistForCuff", function()
   local job = exports["usa-characters"]:GetCharacterField(source, "job")
-  if job == "sheriff" or job == "corrections" then
+  if job == "sasp" or job == "bcso"  or job == "corrections" then
     TriggerClientEvent('cuff:attemptToCuffNearest', source)
   end
 end)

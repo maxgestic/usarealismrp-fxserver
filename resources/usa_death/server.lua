@@ -8,7 +8,7 @@ RegisterServerEvent("death:respawn")
 AddEventHandler("death:respawn", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	if job ~= "sheriff" and job ~= "corrections" and job ~= "ems" then
+	if job ~= "sasp" and job ~= "bcso" and job ~= "corrections" and job ~= "ems" then
 		local m = char.get("money")
 		if m >= RESPAWN_FEE then
 			char.removeMoney(RESPAWN_FEE)
@@ -27,10 +27,9 @@ RegisterServerEvent('death:revivePerson')
 AddEventHandler('death:revivePerson', function(targetSource)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == "cop" or
+	if job == "sasp" or
 	job == "corrections" or
-	job == "sheriff" or
-	job == "highwaypatrol" or
+	job == "bcso" or
 	job == "ems" or
 	job == "doctor" or
 	job == "fire" or
@@ -45,16 +44,15 @@ end)
 TriggerEvent('es:addCommand', 'revive', function(source, args, char)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local job = char.get("job")
-	if job == "cop" or
-		job == "corrections" or
-		job == "sheriff" or
-		job == "highwaypatrol" or
-		job == "ems" or
-		job == "doctor" or
-		user.getGroup() == "mod" or
-		user.getGroup() == "admin" or
-		user.getGroup() == "superadmin" or
-		user.getGroup() == "owner" then
+	if job == "sasp" or
+	job == "corrections" or
+	job == "bcso" or
+	job == "ems" or
+	job == "doctor" or
+	user.getGroup() == "mod" or
+	user.getGroup() == "admin" or
+	user.getGroup() == "superadmin" or
+	user.getGroup() == "owner" then
 		if args[2] == nil then
 			TriggerClientEvent("death:reviveNearest", source)
 		else

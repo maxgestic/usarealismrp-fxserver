@@ -377,10 +377,12 @@ const mdtApp = new Vue({
         },
         GetProperBadge: function() {
             if (this.employee.job) {
-                if (this.employee.job.rawName == "sheriff") {
+                if (this.employee.job.rawName == "sasp") {
                     return "sasp-badge.png"
-                } else if (this.employee.job.rawName == "corrections") {
+                } else if (this.employee.job.rawName == "bcso") {
                     return "https://imgur.com/slnSzJQ.png"
+                } else if (this.employee.job.rawName == "corrections") {
+                    return "https://imgur.com/J3TZzYg.png"
                 }
             }
         }
