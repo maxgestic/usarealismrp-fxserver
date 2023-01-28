@@ -30,7 +30,7 @@ local POLICE_RANKS = {
 	["Corrections"] = {
 		[1] = "Correctional Deputy",
 		[2] = "Senior Correctional Deputy",
-	}
+	},
 	["EMS"] = {
 		[1] = "Probationary Fire Paramedic",
 		[2] = "Fire Paramedic",

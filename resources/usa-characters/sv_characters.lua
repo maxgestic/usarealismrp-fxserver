@@ -209,6 +209,9 @@ function InitializeCharacter(src, characterID)
             charData.source = src
             local character = CreateCharacter(charData) -- Create character object in memory
             character.set("job", "civ")
+            if (character.get("correctionsRank") == nil) then
+              character.set("correctionsRank", 0)
+            end
             CHARACTERS[src] = character
             TriggerClientEvent("character:setCharacter", src, character.get("appearance"), character.getWeapons(), character.get("hp"), character.get("armor")) -- load character
             TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
