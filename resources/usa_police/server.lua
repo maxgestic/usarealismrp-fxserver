@@ -247,8 +247,17 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, char)
         user_rank = 999999 -- so admins can use /whitelist
     end
 
-    if user_rank < 5 then
-        TriggerClientEvent("usa:notify", source, "Error: must be ranked as 5 or above to set permissions!")
+    local whitelist_requirement = {
+        ["sasp"] = 5,
+        ["bcso"] = 4,
+        ["corrections"] = 3,
+        ["ems"] = 5,
+        ["doctor"] = 5,
+        ["da"] = 5,
+    }
+
+    if user_rank < whitelist_requirement[type] then
+        TriggerClientEvent("usa:notify", source, "Error: must be ranked as ".. whitelist_requirement[type] .." or above to set permissions!")
         return
     elseif rank > user_rank then
         print("Error: can't set a person's rank to something higher than your own!")

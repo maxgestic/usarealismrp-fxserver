@@ -15,21 +15,24 @@ local POLICE_RANKS = {
 		[13] = "Director of Emergency Services"
 	},
 	["BCSO"] = {
-		[1] = "Correctional Deputy",
-		[2] = "Senior Correctional Deputy",
-		[3] = "Probational Deputy",
-		[4] = "Sheriff's Deputy",
-		[5] = "Senior Sheriff's Deputy",
-		[6] = "Corporal",
-		[7] = "Sergeant",
-		[8] = "Captain",
-		[9] = "Commander",
-		[10] = "Undersheriff",
-		[11] = "Sheriff"
+		[1] = "Probational Deputy",
+		[2] = "Sheriff's Deputy",
+		[3] = "Senior Sheriff's Deputy",
+		[4] = "Corporal",
+		[5] = "Sergeant",
+		[6] = "Captain",
+		[7] = "Commander",
+		[8] = "Undersheriff",
+		[9] = "Sheriff"
 	},
 	["Corrections"] = {
 		[1] = "Correctional Deputy",
 		[2] = "Senior Correctional Deputy",
+		[3] = "Corporal",
+		[4] = "Sergeant",
+		[5] = "Deputy Warden",
+		[6] = "Chief Deputy Warden",
+		[7] = "Warden",
 	},
 	["EMS"] = {
 		[1] = "Probationary Fire Paramedic",
@@ -543,7 +546,7 @@ TriggerEvent('es:addCommand', 'showbadge', function(source, args, char, location
 end, {
 	help = "Show official police or ems badge.",
 	params = {
-		{ name = "dept", help = "Department: sasp, bcso, ems, doctor." }
+		{ name = "dept", help = "Department: sasp, corrections, bcso, ems, doctor." }
 	}
 })
 

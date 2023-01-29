@@ -389,24 +389,34 @@ local VEHICLE_RANKS = {
 	["corrections"] = {
 		["pcvpi"] = {
 			rank = 1,
-			allowedLiveries = {1, 2, 3, 4},
+			allowedLiveries = {3},
 			hash = GetHashKey("pcvpi")
 		},
 		["bearcatrb"] = {
 			rank = 3,
-			allowedLiveries = {1, 2, 3},
+			allowedLiveries = {1},
 			hash = -500937862
 		},
 		["policet"] = {
 			rank = 2,
-			allowedLiveries = {1, 2, 3},
+			allowedLiveries = {1},
 			hash = -500937862
 		},
 		["pbus"] = {
 			rank = 2,
 			allowedLiveries = {1},
 			hash = GetHashKey("14suvrb")
-		}
+		},
+		["p20exp"] = {
+			rank = 2,
+			allowedLiveries = {3},
+			hash = GetHashKey("p20exp")
+		},
+		["as350"] = {
+			rank = 3,
+			allowedLiveries = {4},
+			hash = 1346171487
+		},
 	},
 	["doctor"] = {
 		--["paraexp"] = 1,

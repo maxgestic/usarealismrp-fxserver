@@ -27,9 +27,14 @@ local POLICE_RANKS = {
 		[10] = "Undersheriff",
 		[11] = "Sheriff"
 	},
-	["BCSO (Corrections)"] = {
+	["Corrections"] = {
 		[1] = "Correctional Deputy",
-		[2] = "Senior Correctional Deputy"
+		[2] = "Senior Correctional Deputy",
+		[3] = "Corporal",
+		[4] = "Sergeant",
+		[5] = "Deputy Warden",
+		[6] = "Chief Deputy Warden",
+		[7] = "Warden",
 	}
 }
 
@@ -40,7 +45,7 @@ function GetRankName(rank, dept)
 	elseif dept == "sasp" then 
 		department = "SASP"
 	elseif dept == "corrections" then
-		department = "BCSO (Corrections)"
+		department = "Corrections"
 	end
 	local retString = department .. " | " .. POLICE_RANKS[department][rank]
 	return retString

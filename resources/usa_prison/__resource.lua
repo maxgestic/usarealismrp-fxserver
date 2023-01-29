@@ -31,17 +31,20 @@ client_scripts {
     "@NativeUI/UIMenu/UIMenu.lua",
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
-    'menu.lua',
     'contraband/cl_contraband.lua',
     'jobs/janitor/cl_janitor.lua',
-    'frontdesk/*.lua'
+    'frontdesk/*.lua',
+    'bcso/cl_menu.lua',
+    'corrections/cl_menu.lua'
 }
 
 server_scripts {
     '@salty_tokenizer/init.lua',
     'server.lua',
     'contraband/sv_contraband.lua',
-    'jobs/janitor/sv_janitor.lua'
+    'jobs/janitor/sv_janitor.lua',
+    'bcso/sv_menu.lua',
+    'corrections/sv_menu.lua'
 }
 
 server_exports {

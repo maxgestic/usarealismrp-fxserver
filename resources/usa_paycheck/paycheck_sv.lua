@@ -84,27 +84,39 @@ function DepositPayCheck(char)
         paycheckAmount = 1700
     elseif job == "bcso" then
         local bcsoRank = char.get("bcsoRank")
-        paycheckAmount = 850 --Correctional Deputy
+        paycheckAmount = 1050 --Probational Deputy
         if bcsoRank == 2 then
-            paycheckAmount = 950 --Sr Correctional Deputy
-        elseif bcsoRank == 3 then
-            paycheckAmount = 1050 --Probational Deputy
-        elseif bcsoRank == 4 then
             paycheckAmount = 1150 -- Sheriff's Deputy
-        elseif bcsoRank == 5 then
+        elseif bcsoRank == 3 then
             paycheckAmount = 1250 -- Senior Sheriff's Deputy
-        elseif bcsoRank == 6 then
+        elseif bcsoRank == 4 then
             paycheckAmount = 1350 -- Corporal
-        elseif bcsoRank == 7 then
+        elseif bcsoRank == 5 then
             paycheckAmount = 1450 -- Sergeant
-        elseif bcsoRank == 8 then
+        elseif bcsoRank == 6 then
             paycheckAmount = 1550 -- Captain
-        elseif bcsoRank == 9 then
+        elseif bcsoRank == 7 then
             paycheckAmount = 1650 -- Commander
-        elseif bcsoRank == 10 then
+        elseif bcsoRank == 8 then
             paycheckAmount = 1750 -- Undersheriff
-        elseif bcsoRank == 11 then
+        elseif bcsoRank == 9 then
             paycheckAmount = 1850 -- Sheriff
+        end
+    elseif job == "corrections" then
+        local bcsoRank = char.get("correctionsRank")
+        paycheckAmount = 1500 -- Correctional Deputy
+        if bcsoRank == 2 then
+            paycheckAmount = 1600 -- Senior Correctional Deputy
+        elseif bcsoRank == 3 then
+            paycheckAmount = 1700 -- Corporal
+        elseif bcsoRank == 4 then
+            paycheckAmount = 1800 -- Sergeant
+        elseif bcsoRank == 5 then
+            paycheckAmount = 1900 -- Deputy Warden
+        elseif bcsoRank == 6 then
+            paycheckAmount = 2000 -- Chief Deputy Warden
+        elseif bcsoRank == 7 then
+            paycheckAmount = 2100 -- Warden 
         end
     elseif job == "lawyer" then
         paycheckAmount = 1500
@@ -198,6 +210,8 @@ function myJob(job, source)
         TriggerClientEvent('usa:notify', source, "You currently work for ~y~Cluckin' Bell~s~.")
     elseif job == 'bcso' then
         TriggerClientEvent('usa:notify', source, "You currently work for the ~y~Blaine County Sheriff's Office~s~.")
+    elseif job == 'corrections' then
+        TriggerClientEvent('usa:notify', source, "You currently work for the ~y~Blaine County Sheriff's Office Correctional Department~s~.")
     elseif job == 'lawyer' then
         TriggerClientEvent('usa:notify', source, "You currently work for the ~y~San Andreas Legal Association~s~.")
     elseif job == 'judge' then

@@ -2,59 +2,29 @@ local MENU_KEY = 38 -- "E"
 
 local weapons = {}
 
-TriggerServerEvent("doc:getWeapons")
-
-RegisterNetEvent("doc:getWeapons")
-AddEventHandler("doc:getWeapons", function(weps)
-    weapons = weps
-    CreateWeaponsMenu(mainMenu)
-end)
 
 local vehicles = {
   { name = "Police Bike", hash = GetHashKey("pbike") },
   { name = "Quad Bike", hash = GetHashKey("blazer") },
   { name = "Golf Cart", hash = GetHashKey("caddy") },
   { name = "2011 Ford CVPI", hash = GetHashKey("pcvpi") },
-  { name = "2014 Tesla Model S", hash = GetHashKey("p14tesla") },
-  { name = "2016 Ford Taurus", hash = GetHashKey("p16tau") },
-  { name = "2018 Dodge Charger", hash = GetHashKey("p18char") },
-  { name = "2018 Ford F-250", hash = GetHashKey("p18xl") },
   { name = "2020 Ford Explorer", hash = GetHashKey("p20exp") },
-  { name = "2020 Chevorlet Tahoe", hash = GetHashKey("p20tah") },
-  { name = "2021 Dodge Durango", hash = GetHashKey("p21dur") },
-  { name = "2021 Chevorlet Tahoe", hash = GetHashKey("p21tah") },
-  { name = "Ford F-150", hash = GetHashKey("sotruck") },
-  { name = "BMW 1200RT", hash = GetHashKey("1200RT") },
-  { name = "Dodge Charger Hellcat", hash = GetHashKey("intchar") },
-  { name = "Ford Mustang", hash = GetHashKey("npolstang") },
-  { name = "Dodge Challenger", hash = GetHashKey("npolchal") },
-  { name = "Chevorlet Corvette", hash = GetHashKey("npolvette") },
-  { name = "Lamborghini Huracan", hash = GetHashKey("tolplam") },
-  { name = "FBI 2", hash = GetHashKey("fbi2") },
   { name = "Bearcat", hash = GetHashKey("bearcatrb") },
-  { name = "Armored Suburban", hash = GetHashKey("suvrb14") },
   { name = "Prison Bus", hash = GetHashKey("pbus") },
-  { name = "Transport Van", hash = GetHashKey("policet") },
-  { name = "Unmarked Stainer", hash = GetHashKey("police4") }
+  { name = "Transport Van", hash = GetHashKey("policet") }
 }
 
 local PRISON_GUARD_SIGN_IN_LOCATIONS = {
     {x = 1690.71484375, y = 2591.3149414063, z = 45.914203643799, vehSpawn = vector3(1696.0581054688, 2599.6557617188, 45.56489944458)},
     {x = 1849.0, y = 2599.5, z = 45.8, vehSpawn = vector3(1854.4420166016, 2599.0654296875, 45.672290802002)}, -- front
     {x = 1834.2426757813, y = 2572.6655273438, z = 46.014339447021}, -- Prison Locker Room
-    {x = 1853.5485839844, y = 3688.4887695312, z = 29.818534851074}, -- Sandy SO
-    {x = 853.53967285156, y = -1313.1147460938, z = 28.244941711426}, -- La Mesa PD
-    {x = -449.33654785156, y = 6010.4638671875, z = 31.716360092163}, -- Paleto SO
-    {x = -1787.9445800781, y = 2997.0026855469, z = 32.809375762939}, -- Zancudo
-    {x=-1052.9510, y=-802.8206, z=11.6252}, -- vespucci male locker room
-    {x=-1074.5692, y=-802.1264, z=11.6252}, -- vespucci female locker room
 }
 
 local locationsData = {}
 for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
   table.insert(locationsData, {
-	coords = vector3(PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z),
-	text = "[E] - Locker Room"
+    coords = vector3(PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z),
+    text = "[E] - Corrections Locker Room"
   })
 end
 exports.globals:register3dTextLocations(locationsData)
@@ -76,8 +46,8 @@ local props = { "Head", "Glasses", "Ear Acessories", "Watch"}
 local MENU_OPEN_KEY = 38
 local closest_shop = nil
 
-RegisterNetEvent("doc:setciv")
-AddEventHandler("doc:setciv", function(character, playerWeapons)
+RegisterNetEvent("corrections:setciv")
+AddEventHandler("corrections:setciv", function(character, playerWeapons)
     Citizen.CreateThread(function()
         local model
         if not character.hash then -- does not have any customizations saved
@@ -133,14 +103,23 @@ end
 ---------------------------
 -- Set up main menu --
 ---------------------------
-_menuPool = NativeUI.CreatePool()
-mainMenu = NativeUI.CreateMenu("BCSO", "~b~Blaine County Sheriff's Office", 0 --[[X COORD]], 320 --[[Y COORD]])
-_menuPool:Add(mainMenu)
+local _correctionsMenuPool = NativeUI.CreatePool()
+local correctionsmainMenu = NativeUI.CreateMenu("Corrections", "~b~Corrections Department", 0 --[[X COORD]], 320 --[[Y COORD]])
+_correctionsMenuPool:Add(correctionsmainMenu)
 
-function CreateUniformMenu(menu)
+
+TriggerServerEvent("corrections:getWeapons")
+
+RegisterNetEvent("corrections:getWeapons")
+AddEventHandler("corrections:getWeapons", function(weps)
+    weapons = weps
+    CreateCorrectionsWeaponsMenu(correctionsmainMenu)
+end)
+
+function CreateCorrectionsUniformMenu(menu)
     local ped = GetPlayerPed(-1)
 
-    local submenu2 = _menuPool:AddSubMenu(menu, "Outfits", "Save and load outfits", true)
+    local submenu2 = _correctionsMenuPool:AddSubMenu(menu, "Outfits", "Save and load outfits", true)
     local selectedSaveSlot = 1
     local selectedLoadSlot = 1
     local saveslot = UIMenuListItem.New("Slot to Save", policeoutfitamount)
@@ -178,11 +157,11 @@ function CreateUniformMenu(menu)
         character.components[i] = GetPedDrawableVariation(ply, i)
         character.componentstexture[i] = GetPedTextureVariation(ply, i)
       end
-      TriggerServerEvent("doc:saveOutfit", character, selectedSaveSlot)
+      TriggerServerEvent("corrections:saveOutfit", character, selectedSaveSlot)
         elseif item == loadconfirm then
             DoScreenFadeOut(500)
             Citizen.Wait(500)
-            TriggerServerEvent('doc:loadOutfit', selectedLoadSlot)
+            TriggerServerEvent('corrections:loadOutfit', selectedLoadSlot)
       TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'zip-close', 1.0)
       Citizen.Wait(2000)
       DoScreenFadeIn(500)
@@ -190,7 +169,7 @@ function CreateUniformMenu(menu)
         end
     end
   -- Components --
-  local submenu = _menuPool:AddSubMenu(menu, "Components", "Modify components", true --[[KEEP POSITION]])
+  local submenu = _correctionsMenuPool:AddSubMenu(menu, "Components", "Modify components", true --[[KEEP POSITION]])
   for i = 1, #components do
     local selectedComponent = GetPedDrawableVariation(ped, i - 1) + 1
     local selectedTexture = GetPedTextureVariation(ped, i - 1) + 1
@@ -222,7 +201,7 @@ function CreateUniformMenu(menu)
     --end
   end
   -- Props --
-  local submenu = _menuPool:AddSubMenu(menu, "Props", "Modify props", true --[[KEEP POSITION]])
+  local submenu = _correctionsMenuPool:AddSubMenu(menu, "Props", "Modify props", true --[[KEEP POSITION]])
   for i = 1, 3 do
     local selectedProp = GetPedPropIndex(ped, i - 1) + 1
     local selectedPropTexture = GetPedPropTextureIndex(ped, i - 1) + 1
@@ -269,7 +248,7 @@ function CreateUniformMenu(menu)
   local item = NativeUI.CreateItem("Clock Out", "Sign off duty")
   item:SetRightBadge(BadgeStyle.Lock)
   item.Activated = function(parentmenu, selected)
-    TriggerServerEvent("doc:offduty")
+    TriggerServerEvent("corrections:offduty")
     RemoveAllPedWeapons(PlayerPedId())
     TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
     TriggerEvent("ptt:isEmergency", false)
@@ -277,23 +256,23 @@ function CreateUniformMenu(menu)
   menu:AddItem(item)
 end
 
-function CreateWeaponsMenu(menu)
-    local submenu = _menuPool:AddSubMenu(menu, "Weapons", "Select speciality weapons", true --[[KEEP POSITION]])
+function CreateCorrectionsWeaponsMenu(menu)
+    local submenu = _correctionsMenuPool:AddSubMenu(menu, "Weapons", "Select speciality weapons", true --[[KEEP POSITION]])
      for i = 1, #weapons do
          local item = NativeUI.CreateItem(weapons[i].name, "")
          item.Activated = function(parentmenu, selected)
-            TriggerServerEvent("doc:checkRankForWeapon", weapons[i])
+            TriggerServerEvent("corrections:checkRankForWeapon", weapons[i])
          end
          submenu.SubMenu:AddItem(item)
      end
 end
 
-function CreateVehiclesMenu(menu)
-    local submenu = _menuPool:AddSubMenu(menu, "Vehicles", "Deploy a vehicle", true --[[KEEP POSITION]])
+function CreateCorrectionsVehiclesMenu(menu)
+    local submenu = _correctionsMenuPool:AddSubMenu(menu, "Vehicles", "Deploy a vehicle", true --[[KEEP POSITION]])
     for i = 1, #vehicles do
         local item = NativeUI.CreateItem(vehicles[i].name, "")
         item.Activated = function(parentmenu, selected)
-          TriggerServerEvent("doc:spawnVehicle", vehicles[i])
+          TriggerServerEvent("corrections:spawnVehicle", vehicles[i])
         end
         submenu.SubMenu:AddItem(item)
     end
@@ -307,50 +286,50 @@ Citizen.CreateThread(function()
     local closest_location = nil
     while true do
         Citizen.Wait(0)
-        _menuPool:MouseControlsEnabled(false)
-        _menuPool:ControlDisablingEnabled(false)
-        _menuPool:ProcessMenus()
+        _correctionsMenuPool:MouseControlsEnabled(false)
+        _correctionsMenuPool:ControlDisablingEnabled(false)
+        _correctionsMenuPool:ProcessMenus()
         local mycoords = GetEntityCoords(GetPlayerPed(-1))
         -- see if close to any stores --
-        if IsControlJustPressed(1, MENU_KEY) and not _menuPool:IsAnyMenuOpen() then
-          for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
-            if Vdist(mycoords, PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z) < 2.0 then
-              TriggerServerEvent("doc:checkWhitelist", PRISON_GUARD_SIGN_IN_LOCATIONS[i])
+        if IsControlJustPressed(1, MENU_KEY) and not _correctionsMenuPool:IsAnyMenuOpen() then
+            for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
+                if Vdist(mycoords, PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z) < 2.0 then
+                    TriggerServerEvent("corrections:checkWhitelist", PRISON_GUARD_SIGN_IN_LOCATIONS[i])
+                end
             end
-          end
         end
         -- close menu when far away --
         if closest_location then
             if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 1.3 then
-                if _menuPool:IsAnyMenuOpen() then
+                if _correctionsMenuPool:IsAnyMenuOpen() then
                     closest_location = nil
-                    _menuPool:CloseAllMenus()
+                    _correctionsMenuPool:CloseAllMenus()
                 end
             end
         end
     end
 end)
 
-RegisterNetEvent("doc:spawnVehicle")
-AddEventHandler("doc:spawnVehicle", function(veh)
-  SpawnVehicle(veh)
+RegisterNetEvent("corrections:spawnVehicle")
+AddEventHandler("corrections:spawnVehicle", function(veh)
+  SpawnCorrectionsVehicle(veh)
 end)
 
-RegisterNetEvent("doc:open")
-AddEventHandler("doc:open", function(loc)
-    mainMenu:Clear()
-    CreateUniformMenu(mainMenu)
+RegisterNetEvent("corrections:open")
+AddEventHandler("corrections:open", function(loc)
+    correctionsmainMenu:Clear()
+    CreateCorrectionsUniformMenu(correctionsmainMenu)
     if loc.vehSpawn then
-        CreateVehiclesMenu(mainMenu)
+        CreateCorrectionsVehiclesMenu(correctionsmainMenu)
     end
-    CreateWeaponsMenu(mainMenu)
-    mainMenu:Visible(not mainMenu:Visible())
+    CreateCorrectionsWeaponsMenu(correctionsmainMenu)
+    correctionsmainMenu:Visible(not correctionsmainMenu:Visible())
     closest_location = loc
-    _menuPool:RefreshIndex()
+    _correctionsMenuPool:RefreshIndex()
 end)
 
-RegisterNetEvent("doc:uniformLoaded")
-AddEventHandler("doc:uniformLoaded", function(uniform)
+RegisterNetEvent("corrections:uniformLoaded")
+AddEventHandler("corrections:uniformLoaded", function(uniform)
 
   if uniform then
 
@@ -373,23 +352,23 @@ AddEventHandler("doc:uniformLoaded", function(uniform)
   end
 end)
 
-RegisterNetEvent("doc:close")
-AddEventHandler("doc:close", function()
-    _menuPool:CloseAllMenus()
+RegisterNetEvent("corrections:close")
+AddEventHandler("corrections:close", function()
+    _correctionsMenuPool:CloseAllMenus()
 end)
 
 ----------------------
 -- VEHICLE SPAWNING --
 ----------------------
-function addVehicles(id)
+function addCorrectionsVehicles(id)
   for i = 1, #vehicles do
     TriggerEvent("menu:addModuleItem", id, vehicles[i].name, nil, false, function(id, state)
-      SpawnVehicle(vehicles[i])
+      SpawnCorrectionsVehicle(vehicles[i])
     end)
   end
 end
 
-function findClosestVehSpawn()
+function findClosestCorrectionsVehSpawn()
   local closest = {
     dist = nil,
     index = nil
@@ -406,7 +385,7 @@ function findClosestVehSpawn()
   return PRISON_GUARD_SIGN_IN_LOCATIONS[closest.index]
 end
 
-function SpawnVehicle(vehInfo)
+function SpawnCorrectionsVehicle(vehInfo)
   local model = vehInfo.hash
   Citizen.CreateThread(function()
     RequestModel(model)
@@ -414,7 +393,7 @@ function SpawnVehicle(vehInfo)
       Wait(100)
     end
 
-    local closestLocation = findClosestVehSpawn()
+    local closestLocation = findClosestCorrectionsVehSpawn()
     local spawnCoords = closestLocation.vehSpawn
     local veh = CreateVehicle(model, spawnCoords.x, spawnCoords.y, spawnCoords.z + 0.6, (closestLocation.vehSpawnHeading or 0.0), true, false)
     SetEntityAsMissionEntity(veh, true, true)
@@ -442,15 +421,15 @@ function SpawnVehicle(vehInfo)
     }
     TriggerServerEvent("garage:giveKey", vehicle_key)
 
-	  TriggerServerEvent('mdt:addTempVehicle', 'Govt. Vehicle [BCSO]', "", vplate)
+      TriggerServerEvent('mdt:addTempVehicle', 'Govt. Vehicle [Corrections]', "", vplate)
   end)
 end
 
 ---------------------
 -- WEAPON SPAWNING --
 ---------------------
-RegisterNetEvent("doc:equipWeapon")
-AddEventHandler("doc:equipWeapon", function(weapon)
+RegisterNetEvent("corrections:equipWeapon")
+AddEventHandler("corrections:equipWeapon", function(weapon)
     TriggerEvent("mini:equipWeapon", weapon.hash, weapon.components, false)
     exports.globals:notify("Equipped: " .. weapon.name)
 end)
