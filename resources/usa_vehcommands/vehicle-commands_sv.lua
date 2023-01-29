@@ -417,6 +417,21 @@ local VEHICLE_RANKS = {
 			allowedLiveries = {4},
 			hash = 1346171487
 		},
+		["pbike"] = {
+			rank = 1,
+			allowedLiveries = {-1},
+			hash = GetHashKey("pbike")
+		},
+		["blazer"] = {
+			rank = 1,
+			allowedLiveries = {-1},
+			hash = GetHashKey("blazer")
+		},
+		["caddy"] = {
+			rank = 1,
+			allowedLiveries = {-1},
+			hash = GetHashKey("caddy")
+		},
 	},
 	["doctor"] = {
 		--["paraexp"] = 1,
