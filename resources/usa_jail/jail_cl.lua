@@ -10,20 +10,22 @@ local menuEnabled = false
 local gracePeriod = false
 local allowedOut = false
 
-function EnableGui(enable)
+function EnableGui(enable, rebook, data)
     SetNuiFocus(enable, enable)
     menuEnabled = enable
     SetPedCanSwitchWeapon(GetPlayerPed(-1), (not menuEnabled))
 
     SendNUIMessage({
         type = "enableui",
-        enable = enable
+        enable = enable,
+        rebook = rebook,
+        values = data
     })
 end
 
 RegisterNetEvent("jail:openMenu")
-AddEventHandler("jail:openMenu", function()
-    EnableGui(true, true)
+AddEventHandler("jail:openMenu", function(rebook, data)
+    EnableGui(true, rebook, data)
     SetPedCanSwitchWeapon(GetPlayerPed(-1), false)
     -- look at clipboard:
     local playerPed = PlayerPedId()
@@ -48,6 +50,16 @@ RegisterNUICallback('submit', function(data, cb)
   tabletObject = nil
 	EnableGui(false, false) -- close form
     TriggerServerEvent("jail:jailPlayerFromMenu", data)
+    cb('ok')
+end)
+
+RegisterNUICallback('resubmit', function(data, cb)
+  local playerPed = PlayerPedId()
+  DeleteEntity(tabletObject)
+  ClearPedTasks(playerPed)
+  tabletObject = nil
+  EnableGui(false, false) -- close form
+    TriggerServerEvent("jail:rebookPlayerFromMenu", data)
     cb('ok')
 end)
 
@@ -127,25 +139,32 @@ AddEventHandler("jail:jail", function(cell, gender)
 end)
 
 RegisterNetEvent("jail:release")
-AddEventHandler("jail:release", function(character)
+AddEventHandler("jail:release", function(character, tp_out)
+  if tp_out == nil then
+    tp_out = false
+  end
   local playerPed = PlayerPedId()
   local playerCoords = GetEntityCoords(playerPed)
   Citizen.CreateThread(function()
     local model
-    SetEntityCoords(playerPed, releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
-    if not character.hash then
-      model = GetHashKey("a_m_y_skater_01")
-      RequestModel(model)
-      while not HasModelLoaded(model) do -- Wait for model to load
-        Citizen.Wait(100)
+    if tp_out then
+      print(tp_out)
+      print("teleporting")
+      SetEntityCoords(playerPed, releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
+      if not character.hash then
+        model = GetHashKey("a_m_y_skater_01")
+        RequestModel(model)
+        while not HasModelLoaded(model) do -- Wait for model to load
+          Citizen.Wait(100)
+        end
+        SetPlayerModel(PlayerId(), model)
+        SetModelAsNoLongerNeeded(model)
+      else
+        TriggerEvent("usa:setPlayerComponents", character)
       end
-      SetPlayerModel(PlayerId(), model)
-      SetModelAsNoLongerNeeded(model)
-    else
-      TriggerEvent("usa:setPlayerComponents", character)
+      TriggerEvent("cuff:unCuff", true)
     end
     TriggerServerEvent("jail:clearCell", assigned_cell, false)
-    TriggerEvent("cuff:unCuff", true)
     assigned_cell = nil
     TriggerEvent("usa:toggleJailedStatus", false)
   end)

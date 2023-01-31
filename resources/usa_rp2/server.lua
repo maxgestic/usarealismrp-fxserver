@@ -59,7 +59,8 @@ AddEventHandler("usa_rp:checkJailedStatusOnPlayerJoin", function(id)
 	local name = exports["usa-characters"]:GetCharacterField(source, "name")
 	local fullName = name.first .. " " .. name.middle .. " " .. name.last
 	if time > 0 then
-		TriggerClientEvent("jail:jail", source)
+		local security = exports["usa-characters"]:GetCharacterField(source, "jailSecurity")
+		TriggerEvent("jail:rebookWakeup", source, security)
 		exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. fullName .. " has woken up from a nap.")
 	end
 end)

@@ -4,34 +4,47 @@
 
 -- Each cell block floor starts from the leftmost cell and wraps around until finished (cell numbers)
 local CELLS = {
-	{x = 1767.6765136719, y = 2501.0712890625, z = 45.740745544434, occupant = nil}, -- Cell 1
-	{x = 1764.2520751953, y = 2499.0471191406, z = 45.740772247314, occupant = nil}, -- Cell 2
-	{x = 1761.2839355469, y = 2497.3190917969, z = 45.740772247314, occupant = nil}, -- Cell 3
-	{x = 1754.935546875, y = 2493.5183105469, z = 45.740772247314, occupant = nil}, -- Cell 4
-	{x = 1752.2100830078, y = 2491.8581542969, z = 45.740749359131, occupant = nil}, -- Cell 5
-	{x = 1748.9245605469, y = 2490.0551757813, z = 45.740749359131, occupant = nil}, -- Cell 6
-	{x = 1767.6411132813, y = 2500.9851074219, z = 49.693042755127, occupant = nil}, -- Cell 7
-	{x = 1764.6899414063, y = 2499.1826171875, z = 49.693050384521, occupant = nil}, -- Cell 8
-	{x = 1761.4486083984, y = 2497.2639160156, z = 49.693046569824, occupant = nil}, -- Cell 9
-	{x = 1758.0531005859, y = 2495.8103027344, z = 49.693054199219, occupant = nil}, -- Cell 10
-	{x = 1754.9320068359, y = 2494.3276367188, z = 49.693046569824, occupant = nil}, -- Cell 11
-	{x = 1751.9644775391, y = 2492.0417480469, z = 49.693050384521, occupant = nil}, -- Cell 12
-	{x = 1748.7556152344, y = 2490.1962890625, z = 49.693042755127, occupant = nil}, -- Cell 13
-	{x = 1758.5069580078, y = 2472.4377441406, z = 45.740745544434, occupant = nil}, -- Cell 14
-	{x = 1761.7844238281, y = 2474.1655273438, z = 45.740745544434, occupant = nil}, -- Cell 15
-	{x = 1764.6411132813, y = 2476.3666992188, z = 45.740772247314, occupant = nil}, -- Cell 16
-	{x = 1768.19921875, y = 2477.8666992188, z = 45.740726470947, occupant = nil}, -- Cell 17
-	{x = 1771.2290039063, y = 2479.6123046875, z = 45.740745544434, occupant = nil}, -- Cell 18
-	{x = 1774.1466064453, y = 2481.6750488281, z = 45.740760803223, occupant = nil}, -- Cell 19
-	{x = 1777.7443847656, y = 2483.2238769531, z = 45.740760803223, occupant = nil}, -- Cell 20
-	{x = 1758.3173828125, y = 2472.7045898438, z = 49.693050384521, occupant = nil}, -- Cell 21
-	{x = 1762.1300048828, y = 2473.6948242188, z = 49.693050384521, occupant = nil}, -- Cell 22
-	{x = 1764.7816162109, y = 2476.2902832031, z = 49.693054199219, occupant = nil}, -- Cell 23
-	{x = 1767.9769287109, y = 2477.9680175781, z = 49.693046569824, occupant = nil}, -- Cell 24
-	{x = 1770.8480224609, y = 2479.720703125, z = 49.693046569824, occupant = nil}, -- Cell 25
-	{x = 1774.1553955078, y = 2481.6520996094, z = 49.693042755127, occupant = nil}, -- Cell 26
-	{x = 1777.3125, y = 2483.3032226563, z = 49.693046569824, occupant = nil}, -- Cell 27
+	{x = 1700.0605, y = 2462.5879, z = 45.8467, occupant = nil, security = "low"}, -- Low Cell 1
+	{x=1696.7504, y=2463.1870, z=45.8465, occupant = nil, security = "low"},
+	{x = 1763.8583, y = 2499.2280, z = 45.8226, occupant = nil, security = "high"}, -- Medium Cell 1
+	{x = 1590.2433, y = 2542.5283, z = 45.9880, occupant = nil, security = "solitary"}, -- Solitary Cell 1
 }
+
+local tempcells = {
+	["low"]= {x = 1700.0605, y = 2462.5879, z = 45.8467, occupant = nil, security = "low", tempcell = true},
+	["high"]= {x = 1763.8583, y = 2499.2280, z = 45.8226, occupant = nil, security = "high", tempcell = true},
+	["solitary"]= {x = 1590.2433, y = 2542.5283, z = 45.9880, occupant = nil, security = "solitary", tempcell = true}
+}
+
+TriggerEvent('es:addJobCommand', 'listcells', {"corrections"}, function(source, args, char)
+	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1^*[BOLINGBROKE PENITENTIARY] " .. #CELLS)
+	for i,v in ipairs(CELLS) do
+		if v.occupant ~= nil then
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, " - "..v.security.." Inmate: "..v.occupant.name)
+		end
+	end
+end, {
+	help = "See Occpupied Cells"
+})
+
+
+local default_low = nil
+local default_high = nil
+local default_solitary = nil
+
+for i,v in ipairs(CELLS) do
+	if v.security == "low" and default_low == nil then
+		default_low = i
+	end
+	if v.security == "high" and default_high == nil then
+		default_high = i
+	end
+	if v.security == "solitary" and default_solitary == nil then
+		default_solitary = i
+	end
+end
+
+print(default_low, default_high, default_solitary)
 
 local Prison_Locations = {
 	{ coords = vector3(1689.3699951172, 2592.8100585938, 45.668334960938), distance = 140 },
@@ -70,6 +83,119 @@ end, {
 	help = "See how much time you have left in jail / jail a player (police)"
 })
 
+-- Check inmates remaining jail time --
+TriggerEvent('es:addJobCommand', 'roster', {"sasp", "bcso", "corrections", "da", "judge"}, function(source, args, char)
+	local hasInmates = false
+	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1^*[BOLINGBROKE PENITENTIARY]")
+	local inmates = get_inmates()
+	for id, char in pairs(inmates) do
+		local time = char.get("jailTime")
+		if time then
+			if time > 0 then
+				hasInmates = true
+				local security = getInmateSecurity(char.get("source"))
+				security = security:gsub("^%l", string.upper)
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0" .. char.getFullName() .. " (".. char.get("source") ..") ^1^*|^r^0 " .. time .. " month(s) ^1^*|^r^0 Security: "..security)
+			end
+		end
+	end
+	if not hasInmates then
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0There are no inmates at this time")
+	end
+end, {
+	help = "See who is booked into the prison."
+})
+
+-- Check inmates remaining jail time --
+TriggerEvent('es:addJobCommand', 'rebook', {"corrections"}, function(source, args, char)
+	local id = args[2]
+	local data = nil
+	if id ~= nil then
+		local inmates = get_inmates()
+		local isInmate = false
+		for i,v in ipairs(inmates) do
+			if v.get("source") == tonumber(id) then
+				isInmate = true
+			end
+		end
+		if isInmate then
+			local char = exports["usa-characters"]:GetCharacter(tonumber(id))
+			local time = char.get("jailTime")
+			local security = char.get("jailSecurity")
+			data = {
+				id = id,
+				time = time,
+				security = security,
+			}
+			TriggerClientEvent("jail:openMenu", tonumber(source), true, data)
+		else
+			TriggerClientEvent("usa:notify", source, "That person is not in jail!")
+		end
+	else
+		TriggerClientEvent("jail:openMenu", tonumber(source), true, data)
+	end
+end, {
+	help = "Rebook an inmate to make changes to sentence",
+	params = {
+		{ name = "id (optional)", help = "id of innmate" },
+	}
+})
+
+TriggerEvent('es:addJobCommand', 'release', { "corrections"}, function(source, args, char)
+	local co = exports["usa-characters"]:GetCharacter(source)
+	local rank = co.get("correctionsRank")
+	if rank >= 4 then
+		local inmate_id = args[2]
+		local tp
+		if args[3] == "true" then
+		  	tp=true
+		else 
+			tp=false
+		end
+		table.remove(args,1) -- remove /command
+		table.remove(args,1) -- remove inmate id arg
+		table.remove(args,1) -- remove inmate id arg
+		local reason = table.concat(args, " ")
+		if inmate_id ~= nil then
+			inmate_id = tonumber(inmate_id)
+			if tp ~= nil then
+				if reason ~= nil then
+					local inmates = get_inmates()
+					local isInmate = false
+					for i,v in ipairs(inmates) do
+						if v.get("source") == inmate_id then
+							isInmate = true
+						end
+					end
+					if isInmate then
+						local inmate = exports["usa-characters"]:GetCharacter(inmate_id)
+						TriggerClientEvent("usa:notify", source, "Releasing " .. inmate.getFullName() .. "!", "Releasing " .. inmate.getFullName() .. " with " .. inmate.get("jailTime") .. " months remaining for reason: "..reason)
+						-- TODO Discord log
+						release_inmate(inmate_id, inmate, tp, reason)
+					else
+						TriggerClientEvent("usa:notify", source, "That person is not in jail!")
+					end
+				else
+					TriggerClientEvent("usa:notify", source, "Please provide the reason of release!")
+				end
+			else
+				TriggerClientEvent("usa:notify", source, "Please specify if the inmate will be brought to reception!")
+			end
+		else
+			TriggerClientEvent("usa:notify", source, "Please provide the inmate ID!")
+		end
+	else
+		TriggerClientEvent("usa:notify", source, "Only SGT+ can release inmates!")
+	end
+end, {
+	help = "Release a prisoner from the prison early (Corrections)",
+	params = {
+		{ name = "id", help = "id of innmate" },
+		{ name = "bring to reception", help = "true = tp's the inmate to reception, false = does not TP the prisoner to reception"},
+		{ name = "reason", help = "Reason of Release"}
+	}
+})
+
 TriggerEvent('es:addJobCommand', 'togglealarm', { "corrections", "sasp", "bcso"}, function(source, args, char)
 	if alarm_on == false then
 		alarm_on = true
@@ -104,6 +230,183 @@ AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	end
 end)
 
+RegisterServerEvent("jail:rebookPlayerFromMenu")
+AddEventHandler("jail:rebookPlayerFromMenu", function(data)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get('job')
+	if job == 'sasp' or job == 'bcso' or job == 'corrections' or job == "judge" then
+		local arrestingOfficerName = char.getFullName()
+		rebookPlayer(source, data, arrestingOfficerName)
+	else
+		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+		TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for LUA injection, please intervene^0!')
+	end
+end)
+
+RegisterServerEvent("jail:rebookWakeup")
+AddEventHandler("jail:rebookWakeup", function(targetPlayer, security)
+	local inmate = exports["usa-characters"]:GetCharacter(targetPlayer)
+	-- assign an open cell --
+	local assigned_cell = nil
+
+	for i = 1, #CELLS do
+		if security == CELLS[i].security then
+			if not CELLS[i].occupant then
+				CELLS[i].occupant = {
+					source = inmate.get("source"),
+					name = inmate.getFullName()
+				}
+				assigned_cell = CELLS[i]
+				print("assigned cell "..i)
+				break
+			end
+		end
+	end
+
+	if assigned_cell == nil then
+		assigned_cell = tempcells[security]
+		assigned_cell.occupant = {
+			source = inmate.get("source"),
+			name = inmate.getFullName()
+		}
+		table.insert(CELLS, assigned_cell)
+	end
+
+	TriggerClientEvent("jail:jail", targetPlayer, assigned_cell)
+end)
+
+function rebookPlayer(src, data, officerName)
+	local targetPlayer = tonumber(data.id)
+	if not GetPlayerName(targetPlayer) then TriggerClientEvent("usa:notify", src, 'Player to jail not found!') return end
+	local inmates = get_inmates()
+	local isInmate = false
+	for i,v in ipairs(inmates) do
+		if v.get("source") == targetPlayer then
+			isInmate = true
+		end
+	end
+	if isInmate then
+		local sentence = tonumber(data.sentence)
+		local reason = data.charges
+		local fine = data.fine
+		if sentence == nil then
+			TriggerClientEvent("usa:notify", src, 'Invalid jail time!')
+			CancelEvent()
+			return
+		elseif not tonumber(fine) then
+			TriggerClientEvent("usa:notify", src, 'Invalid fine!')
+			CancelEvent()
+			return
+		end
+		if tonumber(fine) then
+			fine = tonumber(fine)
+			fine = math.ceil(fine)
+			print("after rounding, fine: " .. fine)
+		end
+		local inmate = exports["usa-characters"]:GetCharacter(targetPlayer)
+		print(getInmateSecurity(targetPlayer),data.security)
+		if (getInmateSecurity(targetPlayer) ~= data.security) then
+			-- assign an open cell --
+			local assigned_cell = nil
+
+			for i = 1, #CELLS do
+				if data.security == CELLS[i].security then
+					if not CELLS[i].occupant then
+						for i = 1, #CELLS do
+							if CELLS[i].occupant then
+								if CELLS[i].occupant.source == targetPlayer then
+									print("evicting person from cell #: " .. i .. "!")
+									CELLS[i].occupant = nil
+									break
+								end
+							end
+						end
+						CELLS[i].occupant = {
+							source = inmate.get("source"),
+							name = inmate.getFullName()
+						}
+						assigned_cell = CELLS[i]
+						print("new cell: "..i)
+						break
+					end
+				end
+			end
+
+			if assigned_cell == nil then
+				TriggerClientEvent("usa:notify", src, 'Cellblock Full!')
+				return
+			end
+
+		end
+		-- send to assigned cell --
+		local inmate_name = inmate.getFullName()
+
+		exports["globals"]:notifyPlayersWithJobs({"sasp", "bcso", "corrections"}, "^3Jail: ^0".. inmate_name .. " has been rebooked for ^3" .. sentence .. "^0 month(s).")
+		exports["globals"]:notifyPlayersWithJobs({"sasp", "bcso", "corrections"}, "^3Charges:^0 " .. reason)
+		exports["globals"]:notifyPlayersWithJobs({"sasp", "bcso", "corrections"}, "^3Fine:^0 $" .. fine)
+
+		inmate.set("jailTime", sentence)
+		inmate.set("jailSecurity", data.security)
+		inmate.set("job", "civ")
+		inmate.removeBank(fine)
+
+		if inmate.get("bank") < 0 then
+			TriggerClientEvent("usa:notify", src, "Person owes money to the state!", "^3INFO: ^0The person you jailed now owes $" .. inmate.get("bank") .. " to the state. They can now legally have their assets (vehicles, properties, etc) worth that amount seized now unless they can pay the amount they owe.")
+		end
+
+		TriggerClientEvent("usa:notify", targetPlayer, "You have been fined: $" .. fine)
+		-- add to criminal history --
+		local playerCriminalHistory = inmate.get("criminalHistory")
+		local record = {
+			sentence = sentence,
+			charges = reason,
+			arrestingOfficer = officerName,
+			timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time()),
+			type = "arrest",
+			number = 'A'..math.random(10000000, 99999999)
+		}
+
+		table.insert(playerCriminalHistory, record)
+		inmate.set("criminalHistory", playerCriminalHistory)
+		TriggerEvent("warrants:removeAnyActiveWarrants", inmate.get("name"), inmate.get("dateOfBirth"))
+
+		local suspensions = ""
+		if GetDLSuspensionDays(reason) > 0 then
+			TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
+			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason) .. " day(s)")
+			suspensions = "\nDL suspended for " .. GetDLSuspensionDays(reason) .. " day(s)"
+		end
+		-- suspend gun permit if necessary --
+		if GetFPRevoked(reason) then
+			TriggerEvent("police:revokeFirearmPermit", targetPlayer)
+			-- If we revoke FP permit, revoke the pilot license too
+			TriggerEvent("police:suspendPilotLicense", targetPlayer)
+			TriggerClientEvent("usa:notify", targetPlayer, "Your firearm permit has been revoked!")
+			suspensions = suspensions .. "\nFP revoked permanently"
+		end
+		-- send to discord #jail-logs --
+		local url = GetConvar("jail-log-webhook", "")
+		if not suspensions then suspensions = "None" end
+		PerformHttpRequest(url, function(err, text, headers)
+			if text then
+				print(text)
+			end
+		end, "POST", json.encode({
+			embeds = {
+				{
+					description = "**Rebooking**\n**Name:** " .. inmate_name .. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Fine:** $" .. fine .. "\n**Suspensions:** " .. (suspensions or "None") .. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+					color = 263172,
+					author = {
+						name = "Blaine County Correctional Facility"
+					}
+				}
+			}
+		}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+	else
+		TriggerClientEvent("usa:notify", src, "That person is not in jail!")
+	end
+end
+
 function jailPlayer(src, data, officerName, gender)
 	local targetPlayer = tonumber(data.id)
 	if not GetPlayerName(targetPlayer) then TriggerClientEvent("usa:notify", src, 'Player to jail not found!') return end
@@ -126,16 +429,27 @@ function jailPlayer(src, data, officerName, gender)
 	end
 	local inmate = exports["usa-characters"]:GetCharacter(targetPlayer)
 	-- assign an open cell --
-	local assigned_cell = CELLS[1] -- use CELLS[1] just in case there are no open cells (lol)
+	local assigned_cell = nil
+
 	for i = 1, #CELLS do
-		if not CELLS[i].occupant then
-			CELLS[i].occupant = {
-				name = inmate.getFullName()
-			}
-			assigned_cell = CELLS[i]
-			break
+		if data.security == CELLS[i].security then
+			if not CELLS[i].occupant then
+				CELLS[i].occupant = {
+					source = inmate.get("source"),
+					name = inmate.getFullName()
+				}
+				assigned_cell = CELLS[i]
+				print("assinged cell "..i)
+				break
+			end
 		end
 	end
+
+	if assigned_cell == nil then
+		TriggerClientEvent("usa:notify", src, 'Cellblock Full!')
+		return
+	end
+
 	-- send to assigned cell --
 	local inmate_name = inmate.getFullName()
 
@@ -181,8 +495,8 @@ function jailPlayer(src, data, officerName, gender)
 	end
 
 	inmate.set("jailTime", sentence)
+	inmate.set("jailSecurity", data.security)
 	inmate.set("job", "civ")
-
 	inmate.removeBank(fine)
 
 	if inmate.get("bank") < 0 then
@@ -239,13 +553,28 @@ function jailPlayer(src, data, officerName, gender)
 	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
+AddEventHandler("playerDropped", function(reason)
+	for i,v in ipairs(CELLS) do
+		if v.occupant ~= nil then
+			if v.occupant.source == source then
+				TriggerEvent("jail:clearCell", v)
+			end
+		end
+	end
+end)
+
 RegisterServerEvent("jail:clearCell")
 AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 	for i = 1, #CELLS do
 		if CELLS[i].occupant and cell.occupant then
 			if CELLS[i].occupant.name == cell.occupant.name then
-				print("evicting person from cell #: " .. i .. "!")
-				CELLS[i].occupant = nil
+				if CELLS[i].tempcell then
+					table.remove(CELLS, i)
+					print("Removing cell", #CELLS)
+				else
+					print("evicting person from cell #: " .. i .. "!")
+					CELLS[i].occupant = nil
+				end
 				break
 			end
 		end
@@ -254,6 +583,7 @@ AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 	if clearJailTime then
 		local char = exports["usa-characters"]:GetCharacter(source)
 		char.set("jailTime", 0)
+		char.set("jailSecurity", nil)
 	end
 end)
 
@@ -349,15 +679,58 @@ function jailStatusLoop()
 				if jailtime > 0 then
 					local newJailTime = jailtime - 1
 					char.set("jailTime", newJailTime)
-					if newJailTime == 0 then
-						TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
-						exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released.")
+					if newJailTime <= 0 then
+						release_inmate(id, char, true)
 					end
 				end
 			end
 			jailStatusLoop()
 		end)
 	end)
+end
+
+function release_inmate(inmate_id, char, tp_out, reason)
+	if reason == nil then
+		reason = "Served Sentence"
+	else
+		reason = reason .. " | They had " .. char.get("jailTime") .. " months left on their sentence."
+	end
+	char.set("jailTime", 0)
+	char.set("jailSecurity", nil)
+	TriggerClientEvent("jail:release", tonumber(inmate_id), char.get("appearance"), tp_out)
+	exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released. Reason: "..reason)
+end
+
+function get_inmates()
+	local inmates = {}
+	local done = false
+	while not done do
+		Wait(1)
+		exports["usa-characters"]:GetCharacters(function(characters)
+			for id, char in pairs(characters) do
+				local time = char.get("jailTime")
+				if time then
+					if time > 0 then
+						print(char.getFullName())
+						table.insert(inmates, char)
+					end
+				end
+			end
+			done = true
+		end)
+	end
+	return inmates
+end
+
+function getInmateSecurity(id)
+	for i,v in ipairs(CELLS) do
+		if v.occupant ~= nil then
+			if v.occupant.source == id then
+				return v.security
+			end
+		end
+	end
+	return "Unknown"
 end
 
 jailStatusLoop()
