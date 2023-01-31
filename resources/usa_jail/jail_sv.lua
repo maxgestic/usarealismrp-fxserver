@@ -5,9 +5,11 @@
 -- Each cell block floor starts from the leftmost cell and wraps around until finished (cell numbers)
 local CELLS = {
 	{x = 1700.0605, y = 2462.5879, z = 45.8467, occupant = nil, security = "low"}, -- Low Cell 1
-	{x=1696.7504, y=2463.1870, z=45.8465, occupant = nil, security = "low"},
+	{x=1696.7504, y=2463.1870, z=45.8465, occupant = nil, security = "low"}, -- Low Cell 2
 	{x = 1763.8583, y = 2499.2280, z = 45.8226, occupant = nil, security = "high"}, -- Medium Cell 1
+	{x=1760.6530, y=2498.3381, z=45.8219, occupant = nil, security = "high"}, -- Medium Cell 2
 	{x = 1590.2433, y = 2542.5283, z = 45.9880, occupant = nil, security = "solitary"}, -- Solitary Cell 1
+	{x = 1589.9760, y=2546.1804, z=45.9880, occupant = nil, security = "solitary"}, -- Solitary Cell 2
 }
 
 local tempcells = {
