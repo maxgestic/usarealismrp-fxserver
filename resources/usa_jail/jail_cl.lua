@@ -2,6 +2,13 @@
 --# for USA REALISM rep
 --# requres 'globals' resource to send notifications and usa_rp to change their model, check their jail time on join, and stuff like that
 
+Citizen.CreateThread(function()
+    while (true) do
+    ClearAreaOfPeds(1689.0, 2592.0, 53.0, 200.0, 1)
+        Citizen.Wait(100)
+    end
+end)
+
 local releaseX, releaseY, releaseZ = 1840.3393554688, 2589.9916992188, 46.014316558838
 local assigned_cell = nil
 local tabletObject
