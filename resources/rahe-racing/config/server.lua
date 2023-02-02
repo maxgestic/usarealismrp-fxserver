@@ -39,9 +39,9 @@ svConfig = {
 
     -- Luck weight
     competitionChanceWeights = {
-        ['S'] = 45,
-        ['A'] = 35,
-        ['B'] = 17,
+        ['S'] = 60,
+        ['A'] = 25,
+        ['B'] = 12,
         ['C'] = 2,
         ['D'] = 1
     },
