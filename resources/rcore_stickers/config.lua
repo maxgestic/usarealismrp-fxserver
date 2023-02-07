@@ -698,6 +698,12 @@ Config.Stickers = {
                 dict = 'others'
             },
 			{
+                name = 'Sunflower 3',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
                 name = 'Geometric Patterns 1',
                 price = 95,
                 flip = false,
@@ -729,6 +735,18 @@ Config.Stickers = {
             },
 			{
                 name = 'Triple R',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Chicken Nuggets',
+                price = 95,
+                flip = false,
+                dict = 'others'
+            },
+			{
+                name = 'Kuromi',
                 price = 95,
                 flip = false,
                 dict = 'others'
