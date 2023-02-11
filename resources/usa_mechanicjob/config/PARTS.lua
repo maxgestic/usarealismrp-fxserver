@@ -112,5 +112,19 @@ PARTS = {
 		quantity = 1,
 		weight = 30,
 		type = "mechanicPart"
+	},
+	["Stage 1 Brakes"] = {
+		name = "Stage 1 Brakes",
+		price = 4000,
+		quantity = 1,
+		weight = 25,
+		type = "mechanicPart"
+	},
+	["Stage 2 Brakes"] = {
+		name = "Stage 2 Brakes",
+		price = 8000,
+		quantity = 1,
+		weight = 25,
+		type = "mechanicPart"
 	}
 }

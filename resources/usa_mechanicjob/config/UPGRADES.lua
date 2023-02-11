@@ -140,5 +140,21 @@ UPGRADES = {
         displayName = "Xenon Headlights",
         requiresItem = "Xenon Headlights",
         postInstall = function(vehPlate) end
+    },
+    ["stage-1-brakes"] = {
+        id = "stage-1-brakes",
+        displayName = "Stage 1 Brakes",
+        requiresItem = "Stage 1 Brakes",
+        postInstall = function(vehPlate)
+            MechanicHelper.removeVehicleUpgrades(vehPlate, {"stage-1-brakes"})
+        end
+    },
+    ["stage-2-brakes"] = {
+        id = "stage-2-brakes",
+        displayName = "Stage 2 Brakes",
+        requiresItem = "Stage 2 Brakes",
+        postInstall = function(vehPlate)
+            MechanicHelper.removeVehicleUpgrades(vehPlate, {"stage-2-brakes"})
+        end
     }
 }

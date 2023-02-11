@@ -268,7 +268,9 @@ local ITEMS = {
 		quantity = 1,
 		weight = 30,
 		type = "mechanicPart"
-	}
+	},
+    { name = "Stage 1 Brakes", price = 5000, type = "mechanicPart", quantity = 1, weight = 10},
+    { name = "Stage 2 Brakes", price = 5000, type = "mechanicPart", quantity = 1, weight = 10},
 }
 
 
