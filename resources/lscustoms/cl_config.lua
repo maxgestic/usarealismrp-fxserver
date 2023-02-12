@@ -92,6 +92,7 @@ LSC_Config.prices = {
 	},
 
 ------Window tint------
+--[[
 	windowtint = {
 		{ name = "Pure Black", tint = 1, price = 1000},
 		{ name = "Dark Smoke", tint = 2, price = 1000},
@@ -99,7 +100,7 @@ LSC_Config.prices = {
 		{ name = "Limo", tint = 4, price = 1000},
 		{ name = "Green", tint = 5, price = 1000},
 	},
-
+--]]
 -------Respray--------
 ----Primary color---
 	--Chrome

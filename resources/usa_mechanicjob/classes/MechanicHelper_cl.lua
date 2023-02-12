@@ -65,6 +65,30 @@ MechanicHelper.UPGRADE_FUNC_MAP = {
             SetVehicleModKit(veh, 0)
         end
         SetVehicleMod(veh, 12, 2, false)
+    end,
+    ["tint-remover"] = function(veh)
+        if GetVehicleModKit(veh) ~= 0 then
+            SetVehicleModKit(veh, 0)
+        end
+        SetVehicleWindowTint(veh, 0)
+    end,
+    ["5-percent-tint"] = function(veh)
+        if GetVehicleModKit(veh) ~= 0 then
+            SetVehicleModKit(veh, 0)
+        end
+        SetVehicleWindowTint(veh, 1)
+    end,
+    ["20-percent-tint"] = function(veh)
+        if GetVehicleModKit(veh) ~= 0 then
+            SetVehicleModKit(veh, 0)
+        end
+        SetVehicleWindowTint(veh, 2)
+    end,
+    ["35-percent-tint"] = function(veh)
+        if GetVehicleModKit(veh) ~= 0 then
+            SetVehicleModKit(veh, 0)
+        end
+        SetVehicleWindowTint(veh, 3)
     end
 }
 

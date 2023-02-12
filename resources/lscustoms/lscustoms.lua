@@ -94,7 +94,6 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 		SetVehicleNumberPlateTextIndex(currentvehicle,veh.plateindex)
 		SetVehicleWheelType(currentvehicle, veh.wheeltype)
 		SetVehicleTyresCanBurst(currentvehicle, not not veh.bulletProofTyres)
-		SetVehicleWindowTint(currentvehicle,veh.windowtint)
 
 		-- set mods --
     	SetVehicleModKit(currentvehicle,0)
@@ -712,11 +711,13 @@ local function DriveInGarage()
 				local btn = m:addPurchase(mod.name,mod.price)btn.smokecolor = mod.smokecolor
 			end
 
+		--[[
 		m = LSCMenu.categories:addSubMenu("WINDOWS", "Windows", "A selection of tinted windows.",true)
 		btn = m:addPurchase("None")btn.tint = false
 		for n, tint in pairs(LSC_Config.prices.windowtint) do
 			btn = m:addPurchase(tint.name,tint.price)btn.tint = tint.tint
 		end
+		--]]
 
 		local vehExtrasMenu = LSCMenu.categories:addSubMenu("Extras", "Extras", "Vehicle extras",true)
 		for i = 1, 15 do
@@ -1630,7 +1631,7 @@ function UnfakeVeh()
 	SetVehicleExtraColours(veh,myveh.extracolor[1], myveh.extracolor[2])
 	--SetVehicleNeonLightsColour(veh,myveh.neoncolor[1],myveh.neoncolor[2],myveh.neoncolor[3])
 	SetVehicleNumberPlateTextIndex(veh, myveh.plateindex)
-	SetVehicleWindowTint(veh, myveh.windowtint)
+	--SetVehicleWindowTint(veh, myveh.windowtint)
 end
 
 --Still the good old way of adding blips
