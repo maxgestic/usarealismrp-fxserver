@@ -550,7 +550,8 @@ var itemImages = {
     "RC Car": "https://i.imgur.com/L7PtIAY.png",
     "Xenon Headlights": "https://i.imgur.com/VS1f4HT.png",
     "Stage 1 Brakes": "https://i.imgur.com/7MYCnsc.png",
-    "Stage 2 Brakes": "https://i.imgur.com/DZNm0GX.png"
+    "Stage 2 Brakes": "https://i.imgur.com/DZNm0GX.png",
+    "Lottery Ticket": "https://i.imgur.com/km5NQpX.png"
 }
 
 var menuItems = [{
