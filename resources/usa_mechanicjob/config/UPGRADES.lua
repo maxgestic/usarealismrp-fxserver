@@ -146,7 +146,7 @@ UPGRADES = {
         displayName = "Stage 1 Brakes",
         requiresItem = "Stage 1 Brakes",
         postInstall = function(vehPlate)
-            MechanicHelper.removeVehicleUpgrades(vehPlate, {"stage-1-brakes"})
+            MechanicHelper.removeVehicleUpgrades(vehPlate, {"stage-2-brakes"})
         end
     },
     ["stage-2-brakes"] = {
@@ -154,7 +154,7 @@ UPGRADES = {
         displayName = "Stage 2 Brakes",
         requiresItem = "Stage 2 Brakes",
         postInstall = function(vehPlate)
-            MechanicHelper.removeVehicleUpgrades(vehPlate, {"stage-2-brakes"})
+            MechanicHelper.removeVehicleUpgrades(vehPlate, {"stage-1-brakes"})
         end
     },
     ["tint-remover"] = {
