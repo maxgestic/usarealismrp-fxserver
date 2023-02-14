@@ -775,13 +775,14 @@ backwheel = {
 	},
 
 ---------Suspension-----------
+--[[
 	[15] = {
 		{name = "Lowered Suspension",mod = 0, price = 1000},
 		{name = "Street Suspension",mod = 1, price = 2000},
 		{name = "Sport Suspension",mod = 2, price = 3000},
 		{name = "Competition Suspension",mod = 3, price = 4000},
 	},
-
+--]]
 -----------Horn----------
 	[14] = {
 		{name = "Truck Horn", mod = 0, price = 925},
