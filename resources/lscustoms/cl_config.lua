@@ -821,12 +821,13 @@ backwheel = {
 	},
 
 ----------Transmission---------
+--[[
 	[13] = {
 		{name = "Street Transmission", mod = 0, price = 3500},
 		{name = "Sports Transmission", mod = 1, price = 6500},
 		{name = "Race Transmission", mod = 2, price = 10000},
 	},
-
+--]]
 -----------Brakes-------------
 --[[
 	[12] = {

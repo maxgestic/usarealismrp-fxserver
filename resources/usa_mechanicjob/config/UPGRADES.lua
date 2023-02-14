@@ -188,5 +188,21 @@ UPGRADES = {
         postInstall = function(vehPlate)
             MechanicHelper.removeVehicleUpgrades(vehPlate, {"20-percent-tint", "5-percent-tint"})
         end
+    },
+    ["stage-1-transmission"] = {
+        id = "stage-1-transmission",
+        displayName = "Stage 1 Transmission",
+        requiresItem = "Stage 1 Transmission",
+        postInstall = function(vehPlate)
+            MechanicHelper.removeVehicleUpgrades(vehPlate, {"stage-2-transmission"})
+        end
+    },
+    ["stage-2-transmission"] = {
+        id = "stage-2-transmission",
+        displayName = "Stage 2 Transmission",
+        requiresItem = "Stage 2 Transmission",
+        postInstall = function(vehPlate)
+            MechanicHelper.removeVehicleUpgrades(vehPlate, {"stage-1-transmission"})
+        end
     }
 }
