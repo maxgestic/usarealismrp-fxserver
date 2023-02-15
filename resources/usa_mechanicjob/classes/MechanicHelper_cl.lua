@@ -101,6 +101,12 @@ MechanicHelper.UPGRADE_FUNC_MAP = {
             SetVehicleModKit(veh, 0)
         end
         SetVehicleMod(veh, 13, 2)
+    end,
+    ["turbo"] = function(veh)
+        if GetVehicleModKit(veh) ~= 0 then
+            SetVehicleModKit(veh, 0)
+        end
+        ToggleVehicleMod(veh, 18, true)
     end
 }
 
