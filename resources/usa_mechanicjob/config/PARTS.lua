@@ -176,4 +176,11 @@ PARTS = {
 		weight = 30,
 		type = "mechanicPart"
 	},
+	["20% Armor"] = {
+		name = "20% Armor",
+		price = 12000,
+		quantity = 1,
+		weight = 50,
+		type = "mechanicPart"
+	},
 }

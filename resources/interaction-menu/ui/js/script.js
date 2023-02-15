@@ -557,7 +557,9 @@ var itemImages = {
     "35% Window Tint": "https://i.imgur.com/26HppIQ.png",
     "Stage 1 Transmission": "https://i.imgur.com/X2WCTTL.png",
     "Stage 2 Transmission": "https://i.imgur.com/X2WCTTL.png",
-    "Tint Meter": "https://i.imgur.com/K1IN50A.png"
+    "Tint Meter": "https://i.imgur.com/K1IN50A.png",
+    "Turbo": "https://i.imgur.com/LSRmWx9.png",
+    "20% Armor": "https://i.imgur.com/So29uLb.png"
 }
 
 var menuItems = [{

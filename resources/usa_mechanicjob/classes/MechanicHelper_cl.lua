@@ -107,6 +107,12 @@ MechanicHelper.UPGRADE_FUNC_MAP = {
             SetVehicleModKit(veh, 0)
         end
         ToggleVehicleMod(veh, 18, true)
+    end,
+    ["20-percent-armor"] = function(veh)
+        if GetVehicleModKit(veh) ~= 0 then
+            SetVehicleModKit(veh, 0)
+        end
+        SetVehicleMod(veh, 16, 0)
     end
 }
 

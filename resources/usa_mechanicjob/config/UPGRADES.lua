@@ -210,5 +210,11 @@ UPGRADES = {
         displayName = "Turbo",
         requiresItem = "Turbo",
         postInstall = function(vehPlate) end
+    },
+    ["20-percent-armor"] = {
+        id = "20-percent-armor",
+        displayName = "20% Armor",
+        requiresItem = "20% Armor",
+        postInstall = function(vehPlate) end
     }
 }
