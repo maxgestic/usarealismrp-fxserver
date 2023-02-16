@@ -183,4 +183,18 @@ PARTS = {
 		weight = 50,
 		type = "mechanicPart"
 	},
+	["Stage 1 Intake"] = {
+		name = "Stage 1 Intake",
+		price = 7000,
+		quantity = 1,
+		weight = 30,
+		type = "mechanicPart"
+	},
+	["Stage 2 Intake"] = {
+		name = "Stage 2 Intake",
+		price = 12000,
+		quantity = 1,
+		weight = 30,
+		type = "mechanicPart"
+	}
 }

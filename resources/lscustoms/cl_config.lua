@@ -841,12 +841,13 @@ backwheel = {
 --]]
 
 ------------Engine----------
+--[[
 	[11] = {
 		{name = "EMS Upgrade, Level 2", mod = 0, price = 6000},
 		{name = "EMS Upgrade, Level 3", mod = 1, price = 9000},
 		{name = "EMS Upgrade, Level 4", mod = 2, price = 12000},
 	},
-
+--]]
 -------------Roof----------
 	[10] = {
 		startprice = 600,

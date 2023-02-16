@@ -113,7 +113,19 @@ MechanicHelper.UPGRADE_FUNC_MAP = {
             SetVehicleModKit(veh, 0)
         end
         SetVehicleMod(veh, 16, 0)
-    end
+    end,
+    ["stage-1-intake"] = function(veh)
+        if GetVehicleModKit(veh) ~= 0 then
+            SetVehicleModKit(veh, 0)
+        end
+        SetVehicleMod(veh, 11, 1)
+    end,
+    ["stage-2-intake"] = function(veh)
+        if GetVehicleModKit(veh) ~= 0 then
+            SetVehicleModKit(veh, 0)
+        end
+        SetVehicleMod(veh, 11, 2)
+    end,
 }
 
 MechanicHelper.getClosestVehicle = function(maxRange)
