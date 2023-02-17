@@ -129,6 +129,6 @@ RegisterServerCallback {
         local result = MySQL.query.await('SELECT * FROM lotterytotal where lotto = ?', {check})
         local total = result[1].total
 
-        return "Current lottery total is  $"..total.."."
+        return "Current lottery total is  $"..exports.globals:comma_value(total).."."
     end
 }
