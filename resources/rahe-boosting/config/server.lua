@@ -1,4 +1,7 @@
 svConfig = {
+    -- This is for weepers to check if there is anything wrong with Boosting.
+    debugMode = true,
+
     -- The currency settings which are used to display money amount in the tablet's HTML.
     -- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString
     -- The first variable (currencyLocale) defines how the number is formatted. For example in 'en-US': '$60,890.00', 'et': '60 890,00 $'
@@ -735,3 +738,7 @@ supportedVehicles = {
     { name = "1932 Ford V-8 Coupé", model = "fordc32", class = "D" },
     { name = "1980 Ford Bronco", model = "80bronco", class = "D" },
 }
+
+if svConfig.debugMode then
+    print("DEBUG MODE - ENABLED")
+end
