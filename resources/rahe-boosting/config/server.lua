@@ -136,14 +136,14 @@ svConfig = {
             generationPercentage = 40,
             timeBetweenGenerations = 0,
             isImportant = false,
-            maxContractsOfType = 2,
+            maxContractsOfType = 1,
             maxContractsPerSession = 0,
             priceMin = 40,
             priceMax = 60,
             minScratchPrice = 400,
             maxScratchPrice = 600,
             rewardCashMin = 3000,
-            rewardCashMax = 6500,
+            rewardCashMax = 4000,
             rewardCryptoMin = 60,
             rewardCryptoMax = 90,
             experiencePerJob = 12,
@@ -151,7 +151,7 @@ svConfig = {
             riskChances = {
                 doorsLocked = 100,
                 advancedLockChance = 50,
-                advancedSystemChance = 10,
+                advancedSystemChance = 0,
                 npcChance = 0
             }
         },
