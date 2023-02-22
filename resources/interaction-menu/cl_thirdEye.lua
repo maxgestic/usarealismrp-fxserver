@@ -30,7 +30,7 @@ function onVehicleOptionSelect(a, buttonInfo, hitHandle)
             args = {vehPlate}
         }
         if upgrades then
-            exports.globals:notify(false, "^3INFO: ^0Vehicle upgrades with plate " .. vehPlate)
+            exports.globals:notify(false, "^3INFO: ^0Vehicle upgrades")
             for i = 1, #upgrades do
                 exports.globals:notify(false, upgrades[i])
             end
