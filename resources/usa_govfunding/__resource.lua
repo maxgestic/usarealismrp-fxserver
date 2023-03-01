@@ -7,3 +7,7 @@ client_scripts {
 server_scripts {
     "sv_govfunding.lua"
 }
+
+server_exports {
+    "addToAccount"
+}

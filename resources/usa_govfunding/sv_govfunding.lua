@@ -246,6 +246,14 @@ AddEventHandler("govfunding:delete", function(withdrawAmount, src, fundAccount)
     end, fundAccount)
 end)
 
+function addToAccount(src, addAmount, fundAccount)
+    GetSavedBal(fundAccount, function(bal)
+        local newBal = bal + addAmount
+        print("new balance: " .. tostring(newBal))
+        saveBal(src, newBal, fundAccount)
+    end)
+end
+
 function saveBal(src, finishedBalance, fundAccount)
     TriggerEvent('es:exposeDBFunctions', function(db)
         db.updateDocument("govfunds", fundAccount, { content = finishedBalance }, function(doc, err, rText)
