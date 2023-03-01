@@ -142,8 +142,8 @@ local DOORS = {
   {name = "SSPD / Cell Door 3", x = 1849.3833007812, y = 3693.6325683594, z = 34.219367980957, model = -1491332605, locked = true, offset={0.0, 1.24, 0.0}, heading=30, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', "ems"}},
   --{name = 'Hospital / Ward A 1', x = 303.23297119141,y = -582.19818115234, z = 43.284023284912, model = -434783486, locked = false, offset={0.0, -1.0, 0.00}, heading = 340, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   --{name = 'Hospital / Ward A 2', x = 304.57992553711,y = -582.55187988281, z = 43.284008026123, model = -1700911976, locked = true, static = true,  _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
-  --{name = 'Hospital / Ward A 3', x = 326.43518066406,y = -579.94946289063, z = 43.284027099609, model = -1700911976, locked = false, offset={0.0, 1.0, 0.00}, heading = 250, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
-  --{name = 'Hospital / Ward A 4', x = 326.91903686523,y = -578.595703125, z = 43.284027099609, model = -434783486, locked = true, static = true,  _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
+  {name = 'Hospital / Ward A 3', x = 326.43518066406,y = -579.94946289063, z = 43.284027099609, model = -1700911976, locked = true, offset={0.0, 1.0, 0.00}, heading = 250, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
+  {name = 'Hospital / Ward A 4', x = 326.91903686523,y = -578.595703125, z = 43.284027099609, model = -434783486, locked = true, static = true,  _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = "PB Medical / Lower Garage 1", x = 338.19873046875, y = -589.33801269531, z = 28.796865463257, model = -434783486, locked = true, offset={0.0, -1.0, -0.1}, heading = 70, _dist = 1.3, allowedJobs = {'sheriff', "corrections", "ems", "doctor"}},
   {name = "PB Medical / Lower Garage 2", x = 339.61959838867, y = -588.25390625, z = 28.796855926514, model = -1700911976, locked = true, offset={0.0, 1.0, -0.1}, heading = 70, _dist = 1.3, allowedJobs = {'sheriff', "corrections", "ems", "doctor"}},
   {name = 'PB Medical / Ward B 1', x = 326.0634765625, y = -590.35736083984, z = 43.284091949463, model = -1700911976, locked = true, offset={0.0, 1.0, 0.00}, heading = 340, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
@@ -154,7 +154,20 @@ local DOORS = {
   {name = 'PB Medical / Ward A / Surgery 4', x = 318.32626342773, y = -574.1484375, z = 43.28409576416, model = -434783486, locked = true, static = true,  _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = 'PB Medical / Ward A / Surgery 5', x = 313.75811767578, y = -572.56469726563, z = 43.284057617188, model = -1700911976, locked = true, offset={0.0, 1.0, 0.00}, heading = 340, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = 'PB Medical / Ward A / Surgery 6', x = 312.38928222656, y = -571.96166992188, z = 43.284057617188, model = -434783486, locked = true, static = true,  _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
-  {name = 'PB Medical / Staff Entrance', x = 308.6898, y = -597.0485, z = 43.2841, model = 854291622, locked = false, _dist = 1.5, offset={0.0, -1.25, 0.0}, heading = 160, allowedJobs = {'ems', 'doctor', 'sheriff', 'corrections'}}, 
+  {name = 'PB Medical / Staff Entrance', x = 308.6898, y = -597.0485, z = 43.2841, model = 854291622, locked = true, _dist = 1.5, offset={0.0, -1.25, 0.0}, heading = 160, allowedJobs = {'ems', 'doctor', 'sheriff', 'corrections'}}, 
+  {name = 'PB Medical / PillboxReceptionDoor', x = 313.48, y = -595.46, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=250, _dist = 1.5, allowedJobs = {'ems', 'doctor', 'sheriff', 'corrections'}},
+  {name = "PBMedicalWardALaboratory", x = 307.12, y = -569.57, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=340, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBMedicalWardACloset", x = 303.96, y = -572.56, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=70, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBMRI", x = 336.16, y = -580.14, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=340, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBAdministration", x = 339.0, y = -586.7, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=340, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBX-Ray", x = 346.77, y = -584.0, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=340, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBTreatment1", x = 346.89, y = -593.6, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=70, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBDrOfficer373", x = 352.2, y = -594.15, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=250, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBDrOfficer372", x = 358.73, y = -593.88, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=340, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBPrivateRoom369", x = 357.49, y = -579.61, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=250, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBPrivateRoom370", x = 356.13, y = -583.36, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=250, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBPrivateRoom374", x = 350.83, y = -597.9, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=250, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
+  {name = "PBDiagnostics", x = 340.78, y = -581.82, z = 43.43, model = 854291622, locked = true, offset={0.0, -1.0, 0.0}, heading=340, _dist = 1.5, allowedJobs = {'ems','doctor','sheriff','corrections'}},
   {name = 'BCSO Paleto - Door 1', x = -443.16, y = 6015.41, z = 31.71, model = -1501157055, locked = false, offset={0.0, 1.24, -0.1}, heading = 315, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = 'BCSO Paleto - Door 2', x = -444.3, y = 6016.3, z = 31.71, model = -1501157055, locked = true, _dist = 1.5, static = true, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = 'Nightclub / Door 1', x = -1621.88, y = -3016.0, z = -75.20, model = -1119680854, locked = true, static = true, _dist = 1.0},
@@ -400,11 +413,14 @@ function canCharUnlockDoor(char, doorIndex, lsource)
     if door.allowedJobs[i] == char.get("job") then -- clocked in for job
       return true
     elseif door.allowedJobs[i] == 'da' and char.get("daRank") and char.get("daRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+      return true
     elseif door.allowedJobs[i] == 'judge' and char.get("judgeRank") and char.get("judgeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
       return true
     elseif door.allowedJobs[i] == 'sheriff' and char.get("policeRank") and char.get("policeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
       return true
     elseif door.allowedJobs[i] == 'ems' and char.get("emsRank") and char.get("emsRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+      return true
+    elseif door.allowedJobs[i] == 'doctor' and char.get("doctorRank") and char.get("doctorRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
       return true
     elseif door.allowedJobs[i] == 'corrections' and char.get("bcsoRank") and char.get("bcsoRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
       return true
