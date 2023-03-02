@@ -385,7 +385,7 @@ AddEventHandler('doormanager:StaticClipboard', function(name, jobs, doorHash)
   local door_y = round(GetEntityCoords(door).y, 2)
   local door_z = round(GetEntityCoords(door).z, 2)
   local door_heading = round(GetEntityHeading(door))
-  local message = '{name = "' .. name .. '", x = ' .. door_x .. ', y = ' .. door_y .. ', z = ' .. door_z .. ', model = ' .. doorHash .. ', locked = true, offset={0.0, -1.0, 0.0}, heading=' .. door_heading .. ', _dist = 1.5, allowedJobs = {' .. jobs .. '}, static = true, gate = true, lockedCoords = {'..door_x..', '..door_y..', '..door_z..'}},'
+  local message = '{name = "' .. name .. '", x = ' .. door_x .. ', y = ' .. door_y .. ', z = ' .. door_z .. ', model = ' .. doorHash .. ', locked = true, offset={0.0, -1.0, 0.0}, heading=' .. door_heading .. ', _dist = 1.5, allowedJobs = {' .. jobs .. '}, static = true},'
   print(message)
   SendNUIMessage({
     message = message
