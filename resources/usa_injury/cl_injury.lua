@@ -162,12 +162,15 @@ hospitalLocations = {
 effects = {} -- when you take damage for a specific reason, you may be put into an effect
 injuredParts = {} -- injured body parts, and their wounds as the value
 
-pain_level = 0
-drug_level = 0
-pain_timer = nil
-pain_fade_time_minutes = 1
-pain_fading = false
-medication = nil
+local pain_level = 0
+local drug_level = 0
+local pain_timer = nil
+local pain_fade_time_minutes = 10
+local pain_fading = false
+local medication = nil
+local morphine_speedup_minutes = 3
+local codeine_speedup_minutes = 1
+local naloxone_slowdown_minutes = 3
 
 ------ NOTIFY PLAYER OF INJURIES ------
 
@@ -345,7 +348,6 @@ Citizen.CreateThread(function()
                     local new_pain = highest_pain
                     local canceled = false
                     while GetGameTimer() - pain_timer < pain_fade_time_minutes * 60000 do
-                        print(GetGameTimer() - pain_timer)
                         Citizen.Wait(1000)
                         if not pain_fading then
                             canceled = true
@@ -676,12 +678,21 @@ RegisterNetEvent("injuries:administerMedicine")
 AddEventHandler("injuries:administerMedicine", function(medicine, dose, doctor_source)
     if medicine == "codeine" then
         drug_level = drug_level + (15 * dose)
+        if pain_timer ~= nil then
+            pain_timer = pain_timer - ((codeine_speedup_minutes * 60000) * dose)
+        end
     elseif medicine == "morphine" then
         drug_level = drug_level + (25 * dose)
+        if pain_timer ~= nil then
+            pain_timer = pain_timer - ((morphine_speedup_minutes * 60000) * dose)
+        end
     elseif medicine == "naloxone" then -- for overdose
-        drug_level = drug_level - (10 * dose)
+        drug_level = drug_level - (20 * dose)
         if drug_level < 0 then
             drug_level = 0
+        end
+        if pain_timer ~= nil then
+            pain_timer = pain_timer + ((naloxone_slowdown_minutes * 60000) * dose)
         end
     end
 end)
@@ -718,6 +729,10 @@ Citizen.CreateThread(function()
             if drug_level > 100 and GetEntityHealth(PlayerPedId()) > 1 then
                 exports.globals:Draw3DTextForOthers("went unconscious and has foam in mouth")
                 SetEntityHealth(PlayerPedId(), 0)
+                if pain_fading then
+                    pain_fading = false
+                end
+                pain_level = 3
             end
             drug_level = drug_level - 0.05
             if drug_level < 0 then
@@ -787,7 +802,6 @@ AddEventHandler('injuries:checkin', function()
     TriggerEvent('chatMessage', '', {255, 255, 255}, 'Overview: \n ' .. overview)
     injuredParts = {}
     effects = {}
-    pain_level = 0
     drug_level = 0
     StopScreenEffect('Rampage')
     TriggerEvent('death:allowRevive')
