@@ -336,6 +336,61 @@ local DOORS = {
 -- heading - the heading of the door in it's regular position (when a player is not holding it open) -- this value should always be somewhat a multiple of 5 as rockstar like uniformity e.g., 270, 90, 180, 30, 315
 -- ymap - true will result in the door not using any of the above new values for 3D text, and having the text display at the x, y, z coords on the list
 
+function SetPropertyDoors(doors)
+  local i = 1
+  for counter = 1, #DOORS do
+    if DOORS[i].property then
+      print("removing "..DOORS[i].name .. " id "..i)
+      table.remove(DOORS, i)
+    else
+      i = i + 1
+    end
+  end
+  for i,v in ipairs(doors) do
+      print("inserting "..v.name .. " locked: " .. tostring(v.locked))
+    table.insert(DOORS, v)
+  end
+  TriggerClientEvent("doormanager:update", -1, DOORS)
+end
+
+function AddPropertyDoor(door)
+  print("inserting "..door.name .. " locked: " .. tostring(door.locked))
+  table.insert(DOORS, door)
+  TriggerClientEvent("doormanager:update", -1, DOORS)
+end
+
+function RemovePropertyDoor(doorName)
+  for i,v in ipairs(DOORS) do
+    if v.name == doorName then
+      print("removing "..v.name .. " id "..i)
+      table.remove(DOORS,i)
+    end
+  end
+  TriggerClientEvent("doormanager:update", -1, DOORS)
+end
+
+RegisterServerEvent("doormanager:BatteringRam")
+AddEventHandler("doormanager:BatteringRam", function(coords)
+  local closestDist = 1000000000.0
+  local closestDoor = nil
+  for i,door in ipairs(DOORS) do
+    local dist = #(coords - vector3(door.x, door.y, door.z))
+    if dist < 3.0 and dist < closestDist then
+      closestDist = dist
+      closestDoor = door
+    end
+  end
+  if closestDoor ~= nil then
+    local random = math.random(3)
+    TriggerClientEvent("InteractSound_CL:PlayWithinDistanceOS", -1, GetEntityCoords(GetPlayerPed(source)), 7.5, "door-kick", 0.1)
+    if random == 2 and closestDoor.property then
+      toggleDoorLockByName(closestDoor.name, false)
+    end
+  else
+    TriggerClientEvent("usa:notify", source, "No nearby door found!")
+  end
+end)
+
 function getNearestDoor(src, maxRange)
   local closest = nil
   local playerCoords = GetEntityCoords(GetPlayerPed(src))
@@ -379,7 +434,7 @@ end
 function toggleDoorLockByName(doorName, optionalVal)
   for i = 1, #DOORS do
     if DOORS[i].name:find(doorName) then
-      if optionalVal then
+      if optionalVal ~= nil then
         DOORS[i].locked = optionalVal
       else
         if not DOORS[i].locked then
@@ -395,19 +450,28 @@ end
 
 function canCharUnlockDoor(char, doorIndex, lsource)
   local door = DOORS[doorIndex]
-    
-  for i = 1, #door.allowedJobs do
-    if door.allowedJobs[i] == char.get("job") then -- clocked in for job
-      return true
-    elseif door.allowedJobs[i] == 'da' and char.get("daRank") and char.get("daRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
-    elseif door.allowedJobs[i] == 'judge' and char.get("judgeRank") and char.get("judgeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
-      return true
-    elseif door.allowedJobs[i] == 'sheriff' and char.get("policeRank") and char.get("policeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
-      return true
-    elseif door.allowedJobs[i] == 'ems' and char.get("emsRank") and char.get("emsRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
-      return true
-    elseif door.allowedJobs[i] == 'corrections' and char.get("bcsoRank") and char.get("bcsoRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
-      return true
+
+  if not door.property then
+    for i = 1, #door.allowedJobs do
+      if door.allowedJobs[i] == char.get("job") then -- clocked in for job
+        return true
+      elseif door.allowedJobs[i] == 'da' and char.get("daRank") and char.get("daRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+      elseif door.allowedJobs[i] == 'judge' and char.get("judgeRank") and char.get("judgeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+        return true
+      elseif door.allowedJobs[i] == 'sheriff' and char.get("policeRank") and char.get("policeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+        return true
+      elseif door.allowedJobs[i] == 'ems' and char.get("emsRank") and char.get("emsRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+        return true
+      elseif door.allowedJobs[i] == 'corrections' and char.get("bcsoRank") and char.get("bcsoRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+        return true
+      end
+    end
+  else
+    local properties = exports["usa-properties-og"]:GetOwnedProperties(char.get("_id"), true)
+    for i,v in ipairs(properties) do
+      if (v.name == door.property_name) then
+        return true
+      end
     end
   end
   return false

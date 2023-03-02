@@ -1233,6 +1233,8 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerServerEvent('usa_lottery:checkticketnumber')
 	elseif itemName == "Tint Meter" then
 		TriggerEvent("usa_police:checkwindowtint")
+	elseif itemName == "Battering Ram" then
+		TriggerServerEvent("doormanager:BatteringRam", GetEntityCoords(PlayerPedId()))
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
