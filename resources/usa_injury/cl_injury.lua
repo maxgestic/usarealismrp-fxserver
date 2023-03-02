@@ -162,6 +162,13 @@ hospitalLocations = {
 effects = {} -- when you take damage for a specific reason, you may be put into an effect
 injuredParts = {} -- injured body parts, and their wounds as the value
 
+pain_level = 0
+drug_level = 0
+pain_timer = nil
+pain_fade_time_minutes = 1
+pain_fading = false
+medication = nil
+
 ------ NOTIFY PLAYER OF INJURIES ------
 
 RegisterNetEvent('injuries:showMyInjuries')
@@ -287,6 +294,8 @@ Citizen.CreateThread(function()
                         SetPlayerHealthRechargeMultiplier(PlayerId(), 0.0)
                     elseif IsEntityDead(playerPed) then
                         StopScreenEffect('Rampage')
+                        StopScreenEffect('DrugsDrivingIn')
+                        StopScreenEffect('DeathFailTrevorIn')
                     end
                 end
             end
@@ -311,6 +320,69 @@ Citizen.CreateThread(function()
                 DisableControlAction(0, 21, true)
                 DisableControlAction(0, 22, true)
             end
+        end
+    end
+end)
+
+------ Pain Level ------
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(1000)
+        local highest_pain = 0
+        local old_pain = pain_level
+        for bone, injuries in pairs(injuredParts) do
+            for injury, data in pairs(injuredParts[bone]) do
+                if data.stage > highest_pain then
+                    highest_pain = data.stage
+                end
+            end
+        end
+        if old_pain > 0 and highest_pain < old_pain and highest_pain <= 1 then
+            if not pain_fading then
+                pain_fading = true
+                pain_timer = GetGameTimer()
+                Citizen.CreateThread(function()
+                    local new_pain = highest_pain
+                    local canceled = false
+                    while GetGameTimer() - pain_timer < pain_fade_time_minutes * 60000 do
+                        print(GetGameTimer() - pain_timer)
+                        Citizen.Wait(1000)
+                        if not pain_fading then
+                            canceled = true
+                            break
+                        end
+                    end
+                    if not canceled then
+                        pain_level = new_pain
+                    end
+                end)
+            end
+        else
+            if pain_fading then
+                pain_fading = false
+            end
+            pain_level = highest_pain
+        end
+
+        if pain_level == 2 then
+            StopScreenEffect('DeathFailMPIn')
+            if not GetScreenEffectIsActive('DrugsDrivingIn') then
+                StartScreenEffect('DrugsDrivingIn', 0, true)
+            end
+            if not GetScreenEffectIsActive('DeathFailTrevorIn') then
+                StartScreenEffect('DeathFailTrevorIn', 0, true)
+            end
+        elseif pain_level == 3 then
+            StopScreenEffect('DrugsDrivingIn')
+            StopScreenEffect('DeathFailTrevorIn')
+            if not GetScreenEffectIsActive('DeathFailMPIn') then
+                StartScreenEffect('DeathFailMPIn', 0, true)
+            end
+        else
+            pain_timer = nil
+            StopScreenEffect('DrugsDrivingIn')
+            StopScreenEffect('DeathFailTrevorIn')
+            StopScreenEffect('DeathFailMPIn')
         end
     end
 end)
@@ -598,6 +670,66 @@ Citizen.CreateThread(function()
     end
 end)
 
+------ DRUGS ------
+
+RegisterNetEvent("injuries:administerMedicine")
+AddEventHandler("injuries:administerMedicine", function(medicine, dose, doctor_source)
+    if medicine == "codeine" then
+        drug_level = drug_level + (15 * dose)
+    elseif medicine == "morphine" then
+        drug_level = drug_level + (25 * dose)
+    elseif medicine == "naloxone" then -- for overdose
+        drug_level = drug_level - (10 * dose)
+        if drug_level < 0 then
+            drug_level = 0
+        end
+    end
+end)
+
+RegisterNetEvent("injuries:addDrugLevel")
+AddEventHandler("injuries:addDrugLevel", function(drug_level_to_add) -- client event for future use of illigal drugs adding drug level that will lead to overdose
+    drug_level = drug_level + drug_level_to_add
+end)
+
+RegisterNetEvent("injuries:administerMedicineDoc")
+AddEventHandler("injuries:administerMedicineDoc", function(medicine, dose)
+    TriggerServerEvent('display:shareDisplay', 'administers ' .. tostring(dose) .. " dose(s) of " .. medicine .. " to patient", 2, 370, 10, 3000)
+end)
+
+RegisterNetEvent("injuries:toxscreen")
+AddEventHandler("injuries:toxscreen", function(doc_source)
+    TriggerServerEvent("injuries:returnToxscreen", drug_level, doc_source)
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(1000)
+        if drug_level > 0 then
+            if drug_level > 60 then
+                if not GetScreenEffectIsActive('BikerFilter') then
+                    StartScreenEffect("BikerFilter", 0, true)
+                end
+            else
+                if GetScreenEffectIsActive('BikerFilter') then
+                    StopScreenEffect("BikerFilter")
+                    StartScreenEffect("BikerFilterOut", 0, false)
+                end
+            end
+            if drug_level > 100 and GetEntityHealth(PlayerPedId()) > 1 then
+                exports.globals:Draw3DTextForOthers("went unconscious and has foam in mouth")
+                SetEntityHealth(PlayerPedId(), 0)
+            end
+            drug_level = drug_level - 0.05
+            if drug_level < 0 then
+                drug_level = 0
+            end
+        else
+            StopScreenEffect("BikerFilter")
+            StopScreenEffect("BikerFilterOut")
+        end
+    end
+end)
+
 ------ CHECK-IN HOSPITAL AND DOCTOR JOB ------
 
 local BASE_CHECKIN_PRICE = 25
@@ -655,6 +787,8 @@ AddEventHandler('injuries:checkin', function()
     TriggerEvent('chatMessage', '', {255, 255, 255}, 'Overview: \n ' .. overview)
     injuredParts = {}
     effects = {}
+    pain_level = 0
+    drug_level = 0
     StopScreenEffect('Rampage')
     TriggerEvent('death:allowRevive')
     TriggerEvent('civ:resetWalkStyle')
@@ -683,6 +817,8 @@ AddEventHandler('injuries:updateInjuries', function(_injuries)
     end
     injuredParts = __injuries
     effects = {}
+    pain_level = 0
+    drug_level = 0
     StopScreenEffect('Rampage')
     SetEntityHealth(PlayerPedId(), 200)
     TriggerEvent('civ:resetWalkStyle')
@@ -691,11 +827,13 @@ end)
 
 RegisterNetEvent('injuries:removeInjuries')
 AddEventHandler('injuries:removeInjuries', function()
-  injuredParts = {}
-  effects = {}
-  StopScreenEffect('Rampage')
-  SetEntityHealth(PlayerPedId(), 200)
-  TriggerEvent('civ:resetWalkStyle')
+    injuredParts = {}
+    effects = {}
+    pain_level = 0
+    drug_level = 0
+    StopScreenEffect('Rampage')
+    SetEntityHealth(PlayerPedId(), 200)
+    TriggerEvent('civ:resetWalkStyle')
 end)
 
 RegisterNetEvent('character:setCharacter')

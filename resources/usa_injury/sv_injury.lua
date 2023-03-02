@@ -124,6 +124,51 @@ end, {
 	}
 })
 
+TriggerEvent('es:addJobCommand', 'administer', {"doctor"}, function(source, args, char)
+	local target = tonumber(args[2])
+   	local medicine = args[3]
+   	local dose = tonumber(args[4])
+   	if target ~= nil then
+	   	if medicine == "codeine" or medicine == "morphine" or medicine == "naloxone" then
+	   		if dose == nil then
+	   			dose = 1
+	   		end
+			TriggerClientEvent("injuries:administerMedicine", target, medicine, dose, source)
+			TriggerClientEvent("injuries:administerMedicineDoc", source, medicine, dose)
+		else
+			TriggerClientEvent("usa:notify", source, "That is not a valid medication!")
+		end
+	else
+		TriggerClientEvent("usa:notify", source, "Invalid Target!")
+	end
+end, {
+	help = "Administer medicine to player",
+	params = {
+		{ name = "id", help = "Player ID to administer medicine to" },
+		{ name = "medicine", help = "codeine, morphine, naloxone" },
+		{ name = "dosage", help = "how many doses of medicine (number)" },
+	}
+})
+
+TriggerEvent('es:addJobCommand', 'toxscreen', {"doctor"}, function(source, args, char)
+	local target = tonumber(args[2])
+	if target then
+		TriggerClientEvent("injuries:toxscreen", target, source)
+	else
+		TriggerClientEvent("usa:notify", source, "No player id provided")
+	end
+end, {
+	help = "Check drug level of patient",
+	params = {
+		{ name = "id", help = "Player ID to test drug level" },
+	}
+})
+
+RegisterServerEvent("injuries:returnToxscreen")
+AddEventHandler("injuries:returnToxscreen", function(drug_level, doc_source)
+	TriggerClientEvent("usa:notify", doc_source, "Patient has drug level of " .. tostring(drug_level), "^3TOX SCREEN: ^0Patient has drug level of " .. tostring(drug_level))
+end)
+
 TriggerEvent('es:addJobCommand', 'bandage', {'ems', 'doctor', 'sheriff', 'corrections'}, function(source, args, char)
 	if not char.hasItem("First Aid Kit") then
 		TriggerClientEvent("usa:notify", source, "No first aid kit")
