@@ -123,11 +123,15 @@ Citizen.CreateThread(function()
   end
 end)
 
+local loopCheckIn = nil
+local removingDoor = false
+
 function doorLoop()
   Citizen.CreateThread(function()
     local lastKeyPress = 0
     while true do
       Wait(1)
+      loopCheckIn = GetGameTimer()
       if not removingDoor then
         if FIRST_JOIN then
           TriggerServerEvent("doormanager:firstJoin")
@@ -195,19 +199,35 @@ function doorLoop()
   end)
 end
 
-local removingDoor = false
+local loopStopped = false
 RegisterNetEvent("doormanager:setRemovingDoor")
 AddEventHandler("doormanager:setRemovingDoor", function(bool)
-  removingDoor = bool
   if not bool then
-    Wait(2000)
+    while not loopStopped do
+      Citizen.Wait(1)
+    end
+    loopStopped = false
+    removingDoor = bool
     doorLoop()
   else
+    removingDoor = bool
     print("Do not worry if you see an error below this, its just staff removing a door")
   end
 end)
 
+loopCheckIn = GetGameTimer()
 doorLoop()
+
+Citizen.CreateThread(function()
+  while true do
+    Citizen.Wait(1000)
+    if loopCheckIn ~= nil then
+      if GetGameTimer() - loopCheckIn > 1000 then
+        loopStopped = true
+      end
+    end
+  end
+end)
 
 ------------------------------------------------------------------------------------
 -- MAKE SURE DOORS STAY LOCKED (things like leaving the area would unlock things) --

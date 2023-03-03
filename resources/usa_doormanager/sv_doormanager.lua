@@ -419,7 +419,7 @@ function getNearestDoor(src, maxRange)
 end
 
 function toggleDoorLock(index, optionalVal)
-  if optionalVal then
+  if optionalVal ~= nil then
     DOORS[index].locked = optionalVal
   else
     if not DOORS[index].locked then
@@ -456,6 +456,7 @@ function canCharUnlockDoor(char, doorIndex, lsource)
       if door.allowedJobs[i] == char.get("job") then -- clocked in for job
         return true
       elseif door.allowedJobs[i] == 'da' and char.get("daRank") and char.get("daRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+        return true
       elseif door.allowedJobs[i] == 'judge' and char.get("judgeRank") and char.get("judgeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
         return true
       elseif door.allowedJobs[i] == 'sheriff' and char.get("policeRank") and char.get("policeRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
@@ -492,8 +493,8 @@ end)
 
 RegisterServerEvent("doormanager:checkDoorLock")
 AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked, thermited)
-  local char = exports["usa-characters"]:GetCharacter(source)
   local lsource = source
+  local char = exports["usa-characters"]:GetCharacter(lsource)
 
   if lockpicked and (DOORS[index].lockpickable or DOORS[index].advancedlockpickable) then
     toggleDoorLock(index)
@@ -504,7 +505,6 @@ AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked
     toggleDoorLock(index)
     return
   end
-
   if canCharUnlockDoor(char, index, lsource) then
     toggleDoorLock(index)
     return

@@ -335,7 +335,7 @@ AddEventHandler("properties:startAddDoor", function()
             end
         end
     else
-        TriggerClientEvent("usa:notify", "No object found nearby!")
+        TriggerEvent("usa:notify", "No object found nearby!")
     end
 end)
 
