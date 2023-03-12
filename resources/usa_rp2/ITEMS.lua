@@ -1,4 +1,5 @@
 local ITEMS = {
+    { name = "FN SCAR SC", type = "weapon", hash = GetHashKey("WEAPON_SCARSC"), weight = 28.0, quantity = 1 },
     { name = "Micro SMG", type = "weapon", hash = GetHashKey("WEAPON_MICROSMG"), weight = 25.0, quantity = 1 },
     { name = "Akorus", type = "weapon", hash = GetHashKey("WEAPON_AKORUS"), weight = 25.0, quantity = 1 },
     { name = "Revolver Ultra", type = "weapon", hash = GetHashKey("WEAPON_REVOLVERULTRA"), weight = 25.0, quantity = 1 },
