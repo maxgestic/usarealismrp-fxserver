@@ -1044,7 +1044,7 @@ Config.recipes = {
         },
         {
             name = "Aluminum",
-            image = "https://i.imgur.com/FAhri6J.png",
+            image = "https://i.imgur.com/o4sROlT.png",
             requires = {
                 { name = "Bauxite", quantity = 5 },
             },
