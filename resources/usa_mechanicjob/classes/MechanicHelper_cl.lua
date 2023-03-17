@@ -159,14 +159,14 @@ MechanicHelper.useMechanicTools = function(veh, repairCount, cb)
             local numLongSkillChecks = nil
             
             if repairCount >= MechanicHelper.LEVEL_3_RANK_THRESH then
-                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium'}
-                numLongSkillChecks = 7
+                todoSkillChecks = {'easy', 'medium', 'easy', 'easy', 'easy', 'easy'}
+                numLongSkillChecks = 6
             elseif repairCount >= MechanicHelper.LEVEL_2_RANK_THRESH then
-                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'medium'}
-                numLongSkillChecks = 9
+                todoSkillChecks = {'easy', 'medium', 'easy', 'medium', 'easy', 'medium', 'easy'}
+                numLongSkillChecks = 10
             else
-                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'easy', 'medium'}
-                numLongSkillChecks = 11
+                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'medium'}
+                numLongSkillChecks = 14
             end
 
             for i = 1, numLongSkillChecks do
