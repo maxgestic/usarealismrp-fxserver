@@ -162,10 +162,10 @@ MechanicHelper.useMechanicTools = function(veh, repairCount, cb)
                 todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium'}
                 numLongSkillChecks = 7
             elseif repairCount >= MechanicHelper.LEVEL_2_RANK_THRESH then
-                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'hard'}
+                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'medium'}
                 numLongSkillChecks = 9
             else
-                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard'}
+                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'easy', 'medium'}
                 numLongSkillChecks = 11
             end
 
@@ -212,10 +212,10 @@ MechanicHelper.useRepairKit = function(veh, cb)
                 todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium'}
                 numLongSkillChecks = 7
             elseif repairCount >= MechanicHelper.LEVEL_2_RANK_THRESH then
-                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'hard'}
+                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'medium'}
                 numLongSkillChecks = 9
             else
-                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'hard', 'hard'}
+                todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'easy', 'medium'}
                 numLongSkillChecks = 11
             end
 
