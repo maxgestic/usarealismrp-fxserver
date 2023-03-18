@@ -499,6 +499,9 @@ var itemImages = {
     "Compact Rifle Drum Mag": "https://i.imgur.com/AtnZkbY.png",
     "Machine Pistol Extended Mag": "https://i.imgur.com/bkP2aVs.png",
     "Machine Pistol Drum Mag": "https://i.imgur.com/cycagWt.png",
+    "M4GoldBeast Drum Mag": "https://i.imgur.com/pjAU6wN.png",
+    "M4GoldBeast Extended Mag": "https://i.imgur.com/XenqzGG.png",
+    "M4GoldBeast Mag": "https://i.imgur.com/XenqzGG.png",
     "Carbine Rifle": "https://i.imgur.com/f2Tb0nm.png",
     "Katana": "https://imgur.com/8UP49XZ.png",
     "Shiv": "https://i.imgur.com/65LrH5e.png",
@@ -541,6 +544,7 @@ var itemImages = {
     "Batxmas": "https://i.imgur.com/nJpSAic.png",
     "Snowhammer": "https://i.imgur.com/qgBfs19.png",
     "Akorus Gun Cast": "https://i.imgur.com/3kvY24m.png",
+    "M4GoldBeast Gun Cast": "https://i.imgur.com/ICqVr4r.png",
     "Steel": "https://i.imgur.com/o4sROlT.png",
     "Refined Gold": "https://i.imgur.com/QYthPRN.png",
     "Akorus": "https://i.imgur.com/5KYTXGp.png",
@@ -566,7 +570,8 @@ var itemImages = {
     "Stage 2 Intake": "https://i.imgur.com/q6V2VNi.png",
     "Battering Ram": "https://i.imgur.com/84WaJLq.png",
     "Repair Kit": "https://i.imgur.com/3kXO54l.png",
-    "FN SCAR SC": "https://i.imgur.com/m2C9Z7x.png"
+    "SCAR SC": "https://i.imgur.com/m2C9Z7x.png",
+    "M4GoldBeast": "https://i.imgur.com/6YvspNA.png"
 }
 
 var menuItems = [{
