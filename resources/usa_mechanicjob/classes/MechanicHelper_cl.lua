@@ -198,7 +198,7 @@ MechanicHelper.useMechanicTools = function(veh, repairCount, cb)
     end
 end
 
-MechanicHelper.useRepairKit = function(veh, cb)
+MechanicHelper.useRepairKit = function(veh, repairCount, cb)
     local beforeRepairHealth = GetVehicleEngineHealth(veh)
     local success = false
     if beforeRepairHealth < 800 then

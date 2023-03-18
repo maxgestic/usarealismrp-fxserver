@@ -672,7 +672,11 @@ AddEventHandler("mechanic:repairtools", function()
 		isRepairing = true
 		local veh = MechanicHelper.getClosestVehicle(5)
 		if veh then
-			MechanicHelper.useRepairKit(veh, function(success)
+			local repairCount = TriggerServerCallback {
+				eventName = "mechanic:getRepairCount",
+				args = {}
+			}
+			MechanicHelper.useRepairKit(veh, repairCount, function(success)
 				if success then
 					TriggerServerEvent("mechanic:vehicleRepaired")
 					exports.globals:notify("Vehicle repaired!")
