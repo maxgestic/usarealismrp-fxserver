@@ -23,6 +23,7 @@
   body {
     font: 16px/1.5 'Open Sans', "Century Gothic", "Trebuchet MS", Helvetica, sans-serif;
     background-image: url('../img/bg-9.jpg');
+    background-size: 100%;
     color: #fff;
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
