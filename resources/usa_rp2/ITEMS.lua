@@ -1,4 +1,6 @@
 local ITEMS = {
+    { name = "50 Caliber", type = "weapon", hash = -1716589765, price = 14000, quantity = 1, weight = 20, objectModel = "w_pi_pistol50" },
+    { name = "Empty .50 Cal Mag [9]", type = "magazine", price = 400, weight = 7, receives = ".50 Cal", MAX_CAPACITY = 9, currentCapacity = 0 },
     { name = "FN SCAR SC", type = "weapon", hash = GetHashKey("WEAPON_SCARSC"), weight = 28.0, quantity = 1 },
     { name = "Micro SMG", type = "weapon", hash = GetHashKey("WEAPON_MICROSMG"), weight = 25.0, quantity = 1 },
     { name = "Akorus", type = "weapon", hash = GetHashKey("WEAPON_AKORUS"), weight = 25.0, quantity = 1 },

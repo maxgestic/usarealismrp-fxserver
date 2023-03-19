@@ -2,7 +2,7 @@ local STORE_ITEMS = {
   ["Handguns"] = {
     { name = "Pistol", type = "weapon", hash = 453432689, price = 5000, quantity = 1, weight = 15, objectModel = "w_pi_pistol" },
     { name = "Heavy Pistol", type = "weapon", hash = -771403250, price = 10000, quantity = 1, weight = 20, objectModel = "w_pi_heavypistol" },
-    { name = ".50 Caliber", type = "weapon", hash = -1716589765, price = 14000, quantity = 1, weight = 20, objectModel = "w_pi_pistol50" },
+    { name = "50 Caliber", type = "weapon", hash = -1716589765, price = 14000, quantity = 1, weight = 20, objectModel = "w_pi_pistol50" },
     { name = "SNS Pistol", type = "weapon", hash = -1076751822, price = 5500, quantity = 1, weight = 12, objectModel = "w_pi_sns_pistol" },
     { name = "Glock", type = "weapon", hash = 1593441988, price = 7500, quantity = 1, weight = 15, objectModel = "w_pi_combatpistol" },
     { name = "MK2", type = "weapon", hash = -1075685676, price = 8000, quantity = 1, weight = 15 },

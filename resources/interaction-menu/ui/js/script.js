@@ -101,7 +101,7 @@ var itemImages = {
     "Pistol": "https://i.imgur.com/ZTFs9dB.png",
     "Heavy Pistol": "https://i.imgur.com/weWweWG.png",
     "Pistol .50": "https://i.imgur.com/W9sFoxi.png",
-    ".50 Caliber": "https://i.imgur.com/W9sFoxi.png",
+    "50 Caliber": "https://i.imgur.com/W9sFoxi.png",
     "SNS Pistol": "https://i.imgur.com/taLcM4v.png",
     "Combat Pistol": "https://i.imgur.com/BIUdVAg.png",
     "Revolver": "https://i.imgur.com/2zbT7sf.png",
