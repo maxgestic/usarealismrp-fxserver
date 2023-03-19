@@ -1028,7 +1028,8 @@ Config.recipes = {
                 }
             },
             requiredCraftingLevel = 1,
-            type = "refineryGoods"
+            type = "refineryGoods",
+            craftDurationSeconds = 4 * 60
         },
         {
             name = "Refined Gold",
@@ -1045,7 +1046,8 @@ Config.recipes = {
                 }
             },
             requiredCraftingLevel = 1,
-            type = "refineryGoods"
+            type = "refineryGoods",
+            craftDurationSeconds = 5 * 60
         },
         {
             name = "Plastic",
@@ -1098,7 +1100,8 @@ Config.recipes = {
                 }
             },
             requiredCraftingLevel = 1,
-            type = "refineryGoods"
+            type = "refineryGoods",
+            craftDurationSeconds = 4 * 60
         }
     }
 }
