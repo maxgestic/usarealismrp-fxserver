@@ -402,6 +402,8 @@ local vehicleShopItems = {
 			{make = "Bravado", model = "Greenwood", price = 12000, hash = "greenwood", storage_capacity = 115.0},
 		},
 		["Specials"] = {
+			{make = "Kenworth", model = "T440", price = 150000, hash = GetHashKey("isgtow"), storage_capacity = 400.0},
+			{make = "MTL", model = "Flatbed", price = 75000, hash = GetHashKey("flatbed"), storage_capacity = 500.0},
 			{make = "Dundreary", model = "Stretch", price = 25575, hash = -1961627517, storage_capacity = 300.0},
 			{make = "Maibatsu", model = "Mule 3", price = 55432, hash = -2052737935, storage_capacity = 575.0},
 			{make = "MTL", model = "Pounder", price = 97452, hash = 2112052861, storage_capacity = 900.0},
