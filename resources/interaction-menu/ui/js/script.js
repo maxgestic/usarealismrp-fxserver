@@ -570,7 +570,7 @@ var itemImages = {
     "Stage 2 Intake": "https://i.imgur.com/q6V2VNi.png",
     "Battering Ram": "https://i.imgur.com/84WaJLq.png",
     "Repair Kit": "https://i.imgur.com/3kXO54l.png",
-    "SCAR SC": "https://i.imgur.com/m2C9Z7x.png",
+    "FN SCAR SC": "https://i.imgur.com/m2C9Z7x.png",
     "M4GoldBeast": "https://i.imgur.com/6YvspNA.png"
 }
 
