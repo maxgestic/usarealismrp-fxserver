@@ -15,6 +15,7 @@ local armoryItems = {
     { name = "Heavy Pistol", type = "weapon", hash = GetHashKey("WEAPON_HEAVYPISTOL"), price = 450, weight = 7 },
     { name = "Stun Gun", type = "weapon", hash = 911657153, price = 400, weight = 5 },
     { name = "SMG", type = "weapon", hash = 736523883, price = 750, weight = 10, minRank = 3 },
+    { name = "FN SCAR SC", type = "weapon", hash = GetHashKey("WEAPON_SCARSC"), price = 5000, weight = 10, minRank = 3 },
     { name = "MK2", type = "weapon", hash = -1075685676, price = 400, weight = 5, minRank = 2 },
     { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 700, weight = 25 },
     { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, weight = 15, minRank = 2 },
@@ -37,6 +38,7 @@ local armoryItems = {
     { name = "Beanbag Shell", type = "ammo", price = 50, weight = 0.5, quantity = 8, objectModel = "prop_ld_ammo_pack_02" },
     { name = "Flashbang", type = "weapon", hash = GetHashKey("WEAPON_FLASHBANG"), price = 150, weight = 2, minRank = 6 },
     { name = "Tint Meter", price = 50, weight = 2 },
+    { name = "Battering Ram", type = "misc", price = 250, weight = 25, quantity = 1, serviceWeapon = true, notStackable = true},
 }
 
 for i = 1, #armoryItems do

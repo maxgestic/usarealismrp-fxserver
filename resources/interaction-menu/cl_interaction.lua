@@ -966,7 +966,7 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerServerEvent("drugs:use", "Packaged Weed")
 	elseif itemName:find("Joint") then
 		TriggerServerEvent("drugs:use", "Joint")
-	elseif string.find(itemName, "Repair Kit") then
+	elseif string.find(itemName, "Mechanic Tools") then
 		TriggerEvent("mechanic:repairJobCheck")
 	elseif string.find(itemName, "Hotwiring Kit") then
 		local ped = GetPlayerPed(-1)
@@ -1233,6 +1233,14 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerServerEvent('usa_lottery:checkticketnumber')
 	elseif itemName == "Tint Meter" then
 		TriggerEvent("usa_police:checkwindowtint")
+	elseif itemName == "Battering Ram" then
+		TriggerServerEvent("doormanager:BatteringRam", GetEntityCoords(PlayerPedId()))
+	elseif itemName == "Repair Kit" then
+		TriggerEvent("mechanic:repairtools", source)
+	elseif itemName == "Spray Paint" then
+		TriggerServerEvent("rcore_spray:spray")
+	elseif itemName == "Rag" then
+		TriggerServerEvent("rcore_spray:sprayremover")
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end

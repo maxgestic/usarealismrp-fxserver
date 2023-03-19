@@ -81,7 +81,9 @@ local largeWeapons = {
 	"WEAPON_ASSAULTSMG",
 	"WEAPON_TACTICALRIFLE",
 	"WEAPON_MILITARYRIFLE",
-	"WEAPON_AKORUS"
+	"WEAPON_AKORUS",
+	"WEAPON_SCARSC",
+	"WEAPON_M4GOLDBEAST",
 }
 
 -- HOLD WEAPON HOLSTER ANIMATION --
@@ -139,8 +141,8 @@ end)
 
 local isPassanger = false
 
-RegisterNetEvent("usa_trains:setExportPassager")
-AddEventHandler("usa_trains:setExportPassager", function(bool)
+RegisterNetEvent("max_trains:setExportPassager")
+AddEventHandler("max_trains:setExportPassager", function(bool)
   isPassanger = bool
 end)
 

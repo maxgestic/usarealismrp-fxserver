@@ -89,12 +89,11 @@ local HARDWARE_STORE_ITEMS = {
   ["Electronics"] = {
     { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_npc_phone_02", blockedInPrison = true },
     { name = "Radio", price = 2000, type = "misc", quantity = 1, legality = "legal", weight = 10, objectModel = "prop_cs_hand_radio" },
-    { name = "Speaker", price = 5000, legality = "legal", quantity = 1, type = "misc", weight = 20, objectModel = "sm_prop_smug_speaker" },
+    { name = "Speaker", price = 5000, legality = "legal", quantity = 1, type = "misc", weight = 20, objectModel = "sm_prop_smug_speaker", doNotAutoRemove = true },
     { name = "Megaphone", type = "weapon", hash = GetHashKey("WEAPON_MEGAPHONE"), price = 2000, legality = "legal", weight = 15, objectModel = "w_pi_megaphone" },
     { name = "Tablet", price = 1000, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "imp_prop_impexp_tablet", blockedInPrison = true}
   },
   ["Misc"] = {
-    { name = "Repair Kit", price = 500, type = "misc", quantity = 1, legality = "legal", weight = 20, objectModel = "imp_prop_tool_box_01a"},
     { name = 'Razor Blade', type = 'misc', price = 60, legality = 'legal', quantity = 1, residue = false, weight = 3},
     { name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "v_ret_ta_firstaid"},
     { name = "Large Scissors", price = 15, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_cs_scissors"},
