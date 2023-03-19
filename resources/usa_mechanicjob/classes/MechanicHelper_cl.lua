@@ -182,9 +182,9 @@ MechanicHelper.useMechanicTools = function(veh, repairCount, cb)
                 else -- Damaged but not red, so prob orange
                     SetVehicleEngineHealth(veh, 800.0)
                 end
+
                 FixAllTires(veh)
                 success = true
-                
                 cb(true)
             else 
                 cb(false)
@@ -233,6 +233,8 @@ MechanicHelper.useRepairKit = function(veh, repairCount, cb)
                 else
                     SetVehicleEngineHealth(veh, 600.0)
                 end
+                
+                FixAllTires(veh)
                 success = true
                 cb(true)
             else
