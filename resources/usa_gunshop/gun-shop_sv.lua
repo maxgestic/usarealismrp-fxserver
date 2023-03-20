@@ -1,20 +1,20 @@
 local STORE_ITEMS = {
   ["Handguns"] = {
     { name = "Pistol", type = "weapon", hash = 453432689, price = 5000, quantity = 1, weight = 15, objectModel = "w_pi_pistol" },
-    { name = "Heavy Pistol", type = "weapon", hash = -771403250, price = 10000, quantity = 1, weight = 20, objectModel = "w_pi_heavypistol" },
-    { name = "50 Caliber", type = "weapon", hash = -1716589765, price = 14000, quantity = 1, weight = 20, objectModel = "w_pi_pistol50" },
-    { name = "SNS Pistol", type = "weapon", hash = -1076751822, price = 5500, quantity = 1, weight = 12, objectModel = "w_pi_sns_pistol" },
-    { name = "Glock", type = "weapon", hash = 1593441988, price = 7500, quantity = 1, weight = 15, objectModel = "w_pi_combatpistol" },
-    { name = "MK2", type = "weapon", hash = -1075685676, price = 8000, quantity = 1, weight = 15 },
-    { name = "Vintage Pistol", type = "weapon", hash = 137902532, price = 7500, quantity = 1, weight = 15, objectModel = "w_pi_vintage_pistol" },
+    { name = "Heavy Pistol", type = "weapon", hash = -771403250, price = 7500, quantity = 1, weight = 20, objectModel = "w_pi_heavypistol" },
+    { name = "50 Caliber", type = "weapon", hash = -1716589765, price = 10000, quantity = 1, weight = 20, objectModel = "w_pi_pistol50" },
+    { name = "SNS Pistol", type = "weapon", hash = -1076751822, price = 4000, quantity = 1, weight = 12, objectModel = "w_pi_sns_pistol" },
+    { name = "Glock", type = "weapon", hash = 1593441988, price = 7000, quantity = 1, weight = 15, objectModel = "w_pi_combatpistol" },
+    { name = "MK2", type = "weapon", hash = -1075685676, price = 6000, quantity = 1, weight = 15 },
+    { name = "Vintage Pistol", type = "weapon", hash = 137902532, price = 5000, quantity = 1, weight = 15, objectModel = "w_pi_vintage_pistol" },
     --{ name = "Stun Gun", type = "weapon", hash = 911657153, price = 1500, quantity = 1, weight = 5, objectModel = "w_pi_stungun" }
     --{ name = "Marksman Pistol", type = "weapon", hash = -598887786, price = 2000, quantity = 1, weight = 15 },
     --{ name = "Revolver", type = "weapon", hash = -1045183535, price = 2000, quantity = 1, weight = 15 }
   },
   ["Shotguns"] = {
-    { name = "Pump Shotgun", type = "weapon", hash = 487013001, price = 20000, quantity = 1, weight = 25, objectModel = "w_sg_pumpshotgun" },
-    { name = "Bullpup Shotgun", type = "weapon", hash = -1654528753, price = 30000, quantity = 1, weight = 30, objectModel = "w_sg_bullpupshotgun" },
-    { name = "Musket", type = "weapon", hash = -1466123874, price = 18000, quantity = 1, weight = 35, objectModel = "w_ar_musket" }
+    { name = "Pump Shotgun", type = "weapon", hash = 487013001, price = 10000, quantity = 1, weight = 25, objectModel = "w_sg_pumpshotgun" },
+    { name = "Bullpup Shotgun", type = "weapon", hash = -1654528753, price = 25000, quantity = 1, weight = 30, objectModel = "w_sg_bullpupshotgun" },
+    { name = "Musket", type = "weapon", hash = -1466123874, price = 15000, quantity = 1, weight = 35, objectModel = "w_ar_musket" }
   },
   ["Extras"] = {
     { name = "Body Armor", type = "misc", price = 1000, quantity = 1, weight = 15, objectModel = "prop_bodyarmour_03" },
