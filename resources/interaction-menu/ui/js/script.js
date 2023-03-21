@@ -495,6 +495,7 @@ var itemImages = {
     "AK47 Extended Mag": "https://i.imgur.com/YqCXmEF.png",
     "AK47 Drum Mag": "https://i.imgur.com/NS7Cho2.png",
     "Carbine Extended Mag": "https://i.imgur.com/XenqzGG.png",
+    "MK2 Carbine Rifle Extended Mag": "https://i.imgur.com/XenqzGG.png",
     "Carbine Box Mag": "https://i.imgur.com/tXiEpqx.png",
     "Compact Rifle Extended Mag": "https://i.imgur.com/UxpUdCO.png",
     "Compact Rifle Drum Mag": "https://i.imgur.com/AtnZkbY.png",
