@@ -79,6 +79,7 @@ var itemImages = {
     "Everclear Vodka (90%)": "https://i.imgur.com/eCptoIY.png",
     "Mechanic Tools": "https://i.imgur.com/ch7wTIi.png",
     "First Aid Kit": "https://i.imgur.com/q3GjQKH.png",
+    "IFAK": "https://i.imgur.com/FhilAfQ.png",
     "Large Scissors": "https://i.imgur.com/d8pMdHO.png",
     "Shovel": "https://i.imgur.com/n2vAjfz.png",
     "Sturdy Rope": "https://i.imgur.com/rL7qgDa.png",
