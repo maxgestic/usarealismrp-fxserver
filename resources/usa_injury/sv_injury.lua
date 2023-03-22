@@ -78,7 +78,7 @@ injuries = { -- ensure this is the same as cl_injury.lua
 	[GetHashKey("WEAPON_PISTOL_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0}, -- WEAPON_PISTOL_MK2
 	[GetHashKey("WEAPON_CARBINERIFLE_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE_MK2
 	[GetHashKey("WEAPON_PUMPSHOTGUN_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0}, -- WEAPON_PUMPSHOTGUN_MK2
-	[GetHashKey("WEAPON_ASSAULTRIFLE_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0}, 
+	[GetHashKey("WEAPON_ASSAULTRIFLE_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0},
 	[GetHashKey("WEAPON_COMPACTRIFLE")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0}, -- WEAPON_COMPACTRIFLE
 	[GetHashKey("WEAPON_M4GOLDBEAST")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 500, dropEvidence = 1.0},
 }
@@ -172,11 +172,11 @@ AddEventHandler("injuries:returnToxscreen", function(drug_level, doc_source)
 end)
 
 TriggerEvent('es:addJobCommand', 'bandage', {'ems', 'doctor', 'sheriff', 'corrections'}, function(source, args, char)
-	if not char.hasItem("First Aid Kit") then
-		TriggerClientEvent("usa:notify", source, "No first aid kit")
+	if not char.hasItem("IFAK") then
+		TriggerClientEvent("usa:notify", source, "No IFAK")
 		return
 	end
-	char.removeItem("First Aid Kit", 1)
+	char.removeItem("IFAK", 1)
 	local _source = source
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
@@ -278,13 +278,13 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 			end
 			-- print(chance) -- DEBUG
 			totalPrice = totalPrice + injuries[injury].treatmentPrice
-			if injuries[injury].string == "High-speed Projectile" then 
+			if injuries[injury].string == "High-speed Projectile" then
 				treatmentTimeMinutes = treatmentTimeMinutes + 3
-			elseif injuries[injury].string == "Knife Puncture" then 
+			elseif injuries[injury].string == "Knife Puncture" then
 				treatmentTimeMinutes = treatmentTimeMinutes + 2
-			elseif injuries[injury].string == "Explosion" then 
+			elseif injuries[injury].string == "Explosion" then
 				treatmentTimeMinutes = treatmentTimeMinutes + 3
-			elseif injuries[injury].string == "Large Sharp Object" then 
+			elseif injuries[injury].string == "Large Sharp Object" then
 				treatmentTimeMinutes = treatmentTimeMinutes + 2
 			end
 		end
@@ -360,7 +360,7 @@ AddEventHandler('injuries:chargeForInjuries', function(playerInjuries, multiplie
 		char.removeBank(bankCharge)
 		local toGovFunds = math.floor(bankCharge * AMOUNT_OF_MOENY_TO_PILLBOX_ACCOUNT)
 		exports["usa_govfunding"]:addToAccount(source, toGovFunds, "doctor")
-	else 
+	else
 		char.removeBank(totalPrice)
 		local toGovFunds = math.floor(totalPrice * AMOUNT_OF_MOENY_TO_PILLBOX_ACCOUNT)
 		exports["usa_govfunding"]:addToAccount(source, toGovFunds, "doctor")
