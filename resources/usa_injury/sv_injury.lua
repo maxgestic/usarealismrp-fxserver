@@ -85,7 +85,7 @@ injuries = { -- ensure this is the same as cl_injury.lua
 
 local WEBHOOK_URL = GetConvar("injury-log-webhook", "")
 
-local AMOUNT_OF_MOENY_TO_PILLBOX_ACCOUNT = 0.8 -- how much money taken from characters upon check in and such is to be sent to doctor gov account
+local AMOUNT_OF_MONEY_TO_PILLBOX_ACCOUNT = 0.8 -- how much money taken from characters upon check in and such is to be sent to doctor gov account
 
 TriggerEvent('es:addCommand', 'injuries' , function(source, args, char)
 	TriggerClientEvent("injuries:showMyInjuries", source)
