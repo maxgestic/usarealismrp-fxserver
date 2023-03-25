@@ -38,7 +38,8 @@ local MAGAZINE_LOAD_ANIM = {
 local MAGS_ENABLED = true
 
 local NO_WEAPON_RELOADS = {
-    [683870287] = true
+    [683870287] = true,
+    [857138607] = true
 }
 
 RegisterNetEvent("ammo:setMagMode")
