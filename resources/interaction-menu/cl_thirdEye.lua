@@ -7,6 +7,8 @@ function onATMInteract(targetData, itemData)
     if itemData.name == "use" then
         local coords = GetEntityCoords(exports.banking:GetClosestATM())
         TriggerServerEvent("bank:getBalanceForGUI", coords)
+    elseif itemData.name == "hack" then
+        TriggerEvent("banking:DrillATM")
     end
 end
 
@@ -422,10 +424,14 @@ function addCivModelOptions()
     }
     local targetIds = target.addModels('ATMs', 'ATM', 'fas fa-usd-circle', atmModels, 1.0, onATMInteract, {
         {
-          name = 'use',
-          label = 'Use'
+            name = 'use',
+            label = 'Use'
+        },
+        {
+            name = 'hack',
+            label = 'Hack'
         }
-      })
+    })
 end
 
 addCivPlayerOptions()
