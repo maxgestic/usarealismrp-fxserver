@@ -12,6 +12,14 @@ function onATMInteract(targetData, itemData)
     end
 end
 
+function onPlantInteract(targetData, itemData)
+    if itemData.name == "water" then
+        TriggerEvent("cultivation:water")
+    elseif itemData.name == "feed" then
+        TriggerEvent("cultivation:feed")
+    end
+end
+
 function onVehicleOptionSelect(a, buttonInfo, hitHandle)
     -- enable ui and go to correction page
     local vehPlate = GetVehicleNumberPlateText(hitHandle)
@@ -422,7 +430,15 @@ function addCivModelOptions()
         -1126237515,
         -870868698
     }
-    local targetIds = target.addModels('ATMs', 'ATM', 'fas fa-usd-circle', atmModels, 1.0, onATMInteract, {
+    local weedPlantModels = {
+        GetHashKey("bkr_prop_weed_01_small_01a"),
+        GetHashKey("bkr_prop_weed_01_small_01b"),
+        GetHashKey("bkr_prop_weed_01_small_01c"),
+        GetHashKey("bkr_prop_weed_med_01a"),
+        GetHashKey("bkr_prop_weed_med_01b"),
+        GetHashKey("bkr_prop_weed_lrg_01b")
+    }
+    local atmTargetIds = target.addModels('ATMs', 'ATM', 'fas fa-usd-circle', atmModels, 1.0, onATMInteract, {
         {
             name = 'use',
             label = 'Use'
@@ -430,6 +446,16 @@ function addCivModelOptions()
         {
             name = 'hack',
             label = 'Hack'
+        }
+    })
+    local plantTargetIds = target.addModels('Plants', 'Plant', 'fa fa-leaf', weedPlantModels, 1.0, onPlantInteract, {
+        {
+            name = 'water',
+            label = 'Water'
+        },
+        {
+            name = 'feed',
+            label = 'Feed'
         }
     })
 end
