@@ -116,6 +116,10 @@ end)
 
 RegisterNetEvent("ammo:reloadFromInventoryButton")
 AddEventHandler("ammo:reloadFromInventoryButton", function(data)
+    if NO_WEAPON_RELOADS[GetSelectedPedWeapon(PlayerPedId())] then
+        exports.globals:notify("Can't reload that")
+        return
+    end
     if MAGS_ENBALED then
         local me = PlayerPedId()
         local myveh = nil
