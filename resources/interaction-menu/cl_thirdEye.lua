@@ -8,7 +8,15 @@ function onATMInteract(targetData, itemData)
         local coords = GetEntityCoords(exports.banking:GetClosestATM())
         TriggerServerEvent("bank:getBalanceForGUI", coords)
     elseif itemData.name == "hack" then
-        TriggerEvent("banking:DrillATM")
+        local hasDrill = TriggerServerCallback {
+            eventName = "interaction:hasItem",
+            args = { "Drill" }
+        }
+        if hasDrill then
+            TriggerEvent("banking:DrillATM")
+        else
+            exports.globals:notify("Need a drill")
+        end
     end
 end
 
@@ -428,7 +436,8 @@ end
 function addCivModelOptions()
     local atmModels = {
         -1126237515,
-        -870868698
+        -870868698,
+        506770882
     }
     local weedPlantModels = {
         GetHashKey("bkr_prop_weed_01_small_01a"),
