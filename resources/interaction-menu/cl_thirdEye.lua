@@ -22,9 +22,25 @@ end
 
 function onPlantInteract(targetData, itemData)
     if itemData.name == "water" then
-        TriggerEvent("cultivation:water")
+        local hasRequiredItem = TriggerServerCallback {
+            eventName = "interaction:hasItem",
+            args = { "Watering Can" }
+        }
+        if hasRequiredItem then
+            TriggerEvent("cultivation:water")
+        else
+            exports.globals:notify("Need a watering can")
+        end
     elseif itemData.name == "feed" then
-        TriggerEvent("cultivation:feed")
+        local hasRequiredItem = TriggerServerCallback {
+            eventName = "interaction:hasItem",
+            args = { "Fertilizer" }
+        }
+        if hasRequiredItem then
+            TriggerEvent("cultivation:feed")
+        else
+            exports.globals:notify("Need fertilizer")
+        end
     end
 end
 
