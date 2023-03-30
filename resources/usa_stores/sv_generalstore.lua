@@ -161,7 +161,7 @@ AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business
     return
   end
   if char.canHoldItem(item) then
-    if char.hasEnoughMoney(item.price) then
+    if char.hasEnoughMoneyOrBank(item.price) then
       if item.type and item.type == "weapon" then
         item.uuid = exports.globals:generateID()
       end
