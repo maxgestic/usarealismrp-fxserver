@@ -250,7 +250,7 @@ TriggerEvent('es:addJobCommand', 'newrecord', {'ems', 'doctor'}, function(source
 	local targetDOB = target.get('dateOfBirth')
 	local userName = char.getFullName()
 	target.removeBank(payment)
-	local toGovFunds = math.floor(payment * AMOUNT_OF_MOENY_TO_PILLBOX_ACCOUNT)
+	local toGovFunds = math.floor(payment * AMOUNT_OF_MONEY_TO_PILLBOX_ACCOUNT)
 	exports["usa_govfunding"]:addToAccount(source, toGovFunds, "doctor")
 	TriggerClientEvent('usa:notify', targetSource, 'You have been charged ~y~$' .. payment .. '~s~ in medical fees, payment processed from bank.')
 	TriggerClientEvent('usa:notify', source, 'Medical record has been created!')
@@ -337,7 +337,7 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 	print('INJURIES: '..PlayerName(usource) .. ' has checked-in to hospital and was charged amount['..totalPrice..']')
 	if char.get('job') ~= 'sheriff' and char.get("job") ~= "corrections" and char.get("job") ~= "ems" then
 		char.removeBank(totalPrice)
-		local toGovFunds = math.floor(totalPrice * AMOUNT_OF_MOENY_TO_PILLBOX_ACCOUNT)
+		local toGovFunds = math.floor(totalPrice * AMOUNT_OF_MONEY_TO_PILLBOX_ACCOUNT)
 		exports["usa_govfunding"]:addToAccount(source, toGovFunds, "doctor")
 	end
 end)
@@ -380,11 +380,11 @@ AddEventHandler('injuries:chargeForInjuries', function(playerInjuries, multiplie
 	if job == "sheriff" or job == "corrections" or job == "ems" then
 		local bankCharge = math.floor(totalPrice * 0.25)
 		char.removeBank(bankCharge)
-		local toGovFunds = math.floor(bankCharge * AMOUNT_OF_MOENY_TO_PILLBOX_ACCOUNT)
+		local toGovFunds = math.floor(bankCharge * AMOUNT_OF_MONEY_TO_PILLBOX_ACCOUNT)
 		exports["usa_govfunding"]:addToAccount(source, toGovFunds, "doctor")
 	else
 		char.removeBank(totalPrice)
-		local toGovFunds = math.floor(totalPrice * AMOUNT_OF_MOENY_TO_PILLBOX_ACCOUNT)
+		local toGovFunds = math.floor(totalPrice * AMOUNT_OF_MONEY_TO_PILLBOX_ACCOUNT)
 		exports["usa_govfunding"]:addToAccount(source, toGovFunds, "doctor")
 	end
 	print('INJURIES: '..PlayerName(source) .. ' has been charged amount['..totalPrice..'] in bank for hospital fees!')
