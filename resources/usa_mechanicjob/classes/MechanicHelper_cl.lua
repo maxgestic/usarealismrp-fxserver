@@ -160,15 +160,12 @@ MechanicHelper.useMechanicTools = function(veh, repairCount, cb)
             
             if repairCount >= MechanicHelper.LEVEL_3_RANK_THRESH then
                 todoSkillChecks = {'easy', 'medium', 'easy', 'easy', 'easy', 'easy'}
-                keys = {'w', 'a', 's', 'd'}
                 numLongSkillChecks = 6
             elseif repairCount >= MechanicHelper.LEVEL_2_RANK_THRESH then
                 todoSkillChecks = {'easy', 'medium', 'easy', 'medium', 'easy', 'medium', 'easy'}
-                keys = {'w', 'a', 's', 'd'}
                 numLongSkillChecks = 10
             else
                 todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'medium'}
-                keys = {'w', 'a', 's', 'd'}
                 numLongSkillChecks = 14
             end
 
@@ -176,7 +173,7 @@ MechanicHelper.useMechanicTools = function(veh, repairCount, cb)
                 table.insert(todoSkillChecks, 1, LONG_SKILL_CHECK)
             end
             
-            local passed = lib.skillCheck(todoSkillChecks, keys)
+            local passed = lib.skillCheck(todoSkillChecks)
 
             if passed then
                 if not IsVehicleDriveable(veh, true) then -- damaged and red
@@ -213,15 +210,12 @@ MechanicHelper.useRepairKit = function(veh, repairCount, cb)
             
             if repairCount >= MechanicHelper.LEVEL_3_RANK_THRESH then
                 todoSkillChecks = {'easy', 'medium', 'easy', 'easy', 'easy', 'easy'}
-                keys = {'w', 'a', 's', 'd'}
                 numLongSkillChecks = 6
             elseif repairCount >= MechanicHelper.LEVEL_2_RANK_THRESH then
                 todoSkillChecks = {'easy', 'medium', 'easy', 'medium', 'easy', 'medium', 'easy'}
-                keys = {'w', 'a', 's', 'd'}
                 numLongSkillChecks = 10
             else
                 todoSkillChecks = {'easy', 'medium', 'medium', 'medium', 'medium', 'medium', 'medium'}
-                keys = {'w', 'a', 's', 'd'}
                 numLongSkillChecks = 14
             end
 
@@ -229,7 +223,7 @@ MechanicHelper.useRepairKit = function(veh, repairCount, cb)
                 table.insert(todoSkillChecks, 1, LONG_SKILL_CHECK)
             end
             
-            local passed = lib.skillCheck(todoSkillChecks, keys)
+            local passed = lib.skillCheck(todoSkillChecks)
             if passed then
                 TriggerServerEvent("usa:removeItem", "Repair Kit", 1)
                 SetVehicleDoorShut(veh, 4, false)
