@@ -715,34 +715,38 @@ AddEventHandler("injuries:toxscreen", function(doc_source)
 end)
 
 Citizen.CreateThread(function()
+    local lastCheck = GetGameTimer()
     while true do
-        Citizen.Wait(1000)
-        if drug_level > 0 then
-            if drug_level > 60 then
-                if not GetScreenEffectIsActive('BikerFilter') then
-                    StartScreenEffect("BikerFilter", 0, true)
+        Wait(1)
+        if GetGameTimer() - lastCheck > 1000 then
+            lastCheck = GetGameTimer()
+            if drug_level > 0 then
+                if drug_level > 60 then
+                    if not GetScreenEffectIsActive('BikerFilter') then
+                        StartScreenEffect("BikerFilter", 0, true)
+                    end
+                else
+                    if GetScreenEffectIsActive('BikerFilter') then
+                        StopScreenEffect("BikerFilter")
+                        StartScreenEffect("BikerFilterOut", 0, false)
+                    end
+                end
+                if drug_level > 100 and GetEntityHealth(PlayerPedId()) > 1 then
+                    exports.globals:Draw3DTextForOthers("went unconscious and has foam in mouth")
+                    SetEntityHealth(PlayerPedId(), 0)
+                    if pain_fading then
+                        pain_fading = false
+                    end
+                    pain_level = 3
+                end
+                drug_level = drug_level - 0.05
+                if drug_level < 0 then
+                    drug_level = 0
                 end
             else
-                if GetScreenEffectIsActive('BikerFilter') then
-                    StopScreenEffect("BikerFilter")
-                    StartScreenEffect("BikerFilterOut", 0, false)
-                end
+                StopScreenEffect("BikerFilter")
+                StopScreenEffect("BikerFilterOut")
             end
-            if drug_level > 100 and GetEntityHealth(PlayerPedId()) > 1 then
-                exports.globals:Draw3DTextForOthers("went unconscious and has foam in mouth")
-                SetEntityHealth(PlayerPedId(), 0)
-                if pain_fading then
-                    pain_fading = false
-                end
-                pain_level = 3
-            end
-            drug_level = drug_level - 0.05
-            if drug_level < 0 then
-                drug_level = 0
-            end
-        else
-            StopScreenEffect("BikerFilter")
-            StopScreenEffect("BikerFilterOut")
         end
     end
 end)
