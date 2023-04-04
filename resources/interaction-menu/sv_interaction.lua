@@ -408,7 +408,7 @@ end
 
 AddEventHandler('es:playerLoaded', function(src, user)
 	local doc = exports.essentialmode:getDocument("third-eye-setting", GetPlayerIdentifiers(src)[1])
-	TriggerClientEvent("thirdEye:updateHotkey", src, (doc.key or THIRD_EYE_DEFAULT_HOTKEY))
+	TriggerClientEvent("thirdEye:updateHotkey", src, (doc and doc.key or THIRD_EYE_DEFAULT_HOTKEY))
 end)
 
 RegisterServerCallback {
