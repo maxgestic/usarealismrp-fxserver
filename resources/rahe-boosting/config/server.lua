@@ -414,7 +414,7 @@ supportedVehicles = {
     { name = "2020 Porsche 718 Cayman GT4", model = "por718gt4", class = "S" },
     { name = "Chevrolet Corvette C7R GTLM", model = "C7R", class = "S" },
     { name = "2012 Porsche 911 GT2 RS", model = "pgt2", class = "S" },
-    { name = "1993 Porsche 911 (993) RWB "Rotana"", model = "911rwb", class = "S" },
+    { name = "1993 Porsche 911 (993) RWB Rotana", model = "911rwb", class = "S" },
     { name = "2016 SRT Viper", model = "viper", class = "S" },
     { name = "2016 SRT Viper ACR", model = "acr", class = "S" },
     { name = "Audi R8 Hycade", model = "r8hycade", class = "S" },
