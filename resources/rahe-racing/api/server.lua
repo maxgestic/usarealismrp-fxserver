@@ -234,7 +234,7 @@ supportedVehicles = {
     { name = "2020 Porsche 718 Cayman GT4", model = "por718gt4", class = "S" },
     { name = "Chevrolet Corvette C7R GTLM", model = "C7R", class = "S" },
     { name = "2012 Porsche 911 GT2 RS", model = "pgt2", class = "S" },
-    { name = "1993 Porsche 911 (993) RWB "Rotana"", model = "911rwb", class = "S" },
+    { name = "1993 Porsche 911 (993) RWB Rotana", model = "911rwb", class = "S" },
     { name = "2016 SRT Viper", model = "viper", class = "S" },
     { name = "2016 SRT Viper ACR", model = "acr", class = "S" },
     { name = "Audi R8 Hycade", model = "r8hycade", class = "S" },
@@ -683,6 +683,7 @@ supportedVehicles = {
     { name = "1966 Volkswagon Type 2", model = "type266", class = "C" },
     { name = "2000 Ford F350 Dually", model = "00f350d", class = "C" },
     { name = "Hummer H2", model = "H2", class = "C" },
+    { name = "1971 AMC Javelin-AMX", model = "aamx", class = "C" },
     -- D Class:**
     { name = "Bravado Youga Classic 4x4", model = "youga3", class = "D" },
     { name = "Bravado Youga Custom", model = "youga4_USA", class = "D" },
