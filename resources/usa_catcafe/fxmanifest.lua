@@ -6,7 +6,7 @@ game         'gta5'
 name         'usa-catcafe'
 author       'USARRP Development Team'
 description  'Cat Cafe Job'
-version      '1.0.0'
+version      '1.0.1'
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',

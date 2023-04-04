@@ -133,6 +133,15 @@ TriggerEvent('es:addCommand', 'payuwufines', function(source, args, char)
     local char = exports["usa-characters"]:GetCharacter(usource)
     local ident = char.get("_id")
     local strikes = MySQL.prepare.await('SELECT strikes FROM usa_catcafe WHERE uid = ?', {ident})
+    if config.debugMode then
+        print("User Ident : "..ident)
+        print("Strikes return is")
+        if strikes >= 0 then
+            print(strikes)
+        elseif strikes == nil or not strikes then
+            print("Error finding strikes")
+        end
+    end
     if strikes >= 1 then
         if char.get('money') >= config.fine then
             char.removeMoney(config.fine)
@@ -164,6 +173,24 @@ TriggerEvent('es:addCommand', 'uwustats', function(source, args, char)
     local xp = MySQL.prepare.await('SELECT xp FROM usa_catcafe WHERE uid = ?', {ident})
     local strikes = MySQL.prepare.await('SELECT strikes FROM usa_catcafe WHERE uid = ?', {ident})
 
+    if config.debugMode then
+        print("Player's ident is ..["..ident.."]")
+        if rank then
+            print(rank)
+        else
+            print("No value found for rank")
+        end
+        if xp then
+            print(xp)
+        else
+            print("No value found for XP")
+        end
+        if strikes >= 0 then
+            print(strikes)
+        else
+            print("Error finding strikes")
+        end
+    end
     TriggerClientEvent('chat:addMessage', source,{
         args = {"^4Cat Cafe", "Your rank is ["..rank.."] You have ["..xp.."] xp and you have ["..strikes.."] strike(s)."}
     })
@@ -187,8 +214,18 @@ AddEventHandler("catcafe:addxp", function(xpCooldown)
         if not xpCooldown then
             local xpEarning = math.random(3,7)
             local result = MySQL.prepare.await('SELECT xp FROM usa_catcafe WHERE uid = ?', {ident})
+            if config.debugMode then
+                if result then
+                    print("Result is found for adding XP")
+                else
+                    print("There is a problem retrieving XP")
+                end
+            end
             MySQL.update('UPDATE usa_catcafe SET xp = ? WHERE uid = ?', {result + xpEarning, ident}, function(affectedRows)
                 if affectedRows then
+                    if config.debugMode then
+                        print("User is receiving XP - Script is running ok")
+                    end
                     TriggerClientEvent('catcafe:xpNotify', usource, xpEarning)
                 end
             end)
@@ -293,12 +330,26 @@ AddEventHandler("catcafe:retrievestats", function()
     local ident = char.get("_id")
     local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
     if rank then
+        if config.debugMode then
+            print("Existing User | "..ident.." | Player name is | "..char.get("name").first.." "..char.get("name").last)
+            print("Rank was successfully retrieved")
+        end
         local PayBonus = config.ranks[rank].PayBonus
         local craftAdjustmentTime = config.ranks[rank].craftAdjustmentTime
         local data = {a = rank, b = craftAdjustmentTime, c = PayBonus}
         TriggerClientEvent("catcafe:loaddata", usource, data)
     else
+        if config.debugMode then
+            print("New User | "..ident)
+            print("Rank was successfully retrieved")
+        end
         TriggerClientEvent("catcafe:firsttime", usource)
+    end
+    if not rank or rank == nil then
+        if config.debugMode then
+            print("User with | "..ident)
+            print("Problem retreiving SQL Rank.")
+        end
     end
 end)
 
@@ -309,6 +360,10 @@ AddEventHandler("catcafe:payB", function(bool)
     local ident = char.get("_id")
     local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
     local check = bool
+    if config.debugMode then
+        print("Existing User | "..ident.." | Player name is | "..char.get("name").first.." "..char.get("name").last)
+        print("Rank was successfully retrieved.. Event payB running")
+    end
     if char.get("job") == "CatCafeEmployee" then
         if check then
             if rank then
