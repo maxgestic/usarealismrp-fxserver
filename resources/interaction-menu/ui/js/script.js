@@ -953,8 +953,10 @@ var interactionMenu = new Vue({
                     this.inputBox.value = this.secondaryInventory.items[this.dropHelper.originIndex].quantity;
             }
             /* Update player */
+            let fromSlot = parseInt(this.dropHelper.originIndex);
             $.post('http://interaction-menu/moveItem', JSON.stringify({
-                fromSlot: parseInt(this.dropHelper.originIndex),
+                itemUUID: this.secondaryInventory.items[fromSlot].uuid,
+                fromSlot: fromSlot,
                 toSlot: parseInt(this.dropHelper.targetIndex),
                 fromType: this.dropHelper.fromType,
                 toType: this.dropHelper.toType,
