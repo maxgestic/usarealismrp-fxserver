@@ -104,7 +104,22 @@ AddEventHandler("catcafe:addStrike", function()
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
     local ident = char.get("_id")
+    if config.debugMode then
+        if ident then
+            print(ident)
+            print("The string length is ["..string.len(ident).."]")
+        elseif not ident or ident == nil then
+            print("Error retreiving char _id")
+        end
+    end
     local strikes = MySQL.prepare.await('SELECT strikes FROM usa_catcafe WHERE uid = ?', {ident})
+    if config.debugMode then 
+        if strikes ~= nil then 
+            print("potential strike value found.")
+        else
+            print("issue found for strikes.")
+        end
+    end
     -- Add Strike
     MySQL.update('UPDATE usa_catcafe SET strikes = ? WHERE uid = ?', {strikes + 1, ident}, function(affectedRows)
         if affectedRows then
@@ -169,9 +184,36 @@ TriggerEvent('es:addCommand', 'uwustats', function(source, args, char)
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
     local ident = char.get("_id")
-    local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
-    local xp = MySQL.prepare.await('SELECT xp FROM usa_catcafe WHERE uid = ?', {ident})
-    local strikes = MySQL.prepare.await('SELECT strikes FROM usa_catcafe WHERE uid = ?', {ident})
+    local rank, xp, strikes
+    -- Prepare format test
+    MySQL.prepare('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident}, function(result)
+        if result then
+            rank = result
+            print("result found")
+            print(rank)
+        end
+    end)
+    MySQL.prepare('SELECT xp FROM usa_catcafe WHERE uid = ?', {ident}, function(result)
+        if result then
+            xp = result
+            print("result found")
+            print(xp)
+        end
+    end)
+    MySQL.prepare('SELECT strikes FROM usa_catcafe WHERE uid = ?', {ident}, function(result)
+        if result then
+            strikes = result
+            print("result found")
+            print(strikes)
+        end
+    end)
+    -- Wait to retrieve info
+    Wait(500)
+
+    -- Old Format
+    -- local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
+    -- local xp = MySQL.prepare.await('SELECT xp FROM usa_catcafe WHERE uid = ?', {ident})
+    -- local strikes = MySQL.prepare.await('SELECT strikes FROM usa_catcafe WHERE uid = ?', {ident})
 
     if config.debugMode then
         print("Player's ident is ..["..ident.."]")
@@ -185,10 +227,14 @@ TriggerEvent('es:addCommand', 'uwustats', function(source, args, char)
         else
             print("No value found for XP")
         end
-        if strikes >= 0 then
-            print(strikes)
+        if strikes ~= nil then
+            if strikes >= 0 then
+                print(strikes)
+            else
+                print("Error finding strikes")
+            end
         else
-            print("Error finding strikes")
+            print("Strikes returned NIL")
         end
     end
     TriggerClientEvent('chat:addMessage', source,{
@@ -210,6 +256,14 @@ AddEventHandler("catcafe:addxp", function(xpCooldown)
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
     local ident = char.get("_id")
+    if config.debugMode then
+        if ident then
+            print(ident)
+            print("The string length is ["..string.len(ident).."]")
+        elseif not ident or ident == nil then
+            print("Error retreiving char _id")
+        end
+    end
     if char.get("job") == "CatCafeEmployee" then
         if not xpCooldown then
             local xpEarning = math.random(3,7)
@@ -328,6 +382,14 @@ AddEventHandler("catcafe:retrievestats", function()
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
     local ident = char.get("_id")
+    if config.debugMode then
+        if ident then
+            print(ident)
+            print("The string length is ["..string.len(ident).."]")
+        elseif not ident or ident == nil then
+            print("Error retreiving char _id")
+        end
+    end
     local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
     if rank then
         if config.debugMode then
