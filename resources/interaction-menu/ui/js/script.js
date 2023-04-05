@@ -954,8 +954,9 @@ var interactionMenu = new Vue({
             }
             /* Update player */
             let fromSlot = parseInt(this.dropHelper.originIndex);
+            let fromSlotItemUUID = this.secondaryInventory.items && this.secondaryInventory.items[fromSlot] && this.secondaryInventory.items[fromSlot].uuid;
             $.post('http://interaction-menu/moveItem', JSON.stringify({
-                itemUUID: this.secondaryInventory.items[fromSlot].uuid,
+                itemUUID: fromSlotItemUUID,
                 fromSlot: fromSlot,
                 toSlot: parseInt(this.dropHelper.targetIndex),
                 fromType: this.dropHelper.fromType,
