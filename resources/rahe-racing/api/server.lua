@@ -372,6 +372,8 @@ supportedVehicles = {
     { name = "Mitsubishi Lancer Evolution IX Voltex", model = "topfoil", class = "A" },
     { name = "2012 Mercedes-Benz C63 AMG Coupe Black Series", model = "mbc63", class = "A" },
     { name = "1969 Dodge Charger", model = "rmodcharger69", class = "A" },
+    { name = "2022 BMW M4", model = "m422", class = "A"},
+    { name = "2022 BMW M5 Sport", model = "22M5", class = "A"},
     -- B Class:**
     { name = "Declasse Hotring Sabre", model = "hotring", class = "B" },
     { name = "Imponte Beater Dukes", model = "dukes3", class = "B" },
@@ -513,6 +515,7 @@ supportedVehicles = {
     { name = "Chevrolet C-10 Stepside Custom", model = "c10custom", class = "B" },
     { name = "1969 Chevrolet Camaro SS", model = "camaro69", class = "B" },
     { name = "1970 Chevrolet Camaro Z28", model = "camaro70", class = "B" },
+    { name = "2006 Chevrolet Silverado", model = "loweyezv", class = "B" },
     { name = "2018 Can Am Maverick", model = "can", class = "B" },
     { name = "2020 Lincoln Continental (Custom Wheels)", model = "cont", class = "B" },
     { name = "1970 Chevrolet Corvette", model = "corvette70", class = "B" },
