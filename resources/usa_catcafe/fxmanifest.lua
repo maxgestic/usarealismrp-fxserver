@@ -5,7 +5,7 @@ game         'gta5'
 name         'usa-catcafe'
 author       'USARRP Development Team'
 description  'Cat Cafe Job'
-version      '1.0.2'
+version      '1.0.3'
 
 
 shared_scripts {

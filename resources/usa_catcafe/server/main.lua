@@ -39,7 +39,6 @@ local ITEMS = {
 
 -- Needed for new employees
 local result_check = {uid = nil}
-local bonusPay = 0
 
 RegisterServerEvent("catcafe:loadItems")
 AddEventHandler("catcafe:loadItems", function()
@@ -56,7 +55,7 @@ AddEventHandler("catcafe:startJob", function(location)
         result_check = result[i]
     end
     if result_check.uid == uid then
-        if char.get("job") == 'civ' then
+        if char.get("job") ~= 'CatCafeEmployee' then
             char.set("job", "CatCafeEmployee")
             TriggerClientEvent("catcafe:startJob", usource, location)
         end
@@ -65,7 +64,7 @@ AddEventHandler("catcafe:startJob", function(location)
         MySQL.insert('INSERT INTO usa_catcafe (uid) VALUES (?) ', {uid}, function(id)
             print("Successfully added to DB")
         end)
-        if char.get("job") == 'civ' then
+        if char.get("job") ~= 'CatCafeEmployee' then
             char.set("job", "CatCafeEmployee")
             TriggerClientEvent("catcafe:startJob", usource, location)
         end
@@ -104,14 +103,6 @@ AddEventHandler("catcafe:addStrike", function()
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
     local ident = char.get("_id")
-    if config.debugMode then
-        if ident then
-            print(ident)
-            print("The string length is ["..string.len(ident).."]")
-        elseif not ident or ident == nil then
-            print("Error retreiving char _id")
-        end
-    end
     local strikes = MySQL.prepare.await('SELECT strikes FROM usa_catcafe WHERE uid = ?', {ident})
     if config.debugMode then 
         if strikes ~= nil then 
@@ -124,19 +115,21 @@ AddEventHandler("catcafe:addStrike", function()
     MySQL.update('UPDATE usa_catcafe SET strikes = ? WHERE uid = ?', {strikes + 1, ident}, function(affectedRows)
         if affectedRows then
             if config.debugMode then
-                print(affectedRows)
                 print("User received strike.")
             end
         end
     end)
     -- XP penalty
     local xp = MySQL.prepare.await('SELECT xp FROM usa_catcafe WHERE uid = ?', {ident})
-    MySQL.update('UPDATE usa_catcafe SET xp = ? WHERE uid = ?', {xp - 15, ident}, function(affectedRows)
+    local XpPenalty = math.random(13,25)
+    MySQL.update('UPDATE usa_catcafe SET xp = ? WHERE uid = ?', {xp - XpPenalty, ident}, function(affectedRows)
         if affectedRows then
             if config.debugMode then
-                print(affectedRows)
                 print("User lost xp.")
             end
+            TriggerClientEvent('chat:addMessage', usource,{
+                args = {"^4Cat Cafe", "You lost ["..XpPenalty.."] xp because you received a strike."}
+            })
         end
     end)
         
@@ -163,7 +156,6 @@ TriggerEvent('es:addCommand', 'payuwufines', function(source, args, char)
             MySQL.update('UPDATE usa_catcafe SET strikes = ? WHERE uid = ?', {0, ident}, function(affectedRows)
                 if affectedRows then
                     if config.debugMode then
-                        print(affectedRows)
                         print("User payed fines")
                     end
                     TriggerClientEvent('usa:notify', usource, 'Your strikes have been cleared. Don\'t let me down and make the same mistake again!')
@@ -185,56 +177,26 @@ TriggerEvent('es:addCommand', 'uwustats', function(source, args, char)
     local char = exports["usa-characters"]:GetCharacter(usource)
     local ident = char.get("_id")
     local rank, xp, strikes
-    -- Prepare format test
-    MySQL.prepare('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident}, function(result)
-        if result then
-            rank = result
-            print("result found")
-            print(rank)
-        end
-    end)
-    MySQL.prepare('SELECT xp FROM usa_catcafe WHERE uid = ?', {ident}, function(result)
-        if result then
-            xp = result
-            print("result found")
-            print(xp)
-        end
-    end)
-    MySQL.prepare('SELECT strikes FROM usa_catcafe WHERE uid = ?', {ident}, function(result)
-        if result then
-            strikes = result
-            print("result found")
-            print(strikes)
-        end
-    end)
-    -- Wait to retrieve info
-    Wait(500)
-
-    -- Old Format
-    -- local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
-    -- local xp = MySQL.prepare.await('SELECT xp FROM usa_catcafe WHERE uid = ?', {ident})
-    -- local strikes = MySQL.prepare.await('SELECT strikes FROM usa_catcafe WHERE uid = ?', {ident})
-
+    local stats = MySQL.prepare.await('SELECT * FROM usa_catcafe WHERE uid = ?', {ident})
+    if stats then
+        rank = stats.rank
+        xp = stats.xp
+        strikes = stats.strikes
+    end
     if config.debugMode then
         print("Player's ident is ..["..ident.."]")
-        if rank then
-            print(rank)
-        else
-            print("No value found for rank")
+        if rank then print(rank) end
+        if xp then print(xp) end
+        if strikes then print(strikes) end
+
+        if not rank or rank == nil then
+            print("Error finding rank")
         end
-        if xp then
-            print(xp)
-        else
-            print("No value found for XP")
+        if not xp or xp == nil then
+            print("Error finding XP")
         end
-        if strikes ~= nil then
-            if strikes >= 0 then
-                print(strikes)
-            else
-                print("Error finding strikes")
-            end
-        else
-            print("Strikes returned NIL")
+        if not strikes or strikes == nil then
+            print("Error finding strikes")
         end
     end
     TriggerClientEvent('chat:addMessage', source,{
@@ -258,8 +220,7 @@ AddEventHandler("catcafe:addxp", function(xpCooldown)
     local ident = char.get("_id")
     if config.debugMode then
         if ident then
-            print(ident)
-            print("The string length is ["..string.len(ident).."]")
+            print("Unique ID Found : ["..ident.."]")
         elseif not ident or ident == nil then
             print("Error retreiving char _id")
         end
@@ -299,15 +260,19 @@ AddEventHandler("catcafe:getrank",function()
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
     local ident = char.get("_id")
-    local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
+    local stats = MySQL.prepare.await('SELECT * FROM usa_catcafe WHERE uid = ?', {ident})
     if config.debugMode then
-        if rank ~= nil then
-            print("Retrieving player's rank ["..rank.."]")
+        if stats ~= nil then
+            print("User rank is ["..stats.rank.."]")
+            print("User xp is ["..stats.xp.."]")
+            print("User xp is ["..stats.strikes.."]")
         else
             print("No rank found. New Player")
         end
     end
-    TriggerClientEvent("catcafe:rank", usource, rank)
+    if stats then
+        TriggerClientEvent("catcafe:rank", usource, stats.rank)
+    end
 end)
 
 RegisterServerEvent("catcafe:rankStatus")
@@ -317,7 +282,13 @@ AddEventHandler("catcafe:rankStatus", function()
     local ident = char.get("_id")
     local name = char.get("name")
     local rankUpdateString = "Player ["..name.first.." "..name.last.."] has the rank of "
-    local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
+    local stats = MySQL.prepare.await('SELECT * FROM usa_catcafe WHERE uid = ?', {ident})
+    local rank
+    if stats then
+        rank = stats.rank
+    else
+        rank = 'Pending'
+    end
     MySQL.prepare('SELECT xp FROM usa_catcafe WHERE uid = ?', {ident}, function(result)
         -- debug stuff
         if config.debugMode then
@@ -390,8 +361,10 @@ AddEventHandler("catcafe:retrievestats", function()
             print("Error retreiving char _id")
         end
     end
-    local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
-    if rank then
+    local stats = MySQL.prepare.await('SELECT * FROM usa_catcafe WHERE uid = ?', {ident})
+    local rank
+    if stats then
+        rank = stats.rank
         if config.debugMode then
             print("Existing User | "..ident.." | Player name is | "..char.get("name").first.." "..char.get("name").last)
             print("Rank was successfully retrieved")
@@ -420,15 +393,17 @@ AddEventHandler("catcafe:payB", function(bool)
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
     local ident = char.get("_id")
-    local rank = MySQL.prepare.await('SELECT rank FROM usa_catcafe WHERE uid = ?', {ident})
+    local stats = MySQL.prepare.await('SELECT * FROM usa_catcafe WHERE uid = ?', {ident})
     local check = bool
+    local rank
     if config.debugMode then
         print("Existing User | "..ident.." | Player name is | "..char.get("name").first.." "..char.get("name").last)
         print("Rank was successfully retrieved.. Event payB running")
     end
     if char.get("job") == "CatCafeEmployee" then
         if check then
-            if rank then
+            if stats then
+                rank = stats.rank
                 local PayBonus = config.ranks[rank].PayBonus
                 char.giveMoney(PayBonus)
                 TriggerEvent('catcafe:paybonus', usource, PayBonus)
