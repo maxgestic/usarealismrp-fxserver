@@ -10,6 +10,7 @@ local ITEMS = {
         exports.usa_rp2:getItem("Miso Soup"),
         exports.usa_rp2:getItem("UWU Sandwich"),
         exports.usa_rp2:getItem("Weepy Cupcake"),
+        exports.usa_rp2:getItem("Moon Mochi"),
         {name = "", price = 0}, -- Placeholder (This won't show up on the list, but don't delete because it's needed for the menu to work.)
     },
     ["combos"] = {
@@ -206,6 +207,39 @@ end, {
     help = "Check your Cat Cafe stats.",
 })
 
+TriggerEvent('es:addCommand', 'giveuwuxp', function(source, args, char)
+	local group = exports["essentialmode"]:getPlayerFromId(source).getGroup()
+	if group == "owner" then
+		local targetSource = tonumber(args[2])
+		if tonumber(args[2]) and GetPlayerName(args[2]) then
+			local target = exports["usa-characters"]:GetCharacter(targetSource)
+            local targetIdent = target.get("_id")
+            local currentXP = MySQL.prepare.await('SELECT xp FROM usa_catcafe WHERE uid = ?', {targetIdent})
+            local requestedXP = tonumber(args[3])
+            MySQL.update('UPDATE usa_catcafe SET xp = ? WHERE uid = ?', {currentXP + requestedXP, targetIdent}, function(affectedRows)
+                if affectedRows then
+                    if config.debugMode then
+                        print("User is receiving XP from command")
+                    end
+                    TriggerClientEvent('catcafe:xpNotify', targetSource, requestedXP)
+                end
+            end)
+			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(targetSource)..' ['..targetSource..'] ^0 has been given ['..args[3]..'] xp by ^2'..GetPlayerName(source)..' ['..source..'] ^0.')
+			TriggerClientEvent('chatMessage', targetSource, '^2^*[STAFF]^r^0 You have been given XP by ^2'..GetPlayerName(source)..'^0.')
+		else
+            TriggerClientEvent("usa:notify", source, "User not found")
+        end
+	else
+		TriggerClientEvent("usa:notify", source, "Not permitted")
+	end
+end, {
+	help = "Give a player XP for Cat Cafe.",
+	params = {
+		{ name = "id", help = "id of person" },
+        { name = "xp", help = "amount of xp" },
+	}
+})
+
 RegisterServerEvent("catcafe:forceRemoveJob")
 AddEventHandler("catcafe:forceRemoveJob", function()
     local char = exports["usa-characters"]:GetCharacter(source)
@@ -300,7 +334,7 @@ AddEventHandler("catcafe:rankStatus", function()
         end
         if result >= config.ranks["Employee"].xpRequired and result < config.ranks["Trainer"].xpRequired then
             rank = "Employee"
-            MySQL.update('UPDATE usa_catcafe SET rank = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
+            MySQL.update('UPDATE usa_catcafe SET `rank` = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
                 if affectedRows then
                     if config.debugMode then
                         print(rankUpdateString..rank)
@@ -309,7 +343,7 @@ AddEventHandler("catcafe:rankStatus", function()
             end)
         elseif result >= config.ranks["Trainer"].xpRequired and result < config.ranks["Shift Supervisor"].xpRequired then
             rank = "Trainer"
-            MySQL.update('UPDATE usa_catcafe SET rank = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
+            MySQL.update('UPDATE usa_catcafe SET `rank` = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
                 if affectedRows then
                     if config.debugMode then
                         print(rankUpdateString..rank)
@@ -318,7 +352,7 @@ AddEventHandler("catcafe:rankStatus", function()
             end)
         elseif result >= config.ranks["Shift Supervisor"].xpRequired and result < config.ranks["Shift Manager"].xpRequired then
             rank = "Shift Supervisor"
-            MySQL.update('UPDATE usa_catcafe SET rank = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
+            MySQL.update('UPDATE usa_catcafe SET `rank` = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
                 if affectedRows then
                     if config.debugMode then
                         print(rankUpdateString..rank)
@@ -327,7 +361,7 @@ AddEventHandler("catcafe:rankStatus", function()
             end)
         elseif result >= config.ranks["Shift Manager"].xpRequired and result < config.ranks["Store Manager"].xpRequired then
             rank = "Shift Manager"
-            MySQL.update('UPDATE usa_catcafe SET rank = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
+            MySQL.update('UPDATE usa_catcafe SET `rank` = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
                 if affectedRows then
                     if config.debugMode then
                         print(rankUpdateString..rank)
@@ -336,7 +370,7 @@ AddEventHandler("catcafe:rankStatus", function()
             end)
         elseif result >= config.ranks["Store Manager"].xpRequired then
             rank = "Store Manager"
-            MySQL.update('UPDATE usa_catcafe SET rank = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
+            MySQL.update('UPDATE usa_catcafe SET `rank` = ? WHERE uid = ?', {rank, ident}, function(affectedRows)
                 if affectedRows then
                     if config.debugMode then
                         print(rankUpdateString..rank)
