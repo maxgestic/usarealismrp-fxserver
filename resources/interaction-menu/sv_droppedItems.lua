@@ -12,6 +12,9 @@ end)
 
 RegisterServerEvent("interaction:addDroppedItem")
 AddEventHandler("interaction:addDroppedItem", function(item)
+	if not item.uuid then
+		item.uuid = exports.globals:generateID()
+	end
 	item.dropTime = os.time()
 	table.insert(DROPPED_ITEMS, item)
 	TriggerClientEvent("interaction:addDroppedItem", -1, item)
@@ -89,6 +92,9 @@ AddEventHandler("interaction:dropMultipleOfItem", function(item)
 		local copy = item
 		copy.quantity = 1
 		copy.dropTime = os.time()
+		if not copy.uuid then
+			copy.uuid = exports.globals:generateID()
+		end
 		table.insert(DROPPED_ITEMS, copy)
 		table.insert(toSend, copy)
 	end
