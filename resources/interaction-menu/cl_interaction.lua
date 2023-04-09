@@ -362,8 +362,10 @@ RegisterNUICallback('escape', function(data, cb)
 	if data.vehicle.plate then
 		TriggerServerEvent("vehicle:RemovePersonFromInventory", data.vehicle.plate)
 	end
-	if data.secondaryInventoryType == "person" then
+	if data.secondaryInventoryType == "person"  then
 		TriggerServerEvent("inventory:removeInventoryAccessor", data.secondaryInventorySrc)
+	elseif data.secondaryInventoryType == "nearbyItems" then
+		TriggerServerEvent("interaction:removeDroppedItemAccessor")
 	end
 	if data.currentPage == "Inventory" and data.secondaryInventoryType == "property" then
 		TriggerServerEvent("properties-og:markAsInventoryClosed")
