@@ -1098,7 +1098,7 @@ function interactionMenuUse(index, itemName, wholeItem)
 					TaskPlayAnim(playerPed, anim.dict, anim.name, 8.0, 1.0, -1, 31, 1.0, false, false, false)
 				end
 
-				local success = lib.skillCheck({'easy', 'easy', 'medium', 'medium'}, {'i', 'j', 'k', 'l'})
+				local success = lib.skillCheck({'easy', 'easy', 'medium', 'medium'})
 				if success then
 					SetVehicleDoorsLocked(veh, 1)
 					SetVehicleDoorsLockedForAllPlayers(veh, 0)
