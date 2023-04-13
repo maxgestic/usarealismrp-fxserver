@@ -267,6 +267,10 @@ end
 
 RegisterServerEvent("properties-og:onStorageBtnSelected")
 AddEventHandler("properties-og:onStorageBtnSelected", function(propertyName)
+  if not ownsProperty(propertyName, source) then
+    TriggerClientEvent("usa:notify", source, "Not property owner")
+    return
+  end
   -- get property inventory
   local propertyInv = PROPERTIES[propertyName].storage.items
   -- send to interaction-menu's inventory system for display and item movement
