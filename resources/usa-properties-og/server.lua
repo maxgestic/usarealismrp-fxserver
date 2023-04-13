@@ -715,6 +715,10 @@ end)
 ---------------------------
 RegisterServerEvent("properties:addCoOwner")
 AddEventHandler("properties:addCoOwner", function(property_name, id)
+  if not ownsProperty(property_name, source) then
+    TriggerClientEvent("usa:notify", source, "Not property owner")
+    return
+  end
   if GetPlayerName(id) then
     -- check if property has any co owners already --
     if not PROPERTIES[property_name].coowners then
