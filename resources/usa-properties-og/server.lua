@@ -189,7 +189,9 @@ AddEventHandler("properties-og:storeMoney", function(name, amount)
 		-- remove from player --
 		player.removeMoney(amount)
 		-- add to property --
-		TriggerEvent("properties:addMoney", name, amount)
+    PROPERTIES[name].storage.money = PROPERTIES[name].storage.money + amount
+    -- save property --
+    SavePropertyData(name)
 	else
 		TriggerClientEvent("usa:notify", user_source, "You don't have that much money on you!")
 	end
@@ -558,17 +560,6 @@ AddEventHandler("properties:willLeave", function(name, willLeave)
     -- save property --
     SavePropertyData(name)
   end
-end)
-
---------------------------------
--- ADD MONEY (from purchases) --
---------------------------------
-RegisterServerEvent("properties:addMoney")
-AddEventHandler("properties:addMoney", function(name, amount)
-    PROPERTIES[name].storage.money = PROPERTIES[name].storage.money + amount
-    print("$" .. amount .. " added!")
-    -- save property --
-    SavePropertyData(name)
 end)
 
 ------------------
