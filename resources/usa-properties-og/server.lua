@@ -736,64 +736,16 @@ AddEventHandler("properties:addCoOwner", function(property_name, id)
   end
 end)
 
-RegisterServerEvent("properties:changeOwner")
-AddEventHandler("properties:changeOwner", function(property_name, id)
+RegisterServerEvent("properties:requestChangeOwner")
+AddEventHandler("properties:requestChangeOwner", function(property_name, id)
   local sourceIdent = exports["usa-characters"]:GetCharacter(source).get("_id")
   local oldOwnerIdent = PROPERTIES[property_name].owner.identifier
   if sourceIdent == oldOwnerIdent then
     if source ~= id then
       if GetPlayerName(id) then
-        -- create person --
-        local person = exports["usa-characters"]:GetCharacter(id)
-        if GetNumberOfOwnedProperties(person.get("_id")) < MAX_NUM_OF_PROPERTIES_SINGLE_PERSON then
-          if PROPERTIES[property_name].lastTransfer == nil then
-            PROPERTIES[property_name].lastTransfer = 0
-          end
-          if os.time() - tonumber(PROPERTIES[property_name].lastTransfer) > PROPERTY_TRANSFER_TIMEOUT_HOURS * 3600 then
-            local new_owner = {
-              name = person.getFullName(),
-              purchase_date = PROPERTIES[property_name].owner.purchase_date,
-              identifier = person.get("_id")
-            }
-            local oldOwner = PROPERTIES[property_name].owner.name
-            PROPERTIES[property_name].owner = new_owner
-            PROPERTIES[property_name].lastTransfer = os.time()
-            -- save --
-            SavePropertyData(property_name)
-            -- update all clients --
-            TriggerClientEvent("properties:update", -1, PROPERTIES[property_name])
-            -- add blip for co owner --
-            TriggerClientEvent("properties:setPropertyBlips", id, GetOwnedPropertyCoords(new_owner.identifier, true))
-            TriggerClientEvent("properties:setPropertyBlips", source, GetOwnedPropertyCoords(exports["usa-characters"]:GetCharacter(source).get("_id"), true))
-            -- notify --
-            TriggerClientEvent("usa:notify", source, "The property has been transfered to "..new_owner.name)
-            TriggerClientEvent("usa:notify", id, property_name .. " has been transfered into your ownership!")
-
-            local desc = "**Property Transfer**:\n\n**Property:** " .. property_name .. "\n**Old Owner:** " .. oldOwner .. "\n**New Owner:** ".. new_owner.name
-            local url = GetConvar("property-log-webhook", "")
-            PerformHttpRequest(url, function(err, text, headers)
-              if text then
-                print(text)
-              end
-            end, "POST", json.encode({
-              embeds = {
-                {
-                  description = desc,
-                  color = 524288,
-                  author = {
-                    name = "SAN ANDREAS PROPERTY MGMT"
-                  }
-                }
-              }
-            }), { ["Content-Type"] = 'application/json' })
-          else
-            local timeSinceTrans = (os.time() - PROPERTIES[property_name].lastTransfer)/3600
-            timeSinceTrans = exports["globals"]:round(timeSinceTrans, 1)
-            TriggerClientEvent("usa:notify", source,"This property was transfered " .. timeSinceTrans .. " hours ago, there is a limit of 48 hours between transfers!")
-          end
-        else
-          TriggerClientEvent("usa:notify", source,"This person has too many properties already!")
-        end
+        local ownerChar = exports["usa-characters"]:GetCharacter(source)
+        local ownerName = ownerChar.getName()
+        TriggerClientEvent("properties:confirmNewOwner", id, property_name, id, source, ownerName)
       else
         TriggerClientEvent("usa:notify", source, "Person does not exist!")
       end
@@ -802,6 +754,79 @@ AddEventHandler("properties:changeOwner", function(property_name, id)
     end
   else
     TriggerClientEvent("usa:notify", source, "That is not your house!")
+  end
+end)
+
+RegisterServerEvent("properties:changeOwner")
+AddEventHandler("properties:changeOwner", function(property_name, targetID, ownerID, accepted)
+  if not accepted then
+    TriggerClientEvent("usa:notify", ownerID, "Person did not accept the transfer!")
+  else
+    local sourceIdent = exports["usa-characters"]:GetCharacter(ownerID).get("_id")
+    local oldOwnerIdent = PROPERTIES[property_name].owner.identifier
+    if sourceIdent == oldOwnerIdent then
+      if ownerID ~= targetID then
+        if GetPlayerName(targetID) then
+          -- create person --
+          local person = exports["usa-characters"]:GetCharacter(targetID)
+          if GetNumberOfOwnedProperties(person.get("_id")) < MAX_NUM_OF_PROPERTIES_SINGLE_PERSON then
+            if PROPERTIES[property_name].lastTransfer == nil then
+              PROPERTIES[property_name].lastTransfer = 0
+            end
+            if os.time() - tonumber(PROPERTIES[property_name].lastTransfer) > PROPERTY_TRANSFER_TIMEOUT_HOURS * 3600 then
+              local new_owner = {
+                name = person.getFullName(),
+                purchase_date = PROPERTIES[property_name].owner.purchase_date,
+                identifier = person.get("_id")
+              }
+              local oldOwner = PROPERTIES[property_name].owner.name
+              PROPERTIES[property_name].owner = new_owner
+              PROPERTIES[property_name].lastTransfer = os.time()
+              -- save --
+              SavePropertyData(property_name)
+              -- update all clients --
+              TriggerClientEvent("properties:update", -1, PROPERTIES[property_name])
+              -- add blip for co owner --
+              TriggerClientEvent("properties:setPropertyBlips", targetID, GetOwnedPropertyCoords(new_owner.identifier, true))
+              TriggerClientEvent("properties:setPropertyBlips", ownerID, GetOwnedPropertyCoords(exports["usa-characters"]:GetCharacter(ownerID).get("_id"), true))
+              -- notify --
+              TriggerClientEvent("usa:notify", ownerID, "The property has been transfered to "..new_owner.name)
+              TriggerClientEvent("usa:notify", targetID, property_name .. " has been transfered into your ownership!")
+
+              local desc = "**Property Transfer**:\n\n**Property:** " .. property_name .. "\n**Old Owner:** " .. oldOwner .. "\n**New Owner:** ".. new_owner.name
+              local url = GetConvar("property-log-webhook", "")
+              PerformHttpRequest(url, function(err, text, headers)
+                if text then
+                  print(text)
+                end
+              end, "POST", json.encode({
+                embeds = {
+                  {
+                    description = desc,
+                    color = 524288,
+                    author = {
+                      name = "SAN ANDREAS PROPERTY MGMT"
+                    }
+                  }
+                }
+              }), { ["Content-Type"] = 'application/json' })
+            else
+              local timeSinceTrans = (os.time() - PROPERTIES[property_name].lastTransfer)/3600
+              timeSinceTrans = exports["globals"]:round(timeSinceTrans, 1)
+              TriggerClientEvent("usa:notify", ownerID,"This property was transfered " .. timeSinceTrans .. " hours ago, there is a limit of 48 hours between transfers!")
+            end
+          else
+            TriggerClientEvent("usa:notify", ownerID,"This person has too many properties already!")
+          end
+        else
+          TriggerClientEvent("usa:notify", ownerID, "Person does not exist!")
+        end
+      else
+        TriggerClientEvent("usa:notify", ownerID, "You cant transfer a house to yourself!")
+      end
+    else
+      TriggerClientEvent("usa:notify", ownerID, "That is not your house!")
+    end
   end
 end)
 
