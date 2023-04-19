@@ -7,18 +7,19 @@
 				<tbody>
 				<tr
 				v-for="part in menuData.availableParts"
-				:key="part"
+				:key="part.name"
 				>
 					<td width="23%" class="pa-0">
-						<v-img :src="getItemImage(part)" height="150px" width="200px"></v-img>
+						<v-img :src="getItemImage(part.name)" height="150px" width="200px"></v-img>
 					</td>
-					<td width="53%" class="text-left">{{ part }}</td>
+					<td width="10%" class="pa-0 text-left">${{ part.price.toLocaleString("en-US") }} </td>
+					<td width="43%" class="text-left">{{ part.name }}</td>
 					<td width="23%" class="text-center">
 						<v-btn
 						color="primary"
 						elevation="2"
 						large
-						@click="sendData('orderPart', part)"
+						@click="sendData('orderPart', part.name)"
 						>
 						Order
 						</v-btn>

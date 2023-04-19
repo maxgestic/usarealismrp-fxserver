@@ -466,6 +466,12 @@ RegisterServerCallback {
 			MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
 				if rank == 0 then rank = 1 end
 				local availableParts = PARTS_FOR_RANK[rank]
+				for i = 1, #availableParts do
+					availableParts[i] = {
+						name = availableParts[i],
+						price = PARTS[availableParts[i]].price
+					}
+				end
 				MechanicHelper.getMechanicInfo(char.get("_id"), function(info)
 					if not info then
 						info = {}
