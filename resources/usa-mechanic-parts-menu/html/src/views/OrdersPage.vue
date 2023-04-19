@@ -14,7 +14,7 @@
 					</td>
 					<td width="43%" class="text-left">{{ part.name }}</td>
 					<td width="33%" class="text-left">
-						<v-progress-linear :value="part.deliveryProgress"></v-progress-linear>
+						<v-progress-linear v-model="part.deliveryProgress"></v-progress-linear>
 					</td>
 				</tr>
 				</tbody>

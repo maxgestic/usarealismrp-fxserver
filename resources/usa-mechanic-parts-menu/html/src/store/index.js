@@ -21,8 +21,11 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		setMenuData(state, payload) {
-			console.log("setting menu data, payload: " + JSON.stringify(payload))
 			state = Object.assign(state, payload.data)
+			// convert delivery progress to integer since it comes in as a decimal
+			for (let i = 0; i < state.orderedParts.length; i++) {
+				state.orderedParts[i].deliveryProgress = Math.round(state.orderedParts[i].deliveryProgress * 100)
+			}
 		},
 	},
 	actions: {},
