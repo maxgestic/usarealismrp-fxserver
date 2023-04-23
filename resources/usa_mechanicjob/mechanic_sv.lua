@@ -223,7 +223,7 @@ AddEventHandler("mechanic:orderPart", function(partName)
 				orderedPart.owner = char.get("_id")
 				local ok = exports.essentialmode:createDocumentWithId("mechanic-part-orders", orderedPart.uuid, orderedPart)
 				if ok then
-					char.removeBank(orderedPart.price)
+					char.removeBank(orderedPart.price, "Mechanic Order ("..partName..")")
 					local orderedParts = (exports.essentialmode:getDocumentsByRows("mechanic-part-orders", query) or {})
 					TriggerClientEvent("mechanicMenu:sendDataToApp", src, { showNotification = true, notificationText = orderedPart.name .. " ordered for $" .. exports.globals:comma_value(orderedPart.price), orderedParts = orderedParts})
 				end
