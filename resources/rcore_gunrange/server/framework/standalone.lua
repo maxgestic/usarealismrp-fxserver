@@ -8,7 +8,7 @@ if Config.FrameWork == "1" then
             TriggerClientEvent("usa:notify", source, "You paid $" .. price .. " in cash.")
             return true
         elseif bank >= price then
-            char.removeBank(price, "Gunrange")
+            char.removeBank(price)
             TriggerClientEvent("usa:notify", source, "You paid $" .. price .. " from bank")
             return true
         else

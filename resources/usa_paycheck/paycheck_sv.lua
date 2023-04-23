@@ -142,7 +142,7 @@ function DepositPayCheck(char)
     end
 
     if not asyncGiveBank then
-        char.giveBank(paycheckAmount, "Paycheck")
+        char.giveBank(paycheckAmount)
     end
 
     local msg = "You received a "

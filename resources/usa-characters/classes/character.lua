@@ -70,8 +70,7 @@ function CreateCharacter(data)
       end
       self.adjustChatSuggestions(data)
       TriggerClientEvent("max_trains:setJob", self.source, data)
-      TriggerClientEvent("character:jobUpdate", self.source, data)
-      exports["lb-phone"]:RefreshCompanies()
+      TriggerEvent("high_callback:setJob", self.source)
     end
   end
 
@@ -86,23 +85,20 @@ function CreateCharacter(data)
     TriggerClientEvent("es:setMoneyDisplay", self.source, 1, self.money)
   end
 
-  rTable.giveBank = function(amount, reason)
+  rTable.giveBank = function(amount)
     self.bank = self.bank + tonumber(amount)
-    exports["lb-phone"]:AddTransaction(exports["lb-phone"]:GetEquippedPhoneNumber(self.source), amount, reason, nil)
   end
 
-  rTable.removeBank = function(amount, reason)
+  rTable.removeBank = function(amount)
     self.bank = self.bank - tonumber(amount)
-    exports["lb-phone"]:AddTransaction(exports["lb-phone"]:GetEquippedPhoneNumber(self.source), -1 * amount, reason, nil)
   end
 
-  rTable.removeMoneyOrBank = function(amount, reason)
+  rTable.removeMoneyOrBank = function(amount)
     amount = math.abs(amount)
     if self.money >= amount then
       self.money = self.money - amount
     elseif self.bank >= amount then
       self.bank = self.bank - amount
-      exports["lb-phone"]:AddTransaction(exports["lb-phone"]:GetEquippedPhoneNumber(self.source), -1 * amount, reason, nil)
     end
   end
 

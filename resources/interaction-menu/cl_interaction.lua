@@ -1133,7 +1133,7 @@ function interactionMenuUse(index, itemName, wholeItem)
 		-- Cell Phone --
 		-------------------
 	elseif string.find(itemName, "Cell Phone") then
-		exports["lb-phone"]:ToggleOpen(true, false)
+		TriggerEvent("high_phone:openPhone")
 		-------------------
 		-- Food Item  --
 		-------------------

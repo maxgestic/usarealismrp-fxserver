@@ -1010,7 +1010,7 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, business)
 			if price <= money then
 				local plate = generate_random_number_plate()
 				if vehicles then
-					char.removeBank(price, "PDM Vehicle Purchase")
+					char.removeBank(price)
 					local vehicle = {
 						owner = owner_name,
 						make = vehicle.make,

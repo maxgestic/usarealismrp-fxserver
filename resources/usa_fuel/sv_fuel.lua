@@ -43,7 +43,7 @@ AddEventHandler('fuel:purchaseFuel', function(amount, type)
 		if not char.hasEnoughMoneyOrBank(toPay) then
 			TriggerClientEvent("usa:notify", source, "You cannot afford this purchase! ~y~($"..toPay..')')
 		else
-			char.removeMoneyOrBank(toPay, "LS Gas")
+			char.removeMoneyOrBank(toPay)
 			TriggerClientEvent("fuel:refuelAmount", source, amount)
 		end
 	end
