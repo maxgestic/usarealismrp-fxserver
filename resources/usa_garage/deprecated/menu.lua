@@ -74,7 +74,7 @@ function CreateGarageMenu(menu, vehicles, garageCoords)
 			-- close menu --
 			mainMenu:Visible(not mainMenu:Visible())
 		end
-	  menu:AddItem(item)
+		menu:AddItem(item)
 	end
 	-- exit button --
 	local item = NativeUI.CreateItem("Close", "")
