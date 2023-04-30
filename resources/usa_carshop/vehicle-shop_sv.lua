@@ -541,6 +541,8 @@ local vehicleShopItems = {
 			{make = "Ford", model = "F-450 Platinum (2021)", price = 170000, hash = "f450plat", storage_capacity = 340.0},
 			{make = "Ford", model = "F-450 (2020)", price = 155000, hash = "20f450", storage_capacity = 340.0},
 			{make = "Ford", model = "F-350 (2020)", price = 160000, hash = "f350d", storage_capacity = 340.0},
+			{make = "Ford", model = "F550 Wrecker", price = 90000, hash = "wrecker", storage_capacity = 300.0},
+			{make = "Ford", model = "Flatbed", price = 80000, hash = "fordflatbed", storage_capacity = 300.0},
 			{make = "Ford", model = "Focus RS (2009)", price = 65000, hash = "09fordRS", storage_capacity = 180.0},
 			{make = "Ford", model = "Focus RS (2017)", price = 75000, hash = "17fordRS", storage_capacity = 180.0},
 			{make = "Ford", model = "Galaxie", price = 62000, hash = "galaxie", storage_capacity = 220.0},
