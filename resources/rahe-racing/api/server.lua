@@ -372,8 +372,12 @@ supportedVehicles = {
     { name = "Mitsubishi Lancer Evolution IX Voltex", model = "topfoil", class = "A" },
     { name = "2012 Mercedes-Benz C63 AMG Coupe Black Series", model = "mbc63", class = "A" },
     { name = "1969 Dodge Charger", model = "rmodcharger69", class = "A" },
-    { name = "2022 BMW M4", model = "m422", class = "A"},
-    { name = "2022 BMW M5 Sport", model = "22M5", class = "A"},
+    { name = "2022 BMW M4", model = "m422", class = "A" },
+    { name = "2022 BMW M5 Sport", model = "22M5", class = "A" },
+    { name = "2020 Dodge Charger Daytona", model = "vanzdchar", class = "A" },
+    { name = "2010 Chevrolet C6 ZR1", model = "vanzc6zr1", class = "A" },
+    { name = "2008 Chevrolet Camaro ZL1", model = "vanzczl1", class = "A" },
+    { name = "2015 Chrysler 300 WB", model = "vanz300ws", class = "A" },
     -- B Class:**
     { name = "Declasse Hotring Sabre", model = "hotring", class = "B" },
     { name = "Imponte Beater Dukes", model = "dukes3", class = "B" },
@@ -585,6 +589,7 @@ supportedVehicles = {
     { name = "1987 Mercedes Benz AMG Hammer Coupe", model = "amgh", class = "B"},
     { name = "1969 Pontiac Firebird Trans AM", model = "trans69", class = "B"},
     { name = "2016 Mazda MX5 Pandem", model = "mxpan", class = "B"},
+    { name = "2011 Chevrolet Silverado 2500", model = "fm11silv", class = "B" },
     -- C Class:**
     { name = "Declasse Yosemite Rancher", model = "yosemite3", class = "C" },
     { name = "Dinka Blista Compact", model = "blista2", class = "C" },
