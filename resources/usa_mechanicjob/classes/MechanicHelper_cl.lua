@@ -218,24 +218,23 @@ MechanicHelper.useRepairKit = function(veh, repairCount, cb)
             
             local passed = lib.skillCheck(todoSkillChecks)
             if passed then
-                TriggerServerEvent("usa:removeItem", "Repair Kit", 1)
                 SetVehicleDoorShut(veh, 4, false)
                 if not IsVehicleDriveable(veh, true) then
                     SetVehicleUndriveable(veh, false)
-                    SetVehicleEngineHealth(veh, 500.0)
+                    SetVehicleEngineHealth(veh, 650.0)
                 else
-                    SetVehicleEngineHealth(veh, 600.0)
+                    SetVehicleEngineHealth(veh, 850.0)
                 end
                 
                 FixAllTires(veh)
                 success = true
                 cb(true)
             else
-                if math.random() > 0.50 then
-                    TriggerServerEvent("usa:removeItem", "Repair Kit", 1)
-                    TriggerEvent("usa:notify", "Repair Kit have worn out!")
-                end
                 cb(false)
+            end
+	    if math.random() > 0.50 then
+                TriggerServerEvent("usa:removeItem", "Repair Kit", 1)
+                TriggerEvent("usa:notify", "Repair Kit has worn out!")
             end
             Wait(500)
             TriggerEvent("dpemotes:command", 'e', GetPlayerServerId(ped), {"c"})
